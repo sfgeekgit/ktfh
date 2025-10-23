@@ -1,0 +1,13 @@
+{
+    "title": "Pizza Delivery Empire",
+    "id": "pizza-delivery",
+    "author": "Your Name",
+    "discordName": "",
+    "discordLink": "",
+    "versionNumber": "0.1",
+    "versionTitle": "Prototype",
+    "initialTabs": ["main"],
+    "maxTickLength": 3600000,
+    "enablePausing": true,
+    "showNews": false
+}
