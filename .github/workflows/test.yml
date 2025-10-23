@@ -1,0 +1,23 @@
+name: Run Tests
+on:
+  # push:                    # DISABLED: Uncomment to auto-run tests on push to main
+  #   branches: [ main ]
+  # pull_request:            # DISABLED: Uncomment to auto-run tests on pull requests
+  #   branches: [ main ]
+  workflow_dispatch:         # Manual trigger only
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Use Node.js 21.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 21.x
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm test
+      - run: npm run lint
