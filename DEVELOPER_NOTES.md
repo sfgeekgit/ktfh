@@ -1,7 +1,11 @@
-# Pizza Delivery Game - Developer Notes
+# Game - Developer Notes
 
 ## Overview
-This is an incremental/idle game built with the Profectus framework where players run a pizza delivery business. The game features a narrative story system with an intro chapter and 4 progressive chapters that unfold as you reach money milestones. Players accept delivery jobs, unlock pizza types, hire drivers with unique names, and make story choices that provide gameplay bonuses. The goal is to reach $10,000 (currently set low for development/testing).
+
+This is an incremental/idle game built with the Profectus framework.
+The purpose of this document is to record changes from the default Profectus framework and other important things to know about the code.
+This document is NOT about gameplay, see the game design doc and other docs for that.
+
 
 ## Project Structure
 
@@ -14,10 +18,7 @@ This is an incremental/idle game built with the Profectus framework where player
 │   │   ├── layers/
 │   │   │   ├── main.tsx          # Main game layer (all game logic)
 │   │   │   ├── intro.tsx         # Intro story chapter
-│   │   │   ├── chapter1.tsx      # Chapter 1 story ($101 milestone)
-│   │   │   ├── chapter2.tsx      # Chapter 2 story ($1000 milestone)
-│   │   │   ├── chapter3.tsx      # Chapter 3 story ($2000 milestone)
-│   │   │   └── chapter4.tsx      # Chapter 4 story ($3000 milestone)
+│   │   │   ├── chapter1.tsx      # Chapter 1 story (for example, there are other chapters as well)
 │   │   ├── gameConfig.ts         # Centralized game balance configuration
 │   │   ├── projInfo.json         # Game metadata (MODIFIED)
 │   │   ├── layers.tsx            # Layer registry (MODIFIED)
@@ -112,39 +113,7 @@ All game balance settings are centralized in `src/data/gameConfig.ts` for easy t
 
 ```typescript
 export const G_CONF = {
-    // Win condition
-    WIN_AMOUNT: 10000,  // $10,000 (dev mode - production would be 1,000,000)
-
-    // Starting resources
-    STARTING_MONEY: 10,
-    STARTING_DRIVERS: 1,
-    STARTING_PIZZAS: ["Cheese"],
-
-    // Chapter triggers
-    CHAPTER_1_TRIGGER: 101,
-    CHAPTER_2_TRIGGER: 1000,
-    CHAPTER_3_TRIGGER: 2000,
-    CHAPTER_4_TRIGGER: 3000,
-
-    // Job generation
-    JOB_GENERATION_INTERVAL: 3,  // Seconds between new job checks
-    AUTO_JOB_LIMIT: 4,           // Only generate if <= this many in queue
-
-    // Pizza unlock costs
-    PIZZA_UNLOCK_COSTS: {
-        Pepperoni: 50,
-        Supreme: 150,
-        Hawaiian: 400,
-        "Meat Lovers": 1000
-    },
-
-    // Driver costs (exponential)
-    DRIVER_BASE_COST: 20,
-    DRIVER_COST_MULTIPLIER: 1.5,
-
-    // Chapter bonuses
-    CHAPTER_1_QUALITY_BONUS: 50,  // +50% earnings
-    CHAPTER_1_SPEED_BONUS: 20,    // -20% delivery time
+       // set game vars here...
 } as const;
 ```
 
@@ -156,27 +125,15 @@ Import with: `import { G_CONF } from "./gameConfig";`
 
 ### Chapter Layers
 
-The game features 5 story layers that trigger at money milestones:
-
-1. **Intro** - Plays on game start, offers choice:
-   - Extra driver (immediate boost)
-   - Unlock Pepperoni pizza (access to better jobs)
-
-2. **Chapter 1** ($101) - Tony's competition begins, choice:
-   - Quality Focus: +50% earnings on all jobs
-   - Speed Focus: -20% delivery time on all jobs
-
-3. **Chapter 2** ($1000) - Partnership with Tony, community focus
-
-4. **Chapter 3** ($2000) - Facing corporate chains together
-
-5. **Chapter 4** ($3000) - Mentoring other local businesses
+The game features story layers that trigger at milestones.
 
 Each chapter uses `createTabFamily()` to display story content and choices. Story choices are persisted and provide permanent gameplay bonuses.
 
 ---
 
 ## Game Implementation (main.tsx)
+## THIS SECTION MAY BE OUT OF DATE. This was written for a prior version of the game based on pizza delivery
+
 
 ### Architecture Overview
 
@@ -329,30 +286,11 @@ interface Driver {
 ---
 
 ## Game Balance
+## THIS MAY BE  OUT OF DATE AND SHOULDNT BE IN THIS DOC ANYWAY
+
 
 **Note:** All values configured in `gameConfig.ts` (G_CONF object)
 
-### Starting Conditions
-- Money: $10
-- Drivers: 1
-- Unlocked Pizzas: Cheese only
-
-### Pizza Unlock Costs
-```
-Pepperoni:    $50
-Supreme:      $150
-Hawaiian:     $400
-Meat Lovers:  $1000
-```
-
-### Driver Costs (Exponential)
-```
-Driver 2: $20
-Driver 3: $30
-Driver 4: $45
-Driver 5: $67
-etc. (1.5x multiplier: base_cost × 1.5^(drivers_owned))
-```
 
 ### Job Generation
 - New job every 3 seconds (fast for dev/testing)
@@ -364,10 +302,6 @@ etc. (1.5x multiplier: base_cost × 1.5^(drivers_owned))
 ### Chapter Bonuses
 - **Quality Focus (Ch1):** +50% earnings on all jobs
 - **Speed Focus (Ch1):** -20% delivery time on all jobs
-
-### Win Condition
-Currently: $10,000 (for development/testing)
-Production: $1,000,000
 
 ---
 
@@ -671,7 +605,7 @@ npm run dev
 
 ---
 
-**Last Updated:** October 18, 2025
+**Last Updated:** October 22, 2025
 
 ---
 

@@ -12,7 +12,7 @@ export const G_CONF = {
     // ===== STARTING RESOURCES =====
     STARTING_MONEY: 10,
     STARTING_DRIVERS: 1,
-    STARTING_PIZZAS: ["Cheese"],
+    STARTING_PIZZAS: ["cheese"], // Now uses job IDs from jobTypes.ts
 
     // ===== CHAPTER TRIGGERS =====
     CHAPTER_1_TRIGGER: 101, // Trigger at $101
@@ -32,13 +32,15 @@ export const G_CONF = {
     JOB_PAYOUT_MAX: 40, // Maximum additional payout (will add to min)
 
     // ===== PIZZA UNLOCKS =====
-    PIZZA_TYPES: ["Cheese", "Pepperoni", "Supreme", "Hawaiian", "Meat Lovers"],
-    PIZZA_UNLOCK_COSTS: {
-        Pepperoni: 50,
-        Supreme: 150,
-        Hawaiian: 400,
-        "Meat Lovers": 1000
-    },
+    // TODO: Delete after jobTypes.ts migration confirmed working
+    // Now defined in jobTypes.ts - these are commented out but kept for reference
+    // PIZZA_TYPES: ["Cheese", "Pepperoni", "Supreme", "Hawaiian", "Meat Lovers"],
+    // PIZZA_UNLOCK_COSTS: {
+    //     Pepperoni: 50,
+    //     Supreme: 150,
+    //     Hawaiian: 400,
+    //     "Meat Lovers": 1000
+    // },
 
     // ===== DRIVER COSTS =====
     DRIVER_BASE_COST: 20, //100, // Cost of first additional driver (driver #2)
@@ -50,7 +52,7 @@ export const G_CONF = {
 
     // ===== INTRO BONUSES =====
     INTRO_BONUS_DRIVERS: 1, // Extra driver from intro choice
-    INTRO_BONUS_PIZZA: "Pepperoni" // Pizza unlocked from intro choice
+    INTRO_BONUS_PIZZA: "pepperoni" // Pizza unlocked from intro choice (uses job ID)
 } as const;
 
 // Type export for TypeScript autocomplete

@@ -11,6 +11,7 @@ import { noPersist } from "game/persistence";
 import { persistent } from "game/persistence";
 import Options from "components/modals/Options.vue";
 import { G_CONF } from "../gameConfig";
+import { JOB_TYPES } from "../jobTypes";
 
 // Driver names list
 const DRIVER_NAMES = [
@@ -33,7 +34,7 @@ interface Driver {
 interface DeliveryJob {
     id: number;
     duration: number;
-    pizzaType: string;
+    jobTypeId: string;  // Changed from pizzaType - now uses job ID from jobTypes.ts
     payout: DecimalSource;
 }
 
@@ -88,7 +89,42 @@ const layer = createLayer(id, function (this: any) {
         };
     }
 
-    const unlockedPizzas = persistent<string[]>([...G_CONF.STARTING_PIZZAS]);
+    // ===== JOB TYPE HELPER FUNCTIONS =====
+
+    // Get job type config by ID
+    function getJobType(id: string) {
+        return JOB_TYPES.find(job => job.id === id);
+    }
+
+    // Check if a single prerequisite condition is met
+    function isPrereqMet(prereq: { type: string; value: string | number }): boolean {
+        if (prereq.type === "job") {
+            return unlockedJobTypes.value.includes(prereq.value as string);
+        } else if (prereq.type === "money") {
+            return Decimal.gte(money.value, prereq.value as number);
+        }
+        // Add other prereq types here as needed (iq, autonomy, generality, etc.)
+        return true;
+    }
+
+    // Check if a job type can be unlocked (all prereqs met)
+    function canUnlockJob(jobType: any): boolean {
+        // Check all prerequisites
+        return jobType.prereq.every((prereq: any) => isPrereqMet(prereq));
+    }
+
+    // Get jobs that should be available for unlocking (in current chapter, prereqs met, not already unlocked)
+    function getUnlockableJobs() {
+        // For now, just return jobs from chapter 1 that aren't unlocked
+        // TODO: Filter by current chapter when chapter system is implemented
+        return JOB_TYPES.filter(job =>
+            job.chapter === 1 &&
+            !unlockedJobTypes.value.includes(job.id) &&
+            canUnlockJob(job)
+        );
+    }
+
+    const unlockedJobTypes = persistent<string[]>([...G_CONF.STARTING_PIZZAS]);  // Changed from unlockedPizzas - stores job IDs
     const introBonusApplied = persistent<boolean>(false);
     const chapter1BonusApplied = persistent<boolean>(false);
     const qualityBonus = persistent<number>(0); // Percentage bonus to earnings
@@ -146,8 +182,8 @@ const layer = createLayer(id, function (this: any) {
                 drivers.value = [...drivers.value, ...bonusDrivers];
                 console.log("After intro bonus, all drivers:", drivers.value);
             } else if (choice === "buy_ingredients") {
-                if (!unlockedPizzas.value.includes(G_CONF.INTRO_BONUS_PIZZA)) {
-                    unlockedPizzas.value.push(G_CONF.INTRO_BONUS_PIZZA);
+                if (!unlockedJobTypes.value.includes(G_CONF.INTRO_BONUS_PIZZA)) {
+                    unlockedJobTypes.value.push(G_CONF.INTRO_BONUS_PIZZA);
                 }
             }
             introBonusApplied.value = true;
@@ -250,19 +286,30 @@ const layer = createLayer(id, function (this: any) {
 
     // Generate random job
     function generateJob(): DeliveryJob {
-        const pizzaType = G_CONF.PIZZA_TYPES[Math.floor(Math.random() * Math.min(G_CONF.PIZZA_TYPES.length, unlockedPizzas.value.length + 1))];
-        const baseDuration = G_CONF.JOB_DURATION_MIN + Math.floor(Math.random() * G_CONF.JOB_DURATION_MAX);
-        let duration = baseDuration;
-        const basePayout = G_CONF.JOB_PAYOUT_MIN + Math.floor(Math.random() * G_CONF.JOB_PAYOUT_MAX);
-        const multiplier = G_CONF.PIZZA_TYPES.indexOf(pizzaType) + 1;
+        // Pick a random unlocked job type
+        const unlockedJobs = JOB_TYPES.filter(job => unlockedJobTypes.value.includes(job.id));
+        if (unlockedJobs.length === 0) {
+            // Fallback - shouldn't happen but just in case
+            throw new Error("No unlocked job types available!");
+        }
+
+        const jobType = unlockedJobs[Math.floor(Math.random() * unlockedJobs.length)];
+
+        // Calculate duration from job type config
+        let duration = jobType.duration
+            ? jobType.duration.min + Math.floor(Math.random() * (jobType.duration.max - jobType.duration.min + 1))
+            : 20; // Fallback duration
 
         // Apply speed bonus (reduce duration)
         if (speedBonus.value > 0) {
             duration = Math.floor(duration * (1 - speedBonus.value / 100));
         }
 
+        // Calculate payout from job type config (assume first payout is money)
+        const payoutSpec = jobType.payout[0];
+        let payout = payoutSpec.min + Math.floor(Math.random() * (payoutSpec.max - payoutSpec.min + 1));
+
         // Apply quality bonus (increase payout)
-        let payout = basePayout * multiplier;
         if (qualityBonus.value > 0) {
             payout = Math.floor(payout * (1 + qualityBonus.value / 100));
         }
@@ -270,7 +317,7 @@ const layer = createLayer(id, function (this: any) {
         return {
             id: nextJobId.value++,
             duration,
-            pizzaType,
+            jobTypeId: jobType.id,
             payout
         };
     }
@@ -302,35 +349,49 @@ const layer = createLayer(id, function (this: any) {
         }
     }));
 
-    // Pizza unlock clickables
-    const pizzaUnlockClickables = G_CONF.PIZZA_TYPES.slice(1).map((pizzaName) => {
-        const pizzaCost = G_CONF.PIZZA_UNLOCK_COSTS[pizzaName as keyof typeof G_CONF.PIZZA_UNLOCK_COSTS];
+    // Job type unlock clickables
+    const pizzaUnlockClickables = JOB_TYPES
+        .filter(job => job.unlockCost.length > 0)  // Only jobs that cost something to unlock
+        .map((jobType) => {
+            // Assume first unlock cost is money for now
+            const moneyCost = jobType.unlockCost.find(cost => cost.type === "money")?.value || 0;
 
-        return createClickable(() => ({
-            display: {
-                title: `Unlock ${pizzaName}`,
-                description: (
-                    <>
-                        Cost: ${pizzaCost}<br/>
-                        Unlock {pizzaName} pizza deliveries
-                    </>
-                )
-            },
-            canClick: () => Decimal.gte(money.value, pizzaCost) && !unlockedPizzas.value.includes(pizzaName),
-            onClick() {
-                money.value = Decimal.sub(money.value, pizzaCost);
-                unlockedPizzas.value.push(pizzaName);
-            },
-            visibility: () => !unlockedPizzas.value.includes(pizzaName),
-            style: {
-                minHeight: "100px",
-                width: "160px",
-                minWidth: "140px",
-                maxWidth: "180px",
-                flex: "1 1 160px"
-            }
-        }));
-    });
+            return createClickable(() => ({
+                display: {
+                    title: `Unlock ${jobType.displayName}`,
+                    description: (
+                        <>
+                            Cost: ${moneyCost}<br/>
+                            Unlock {jobType.displayName} {jobType.category} jobs
+                        </>
+                    )
+                },
+                canClick: () => {
+                    // Check if we have enough money
+                    const hasEnoughMoney = Decimal.gte(money.value, moneyCost);
+                    // Check if not already unlocked
+                    const notUnlocked = !unlockedJobTypes.value.includes(jobType.id);
+                    // Check if all prerequisites are met
+                    const prereqsMet = canUnlockJob(jobType);
+                    return hasEnoughMoney && notUnlocked && prereqsMet;
+                },
+                onClick() {
+                    money.value = Decimal.sub(money.value, moneyCost);
+                    unlockedJobTypes.value.push(jobType.id);
+                },
+                visibility: () => {
+                    // Show if not unlocked and prereqs are met
+                    return !unlockedJobTypes.value.includes(jobType.id) && canUnlockJob(jobType);
+                },
+                style: {
+                    minHeight: "100px",
+                    width: "160px",
+                    minWidth: "140px",
+                    maxWidth: "180px",
+                    flex: "1 1 160px"
+                }
+            }));
+        });
 
     // Update logic
     globalBus.on("update", diff => {
@@ -420,7 +481,7 @@ const layer = createLayer(id, function (this: any) {
 
     // Can accept job
     function canAcceptJob(job: DeliveryJob): boolean {
-        return availableDrivers.value.length > 0 && unlockedPizzas.value.includes(job.pizzaType);
+        return availableDrivers.value.length > 0 && unlockedJobTypes.value.includes(job.jobTypeId);
     }
 
     // Display
@@ -432,7 +493,7 @@ const layer = createLayer(id, function (this: any) {
                 <div style="margin: 15px 0; padding: 12px; border: 2px solid #FFA500; border-radius: 10px; background: #fff3e0;">
                     <div style="font-size: 16px;"><strong>Money:</strong> ${format(money.value)}</div>
                     <div style="font-size: 14px;"><strong>Drivers:</strong> {availableDrivers.value.length} / {drivers.value.length} available</div>
-                    <div style="font-size: 14px;"><strong>Unlocked Pizzas:</strong> {unlockedPizzas.value.join(", ")}</div>
+                    <div style="font-size: 14px;"><strong>Unlocked Pizzas:</strong> {unlockedJobTypes.value.map(id => getJobType(id)?.displayName || id).join(", ")}</div>
                 </div>
 
                 <div style="margin: 15px 0;">
@@ -451,9 +512,10 @@ const layer = createLayer(id, function (this: any) {
                             //const driver = drivers.value.find(d => d.id === delivery.driverId);
 		      	activeDeliveries.value.map((delivery: ActiveDelivery) => {
 			    const driver = drivers.value.find((d: Driver) => d.id === delivery.driverId);
+                            const jobType = getJobType(delivery.jobTypeId);
                             return (
                                 <div key={delivery.id} style="margin: 10px 0; padding: 8px; background: white; border-radius: 5px; border: 1px solid #ddd;">
-                                    <div style="font-size: 14px;"><strong>🚗 {driver?.name || `Driver #${delivery.driverId}`}:</strong> Delivering {delivery.pizzaType} pizza</div>
+                                    <div style="font-size: 14px;"><strong>🚗 {driver?.name || `Driver #${delivery.driverId}`}:</strong> Delivering {jobType?.displayName || delivery.jobTypeId} pizza</div>
                                     <div style="font-size: 14px;"><strong>⏱️ Time:</strong> {Math.ceil(delivery.timeRemaining)}s</div>
                                     <div style="color: #2e7d32; font-size: 14px;"><strong>💰 Earn:</strong> ${format(delivery.payout)}</div>
                                 </div>
@@ -467,10 +529,11 @@ const layer = createLayer(id, function (this: any) {
                     {jobQueue.value.length === 0 ? (
                         <p style="font-style: italic;">No jobs available. New jobs arrive every 60 seconds.</p>
                     ) : (
-		        jobQueue.value.map((job: DeliveryJob) => (
-                        //jobQueue.value.map(job => (
+		        jobQueue.value.map((job: DeliveryJob) => {
+                            const jobType = getJobType(job.jobTypeId);
+                            return (
                             <div key={job.id} style="margin: 10px 0; padding: 8px; background: white; border-radius: 5px; border: 1px solid #ddd;">
-                                <div style="font-size: 14px;"><strong>Pizza:</strong> {job.pizzaType}</div>
+                                <div style="font-size: 14px;"><strong>Pizza:</strong> {jobType?.displayName || job.jobTypeId}</div>
                                 <div style="font-size: 14px;"><strong>Duration:</strong> {job.duration}s</div>
                                 <div style="font-size: 14px;"><strong>Payout:</strong> ${format(job.payout)}</div>
                                 <div style="margin-top: 8px; display: flex; gap: 5px;">
@@ -504,14 +567,14 @@ const layer = createLayer(id, function (this: any) {
                                         Decline
                                     </button>
                                 </div>
-                                {!unlockedPizzas.value.includes(job.pizzaType) && (
-                                    <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">⚠ Need {job.pizzaType}!</div>
+                                {!unlockedJobTypes.value.includes(job.jobTypeId) && (
+                                    <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">⚠ Need {jobType?.displayName || job.jobTypeId}!</div>
                                 )}
-                                {availableDrivers.value.length <= 0 && unlockedPizzas.value.includes(job.pizzaType) && (
+                                {availableDrivers.value.length <= 0 && unlockedJobTypes.value.includes(job.jobTypeId) && (
                                     <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">⚠ No drivers!</div>
                                 )}
                             </div>
-                        ))
+                        )})
                     )}
                 </div>
 
@@ -560,7 +623,7 @@ const layer = createLayer(id, function (this: any) {
         money,
         best,
         total,
-        unlockedPizzas,
+        unlockedJobTypes,  // Changed from unlockedPizzas
         drivers,
         nextDriverId,
         driversInitialized,
