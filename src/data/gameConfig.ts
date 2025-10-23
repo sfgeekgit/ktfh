@@ -13,6 +13,7 @@ export const G_CONF = {
     STARTING_MONEY: 10,
     STARTING_DRIVERS: 1,
     STARTING_PIZZAS: ["cheese"], // Now uses job IDs from jobTypes.ts
+    STARTING_GPUS: 1,
 
     // ===== CHAPTER TRIGGERS =====
     CHAPTER_1_TRIGGER: 101, // Trigger at $101
@@ -45,6 +46,10 @@ export const G_CONF = {
     // ===== DRIVER COSTS =====
     DRIVER_BASE_COST: 20, //100, // Cost of first additional driver (driver #2)
     DRIVER_COST_MULTIPLIER: 1.5, // Each driver costs 1.5x the previous
+
+    // ===== GPU COSTS =====
+    GPU_BASE_COST: 50, // Cost of first GPU purchase
+    GPU_COST_MULTIPLIER: 1.5, // Each GPU costs 1.5x the previous
 
     // ===== CHAPTER 1 BONUSES =====
     CHAPTER_1_QUALITY_BONUS: 50, // +50% earnings

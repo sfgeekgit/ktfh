@@ -1,8 +1,7 @@
-# Pizza Delivery Empire
+# Is AI the future?
 
-An incremental game where you build a pizza delivery business. Accept delivery jobs, unlock new pizza types, hire drivers, and work your way to becoming a millionaire.
+An incremental game under development.
 
-Built with the [Profectus](https://github.com/profectus-engine/Profectus) incremental game engine.
 
 ## Quick Start
 

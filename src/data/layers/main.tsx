@@ -57,6 +57,9 @@ const layer = createLayer(id, function (this: any) {
     const best = trackBest(money);
     const total = trackTotal(money);
 
+    // GPU persistent state
+    const gpusOwned = persistent<number>(G_CONF.STARTING_GPUS);
+
     // Persistent state - must be created first
     const nextDriverId = persistent<number>(1);
     ////  const drivers = persistent<Driver[]>([]); 
@@ -139,9 +142,20 @@ const layer = createLayer(id, function (this: any) {
         return drivers.value
 	    .filter((d: Driver) => !busyDriverIds.has(d.id))
 	    .sort((a: Driver, b: Driver) => a.lastAvailableTime - b.lastAvailableTime);
-	
+
 		///    .filter(d => !busyDriverIds.has(d.id))
         	///    .sort((a, b) => a.lastAvailableTime - b.lastAvailableTime);
+    });
+
+    // Computed: Available GPUs (total - in use)
+    const availableGPUs = computed(() => {
+        // Calculate GPUs in use by summing compute costs of active deliveries
+        const gpusInUse = activeDeliveries.value.reduce((sum: number, delivery: ActiveDelivery) => {
+            const jobType = getJobType(delivery.jobTypeId);
+            const computeCost = jobType?.cost?.find(c => c.type === "compute")?.value || 0;
+            return sum + computeCost;
+        }, 0);
+        return gpusOwned.value - gpusInUse;
     });
 
     // Read intro choices
@@ -349,6 +363,31 @@ const layer = createLayer(id, function (this: any) {
         }
     }));
 
+    // Buy GPU clickable
+    const buyGPUClickable = createClickable(() => ({
+        display: {
+            title: "Buy GPU",
+            description: () => (
+                <>
+                    Cost: ${format(Decimal.pow(G_CONF.GPU_COST_MULTIPLIER, gpusOwned.value - G_CONF.STARTING_GPUS).times(G_CONF.GPU_BASE_COST))}<br/>
+                    GPUs: {gpusOwned.value}
+                </>
+            )
+        },
+        canClick: () => Decimal.gte(money.value, Decimal.pow(G_CONF.GPU_COST_MULTIPLIER, gpusOwned.value - G_CONF.STARTING_GPUS).times(G_CONF.GPU_BASE_COST)),
+        onClick() {
+            money.value = Decimal.sub(money.value, Decimal.pow(G_CONF.GPU_COST_MULTIPLIER, gpusOwned.value - G_CONF.STARTING_GPUS).times(G_CONF.GPU_BASE_COST));
+            gpusOwned.value = gpusOwned.value + 1;
+        },
+        style: {
+            minHeight: "100px",
+            width: "160px",
+            minWidth: "140px",
+            maxWidth: "180px",
+            flex: "1 1 160px"
+        }
+    }));
+
     // Job type unlock clickables
     const pizzaUnlockClickables = JOB_TYPES
         .filter(job => job.unlockCost.length > 0)  // Only jobs that cost something to unlock
@@ -481,7 +520,18 @@ const layer = createLayer(id, function (this: any) {
 
     // Can accept job
     function canAcceptJob(job: DeliveryJob): boolean {
-        return availableDrivers.value.length > 0 && unlockedJobTypes.value.includes(job.jobTypeId);
+        // Check if we have an available driver
+        if (availableDrivers.value.length <= 0) return false;
+
+        // Check if job type is unlocked
+        if (!unlockedJobTypes.value.includes(job.jobTypeId)) return false;
+
+        // Check if we have enough available compute
+        const jobType = getJobType(job.jobTypeId);
+        const computeRequired = jobType?.cost?.find(c => c.type === "compute")?.value || 0;
+        if (availableGPUs.value < computeRequired) return false;
+
+        return true;
     }
 
     // Display
@@ -493,12 +543,14 @@ const layer = createLayer(id, function (this: any) {
                 <div style="margin: 15px 0; padding: 12px; border: 2px solid #FFA500; border-radius: 10px; background: #fff3e0;">
                     <div style="font-size: 16px;"><strong>Money:</strong> ${format(money.value)}</div>
                     <div style="font-size: 14px;"><strong>Drivers:</strong> {availableDrivers.value.length} / {drivers.value.length} available</div>
+                    <div style="font-size: 14px;"><strong>GPUs:</strong> {availableGPUs.value} / {gpusOwned.value} available</div>
                     <div style="font-size: 14px;"><strong>Unlocked Pizzas:</strong> {unlockedJobTypes.value.map(id => getJobType(id)?.displayName || id).join(", ")}</div>
                 </div>
 
                 <div style="margin: 15px 0;">
                     <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
                         {render(hireDriverClickable)}
+                        {render(buyGPUClickable)}
                         {pizzaUnlockClickables.map(clickable => render(clickable))}
                     </div>
                 </div>
@@ -531,11 +583,13 @@ const layer = createLayer(id, function (this: any) {
                     ) : (
 		        jobQueue.value.map((job: DeliveryJob) => {
                             const jobType = getJobType(job.jobTypeId);
+                            const computeRequired = jobType?.cost?.find(c => c.type === "compute")?.value || 0;
                             return (
                             <div key={job.id} style="margin: 10px 0; padding: 8px; background: white; border-radius: 5px; border: 1px solid #ddd;">
                                 <div style="font-size: 14px;"><strong>Pizza:</strong> {jobType?.displayName || job.jobTypeId}</div>
                                 <div style="font-size: 14px;"><strong>Duration:</strong> {job.duration}s</div>
                                 <div style="font-size: 14px;"><strong>Payout:</strong> ${format(job.payout)}</div>
+                                <div style="font-size: 14px;"><strong>Compute:</strong> {computeRequired} GPU{computeRequired !== 1 ? 's' : ''}</div>
                                 <div style="margin-top: 8px; display: flex; gap: 5px;">
                                     <button
                                         onClick={() => acceptJob(job)}
@@ -570,8 +624,11 @@ const layer = createLayer(id, function (this: any) {
                                 {!unlockedJobTypes.value.includes(job.jobTypeId) && (
                                     <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">⚠ Need {jobType?.displayName || job.jobTypeId}!</div>
                                 )}
-                                {availableDrivers.value.length <= 0 && unlockedJobTypes.value.includes(job.jobTypeId) && (
+                                {availableDrivers.value.length <= 0 && unlockedJobTypes.value.includes(job.jobTypeId) && availableGPUs.value >= computeRequired && (
                                     <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">⚠ No drivers!</div>
+                                )}
+                                {availableGPUs.value < computeRequired && unlockedJobTypes.value.includes(job.jobTypeId) && (
+                                    <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">⚠ Need {computeRequired} GPU{computeRequired !== 1 ? 's' : ''}!</div>
                                 )}
                             </div>
                         )})
@@ -635,7 +692,10 @@ const layer = createLayer(id, function (this: any) {
         activeDeliveries,
         nextJobId,
         timeSinceLastJob,
+        gpusOwned,
+        availableGPUs,
         hireDriverClickable,
+        buyGPUClickable,
         pizzaUnlockClickables,
         display,
         treeNode: createTreeNode(() => ({

@@ -21,6 +21,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Instructions may be found here and in these other files if they exist
 ./README.md
+./read_this.md
 ./claude/PROJECT.md
 Any .md files in ./claude/
 Any .md files in ./.claude/ 
