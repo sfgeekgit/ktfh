@@ -13,23 +13,6 @@ import Options from "components/modals/Options.vue";
 import { G_CONF } from "../gameConfig";
 import { JOB_TYPES } from "../jobTypes";
 
-// Driver names list
-const DRIVER_NAMES = [
-    "Alex", "Blake", "Casey", "Drew", "Eli", "Frankie", "Gray", "Harper", "Izzy", "Jordan",
-    "Kelly", "Logan", "Morgan", "Nico", "Ollie", "Parker", "Quinn", "Riley", "Sage", "Taylor",
-    "Avery", "Bailey", "Cameron", "Dakota", "Emerson", "Finley", "Hayden", "Jamie", "Kendall", "Lane",
-    "Marley", "Noel", "Oakley", "Peyton", "Reese", "Rowan", "Sawyer", "Skyler", "Spencer", "Sydney",
-    "Tatum", "Tyler", "Val", "Wesley", "Winter", "Yael", "Zion", "River", "Phoenix", "Sage"
-];
-
-// Driver interface
-interface Driver {
-    id: number;
-    name: string;
-    status: "available" | "busy";
-    lastAvailableTime: number;  // Date.now() timestamp
-}
-
 // Job interface
 interface DeliveryJob {
     id: number;
@@ -41,7 +24,6 @@ interface DeliveryJob {
 // Active delivery interface
 interface ActiveDelivery extends DeliveryJob {
     timeRemaining: number;
-    driverId: number;
 }
 
 const id = "main";
@@ -59,38 +41,6 @@ const layer = createLayer(id, function (this: any) {
 
     // GPU persistent state
     const gpusOwned = persistent<number>(G_CONF.STARTING_GPUS);
-
-    // Persistent state - must be created first
-    const nextDriverId = persistent<number>(1);
-    ////  const drivers = persistent<Driver[]>([]); 
-    /// const drivers = persistent<Driver[]>([] as any);  // Trust me bro, it works
-    const drivers = persistent([] as any);
-
-
-    // Helper function to generate a random driver name
-    function generateDriverName(): string {
-        const usedNames = new Set(drivers.value.map((d: Driver) => d.name));
-
-        // const usedNames = new Set(drivers.value.map(d => d.name));
-        const availableNames = DRIVER_NAMES.filter(n => !usedNames.has(n));
-        if (availableNames.length === 0) {
-            // If all names used, start adding numbers
-            return `Driver ${nextDriverId.value}`;
-        }
-        return availableNames[Math.floor(Math.random() * availableNames.length)];
-    }
-
-    // Helper function to create a new driver
-    function createDriver(): Driver {
-        const driverId = nextDriverId.value;
-        nextDriverId.value = nextDriverId.value + 1; // Explicitly set to trigger persistence
-        return {
-            id: driverId,
-            name: generateDriverName(),
-            status: "available",
-            lastAvailableTime: Date.now()
-        };
-    }
 
     // ===== JOB TYPE HELPER FUNCTIONS =====
 
@@ -132,20 +82,6 @@ const layer = createLayer(id, function (this: any) {
     const chapter1BonusApplied = persistent<boolean>(false);
     const qualityBonus = persistent<number>(0); // Percentage bonus to earnings
     const speedBonus = persistent<number>(0);   // Percentage reduction to delivery time
-    const driversInitialized = persistent<boolean>(false);
-
-    // Computed: Available drivers sorted by who's been waiting longest
-    const availableDrivers = computed(() => {
-        // Get drivers that are not currently on a delivery
-	const busyDriverIds = new Set(activeDeliveries.value.map((d: ActiveDelivery) => d.driverId));
-	//const busyDriverIds = new Set(activeDeliveries.value.map(d => d.driverId));
-        return drivers.value
-	    .filter((d: Driver) => !busyDriverIds.has(d.id))
-	    .sort((a: Driver, b: Driver) => a.lastAvailableTime - b.lastAvailableTime);
-
-		///    .filter(d => !busyDriverIds.has(d.id))
-        	///    .sort((a, b) => a.lastAvailableTime - b.lastAvailableTime);
-    });
 
     // Computed: Available GPUs (total - in use)
     const availableGPUs = computed(() => {
@@ -168,41 +104,8 @@ const layer = createLayer(id, function (this: any) {
         return (layers.intro as any)?.introComplete?.value || false;
     });
 
-    // Watch for intro completion and apply bonuses reactively
-    watch([introComplete, introChoice], ([complete, choice]) => {
-        // Initialize starting drivers first if not done
-        if (!driversInitialized.value) {
-            console.log("Initializing starting drivers, nextDriverId:", nextDriverId.value);
-            const newDrivers = [];
-            for (let i = 0; i < G_CONF.STARTING_DRIVERS; i++) {
-                const newDriver = createDriver();
-                console.log("Created starting driver:", newDriver);
-                newDrivers.push(newDriver);
-            }
-            drivers.value = newDrivers;
-            console.log("After init, nextDriverId is now:", nextDriverId.value);
-            driversInitialized.value = true;
-        }
-
-        if (complete && !introBonusApplied.value && choice) {
-            if (choice === "hire_driver") {
-                console.log("Applying intro bonus driver, nextDriverId:", nextDriverId.value);
-                const bonusDrivers = [];
-                for (let i = 0; i < G_CONF.INTRO_BONUS_DRIVERS; i++) {
-                    const newDriver = createDriver();
-                    console.log("Created intro bonus driver:", newDriver);
-                    bonusDrivers.push(newDriver);
-                }
-                drivers.value = [...drivers.value, ...bonusDrivers];
-                console.log("After intro bonus, all drivers:", drivers.value);
-            } else if (choice === "buy_ingredients") {
-                if (!unlockedJobTypes.value.includes(G_CONF.INTRO_BONUS_PIZZA)) {
-                    unlockedJobTypes.value.push(G_CONF.INTRO_BONUS_PIZZA);
-                }
-            }
-            introBonusApplied.value = true;
-        }
-    }, { immediate: true });
+    // Intro completion (no gameplay effects, just narrative)
+    // Removed auto-unlock of pepperoni
 
     // Chapter 1 - trigger and bonuses
     const chapter1Choice = computed(() => {
@@ -336,33 +239,6 @@ const layer = createLayer(id, function (this: any) {
         };
     }
 
-    // Hire driver clickable
-    const hireDriverClickable = createClickable(() => ({
-        display: {
-            title: "Hire Driver",
-            description: () => (
-                <>
-                    Cost: ${format(Decimal.pow(G_CONF.DRIVER_COST_MULTIPLIER, drivers.value.length).times(G_CONF.DRIVER_BASE_COST))}<br/>
-                    Drivers: {drivers.value.length}
-                </>
-            )
-        },
-        canClick: () => Decimal.gte(money.value, Decimal.pow(G_CONF.DRIVER_COST_MULTIPLIER, drivers.value.length).times(G_CONF.DRIVER_BASE_COST)),
-        onClick() {
-            money.value = Decimal.sub(money.value, Decimal.pow(G_CONF.DRIVER_COST_MULTIPLIER, drivers.value.length).times(G_CONF.DRIVER_BASE_COST));
-            const newDriver = createDriver();
-            console.log("Hiring driver:", newDriver, "nextDriverId now:", nextDriverId.value);
-            drivers.value = [...drivers.value, newDriver];
-        },
-        style: {
-            minHeight: "100px",
-            width: "160px",
-            minWidth: "140px",
-            maxWidth: "180px",
-            flex: "1 1 160px"
-        }
-    }));
-
     // Buy GPU clickable
     const buyGPUClickable = createClickable(() => ({
         display: {
@@ -450,26 +326,7 @@ const layer = createLayer(id, function (this: any) {
                 // Pay out the money
                 money.value = Decimal.add(money.value, delivery.payout);
 
-                // Update driver's lastAvailableTime for queue rotation
-		const driverIndex = drivers.value.findIndex((d: Driver) => d.id === delivery.driverId);
-		
-                /// const driverIndex = drivers.value.findIndex(d => d.id === delivery.driverId);
-		
-                if (driverIndex !== -1) {
-		   drivers.value = drivers.value.map((d: Driver, idx: number) => {
-		
-                   ///// drivers.value = drivers.value.map((d, idx) => {
-                        if (idx === driverIndex) {
-                            return {
-                                ...d,
-                                lastAvailableTime: Date.now()
-                            };
-                        }
-                        return d;
-                    });
-                }
-
-                // Remove the delivery - this automatically makes driver available again
+                // Remove the completed delivery
                 activeDeliveries.value.splice(i, 1);
             }
         }
@@ -493,22 +350,13 @@ const layer = createLayer(id, function (this: any) {
 
     // Accept job
     function acceptJob(job: DeliveryJob) {
-        const driver = availableDrivers.value[0];
-        if (!driver) return; // Safety check
-
-        const driverId = driver.id;
-
         // Remove job from queue
 	jobQueue.value = jobQueue.value.filter((j: DeliveryJob) => j.id !== job.id);
 
-        ///jobQueue.value = jobQueue.value.filter(j => j.id !== job.id);
-
-        // Add to active deliveries - this automatically makes driver unavailable
-        // because our computed checks activeDeliveries
+        // Add to active deliveries
         activeDeliveries.value.push({
             ...job,
-            timeRemaining: job.duration,
-            driverId: driverId
+            timeRemaining: job.duration
         });
     }
 
@@ -520,9 +368,6 @@ const layer = createLayer(id, function (this: any) {
 
     // Can accept job
     function canAcceptJob(job: DeliveryJob): boolean {
-        // Check if we have an available driver
-        if (availableDrivers.value.length <= 0) return false;
-
         // Check if job type is unlocked
         if (!unlockedJobTypes.value.includes(job.jobTypeId)) return false;
 
@@ -542,32 +387,27 @@ const layer = createLayer(id, function (this: any) {
 
                 <div style="margin: 15px 0; padding: 12px; border: 2px solid #FFA500; border-radius: 10px; background: #fff3e0;">
                     <div style="font-size: 16px;"><strong>Money:</strong> ${format(money.value)}</div>
-                    <div style="font-size: 14px;"><strong>Drivers:</strong> {availableDrivers.value.length} / {drivers.value.length} available</div>
                     <div style="font-size: 14px;"><strong>GPUs:</strong> {availableGPUs.value} / {gpusOwned.value} available</div>
                     <div style="font-size: 14px;"><strong>Unlocked Pizzas:</strong> {unlockedJobTypes.value.map(id => getJobType(id)?.displayName || id).join(", ")}</div>
                 </div>
 
                 <div style="margin: 15px 0;">
                     <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
-                        {render(hireDriverClickable)}
                         {render(buyGPUClickable)}
                         {pizzaUnlockClickables.map(clickable => render(clickable))}
                     </div>
                 </div>
 
                 <div style="margin: 15px 0; padding: 12px; border: 2px solid #2196F3; border-radius: 10px; background: #e3f2fd;">
-                    <h3>Active Deliveries ({activeDeliveries.value.length})</h3>
+                    <h3>Active Jobs ({activeDeliveries.value.length})</h3>
                     {activeDeliveries.value.length === 0 ? (
-                        <p style="font-style: italic;">No active deliveries</p>
+                        <p style="font-style: italic;">No active jobs</p>
                     ) : (
-                        //activeDeliveries.value.map(delivery => {
-                            //const driver = drivers.value.find(d => d.id === delivery.driverId);
 		      	activeDeliveries.value.map((delivery: ActiveDelivery) => {
-			    const driver = drivers.value.find((d: Driver) => d.id === delivery.driverId);
                             const jobType = getJobType(delivery.jobTypeId);
                             return (
                                 <div key={delivery.id} style="margin: 10px 0; padding: 8px; background: white; border-radius: 5px; border: 1px solid #ddd;">
-                                    <div style="font-size: 14px;"><strong>🚗 {driver?.name || `Driver #${delivery.driverId}`}:</strong> Delivering {jobType?.displayName || delivery.jobTypeId} pizza</div>
+                                    <div style="font-size: 14px;"><strong>Processing:</strong> {jobType?.displayName || delivery.jobTypeId} pizza</div>
                                     <div style="font-size: 14px;"><strong>⏱️ Time:</strong> {Math.ceil(delivery.timeRemaining)}s</div>
                                     <div style="color: #2e7d32; font-size: 14px;"><strong>💰 Earn:</strong> ${format(delivery.payout)}</div>
                                 </div>
@@ -624,9 +464,6 @@ const layer = createLayer(id, function (this: any) {
                                 {!unlockedJobTypes.value.includes(job.jobTypeId) && (
                                     <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">⚠ Need {jobType?.displayName || job.jobTypeId}!</div>
                                 )}
-                                {availableDrivers.value.length <= 0 && unlockedJobTypes.value.includes(job.jobTypeId) && availableGPUs.value >= computeRequired && (
-                                    <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">⚠ No drivers!</div>
-                                )}
                                 {availableGPUs.value < computeRequired && unlockedJobTypes.value.includes(job.jobTypeId) && (
                                     <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">⚠ Need {computeRequired} GPU{computeRequired !== 1 ? 's' : ''}!</div>
                                 )}
@@ -681,9 +518,6 @@ const layer = createLayer(id, function (this: any) {
         best,
         total,
         unlockedJobTypes,  // Changed from unlockedPizzas
-        drivers,
-        nextDriverId,
-        driversInitialized,
         introBonusApplied,
         chapter1BonusApplied,
         qualityBonus,
@@ -694,7 +528,6 @@ const layer = createLayer(id, function (this: any) {
         timeSinceLastJob,
         gpusOwned,
         availableGPUs,
-        hireDriverClickable,
         buyGPUClickable,
         pizzaUnlockClickables,
         display,

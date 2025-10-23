@@ -11,7 +11,6 @@ export const G_CONF = {
 
     // ===== STARTING RESOURCES =====
     STARTING_MONEY: 10,
-    STARTING_DRIVERS: 1,
     STARTING_PIZZAS: ["cheese"], // Now uses job IDs from jobTypes.ts
     STARTING_GPUS: 1,
 
@@ -43,21 +42,13 @@ export const G_CONF = {
     //     "Meat Lovers": 1000
     // },
 
-    // ===== DRIVER COSTS =====
-    DRIVER_BASE_COST: 20, //100, // Cost of first additional driver (driver #2)
-    DRIVER_COST_MULTIPLIER: 1.5, // Each driver costs 1.5x the previous
-
     // ===== GPU COSTS =====
     GPU_BASE_COST: 50, // Cost of first GPU purchase
     GPU_COST_MULTIPLIER: 1.5, // Each GPU costs 1.5x the previous
 
     // ===== CHAPTER 1 BONUSES =====
     CHAPTER_1_QUALITY_BONUS: 50, // +50% earnings
-    CHAPTER_1_SPEED_BONUS: 20, // -20% delivery time
-
-    // ===== INTRO BONUSES =====
-    INTRO_BONUS_DRIVERS: 1, // Extra driver from intro choice
-    INTRO_BONUS_PIZZA: "pepperoni" // Pizza unlocked from intro choice (uses job ID)
+    CHAPTER_1_SPEED_BONUS: 20 // -20% delivery time
 } as const;
 
 // Type export for TypeScript autocomplete

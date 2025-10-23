@@ -57,7 +57,6 @@ This document is NOT about gameplay, see the game design doc and other docs for 
 - Commented out/removed `import Nav from "./components/Nav.vue"`
 - Removed `<Nav />` component usage in both files
 
-**Why:** Client wanted a cleaner, full-width interface without default Profectus navigation.
 
 ---
 
@@ -80,9 +79,6 @@ This document is NOT about gameplay, see the game design doc and other docs for 
 import main from "./layers/main";
 import intro from "./layers/intro";
 import chapter1 from "./layers/chapter1";
-import chapter2 from "./layers/chapter2";
-import chapter3 from "./layers/chapter3";
-import chapter4 from "./layers/chapter4";
 
 export const getInitialLayers = (player: Partial<Player>): Array<Layer> =>
     [intro, main, chapter1, chapter2, chapter3, chapter4];
@@ -132,53 +128,48 @@ Each chapter uses `createTabFamily()` to display story content and choices. Stor
 ---
 
 ## Game Implementation (main.tsx)
-## THIS SECTION MAY BE OUT OF DATE. This was written for a prior version of the game based on pizza delivery
-
 
 ### Architecture Overview
 
 The main layer implements:
-- **Resources:** Money (tracked with Decimal for big numbers)
-- **Clickables:** Shop items (hire drivers, unlock pizzas)
-- **Refs:** Game state (jobs, drivers array, unlocked pizzas)
-- **Update Loop:** GlobalBus event for timers, deliveries, and job generation
-- **Driver System:** Unique named drivers with FIFO queue rotation
+- **Resources:** Money (tracked with Decimal for big numbers), GPUs (compute resources)
+- **Clickables:** Shop items (buy GPUs, unlock job types)
+- **Refs:** Game state (jobs, GPUs owned, unlocked job types)
+- **Update Loop:** GlobalBus event for timers, job completion, and job generation
+- **Job System:** Jobs require compute (GPUs) to run, multiple jobs can run in parallel if enough GPUs available
 
 ### Key Components
 
 #### 1. Resources
 ```typescript
 const money = createResource<DecimalSource>(10, "dollars");
-const best = trackBest(money);    // Tracks highest money reached
-const total = trackTotal(money);   // Tracks total money earned
 ```
 
 #### 2. Persistent State (Must be in return statement!)
 ```typescript
-const unlockedPizzas: Ref<string[]> = ref(G_CONF.STARTING_PIZZAS);
-const drivers: Ref<Driver[]> = ref([]);  // Array of Driver objects
+const unlockedJobTypes: Ref<string[]> = ref(G_CONF.STARTING_PIZZAS);
+const gpusOwned = persistent<number>(G_CONF.STARTING_GPUS);
 const jobQueue: Ref<DeliveryJob[]> = ref([]);
 const activeDeliveries: Ref<ActiveDelivery[]> = ref([]);
 const nextJobId = ref(0);
-const nextDriverId = ref(1);  // For generating unique driver IDs
 const timeSinceLastJob = ref(0);
-const initialJobsSpawned = ref(false);
-const driversInitialized = ref(false);
-const introComplete = ref(false);
-const introChoice = ref<string | null>(null);
-const chapter1Choice = ref<string | null>(null);
+const introBonusApplied = ref(false);
+const chapter1BonusApplied = ref(false);
+const qualityBonus = ref(0);
+const speedBonus = ref(0);
 ```
 
 **CRITICAL:** All refs must be included in the layer's return statement or you'll get persistence errors!
 
-**Note on Driver System:** We use a `drivers` array instead of a simple count. Each driver has unique properties and the system rotates through available drivers in FIFO order.
+**Note on GPU System:** GPUs are a fungible resource (just a count). Jobs require a specified amount of compute to run. Available GPUs = total GPUs - GPUs currently in use by active jobs.
 
 #### 3. Game Loop
 ```typescript
 globalBus.on("update", diff => {
-    // Update active deliveries (countdown timers)
-    // Complete deliveries and mark drivers available
-    // Generate new jobs every 3 seconds if <= AUTO_JOB_LIMIT
+    // Update active jobs (countdown timers)
+    // Complete jobs and pay out money
+    // Free up GPUs when jobs complete
+    // Generate new jobs every X seconds if <= AUTO_JOB_LIMIT
     // Spawn initial jobs on first load
 });
 ```
@@ -204,42 +195,10 @@ const itemClickable = createClickable(() => ({
 }));
 ```
 
-**Important:** Driver costs scale using `Decimal.pow(G_CONF.DRIVER_COST_MULTIPLIER, drivers.value.length).times(G_CONF.DRIVER_BASE_COST)`
+**Important:** GPU costs scale using `Decimal.pow(G_CONF.GPU_COST_MULTIPLIER, gpusOwned.value - G_CONF.STARTING_GPUS).times(G_CONF.GPU_BASE_COST)`
 
-#### 5. Driver System
+#### 5. GPU System
 
-**Driver Data Structure:**
-```typescript
-interface Driver {
-    id: number;              // Unique ID (from nextDriverId)
-    name: string;            // Random name from 50-name pool
-    status: "available" | "busy";
-    lastAvailableTime: number;  // Timestamp for FIFO queue rotation
-}
-```
-
-**Driver Names:** 50 unique names randomly selected on creation:
-```typescript
-const DRIVER_NAMES = [
-    "Alex", "Jordan", "Casey", "Morgan", "Taylor",
-    "Riley", "Sam", "Avery", "Quinn", "Charlie",
-    // ... 40 more names
-];
-```
-
-**Available Driver Logic:**
-```typescript
-const availableDrivers = computed(() => {
-    const busyDriverIds = new Set(activeDeliveries.value.map(d => d.driverId));
-    return drivers.value
-        .filter(d => !busyDriverIds.has(d.id))
-        .sort((a, b) => a.lastAvailableTime - b.lastAvailableTime);
-});
-```
-
-**Key Insight:** We check `activeDeliveries` array instead of `driver.status` field because Vue reactivity can be unreliable with nested object updates. This prevents the bug where multiple jobs could be assigned to the same driver.
-
-**Driver Queue Rotation:** When assigning a job, we always take the first driver from `availableDrivers` (sorted by `lastAvailableTime`). When a delivery completes, we update the driver's `lastAvailableTime` to `Date.now()`, moving them to the back of the queue.
 
 #### 6. Job System
 
@@ -250,38 +209,14 @@ const availableDrivers = computed(() => {
 - Modified by chapter bonuses (quality/speed choices)
 
 **Job Acceptance:**
-- Requires: available driver + unlocked pizza type
-- Moves job from queue to active deliveries
-- Assigns to next driver in FIFO queue
-- Updates driver's `lastAvailableTime`
+- Requires: enough available GPUs + unlocked job type
+- Moves job from queue to active jobs
+- Reserves compute (GPUs) for the duration of the job
 
 **Job Completion:**
 - Timer counts down in update loop
 - Money added when timer reaches 0
-- Driver marked available by updating `lastAvailableTime`
-
-### Data Structures
-
-```typescript
-interface DeliveryJob {
-    id: number;
-    duration: number;        // seconds
-    pizzaType: string;
-    payout: DecimalSource;
-}
-
-interface ActiveDelivery extends DeliveryJob {
-    timeRemaining: number;   // countdown
-    driverId: number;        // which driver is handling it
-}
-
-interface Driver {
-    id: number;
-    name: string;
-    status: "available" | "busy";
-    lastAvailableTime: number;
-}
-```
+- GPUs automatically freed (no manual tracking needed)
 
 ---
 
@@ -295,74 +230,15 @@ interface Driver {
 ### Job Generation
 - New job every 3 seconds (fast for dev/testing)
 - Only generates if ≤ 4 jobs in queue (AUTO_JOB_LIMIT)
-- 3 jobs spawn on game start
-- Duration: 10-30 seconds
-- Payout: $10-50 base × pizza multiplier
 
-### Chapter Bonuses
-- **Quality Focus (Ch1):** +50% earnings on all jobs
-- **Speed Focus (Ch1):** -20% delivery time on all jobs
 
 ---
 
-## Critical Bugs Solved
+## Critical Bugs Solved (Historical - from driver-based system)
 
-### 1. Driver ID Duplication Bug
+**Note:** The game previously used a driver-based system with unique driver objects. This was replaced with a simpler GPU-based system. The bugs below are kept for historical reference.
 
-**Symptom:** When starting with intro bonus driver or hiring a 3rd driver, multiple drivers would have the same ID, causing only one to be usable.
-
-**Root Cause:** Profectus persistence timing. When using `nextDriverId.value++`, the increment would happen, but then localStorage would load and reset it back before the next driver was created.
-
-**Failed Solutions:**
-- Using post-increment operator (`nextDriverId.value++`) - doesn't trigger persistence properly
-- Creating drivers immediately on layer initialization - happens before persistence loads
-
-**Working Solution:**
-```typescript
-// 1. Use explicit assignment to trigger persistence
-function createDriver(): Driver {
-    const driverId = nextDriverId.value;
-    nextDriverId.value = nextDriverId.value + 1;  // NOT nextDriverId.value++
-    return {
-        id: driverId,
-        name: generateDriverName(),
-        status: "available",
-        lastAvailableTime: Date.now()
-    };
-}
-
-// 2. Initialize drivers in watch() with immediate: true
-// This ensures it happens AFTER persistence loads
-watch([introComplete, introChoice], ([complete, choice]) => {
-    if (!driversInitialized.value) {
-        const newDrivers = [];
-        for (let i = 0; i < G_CONF.STARTING_DRIVERS; i++) {
-            newDrivers.push(createDriver());
-        }
-        drivers.value = newDrivers;
-        driversInitialized.value = true;
-    }
-    // ... handle intro bonus
-}, { immediate: true });
-```
-
-### 2. Multiple Jobs to Same Driver Bug
-
-**Symptom:** Could assign unlimited jobs to the same driver, even though they should only handle one at a time.
-
-**Root Cause:** Relying on `driver.status` field didn't trigger Vue reactivity properly when checking available drivers.
-
-**Solution:** Check the `activeDeliveries` array instead:
-```typescript
-const availableDrivers = computed(() => {
-    const busyDriverIds = new Set(activeDeliveries.value.map(d => d.driverId));
-    return drivers.value
-        .filter(d => !busyDriverIds.has(d.id))  // Check activeDeliveries, not status
-        .sort((a, b) => a.lastAvailableTime - b.lastAvailableTime);
-});
-```
-
-### 3. Array Mutation Not Triggering Reactivity
+### 1. Array Mutation Not Triggering Reactivity
 
 **Symptom:** When hiring a driver with `drivers.value.push(newDriver)`, the UI wouldn't update properly.
 
@@ -401,12 +277,6 @@ currency: noPersist(money)
 - Other layers (like prestige) in layers folder (delete them)
 - `layers.tsx` not importing your main layer correctly
 
-### 5. Settings Modal Integration
-**Location:** Gear icon in bottom-left corner
-**Features:**
-- Reset save functionality (hard reset)
-- Integrated with existing Options.vue component
-- Commented out appearance settings (not needed for this game)
 
 ---
 
@@ -439,37 +309,36 @@ currency: noPersist(money)
 3. **Initialization Timing:** Use watch() with immediate: true for refs that depend on persistence
    ```typescript
    // BAD - runs before persistence loads
-   if (drivers.value.length === 0) {
-       drivers.value = [createDriver()];
+   if (someState.value === defaultValue) {
+       someState.value = initializeValue();
    }
 
    // GOOD - runs after persistence loads
    watch(someRef, () => {
        if (!initialized.value) {
-           drivers.value = [createDriver()];
+           someState.value = initializeValue();
            initialized.value = true;
        }
    }, { immediate: true });
    ```
 
-4. **Checking Availability:** Use arrays as source of truth, not nested object properties
+4. **Computed Properties:** Use computed for derived values
    ```typescript
-   // BAD - nested updates may not trigger reactivity
-   const available = drivers.value.filter(d => d.status === "available");
-
-   // GOOD - check against array that's definitely reactive
-   const busyIds = new Set(activeDeliveries.value.map(d => d.driverId));
-   const available = drivers.value.filter(d => !busyIds.has(d.id));
+   // Calculate available GPUs from active jobs
+   const availableGPUs = computed(() => {
+       const gpusInUse = activeDeliveries.value.reduce((sum, delivery) => {
+           const jobType = getJobType(delivery.jobTypeId);
+           const computeCost = jobType?.cost?.find(c => c.type === "compute")?.value || 0;
+           return sum + computeCost;
+       }, 0);
+       return gpusOwned.value - gpusInUse;
+   });
    ```
 
 ---
 
 ## Extending the Game
 
-### Adding New Pizza Types
-1. Add to `G_CONF.PIZZA_TYPES` array in `gameConfig.ts`
-2. Add cost to `G_CONF.PIZZA_UNLOCK_COSTS` object
-3. Job generation will automatically include it (weighted by unlock status)
 
 ### Adding New Features
 
@@ -488,26 +357,16 @@ const autoAcceptClickable = createClickable(() => ({
 }));
 
 // In update loop:
-if (autoAcceptCheese.value && availableDrivers.value > 0) {
-    const cheeseJobs = jobQueue.value.filter(j => j.pizzaType === "Cheese");
-    if (cheeseJobs.length > 0) acceptJob(cheeseJobs[0]);
+if (autoAcceptCheese.value) {
+    const cheeseJobs = jobQueue.value.filter(j => j.jobTypeId === "cheese");
+    if (cheeseJobs.length > 0 && canAcceptJob(cheeseJobs[0])) {
+        acceptJob(cheeseJobs[0]);
+    }
 }
 ```
 
 **Remember:** Add new refs to the return statement!
 
-### Adding New Story Chapters
-
-To add a new chapter:
-1. Create `src/data/layers/chapter5.tsx`
-2. Use `createTabFamily()` for story content structure
-3. Import it in `layers.tsx` and `projEntry.tsx`
-4. Set visibility trigger based on money milestone:
-   ```typescript
-   visibility: () => Decimal.gte(main.money.value, G_CONF.CHAPTER_5_TRIGGER)
-   ```
-5. Add persistent refs for choices: `const chapter5Choice = ref<string | null>(null);`
-6. Apply bonuses in main layer based on choice
 
 ---
 
@@ -538,36 +397,6 @@ Minimal ignore list to reduce AI assistant costs. Only ignores `node_modules/`, 
 ### TypeScript Errors
 If you see TS errors but game works, it's usually safe to ignore during prototyping. Run `npm run build` before production to catch real issues.
 
----
-
-## Deployment
-
-### Build for Production
-```bash
-npm run build
-```
-
-Output goes to `dist/` folder. Serve with any static file server.
-
-### Environment Notes
-- Game runs entirely client-side (no backend needed)
-- Uses localStorage for saves
-- Works on mobile browsers
-- No external dependencies required at runtime
-
----
-
-## File Sizes & Performance
-
-### Current Build
-- Main layer: ~300 lines
-- Total game logic: < 10KB minified
-- Profectus framework: ~200KB
-
-### Performance Characteristics
-- Update loop runs at 20 TPS (configurable)
-- Handles 100+ active jobs/deliveries easily
-- No known lag issues
 
 ---
 
@@ -584,11 +413,6 @@ Output goes to `dist/` folder. Serve with any static file server.
 # Check what's in features folder
 ls -la src/features/
 
-# Find where something is used
-grep -ril "searchterm" src/
-
-# See recent changes
-git log --oneline -10
 
 # Clean rebuild
 rm -rf node_modules dist .vite
@@ -605,26 +429,21 @@ npm run dev
 
 ---
 
-**Last Updated:** October 22, 2025
-
----
-
 ## Quick Reference
 
 ### Key Files
 - `gameConfig.ts` - All balance values (G_CONF object)
-- `main.tsx` - Core game logic, driver system, job system
+- `main.tsx` - Core game logic, GPU system, job system
 - `intro.tsx` through `chapter4.tsx` - Story layers
 - `Options.vue` - Settings modal (gear icon bottom-left)
 
 ### Important Patterns
 - Array updates: Use `array.value = [...array.value, newItem]`
 - Counter increments: Use `counter.value = counter.value + 1`
-- Driver availability: Check `activeDeliveries` array, not `status` field
+- GPU availability: Computed from gpusOwned - sum of compute costs of active jobs
 - Initialization: Use `watch()` with `{ immediate: true }` after persistence loads
 
 ### Common Gotchas
-- Driver ID duplication → Initialize in watch(), use explicit assignment
-- Multiple jobs per driver → Check activeDeliveries array for availability
 - Array mutation not updating → Use reassignment instead
 - Refs not persisting → Must be in layer return statement
+- GPU tracking → Use computed property that sums active job compute costs
