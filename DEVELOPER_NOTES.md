@@ -3,7 +3,14 @@
 ## Overview
 
 This is an incremental/idle game built with the Profectus framework.
-The purpose of this document is to record changes from the default Profectus framework and other important things to know about the code.
+The purpose of this document is to :
+-- Record changes from the default Profectus framework
+-- A quickstart of the most important, highest level arch of the code.
+-- Maybe things that are NOT obvious, but touch a lot of parts of the code and future developers might not notice otherwise.
+
+
+Most of the code is self documenting.
+Well written, easily understandable code changes should NOT be added to this document.
 This document is NOT about gameplay, see the game design doc and other docs for that.
 
 
@@ -117,11 +124,9 @@ Import with: `import { G_CONF } from "./gameConfig";`
 ### Progression
 - **currentChapter** persistent state tracks progress (starts at 1)
 - Game starts with chapter1 story, then switches to main gameplay
-- Generic watcher monitors money thresholds and auto-advances chapters
-- All chapter triggers centralized in `getChapterTrigger(chapterNumber)` function
+- Single watcher monitors trigger conditions and auto-advances chapters
+- All chapter triggers in one switch statement inside the watcher
 - Chapter transitions clear job queue and increment currentChapter
-
-### Chapter Triggers (main.tsx)
 
 ### Job Chapter Filtering
 - Jobs support `chapter: number` or `chapter: number[]` (e.g., `chapter: [1, 2]`)
@@ -197,9 +202,6 @@ const itemClickable = createClickable(() => ({
 }));
 ```
 
-**Important:** GPU costs scale using `Decimal.pow(G_CONF.GPU_COST_MULTIPLIER, gpusOwned.value - G_CONF.STARTING_GPUS).times(G_CONF.GPU_BASE_COST)`
-
-#### 5. GPU System
 
 
 #### 6. Job System
@@ -224,7 +226,9 @@ const itemClickable = createClickable(() => ({
 
 ## Game Balance
 
-**Note:** All values configured in `gameConfig.ts` (G_CONF object)
+
+Values are configured in `gameConfig.ts` (G_CONF object)
+
 ### Job Generation
 
 - Only generates if ≤ 4 jobs in queue (AUTO_JOB_LIMIT)

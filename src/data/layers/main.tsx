@@ -83,20 +83,6 @@ const layer = createLayer(id, function (this: any) {
         );
     }
 
-    // Get the money threshold to enter a specific chapter (null = no trigger)
-    // Chapter 1 has no trigger (starts at game start)
-    // All chapter triggers are defined in this single function
-    function getChapterTrigger(chapterNumber: number): number | null {
-        switch(chapterNumber) {
-            case 1: return null; // Chapter 1 starts at game start
-            case 2: return 200;   // Chapter 2 starts at $200
-            case 3: return 1000;  // Chapter 3 starts at $1,000
-            case 4: return 2000;  // Chapter 4 starts at $2,000
-            case 5: return 3000;  // Chapter 5 starts at $3,000
-            default: return null;
-        }
-    }
-
     const unlockedJobTypes = persistent<string[]>([...G_CONF.STARTING_PIZZAS]);  // Changed from unlockedPizzas - stores job IDs
     const introBonusApplied = persistent<boolean>(false);
     const chapter1BonusApplied = persistent<boolean>(false);
@@ -144,16 +130,39 @@ const layer = createLayer(id, function (this: any) {
         }
     }, { immediate: true });
 
-    // Generic chapter transition watcher
-    // Checks if we should advance to the next chapter based on money threshold
+    // Chapter transition watcher
+    // All chapter trigger conditions are defined here in one place
+    // Triggers can be: money thresholds, unlocked jobs, completed jobs, etc.
     watch(
         () => {
             const nextChapter = currentChapter.value + 1;
-            const trigger = getChapterTrigger(nextChapter);
 
-            // No trigger for next chapter, or haven't reached threshold yet
-            if (trigger === null || Decimal.lt(money.value, trigger)) {
-                return null;
+            // Check trigger conditions for the next chapter
+            // Use early returns for failed conditions
+            switch(nextChapter) {
+                case 2:
+                    // Chapter 2: Reach $200
+                    if (Decimal.lt(money.value, 200)) return null;
+                    break;
+
+                case 3:
+                    // Chapter 3: Reach $1,000
+                    if (Decimal.lt(money.value, 1000)) return null;
+                    break;
+
+                case 4:
+                    // Chapter 4: Reach $2,000
+                    if (Decimal.lt(money.value, 2000)) return null;
+                    break;
+
+                case 5:
+                    // Chapter 5: Reach $3,000
+                    if (Decimal.lt(money.value, 3000)) return null;
+                    break;
+
+                default:
+                    // No more chapters
+                    return null;
             }
 
             // Check if chapter story is already complete
