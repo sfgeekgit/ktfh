@@ -7,7 +7,7 @@
     "discordLink": "",
     "versionNumber": "0.1",
     "versionTitle": "Prototype",
-    "initialTabs": ["intro"],
+    "initialTabs": ["chapter1"],
     "maxTickLength": 3600000,
     "enablePausing": true,
     "showNews": false,

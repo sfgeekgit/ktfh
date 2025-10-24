@@ -26,7 +26,7 @@ export default {
     `,
     
     // Initial save data
-    initialTabs: ["main"],
+    initialTabs: ["chapter1"],
     
     // Maximum tick length (in milliseconds)
     maxTickLength: 3600000, // 1 hour

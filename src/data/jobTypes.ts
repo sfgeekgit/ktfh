@@ -35,7 +35,7 @@ interface JobType {
     id: string;              // Internal identifier (used for prereqs)
     displayName: string;     // Name shown to player
     description: string;     // Job description
-    chapter: number;         // Which chapter this unlocks in
+    chapter: number | number[];  // Which chapter(s) this is available in
     prereq: PrereqCondition[];  // Prerequisites to unlock (empty array if none)
     unlockCost: CostSpec[];  // Cost to unlock this job type (empty array if free)
     cost?: CostSpec[];       // Cost to run this job (compute, data, etc.) (optional)
@@ -66,7 +66,7 @@ export const JOB_TYPES: JobType[] = [
         id: "pepperoni",
         displayName: "Pepperoni",
         description: "Classic pepperoni pizza delivery",
-        chapter: 1,
+        chapter: [1, 2],
         prereq: [
             { type: "job", value: "cheese" },
             { type: "money", value: 40 }

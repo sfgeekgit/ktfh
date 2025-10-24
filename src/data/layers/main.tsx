@@ -66,12 +66,18 @@ const layer = createLayer(id, function (this: any) {
         return jobType.prereq.every((prereq: any) => isPrereqMet(prereq));
     }
 
+    // Check if a job is available in the given chapter
+    function isJobInCurrentChapter(job: any, chapter: number): boolean {
+        if (Array.isArray(job.chapter)) {
+            return job.chapter.includes(chapter);
+        }
+        return job.chapter === chapter;
+    }
+
     // Get jobs that should be available for unlocking (in current chapter, prereqs met, not already unlocked)
     function getUnlockableJobs() {
-        // For now, just return jobs from chapter 1 that aren't unlocked
-        // TODO: Filter by current chapter when chapter system is implemented
         return JOB_TYPES.filter(job =>
-            job.chapter === 1 &&
+            isJobInCurrentChapter(job, currentChapter.value) &&
             !unlockedJobTypes.value.includes(job.id) &&
             canUnlockJob(job)
         );
@@ -82,6 +88,7 @@ const layer = createLayer(id, function (this: any) {
     const chapter1BonusApplied = persistent<boolean>(false);
     const qualityBonus = persistent<number>(0); // Percentage bonus to earnings
     const speedBonus = persistent<number>(0);   // Percentage reduction to delivery time
+    const currentChapter = persistent<number>(1); // Current chapter player is in
 
     // Computed: Available GPUs (total - in use)
     const availableGPUs = computed(() => {
@@ -94,20 +101,7 @@ const layer = createLayer(id, function (this: any) {
         return gpusOwned.value - gpusInUse;
     });
 
-    // Read intro choices
-    const introChoice = computed(() => {
-        return (layers.intro as any)?.playerChoice?.value || "";
-    });
-
-    // Apply intro bonuses once when intro completes
-    const introComplete = computed(() => {
-        return (layers.intro as any)?.introComplete?.value || false;
-    });
-
-    // Intro completion (no gameplay effects, just narrative)
-    // Removed auto-unlock of pepperoni
-
-    // Chapter 1 - trigger and bonuses
+    // Chapter 1 - completion and bonuses (chapter1 story shows at game start via initialTabs)
     const chapter1Choice = computed(() => {
         return (layers.chapter1 as any)?.playerChoice?.value || "";
     });
@@ -115,18 +109,6 @@ const layer = createLayer(id, function (this: any) {
     const chapter1Complete = computed(() => {
         return (layers.chapter1 as any)?.complete?.value || false;
     });
-
-    const shouldShowChapter1 = computed(() => {
-        return Decimal.gte(money.value, G_CONF.CHAPTER_1_TRIGGER) && !chapter1Complete.value;
-    });
-
-    // Watch for chapter 1 trigger
-    watch(shouldShowChapter1, (should) => {
-        if (should) {
-	    // @ts-ignore
-            player.tabs = ["chapter1"];
-        }
-    }, { immediate: true });
 
     // Watch for chapter 1 completion and apply bonuses
     watch([chapter1Complete, chapter1Choice], ([complete, choice]) => {
@@ -140,50 +122,53 @@ const layer = createLayer(id, function (this: any) {
         }
     }, { immediate: true });
 
-    // Chapter 2 - trigger
+    // Chapter 2 - trigger when transitioning FROM chapter 1 TO chapter 2
     const chapter2Complete = computed(() => {
         return (layers.chapter2 as any)?.complete?.value || false;
     });
 
     const shouldShowChapter2 = computed(() => {
-        return Decimal.gte(money.value, G_CONF.CHAPTER_2_TRIGGER) && !chapter2Complete.value;
+        return currentChapter.value === 1 && Decimal.gte(money.value, G_CONF.CHAPTER_1_TRIGGER) && !chapter2Complete.value;
     });
 
     watch(shouldShowChapter2, (should) => {
         if (should) {
-	    // @ts-ignore	
+            currentChapter.value = 2; // Advance to chapter 2
+	    // @ts-ignore
             player.tabs = ["chapter2"];
         }
     }, { immediate: true });
 
-    // Chapter 3 - trigger
+    // Chapter 3 - trigger when transitioning FROM chapter 2 TO chapter 3
     const chapter3Complete = computed(() => {
         return (layers.chapter3 as any)?.complete?.value || false;
     });
 
     const shouldShowChapter3 = computed(() => {
-        return Decimal.gte(money.value, G_CONF.CHAPTER_3_TRIGGER) && !chapter3Complete.value;
+        return currentChapter.value === 2 && Decimal.gte(money.value, G_CONF.CHAPTER_2_TRIGGER) && !chapter3Complete.value;
     });
 
     watch(shouldShowChapter3, (should) => {
         if (should) {
-	    // @ts-ignore	
+            currentChapter.value = 3; // Advance to chapter 3
+	    // @ts-ignore
             player.tabs = ["chapter3"];
         }
     }, { immediate: true });
 
-    // Chapter 4 - trigger
+    // Chapter 4 - trigger when transitioning FROM chapter 3 TO chapter 4
     const chapter4Complete = computed(() => {
         return (layers.chapter4 as any)?.complete?.value || false;
     });
 
     const shouldShowChapter4 = computed(() => {
-        return Decimal.gte(money.value, G_CONF.CHAPTER_4_TRIGGER) && !chapter4Complete.value;
+        return currentChapter.value === 3 && Decimal.gte(money.value, G_CONF.CHAPTER_3_TRIGGER) && !chapter4Complete.value;
     });
 
     watch(shouldShowChapter4, (should) => {
         if (should) {
-	    // @ts-ignore	
+            currentChapter.value = 4; // Advance to chapter 4
+	    // @ts-ignore
             player.tabs = ["chapter4"];
         }
     }, { immediate: true });
@@ -310,9 +295,9 @@ const layer = createLayer(id, function (this: any) {
 
     // Update logic
     globalBus.on("update", diff => {
-        // Pause game until intro is complete
-        const introLayer = layers.intro as any;
-        if (introLayer && !introLayer.introComplete?.value) {
+        // Pause game until chapter1 is complete
+        const chapter1Layer = layers.chapter1 as any;
+        if (chapter1Layer && !chapter1Layer.complete?.value) {
             return;
         }
 
@@ -387,6 +372,7 @@ const layer = createLayer(id, function (this: any) {
 
                 <div style="margin: 15px 0; padding: 12px; border: 2px solid #FFA500; border-radius: 10px; background: #fff3e0;">
                     <div style="font-size: 16px;"><strong>Money:</strong> ${format(money.value)}</div>
+                    <div style="font-size: 14px;"><strong>Chapter:</strong> {currentChapter.value}</div>
                     <div style="font-size: 14px;"><strong>GPUs:</strong> {availableGPUs.value} / {gpusOwned.value} available</div>
                     <div style="font-size: 14px;"><strong>Unlocked Pizzas:</strong> {unlockedJobTypes.value.map(id => getJobType(id)?.displayName || id).join(", ")}</div>
                 </div>
@@ -522,6 +508,7 @@ const layer = createLayer(id, function (this: any) {
         chapter1BonusApplied,
         qualityBonus,
         speedBonus,
+        currentChapter,
         jobQueue,
         activeDeliveries,
         nextJobId,
