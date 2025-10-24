@@ -83,6 +83,20 @@ const layer = createLayer(id, function (this: any) {
         );
     }
 
+    // Get the money threshold to enter a specific chapter (null = no trigger)
+    // Chapter 1 has no trigger (starts at game start)
+    // All chapter triggers are defined in this single function
+    function getChapterTrigger(chapterNumber: number): number | null {
+        switch(chapterNumber) {
+            case 1: return null; // Chapter 1 starts at game start
+            case 2: return 200;   // Chapter 2 starts at $200
+            case 3: return 1000;  // Chapter 3 starts at $1,000
+            case 4: return 2000;  // Chapter 4 starts at $2,000
+            case 5: return 3000;  // Chapter 5 starts at $3,000
+            default: return null;
+        }
+    }
+
     const unlockedJobTypes = persistent<string[]>([...G_CONF.STARTING_PIZZAS]);  // Changed from unlockedPizzas - stores job IDs
     const introBonusApplied = persistent<boolean>(false);
     const chapter1BonusApplied = persistent<boolean>(false);
@@ -99,6 +113,14 @@ const layer = createLayer(id, function (this: any) {
             return sum + computeCost;
         }, 0);
         return gpusOwned.value - gpusInUse;
+    });
+
+    // Computed: Check if there are any unlocked jobs available in current chapter
+    const hasAvailableJobs = computed(() => {
+        return JOB_TYPES.some(job =>
+            unlockedJobTypes.value.includes(job.id) &&
+            isJobInCurrentChapter(job, currentChapter.value)
+        );
     });
 
     // Chapter 1 - completion and bonuses (chapter1 story shows at game start via initialTabs)
@@ -122,56 +144,34 @@ const layer = createLayer(id, function (this: any) {
         }
     }, { immediate: true });
 
-    // Chapter 2 - trigger when transitioning FROM chapter 1 TO chapter 2
-    const chapter2Complete = computed(() => {
-        return (layers.chapter2 as any)?.complete?.value || false;
-    });
+    // Generic chapter transition watcher
+    // Checks if we should advance to the next chapter based on money threshold
+    watch(
+        () => {
+            const nextChapter = currentChapter.value + 1;
+            const trigger = getChapterTrigger(nextChapter);
 
-    const shouldShowChapter2 = computed(() => {
-        return currentChapter.value === 1 && Decimal.gte(money.value, G_CONF.CHAPTER_1_TRIGGER) && !chapter2Complete.value;
-    });
+            // No trigger for next chapter, or haven't reached threshold yet
+            if (trigger === null || Decimal.lt(money.value, trigger)) {
+                return null;
+            }
 
-    watch(shouldShowChapter2, (should) => {
-        if (should) {
-            currentChapter.value = 2; // Advance to chapter 2
-	    // @ts-ignore
-            player.tabs = ["chapter2"];
-        }
-    }, { immediate: true });
+            // Check if chapter story is already complete
+            const chapterLayer = layers[`chapter${nextChapter}`] as any;
+            const isComplete = chapterLayer?.complete?.value || false;
 
-    // Chapter 3 - trigger when transitioning FROM chapter 2 TO chapter 3
-    const chapter3Complete = computed(() => {
-        return (layers.chapter3 as any)?.complete?.value || false;
-    });
-
-    const shouldShowChapter3 = computed(() => {
-        return currentChapter.value === 2 && Decimal.gte(money.value, G_CONF.CHAPTER_2_TRIGGER) && !chapter3Complete.value;
-    });
-
-    watch(shouldShowChapter3, (should) => {
-        if (should) {
-            currentChapter.value = 3; // Advance to chapter 3
-	    // @ts-ignore
-            player.tabs = ["chapter3"];
-        }
-    }, { immediate: true });
-
-    // Chapter 4 - trigger when transitioning FROM chapter 3 TO chapter 4
-    const chapter4Complete = computed(() => {
-        return (layers.chapter4 as any)?.complete?.value || false;
-    });
-
-    const shouldShowChapter4 = computed(() => {
-        return currentChapter.value === 3 && Decimal.gte(money.value, G_CONF.CHAPTER_3_TRIGGER) && !chapter4Complete.value;
-    });
-
-    watch(shouldShowChapter4, (should) => {
-        if (should) {
-            currentChapter.value = 4; // Advance to chapter 4
-	    // @ts-ignore
-            player.tabs = ["chapter4"];
-        }
-    }, { immediate: true });
+            return isComplete ? null : nextChapter;
+        },
+        (nextChapter) => {
+            if (nextChapter !== null) {
+                currentChapter.value = nextChapter; // Advance to next chapter
+                jobQueue.value = []; // Clear obsolete jobs from previous chapter
+                // @ts-ignore
+                player.tabs = [`chapter${nextChapter}`];
+            }
+        },
+        { immediate: true }
+    );
 
     /// const jobQueue = persistent<DeliveryJob[]>([]);
     ///    const activeDeliveries = persistent<ActiveDelivery[]>([]);
@@ -186,13 +186,16 @@ const layer = createLayer(id, function (this: any) {
     const nextJobId = persistent<number>(0);
     const timeSinceLastJob = persistent<number>(0);
 
-    // Generate random job
-    function generateJob(): DeliveryJob {
-        // Pick a random unlocked job type
-        const unlockedJobs = JOB_TYPES.filter(job => unlockedJobTypes.value.includes(job.id));
+    // Generate random job (returns null if no jobs available)
+    function generateJob(): DeliveryJob | null {
+        // Pick a random unlocked job type that's available in the current chapter
+        const unlockedJobs = JOB_TYPES.filter(job =>
+            unlockedJobTypes.value.includes(job.id) &&
+            isJobInCurrentChapter(job, currentChapter.value)
+        );
         if (unlockedJobs.length === 0) {
-            // Fallback - shouldn't happen but just in case
-            throw new Error("No unlocked job types available!");
+            // No jobs available - this is okay, player needs to unlock jobs
+            return null;
         }
 
         const jobType = unlockedJobs[Math.floor(Math.random() * unlockedJobs.length)];
@@ -280,8 +283,10 @@ const layer = createLayer(id, function (this: any) {
                     unlockedJobTypes.value.push(jobType.id);
                 },
                 visibility: () => {
-                    // Show if not unlocked and prereqs are met
-                    return !unlockedJobTypes.value.includes(jobType.id) && canUnlockJob(jobType);
+                    // Show if not unlocked, prereqs are met, and in current chapter
+                    return !unlockedJobTypes.value.includes(jobType.id) &&
+                           canUnlockJob(jobType) &&
+                           isJobInCurrentChapter(jobType, currentChapter.value);
                 },
                 style: {
                     minHeight: "100px",
@@ -321,14 +326,20 @@ const layer = createLayer(id, function (this: any) {
         if (timeSinceLastJob.value >= G_CONF.JOB_GENERATION_INTERVAL) {
             timeSinceLastJob.value = 0;
             if (jobQueue.value.length <= G_CONF.AUTO_JOB_LIMIT) {
-                jobQueue.value.push(generateJob());
+                const newJob = generateJob();
+                if (newJob !== null) {
+                    jobQueue.value.push(newJob);
+                }
             }
         }
 
         // Initial jobs
         if (jobQueue.value.length === 0 && activeDeliveries.value.length === 0) {
             for (let i = 0; i < G_CONF.INITIAL_JOBS_COUNT; i++) {
-                jobQueue.value.push(generateJob());
+                const newJob = generateJob();
+                if (newJob !== null) {
+                    jobQueue.value.push(newJob);
+                }
             }
         }
     });
@@ -405,7 +416,14 @@ const layer = createLayer(id, function (this: any) {
                 <div style="margin: 15px 0; padding: 12px; border: 2px solid #4CAF50; border-radius: 10px; background: #e8f5e9;">
                     <h3>Available Jobs ({jobQueue.value.length})</h3>
                     {jobQueue.value.length === 0 ? (
-                        <p style="font-style: italic;">No jobs available. New jobs arrive every 60 seconds.</p>
+                        hasAvailableJobs.value ? (
+                            <p style="font-style: italic;">No jobs available. New jobs arrive every {G_CONF.JOB_GENERATION_INTERVAL} seconds.</p>
+                        ) : (
+                            <div style="padding: 10px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 5px;">
+                                <p style="font-weight: bold; color: #856404; margin: 0 0 8px 0;">⚠️ No job types unlocked for this chapter!</p>
+                                <p style="color: #856404; margin: 0; font-size: 14px;">Unlock a job type below to start receiving jobs.</p>
+                            </div>
+                        )
                     ) : (
 		        jobQueue.value.map((job: DeliveryJob) => {
                             const jobType = getJobType(job.jobTypeId);

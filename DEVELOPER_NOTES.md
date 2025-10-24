@@ -17,9 +17,10 @@ This document is NOT about gameplay, see the game design doc and other docs for 
 │   ├── data/
 │   │   ├── layers/
 │   │   │   ├── main.tsx          # Main game layer (all game logic)
-│   │   │   ├── intro.tsx         # Intro story chapter
-│   │   │   ├── chapter1.tsx      # Chapter 1 story (for example, there are other chapters as well)
-│   │   ├── gameConfig.ts         # Centralized game balance configuration
+│   │   │   ├── chapter1.tsx      # Chapter 1 story (game starts here)
+│   │   │   ├── chapter2.tsx+     # Additional chapter stories
+│   │   ├── jobTypes.ts           # Job definitions with chapter availability
+│   │   ├── gameConfig.ts         # Game balance configuration
 │   │   ├── projInfo.json         # Game metadata (MODIFIED)
 │   │   ├── layers.tsx            # Layer registry (MODIFIED)
 │   │   └── projEntry.tsx         # Entry point (HEAVILY MODIFIED)
@@ -63,25 +64,19 @@ This document is NOT about gameplay, see the game design doc and other docs for 
 ### 2. projEntry.tsx - Simplified Entry Point
 **File:** `src/data/projEntry.tsx`
 
-**Original Issues:**
-- Had demo "prestige" layer and complex tree structure
-- Created its own "main" layer with just points counter
-- Had tree/reset mechanics we didn't need
-
 **Changes Made:**
-1. Removed the entire demo `main` layer definition (was ~70 lines)
+1. Removed the entire demo `main` layer definition
 2. Removed all references to `prestige` layer
 3. Changed `createLayerTreeNode` to `createTreeNode` (API change)
 4. Removed tree reset logic
-5. Simplified to just import and register our custom main layer:
+5. Game starts with chapter1 (story intro), then main (gameplay)
 
 ```typescript
 import main from "./layers/main";
-import intro from "./layers/intro";
 import chapter1 from "./layers/chapter1";
 
 export const getInitialLayers = (player: Partial<Player>): Array<Layer> =>
-    [intro, main, chapter1, chapter2, chapter3, chapter4];
+    [chapter1, main, chapter2, chapter3, chapter4];
 ```
 
 ---
@@ -117,13 +112,22 @@ Import with: `import { G_CONF } from "./gameConfig";`
 
 ---
 
-## Story System
+## Chapter System
 
-### Chapter Layers
+### Progression
+- **currentChapter** persistent state tracks progress (starts at 1)
+- Game starts with chapter1 story, then switches to main gameplay
+- Generic watcher monitors money thresholds and auto-advances chapters
+- All chapter triggers centralized in `getChapterTrigger(chapterNumber)` function
+- Chapter transitions clear job queue and increment currentChapter
 
-The game features story layers that trigger at milestones.
+### Chapter Triggers (main.tsx)
 
-Each chapter uses `createTabFamily()` to display story content and choices. Story choices are persisted and provide permanent gameplay bonuses.
+### Job Chapter Filtering
+- Jobs support `chapter: number` or `chapter: number[]` (e.g., `chapter: [1, 2]`)
+- `generateJob()` filters by current chapter
+- Unlock buttons check `isJobInCurrentChapter()`
+- Returns null if no jobs available (graceful, not error)
 
 ---
 
@@ -136,30 +140,28 @@ The main layer implements:
 - **Clickables:** Shop items (buy GPUs, unlock job types)
 - **Refs:** Game state (jobs, GPUs owned, unlocked job types)
 - **Update Loop:** GlobalBus event for timers, job completion, and job generation
-- **Job System:** Jobs require compute (GPUs) to run, multiple jobs can run in parallel if enough GPUs available
+- **Job System:** 
 
 ### Key Components
 
-#### 1. Resources
-```typescript
-const money = createResource<DecimalSource>(10, "dollars");
-```
 
-#### 2. Persistent State (Must be in return statement!)
+
+
+#### Persistent State (Must be in return statement!)
 ```typescript
-const unlockedJobTypes: Ref<string[]> = ref(G_CONF.STARTING_PIZZAS);
+const unlockedJobTypes = persistent<string[]>(G_CONF.STARTING_PIZZAS);
 const gpusOwned = persistent<number>(G_CONF.STARTING_GPUS);
-const jobQueue: Ref<DeliveryJob[]> = ref([]);
-const activeDeliveries: Ref<ActiveDelivery[]> = ref([]);
-const nextJobId = ref(0);
-const timeSinceLastJob = ref(0);
-const introBonusApplied = ref(false);
-const chapter1BonusApplied = ref(false);
-const qualityBonus = ref(0);
-const speedBonus = ref(0);
+const currentChapter = persistent<number>(1);
+const jobQueue = persistent([]);
+const activeDeliveries = persistent([]);
+const nextJobId = persistent<number>(0);
+const timeSinceLastJob = persistent<number>(0);
+const chapter1BonusApplied = persistent<boolean>(false);
+const qualityBonus = persistent<number>(0);
+const speedBonus = persistent<number>(0);
 ```
 
-**CRITICAL:** All refs must be included in the layer's return statement or you'll get persistence errors!
+**CRITICAL:** All persistent refs must be included in the layer's return statement or you'll get persistence errors!
 
 **Note on GPU System:** GPUs are a fungible resource (just a count). Jobs require a specified amount of compute to run. Available GPUs = total GPUs - GPUs currently in use by active jobs.
 
@@ -203,9 +205,9 @@ const itemClickable = createClickable(() => ({
 #### 6. Job System
 
 **Job Generation:**
-- Random pizza type (weighted toward unlocked types)
-- Random duration (`JOB_DURATION_MIN` to `JOB_DURATION_MAX`)
-- Payout scales with pizza complexity (multiplier based on pizza index)
+- Filters by unlocked job types in current chapter
+- Returns null if no jobs available (graceful, shows warning to player)
+- Random duration and payout from jobTypes.ts definition
 - Modified by chapter bonuses (quality/speed choices)
 
 **Job Acceptance:**
@@ -221,14 +223,10 @@ const itemClickable = createClickable(() => ({
 ---
 
 ## Game Balance
-## THIS MAY BE  OUT OF DATE AND SHOULDNT BE IN THIS DOC ANYWAY
-
 
 **Note:** All values configured in `gameConfig.ts` (G_CONF object)
-
-
 ### Job Generation
-- New job every 3 seconds (fast for dev/testing)
+
 - Only generates if ≤ 4 jobs in queue (AUTO_JOB_LIMIT)
 
 
@@ -432,9 +430,10 @@ npm run dev
 ## Quick Reference
 
 ### Key Files
-- `gameConfig.ts` - All balance values (G_CONF object)
-- `main.tsx` - Core game logic, GPU system, job system
-- `intro.tsx` through `chapter4.tsx` - Story layers
+- `gameConfig.ts` - Game balance values (G_CONF object)
+- `jobTypes.ts` - Job definitions with chapter availability
+- `main.tsx` - Core game logic, chapter system, GPU system, job system
+- `chapter1.tsx` through `chapter4.tsx` - Story layers
 - `Options.vue` - Settings modal (gear icon bottom-left)
 
 ### Important Patterns

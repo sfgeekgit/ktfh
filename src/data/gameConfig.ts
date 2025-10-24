@@ -14,12 +14,6 @@ export const G_CONF = {
     STARTING_PIZZAS: ["cheese"], // Now uses job IDs from jobTypes.ts
     STARTING_GPUS: 1,
 
-    // ===== CHAPTER TRIGGERS =====
-    CHAPTER_1_TRIGGER: 101, // Trigger at $101
-    CHAPTER_2_TRIGGER: 1000, // Trigger at $1,000
-    CHAPTER_3_TRIGGER: 2000, // Trigger at $2,000
-    CHAPTER_4_TRIGGER: 3000, // Trigger at $3,000
-
     // ===== JOB GENERATION =====
     JOB_GENERATION_INTERVAL: 3, // Seconds between new job checks (currently fast for dev)
     AUTO_JOB_LIMIT: 4, // Only auto-generate new jobs if <= this many in queue
