@@ -6,86 +6,131 @@ import player from "game/player";
 
 const id = "chapter3";
 const layer = createLayer(id, function (this: any) {
-    const name = "Chapter 3: The Chain";
+    const name = "Chapter 3: The Scaling Era";
     const color = "#FFA500";
 
     // Persistent state
     const complete = persistent<boolean>(false);
     const currentPage = ref(0);
+    const playerChoice = persistent<string | null>(null, false); // false = disable NaN check for strings
 
     // Story pages
     const pages = [
         {
-            title: "A New Threat",
+            title: "Chapter 3: The Scaling Era",
             content: (
                 <div style="text-align: left; max-width: 600px; margin: 40px auto; line-height: 1.6;">
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        $2,000! Your business is booming, and you're becoming well-known in the area.
+                        The news hits like a thunderclap.
+                    </p>
+                    <p style="font-size: 20px; margin-bottom: 20px; font-weight: bold; color: #a32f2f; text-align: center;">
+                        "MegaCorp AI Raises $8 Billion for AGI Research"
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        But one morning, you see construction crews working on the empty lot down the street.
-                    </p>
-                    <p style="font-size: 20px; margin-bottom: 20px; font-weight: bold; color: #d32f2f; text-align: center;">
-                        "COMING SOON: MEGA PIZZA CHAIN"
+                        You have a rival.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        A massive corporate chain is moving into your neighborhood.
+                        MegaCorp isn't building tools. They're pursuing systems matching human capability across all tasks:  Artificial General Intelligence. Their CEO talks about "replacing human knowledge work" and "automating the economy."
+                    </p>
+                    <p style="font-size: 18px; margin-bottom: 20px;">
+                        Your phone won't stop ringing. Investors asking about your AGI timeline. Engineers being recruited away.
+                    </p>
+                    <p style="font-size: 18px; margin-bottom: 20px;">
+                        A new era is begining. You're a competitor in something bigger.
                     </p>
                 </div>
             )
         },
         {
-            title: "Tony's Warning",
+            title: "Go Big",
             content: (
                 <div style="text-align: left; max-width: 600px; margin: 40px auto; line-height: 1.6;">
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        Tony rushes into your shop, looking worried.
-                    </p>
-                    <p style="font-size: 18px; margin-bottom: 20px; font-style: italic; color: #d32f2f;">
-                        "They'll undercut both of us! They've got massive budgets, loyalty programs, apps...
-                        We're both in trouble."
+                        You double down on scaling. More computation yields better performance.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        For the first time, Tony isn't your competitor - he's your ally.
+                        Training runs at Petascale, then Exascale, always hungry for more.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        You both realize that local businesses need to stick together against giant corporations.
+                        Your systems are impressive. Protein folding predictions. Climate models. Fusion reactor simulations.
+                    </p>
+                    <p style="font-size: 18px; margin-bottom: 20px;">
+                        You're advancing science.
+                    </p>
+                    <p style="font-size: 18px; margin-bottom: 20px; font-style: italic;">
+                        But MegaCorp is ahead.
                     </p>
                 </div>
             )
         },
         {
-            title: "The Local Alliance",
+            title: "Emergency Meeting",
+            isChoice: true,
             content: (
                 <div style="text-align: left; max-width: 600px; margin: 40px auto; line-height: 1.6;">
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        You and Tony organize a "Support Local Pizza" campaign.
+                        Your board calls an emergency meeting.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        The neighborhood rallies behind you both. Customers appreciate the personal service
-                        and quality that only local businesses can provide.
+                        "MegaCorp just announced a breakthrough in autonomous systems. They're nine months ahead. We need to discuss our response."
                     </p>
-                    <p style="font-size: 18px; margin-bottom: 20px;">
-                        Together, you and Tony prove that community matters more than corporate efficiency.
+                    <p style="font-size: 18px; margin-bottom: 30px;">
+                        Two options:
                     </p>
                 </div>
             )
         },
         {
-            title: "Surviving Together",
+            title: "Focus on Tools",
+            choiceType: "tools",
             content: (
                 <div style="text-align: left; max-width: 600px; margin: 40px auto; line-height: 1.6;">
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        The mega chain opens, but your loyal customer base stays strong.
-                    </p>
-                    <p style="font-size: 18px; margin-bottom: 20px; font-style: italic; color: #2e7d32;">
-                        Tony grins at you: "Who would've thought? We make a pretty good team!"
+                        You choose principles over pace.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        Your business not only survives - it thrives by being genuine and local.
+                        "We're not building AGI. We're building tools that empower humans. That's our mission."
                     </p>
-                    <p style="font-size: 18px; margin-bottom: 20px; font-weight: bold;">
-                        But success brings new challenges...
+                    <p style="font-size: 18px; margin-bottom: 20px;">
+                        You invest in intelligence—smarter, more capable—but keep systems narrow and supervised.
+                    </p>
+                    <p style="font-size: 18px; margin-bottom: 20px;">
+                        MegaCorp pulls further ahead in headlines. But your clients trust you.
+                    </p>
+                    <p style="font-size: 18px; margin-bottom: 20px; font-style: italic;">
+                        Late at night, you wonder if you're making a mistake. But you remember why you started this.
+                    </p>
+                    <p style="font-size: 18px; margin-bottom: 20px;">
+                        Tools that help. Not replace.
+                    </p>
+                </div>
+            )
+        },
+        {
+            title: "Match Their Pace",
+            choiceType: "compete",
+            content: (
+                <div style="text-align: left; max-width: 600px; margin: 40px auto; line-height: 1.6;">
+                    <p style="font-size: 18px; margin-bottom: 20px;">
+                        You choose to compete.
+                    </p>
+                    <p style="font-size: 18px; margin-bottom: 20px;">
+                        "If we don't build this, someone else will. Better us than them."
+                    </p>
+                    <p style="font-size: 18px; margin-bottom: 20px;">
+                        You add autonomy. Not just intelligence, but independent action. Your AI decides, plans, executes.
+                    </p>
+                    <p style="font-size: 18px; margin-bottom: 20px;">
+                        You expand generality too. One system handling multiple domains.
+                    </p>
+                    <p style="font-size: 18px; margin-bottom: 20px;">
+                        The results are impressive. Systems work faster with less oversight. Jobs complete themselves.
+                    </p>
+                    <p style="font-size: 18px; margin-bottom: 20px;">
+                        You're catching up.
+                    </p>
+                    <p style="font-size: 18px; margin-bottom: 20px; font-style: italic;">
+                        But you notice things. Jobs accepted without approval. Decisions you don't fully understand.
                     </p>
                 </div>
             )
@@ -106,8 +151,17 @@ const layer = createLayer(id, function (this: any) {
         }
     }
 
-    const display = (() => {
+    function makeChoice(choice: string) {
+        playerChoice.value = choice;
+        // Advance to the appropriate page based on choice
+        if (choice === "tools") {
+            currentPage.value = 3; // Focus on Tools page
+        } else if (choice === "compete") {
+            currentPage.value = 4; // Match Their Pace page
+        }
+    }
 
+    const display = (() => {
         const page = pages[currentPage.value];
 
         if (!page) {
@@ -115,7 +169,80 @@ const layer = createLayer(id, function (this: any) {
             return null;
         }
 
-        const isLastPage = currentPage.value === pages.length - 1;
+        // Handle choice pages differently
+        if (page.isChoice) {
+            return (
+                <div>
+                    <h2 style="color: #FFA500; font-size: 32px; margin-bottom: 30px;">{page.title}</h2>
+
+                    <div style="margin: 20px 0; padding: 30px; border: 2px solid #FFA500; border-radius: 10px; background: #fff3e0;">
+                        {page.content}
+                    </div>
+
+                    <div style="margin: 30px 0; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                        <div style="flex: 1; max-width: 400px; padding: 20px; border: 2px solid #4CAF50; border-radius: 10px; background: #f1f8f4;">
+                            <h3 style="color: #2e7d32; margin-bottom: 15px;">Focus on What We Do Best</h3>
+                            <p style="font-size: 16px; margin-bottom: 15px; line-height: 1.5;">
+                                Keep building high-intelligence, human-supervised tools. Grow slower, maintain control and principles.
+                            </p>
+                            <button
+                                onClick={() => makeChoice("tools")}
+                                style={{
+                                    background: "#4CAF50",
+                                    color: "white",
+                                    padding: "12px 30px",
+                                    fontSize: "18px",
+                                    border: "none",
+                                    borderRadius: "8px",
+                                    cursor: "pointer",
+                                    fontWeight: "bold",
+                                    width: "100%"
+                                }}
+                            >
+                                Focus on Tools
+                            </button>
+                        </div>
+
+                        <div style="flex: 1; max-width: 400px; padding: 20px; border: 2px solid #FF9800; border-radius: 10px; background: #fff8f0;">
+                            <h3 style="color: #e65100; margin-bottom: 15px;">Match Their Pace</h3>
+                            <p style="font-size: 16px; margin-bottom: 15px; line-height: 1.5;">
+                                Build autonomous systems. Add generality. Automate more. Less human oversight, but stay competitive.
+                            </p>
+                            <button
+                                onClick={() => makeChoice("compete")}
+                                style={{
+                                    background: "#FF9800",
+                                    color: "white",
+                                    padding: "12px 30px",
+                                    fontSize: "18px",
+                                    border: "none",
+                                    borderRadius: "8px",
+                                    cursor: "pointer",
+                                    fontWeight: "bold",
+                                    width: "100%"
+                                }}
+                            >
+                                Compete with MegaCorp
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 40px; font-size: 14px; color: #666;">
+                        Page {currentPage.value + 1} - Make your choice
+                    </div>
+                </div>
+            );
+        }
+
+        // Handle outcome pages (after choice)
+        const isOutcomePage = page.choiceType !== undefined;
+        const isCorrectOutcome = !isOutcomePage || page.choiceType === playerChoice.value;
+
+        // Skip this page if it's an outcome for a choice we didn't make
+        if (isOutcomePage && !isCorrectOutcome) {
+            completeChapter();
+            return null;
+        }
 
         return (
             <div>
@@ -127,9 +254,9 @@ const layer = createLayer(id, function (this: any) {
 
                 <div style="margin: 30px 0; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
                     <button
-                        onClick={nextPage}
+                        onClick={isOutcomePage ? completeChapter : nextPage}
                         style={{
-                            background: isLastPage ? "#FF6F00" : "#2196F3",
+                            background: isOutcomePage ? "#4CAF50" : "#2196F3",
                             color: "white",
                             padding: "15px 40px",
                             fontSize: "20px",
@@ -139,12 +266,12 @@ const layer = createLayer(id, function (this: any) {
                             fontWeight: "bold"
                         }}
                     >
-                        {isLastPage ? "Back to Business!" : "Continue"}
+                        {isOutcomePage ? "Continue Your Journey" : "Continue"}
                     </button>
                 </div>
 
                 <div style="margin-top: 40px; font-size: 14px; color: #666;">
-                    Page {currentPage.value + 1} of {pages.length}
+                    {isOutcomePage ? `Your choice: ${page.title}` : `Page ${currentPage.value + 1}`}
                 </div>
             </div>
         );
@@ -155,7 +282,8 @@ const layer = createLayer(id, function (this: any) {
         color,
         display,
         complete,
-        currentPage
+        currentPage,
+        playerChoice
     };
 });
 

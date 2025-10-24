@@ -18,51 +18,56 @@ const layer = createLayer(id, function (this: any) {
     // Story pages
     const pages = [
         {
-            title: "A Rival Appears",
+            title: "Chapter 1: The Spark",
             content: (
                 <div style="text-align: left; max-width: 600px; margin: 40px auto; line-height: 1.6;">
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        Your pizza business is off to a great start! You've made over $100 already.
+		       You've done it. After months of preparation, your AI startup is finally launching.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        But success attracts attention...
+		       The idea is simple: build AI tools that help people, not replace them.
+		       
+		       Image sorting. Document translation. Transcription work.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        A flashy new pizza place just opened across the street: <strong>"Tony's Speedy Pizza"</strong>.
-                        They're advertising lightning-fast delivery and rock-bottom prices.
+		        Today, your first system goes live.
                     </p>
                 </div>
             )
         },
         {
-            title: "The Challenge",
+            title: "Chapter 1: The Spark",
             content: (
                 <div style="text-align: left; max-width: 600px; margin: 40px auto; line-height: 1.6;">
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        Tony walks into your shop with a smug grin.
-                    </p>
-                    <p style="font-size: 18px; margin-bottom: 20px; font-style: italic; color: #d32f2f;">
-                        "Nice little operation you got here. Too bad I'm about to put you out of business.
-                        My pizzas are cheaper AND faster!"
+                        The initial deployments exceed expectations.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        You notice customers starting to glance at Tony's flashy storefront...
+                        Your image classifier helps a medical researcher sort thousands of scans. Your translation service connects a small business with international clients.
+			<BR/><BR/>
+		       These systems are predictable. Controllable. They do exactly what you trained them to do, and nothing more.
+                    </p>
+                    <p style="font-size: 18px; margin-bottom: 20px;">
+
+		       The feedback is immediate: "This saved me so much time." "I can finally focus on the important work."
+
                     </p>
                 </div>
             )
         },
         {
-            title: "Your Response",
+            title: "Chapter 1: The Spark",
             content: (
                 <div style="text-align: left; max-width: 600px; margin: 40px auto; line-height: 1.6;">
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        You need to respond to this competition. How will you compete?
+		      The technology is straightforward. Narrow AI, the researchers call it. Neural networks trained on specific tasks. When given an image, they classify it. When given audio, they transcribe it.
                     </p>
-                    <p style="font-size: 16px; margin-bottom: 30px; font-style: italic;">
-                        Choose your strategy:
+		    <p style="font-size: 18px; margin-bottom: 20px;">
+		       Simple inputs, reliable outputs. Nothing fancy. Just useful.
                     </p>
                 </div>
-            ),
+            )
+	    /*
             choices: [
                 {
                     id: "quality",
@@ -76,44 +81,24 @@ const layer = createLayer(id, function (this: any) {
                     description: `Faster delivery times (-${G_CONF.CHAPTER_1_SPEED_BONUS}% delivery duration)`,
                     effect: "speedBonus"
                 }
-            ]
+            ]*/
         },
         {
-            title: "Putting the Plan into Action",
+            title: "Chapter 1: The Spark",	    
             content: (
                 <div style="text-align: left; max-width: 600px; margin: 40px auto; line-height: 1.6;">
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        You implement your new strategy with determination.
-                    </p>
+		       At night, you read about other companies pursuing something different.
+		    </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        Word starts spreading through the neighborhood about your commitment to excellence.
-                        Customers appreciate the extra effort you're putting in.
-                    </p>
+		       "Artificial General Intelligence," they call it. Systems that can do anything a human can do. You find it fascinating in theory.
+		    </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        Tony's shop is still busy, but you're holding your own.
-                    </p>
-                </div>
-            )
-        },
-        {
-            title: "First Round to You",
-            content: (
-                <div style="text-align: left; max-width: 600px; margin: 40px auto; line-height: 1.6;">
+		       But your focus is practical: building reliable tools that help people now.
+		    </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        Your new strategy is working! Customers are choosing your shop over Tony's more often.
-                    </p>
-                    <p style="font-size: 18px; margin-bottom: 20px;">
-                        One evening, Tony storms into your shop, red-faced and frustrated.
-                    </p>
-                    <p style="font-size: 18px; margin-bottom: 20px; font-style: italic; color: #d32f2f;">
-                        "You got lucky this time," he growls. "But this isn't over. Not by a long shot!"
-                    </p>
-                    <p style="font-size: 18px; margin-bottom: 20px;">
-                        He storms out, and you can see through the window that Tony's Speedy Pizza is still open for business.
-                    </p>
-                    <p style="font-size: 18px; margin-bottom: 20px; font-weight: bold;">
-                        The rivalry continues...
-                    </p>
+		       Your company is small, but it's real. And it's growing.
+		    </p>
                 </div>
             )
         }
@@ -199,7 +184,7 @@ const layer = createLayer(id, function (this: any) {
                                 fontWeight: "bold"
                             }}
                         >
-                            {isLastPage ? "Back to Business!" : "Continue"}
+                            {isLastPage ? "Let's get to work!" : "Continue"}
                         </button>
                     )}
                 </div>

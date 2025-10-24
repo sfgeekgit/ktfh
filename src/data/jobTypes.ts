@@ -50,7 +50,7 @@ export const JOB_TYPES: JobType[] = [
         id: "cheese",
         displayName: "Cheese",
         description: "Basic cheese pizza delivery",
-        chapter: 1,
+        chapter: [1,2,3],
         prereq: [],
         unlockCost: [],
         payout: [
@@ -66,7 +66,7 @@ export const JOB_TYPES: JobType[] = [
         id: "pepperoni",
         displayName: "Pepperoni",
         description: "Classic pepperoni pizza delivery",
-        chapter: [1, 2],
+        chapter: [1, 2,3,4,5],
         prereq: [
             { type: "job", value: "cheese" },
             { type: "money", value: 40 }
@@ -87,7 +87,7 @@ export const JOB_TYPES: JobType[] = [
         id: "supreme",
         displayName: "Supreme",
         description: "Supreme pizza with all the toppings",
-        chapter: 1,
+        chapter: [2,3,4,5],
         prereq: [
             { type: "job", value: "pepperoni" }
         ],
@@ -95,7 +95,7 @@ export const JOB_TYPES: JobType[] = [
             { type: "money", value: 150 }
         ],
         payout: [
-            { type: "money", min: 30, max: 150 }
+            { type: "money", min: 30, max: 250 }
         ],
         duration: { min: 10, max: 40 },
         category: "pizza",
@@ -107,7 +107,7 @@ export const JOB_TYPES: JobType[] = [
         id: "hawaiian",
         displayName: "Hawaiian",
         description: "Pineapple and ham pizza delivery",
-        chapter: 1,
+        chapter: [2,3,4,5],
         prereq: [
             { type: "job", value: "supreme" },
             { type: "money", value: 300 }
@@ -116,7 +116,7 @@ export const JOB_TYPES: JobType[] = [
             { type: "money", value: 400 }
         ],
         payout: [
-            { type: "money", min: 40, max: 200 }
+            { type: "money", min: 40, max: 300 }
         ],
         duration: { min: 10, max: 40 },
         category: "pizza",

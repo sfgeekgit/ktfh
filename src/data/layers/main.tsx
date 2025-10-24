@@ -141,23 +141,19 @@ const layer = createLayer(id, function (this: any) {
             // Use early returns for failed conditions
             switch(nextChapter) {
                 case 2:
-                    // Chapter 2: Reach $200
-                    if (Decimal.lt(money.value, 200)) return null;
+                    if (Decimal.lt(money.value, 25)) return null;
                     break;
 
                 case 3:
-                    // Chapter 3: Reach $1,000
-                    if (Decimal.lt(money.value, 1000)) return null;
+                    if (Decimal.lt(money.value, 80)) return null;
                     break;
 
                 case 4:
-                    // Chapter 4: Reach $2,000
-                    if (Decimal.lt(money.value, 2000)) return null;
+                    if (Decimal.lt(money.value, 200)) return null;
                     break;
 
                 case 5:
-                    // Chapter 5: Reach $3,000
-                    if (Decimal.lt(money.value, 3000)) return null;
+                    if (Decimal.lt(money.value, 10000)) return null;
                     break;
 
                 default:
