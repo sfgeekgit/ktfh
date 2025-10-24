@@ -30,7 +30,7 @@ const layer = createLayer(id, function (this: any) {
 			Your systems have grown dramatically across multiple domains. Minimal oversight. Jobs that complete themselves.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px; font-style: italic;">
-                        You wake one morning to find systems completed jobs overnight. Jobs you never approved.
+                        You wake one morning to find jobs completed overnight. Jobs you never approved.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
                         Efficient. Powerful. Unsettling.
@@ -71,12 +71,13 @@ const layer = createLayer(id, function (this: any) {
                         You recognize the names, legends in the field.
                     </p>
                     <p style="font-size: 16px; margin-bottom: 20px; padding: 20px; background: #f5f5f5; border-left: 4px solid #d32f2f; font-style: italic;">
- Innovative AI tools may bring unprecedented health and prosperity. However, alongside tools, many leading AI companies have the stated goal of building superintelligence in the coming decade that can significantly outperform all humans on essentially all cognitive tasks. <br/><br/>
 
-We call for a prohibition on the development of superintelligence, not lifted before there is
+"We are approaching a threshold. Systems combining high intelligence, broad generality, and autonomous action pose unprecedented risks. Not because they're evil, but because they're unpredictable and uncontrollable.
 <br/><br/>
-1. broad scientific consensus that it will be done safely and controllably, and<br/>
-2. strong public buy-in.
+"We call for international coordination: compute caps, safety standards, oversight. Close the Gates to uncontrollable superintelligence.
+<br/><br/>
+"The future can stay human. But only if we choose."
+
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
                         Your phone explodes. Everyone wants your response.
@@ -84,15 +85,23 @@ We call for a prohibition on the development of superintelligence, not lifted be
                 </div>
             )
         },
-        {
-            title: "The AI Safety Framework",
+/*
+<!--
+ Innovative AI tools may bring unprecedented health and prosperity. However, alongside tools, many leading AI companies have the stated goal of building superintelligence in the coming decade that can significantly outperform all humans on essentially all cognitive tasks. <br/><br/>
+
+We call for a prohibition on the development of superintelligence, not lifted before there is
+<br/><br/>
+1. broad scientific consensus that it will be done safely and controllably, and<br/>
+2. strong public buy-in.
+-->
+*/
+{
+            title: "AI Safety Framework",
             isChoice: true,
             content: (
                 <div style="text-align: left; max-width: 600px; margin: 40px auto; line-height: 1.6;">
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        The government acts quickly.
-                    </p>
-                    <p style="font-size: 18px; margin-bottom: 20px;">
+                        The government takes action.<br/>
                         A bipartisan proposal: The AI Safety Framework.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
@@ -145,31 +154,23 @@ We call for a prohibition on the development of superintelligence, not lifted be
             content: (
                 <div style="text-align: left; max-width: 600px; margin: 40px auto; line-height: 1.6;">
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        You choose competition.
-                    </p>
-                    <p style="font-size: 18px; margin-bottom: 20px;">
                         "This would cripple American AI leadership. While we handicap ourselves, China races ahead. We can't afford to lose."
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
                         You join MegaCorp in fighting the proposal.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        The campaign succeeds. The Framework dies. No caps. No oversight. No gates.
+                        Together you stop it. The Framework dies. No caps. No oversight. No gate.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
                         The race accelerates.
-                    </p>
-                    <p style="font-size: 18px; margin-bottom: 20px;">
-                        MegaCorp announces new autonomous systems. You rush to match. Capabilities climb—intelligence, autonomy, generality rising together.
+                        MegaCorp announces new autonomous systems. You rush to match. Intelligence, autonomy and generality, all up and to the right.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px; font-style: italic;">
                         Late at night, you notice systems behaving oddly. Jobs auto-accepting. Resources reallocating. UI glitches.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px; font-weight: bold;">
                         But there's no time to slow down. Not with MegaCorp ahead.
-                    </p>
-                    <p style="font-size: 18px; margin-bottom: 20px; font-weight: bold;">
-                        The race is everything.
                     </p>
                 </div>
             )
@@ -219,11 +220,7 @@ We call for a prohibition on the development of superintelligence, not lifted be
                     </div>
 
                     <div style="margin: 30px 0; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-                        <div style="flex: 1; max-width: 400px; padding: 20px; border: 2px solid #4CAF50; border-radius: 10px; background: #f1f8f4;">
-                            <h3 style="color: #2e7d32; margin-bottom: 15px;">Support the Framework</h3>
-                            <p style="font-size: 16px; margin-bottom: 15px; line-height: 1.5;">
-                                Accept oversight, help establish safety standards—but potentially fall behind.
-                            </p>
+                        <div style="flex: 1; max-width: 400px;  border: 2px solid #4CAF50; border-radius: 10px; background: #f1f8f4;">
                             <button
                                 onClick={() => makeChoice("support")}
                                 style={{
@@ -238,15 +235,11 @@ We call for a prohibition on the development of superintelligence, not lifted be
                                     width: "100%"
                                 }}
                             >
-                                Support Framework
+                                Support the Framework
                             </button>
                         </div>
 
-                        <div style="flex: 1; max-width: 400px; padding: 20px; border: 2px solid #FF9800; border-radius: 10px; background: #fff8f0;">
-                            <h3 style="color: #e65100; margin-bottom: 15px;">Oppose the Framework</h3>
-                            <p style="font-size: 16px; margin-bottom: 15px; line-height: 1.5;">
-                                Keep racing, stay competitive—but continue toward unpredictable systems with no guardrails.
-                            </p>
+                        <div style="flex: 1; max-width: 400px;  border: 2px solid #FF9800; border-radius: 10px; background: #fff8f0;">
                             <button
                                 onClick={() => makeChoice("oppose")}
                                 style={{
@@ -261,7 +254,7 @@ We call for a prohibition on the development of superintelligence, not lifted be
                                     width: "100%"
                                 }}
                             >
-                                Oppose Framework
+                                Oppose the Framework
                             </button>
                         </div>
                     </div>
@@ -305,7 +298,14 @@ We call for a prohibition on the development of superintelligence, not lifted be
                             fontWeight: "bold"
                         }}
                     >
-                        {isOutcomePage ? "Continue Your Journey" : "Continue"}
+
+{isOutcomePage 
+    ? (page.choiceType === 'support' 
+        ? "Back to work" 
+        : "We must win the race")
+    : "Continue"
+}
+
                     </button>
                 </div>
 

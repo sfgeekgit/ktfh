@@ -312,7 +312,6 @@ export function addLayer(
     layer: Layer,
     player: { layers?: Record<string, Record<string, unknown>> }
 ): void {
-    console.info("Adding layer", layer.id);
     if (layers[layer.id] != null) {
         console.error(
             "Attempted to add layer with same ID as existing layer",

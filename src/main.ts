@@ -52,11 +52,13 @@ if (projInfo.id === "") {
 }
 
 requestAnimationFrame(async () => {
+    /*
     console.log(
         "%cMade in Profectus%c\nLearn more at www.moddingtree.com",
         "font-weight: bold; font-size: 24px; color: #A3BE8C; background: #2E3440; padding: 4px 8px; border-radius: 8px;",
         "padding: 4px;"
     );
+    */
     await load();
 
     // Create Vue

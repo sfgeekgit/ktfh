@@ -44,7 +44,7 @@ const layer = createLayer(id, function (this: any) {
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
                         Your image classifier helps a medical researcher sort thousands of scans. Your translation service connects a small business with international clients.
-			<BR/><BR/>
+			<br/><br/>
 		       These systems are predictable. Controllable. They do exactly what you trained them to do, and nothing more.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
@@ -132,7 +132,7 @@ const layer = createLayer(id, function (this: any) {
             return null;
         }
 
-        const isChoicePage = page.choices && page.choices.length > 0;
+        const isChoicePage = false; // Chapter 1 has no choices
         const isLastPage = currentPage.value === pages.length - 1;
 
         return (
@@ -145,8 +145,8 @@ const layer = createLayer(id, function (this: any) {
 
                 <div style="margin: 30px 0; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
                     {isChoicePage ? (
-                        // Show choices
-                        page.choices!.map(choice => (
+                        // Show choices (never executes in chapter1)
+                        (page as any).choices?.map((choice: any) => (
                             <div key={choice.id} style="text-align: center;">
                                 <button
                                     onClick={() => makeChoice(choice.id)}
