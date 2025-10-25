@@ -57,7 +57,6 @@ export const JOB_TYPES: JobType[] = [
             { type: "money", min: 10, max: 50 }
         ],
         duration: { min: 2, max: 3 },
-        //category: "pizza",
         cost: [
             { type: "compute", value: 1 }
         ]
@@ -113,6 +112,24 @@ export const JOB_TYPES: JobType[] = [
         unlockCost: [            { type: "money", value: 100 }],
         payout: [
             { type: "money", min: 70, max: 150 }
+        ],
+        duration: { min: 2, max: 3 },
+        category: "tool",
+        cost: [
+            { type: "compute", value: 3 }
+        ]
+    },
+
+    {
+        id: "webscrape",
+        displayName: "Web Scraper",
+        description: "Collect Data",
+        chapter: [2,3,4],
+        prereq: [],   // should unlock as soon as chapter 2 begins
+
+        unlockCost: [            { type: "money", value: 100 }],
+        payout: [
+            { type: "data", min: 70, max: 150 }
         ],
         duration: { min: 2, max: 3 },
         category: "tool",

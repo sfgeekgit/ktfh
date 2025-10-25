@@ -13,9 +13,11 @@ export const G_CONF = {
 
     // ===== STARTING RESOURCES =====
     STARTING_MONEY: 2,
-    STARTING_PIZZAS: ["imgclassifier"], // Lol pizza 
-    //STARTING_PIZZAS: ["cheese"], // Lol pizza 
+    STARTING_PIZZAS: ["imgclassifier"], // Lol pizza
+    //STARTING_PIZZAS: ["cheese"], // Lol pizza
     STARTING_GPUS: 1,
+    STARTING_IQ: 1, // Intelligence stat, unlocked in Chapter 2
+    STARTING_DATA: 0, // Data resource, unlocked in Chapter 2
 
     // ===== JOB GENERATION =====
     JOB_GENERATION_INTERVAL: 3, // Seconds between new job checks (currently fast for dev)
