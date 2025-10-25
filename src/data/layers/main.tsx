@@ -63,6 +63,8 @@ const layer = createLayer(id, function (this: any) {
             return unlockedJobTypes.value.includes(prereq.value as string);
         } else if (prereq.type === "money") {
             return Decimal.gte(money.value, prereq.value as number);
+        } else if (prereq.type === "data") {
+            return Decimal.gte(data.value, prereq.value as number);
         }
         // Add other prereq types here as needed (iq, autonomy, generality, etc.)
         return true;
@@ -99,6 +101,8 @@ const layer = createLayer(id, function (this: any) {
     const qualityBonus = persistent<number>(100); // Multiplicative bonus to earnings (100 = 1.0x)
     const speedBonus = persistent<number>(100);   // Multiplicative bonus to delivery time (100 = 1.0x)
     const currentChapter = persistent<number>(1); // Current chapter player is in
+    const spawnedOnetimeJobs = persistent<string[]>([]); // Track which onetime jobs have been spawned
+    const completedOnetimeJobs = persistent<string[]>([]); // Track completed onetime jobs
 
     // Computed: Available GPUs (total - in use)
     const availableGPUs = computed(() => {
@@ -247,6 +251,52 @@ const layer = createLayer(id, function (this: any) {
     const jobQueue = persistent([] as any);
     const activeDeliveries = persistent([] as any);
 
+    // Watch for onetime jobs being unlocked and spawn them immediately
+    watch(() => unlockedJobTypes.value, (unlocked) => {
+        // Find onetime jobs that are unlocked but haven't been spawned yet
+        const onetimeJobs = JOB_TYPES.filter(job =>
+            job.category === "onetime" &&
+            unlocked.includes(job.id) &&
+            !spawnedOnetimeJobs.value.includes(job.id) &&
+            !completedOnetimeJobs.value.includes(job.id) &&
+            isJobInCurrentChapter(job, currentChapter.value)
+        );
+
+        // Spawn each onetime job immediately
+        for (const jobType of onetimeJobs) {
+            // Generate the job (similar to generateJob but for specific job type)
+            let duration = jobType.duration
+                ? jobType.duration.min + Math.floor(Math.random() * (jobType.duration.max - jobType.duration.min + 1))
+                : 20;
+
+            // Apply speed bonus
+            duration = Math.floor(duration / (speedBonus.value / 100));
+
+            // Calculate payout
+            const payoutSpec = jobType.payout[0];
+            let payout = payoutSpec.min + Math.floor(Math.random() * (payoutSpec.max - payoutSpec.min + 1));
+
+            // Apply quality bonus - but not for IQ payouts
+            if (payoutSpec.type !== "iq") {
+                payout = Math.floor(payout * (qualityBonus.value / 100));
+            }
+
+            const newJob: DeliveryJob = {
+                id: nextJobId.value++,
+                duration,
+                jobTypeId: jobType.id,
+                payout,
+                payoutType: payoutSpec.type
+            };
+
+            // Add to queue immediately
+            jobQueue.value.push(newJob);
+
+            // Mark as spawned
+            spawnedOnetimeJobs.value.push(jobType.id);
+        }
+    }, { immediate: true, deep: true });
+
 
     const nextJobId = persistent<number>(0);
     const timeSinceLastJob = persistent<number>(0);
@@ -254,9 +304,11 @@ const layer = createLayer(id, function (this: any) {
     // Generate random job (returns null if no jobs available)
     function generateJob(): DeliveryJob | null {
         // Pick a random unlocked job type that's available in the current chapter
+        // Exclude onetime jobs from random generation
         const unlockedJobs = JOB_TYPES.filter(job =>
             unlockedJobTypes.value.includes(job.id) &&
-            isJobInCurrentChapter(job, currentChapter.value)
+            isJobInCurrentChapter(job, currentChapter.value) &&
+            job.category !== "onetime"
         );
         if (unlockedJobs.length === 0) {
             // No jobs available - this is okay, player needs to unlock jobs
@@ -277,8 +329,10 @@ const layer = createLayer(id, function (this: any) {
         const payoutSpec = jobType.payout[0];
         let payout = payoutSpec.min + Math.floor(Math.random() * (payoutSpec.max - payoutSpec.min + 1));
 
-        // Apply quality bonus (multiplicative)
-        payout = Math.floor(payout * (qualityBonus.value / 100));
+        // Apply quality bonus (multiplicative) - but not for IQ payouts
+        if (payoutSpec.type !== "iq") {
+            payout = Math.floor(payout * (qualityBonus.value / 100));
+        }
 
         return {
             id: nextJobId.value++,
@@ -318,30 +372,37 @@ const layer = createLayer(id, function (this: any) {
     const pizzaUnlockClickables = JOB_TYPES
         .filter(job => job.unlockCost.length > 0)  // Only jobs that cost something to unlock
         .map((jobType) => {
-            // Assume first unlock cost is money for now
+            // Extract costs
             const moneyCost = jobType.unlockCost.find(cost => cost.type === "money")?.value || 0;
+            const dataCost = jobType.unlockCost.find(cost => cost.type === "data")?.value || 0;
 
             return createClickable(() => ({
                 display: {
                     title: `Unlock ${jobType.displayName}`,
                     description: (
                         <>
-                            Cost: ${moneyCost}<br/>
+                            Cost: {moneyCost > 0 && `$${moneyCost}`}{moneyCost > 0 && dataCost > 0 && " + "}{dataCost > 0 && `${dataCost} data`}<br/>
 			    {jobType.description}
                         </>
                     )
                 },
                 canClick: () => {
-                    // Check if we have enough money
-                    const hasEnoughMoney = Decimal.gte(money.value, moneyCost);
+                    // Check if we have enough resources
+                    const hasEnoughMoney = moneyCost === 0 || Decimal.gte(money.value, moneyCost);
+                    const hasEnoughData = dataCost === 0 || Decimal.gte(data.value, dataCost);
                     // Check if not already unlocked
                     const notUnlocked = !unlockedJobTypes.value.includes(jobType.id);
                     // Check if all prerequisites are met
                     const prereqsMet = canUnlockJob(jobType);
-                    return hasEnoughMoney && notUnlocked && prereqsMet;
+                    return hasEnoughMoney && hasEnoughData && notUnlocked && prereqsMet;
                 },
                 onClick() {
-                    money.value = Decimal.sub(money.value, moneyCost);
+                    if (moneyCost > 0) {
+                        money.value = Decimal.sub(money.value, moneyCost);
+                    }
+                    if (dataCost > 0) {
+                        data.value = Decimal.sub(data.value, dataCost);
+                    }
                     unlockedJobTypes.value.push(jobType.id);
                 },
                 visibility: () => {
@@ -380,6 +441,14 @@ const layer = createLayer(id, function (this: any) {
                     money.value = Decimal.add(money.value, delivery.payout);
                 } else if (delivery.payoutType === "data") {
                     data.value = Decimal.add(data.value, delivery.payout);
+                } else if (delivery.payoutType === "iq") {
+                    iq.value += Number(delivery.payout);
+                }
+
+                // Track completed onetime jobs to prevent respawning
+                const jobType = getJobType(delivery.jobTypeId);
+                if (jobType?.category === "onetime" && !completedOnetimeJobs.value.includes(delivery.jobTypeId)) {
+                    completedOnetimeJobs.value.push(delivery.jobTypeId);
                 }
 
                 // Remove the completed delivery
@@ -412,6 +481,13 @@ const layer = createLayer(id, function (this: any) {
 
     // Accept job
     function acceptJob(job: DeliveryJob) {
+        // Deduct money cost if job has one
+        const jobType = getJobType(job.jobTypeId);
+        const moneyRequired = jobType?.cost?.find(c => c.type === "money")?.value || 0;
+        if (moneyRequired > 0) {
+            money.value = Decimal.sub(money.value, moneyRequired);
+        }
+
         // Remove job from queue
 	jobQueue.value = jobQueue.value.filter((j: DeliveryJob) => j.id !== job.id);
 
@@ -437,6 +513,10 @@ const layer = createLayer(id, function (this: any) {
         const jobType = getJobType(job.jobTypeId);
         const computeRequired = jobType?.cost?.find(c => c.type === "compute")?.value || 0;
         if (availableGPUs.value < computeRequired) return false;
+
+        // Check if we have enough money for jobs that cost money
+        const moneyRequired = jobType?.cost?.find(c => c.type === "money")?.value || 0;
+        if (moneyRequired > 0 && Decimal.lt(money.value, moneyRequired)) return false;
 
         return true;
     }
@@ -478,10 +558,10 @@ const layer = createLayer(id, function (this: any) {
                             const jobType = getJobType(delivery.jobTypeId);
                             return (
                                 <div key={delivery.id} style="margin: 10px 0; padding: 8px; background: white; border-radius: 5px; border: 1px solid #ddd;">
-                                    <div style="font-size: 14px;"><strong>Processing:</strong> {jobType?.displayName || delivery.jobTypeId} pizza</div>
+                                    <div style="font-size: 14px;"><strong>Processing:</strong> {jobType?.displayName || delivery.jobTypeId}</div>
                                     <div style="font-size: 14px;"><strong>⏱️ Time:</strong> {Math.ceil(delivery.timeRemaining)}s</div>
                                     <div style="color: #2e7d32; font-size: 14px;">
-                                        <strong>💰 Earn:</strong> {delivery.payoutType === "money" ? "$" : ""}{format(delivery.payout)}{delivery.payoutType === "data" ? " data" : ""}
+                                        <strong>💰 Earn:</strong> {delivery.payoutType === "money" ? "$" : ""}{delivery.payoutType === "iq" ? "+" : ""}{format(delivery.payout)}{delivery.payoutType === "data" ? " data" : ""}{delivery.payoutType === "iq" ? " IQ" : ""}
                                     </div>
                                 </div>
                             );
@@ -497,21 +577,23 @@ const layer = createLayer(id, function (this: any) {
                         ) : (
                             <div style="padding: 10px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 5px;">
                                 <p style="font-weight: bold; color: #856404; margin: 0 0 8px 0;">⚠️ No job types unlocked for this chapter!</p>
-                                <p style="color: #856404; margin: 0; font-size: 14px;">Unlock a job type below to start receiving jobs.</p>
+                                <p style="color: #856404; margin: 0; font-size: 14px;">Unlock a job type above to start receiving jobs.</p>
                             </div>
                         )
                     ) : (
 		        jobQueue.value.map((job: DeliveryJob) => {
                             const jobType = getJobType(job.jobTypeId);
                             const computeRequired = jobType?.cost?.find(c => c.type === "compute")?.value || 0;
+                            const moneyRequired = jobType?.cost?.find(c => c.type === "money")?.value || 0;
                             return (
                             <div key={job.id} style="margin: 10px 0; padding: 8px; background: white; border-radius: 5px; border: 1px solid #ddd;">
                                 <div style="font-size: 14px;"><strong>Job:</strong>{jobType?.displayName || job.jobTypeId}</div>
                                 <div style="font-size: 14px;"><strong>Duration:</strong> {job.duration}s</div>
                                 <div style="font-size: 14px;">
-                                    <strong>Payout:</strong> {job.payoutType === "money" ? "$" : ""}{format(job.payout)}{job.payoutType === "data" ? " data" : ""}
+                                    <strong>Payout:</strong> {job.payoutType === "money" ? "$" : ""}{job.payoutType === "iq" ? "+" : ""}{format(job.payout)}{job.payoutType === "data" ? " data" : ""}{job.payoutType === "iq" ? " IQ" : ""}
                                 </div>
                                 <div style="font-size: 14px;"><strong>Compute:</strong> {computeRequired} GPU{computeRequired !== 1 ? 's' : ''}</div>
+                                {moneyRequired > 0 && <div style="font-size: 14px;"><strong>Cost:</strong> ${moneyRequired}</div>}
                                 <div style="margin-top: 8px; display: flex; gap: 5px;">
                                     <button
                                         onClick={() => acceptJob(job)}
@@ -528,20 +610,22 @@ const layer = createLayer(id, function (this: any) {
                                     >
                                         Accept
                                     </button>
-                                    <button
-                                        onClick={() => declineJob(job.id)}
-                                        style={{
-                                            background: "#f44336",
-                                            color: "white",
-                                            padding: "6px 12px",
-                                            border: "none",
-                                            borderRadius: "4px",
-                                            cursor: "pointer",
-                                            fontSize: "13px"
-                                        }}
-                                    >
-                                        Decline
-                                    </button>
+                                    {jobType?.category !== "onetime" && (
+                                        <button
+                                            onClick={() => declineJob(job.id)}
+                                            style={{
+                                                background: "#f44336",
+                                                color: "white",
+                                                padding: "6px 12px",
+                                                border: "none",
+                                                borderRadius: "4px",
+                                                cursor: "pointer",
+                                                fontSize: "13px"
+                                            }}
+                                        >
+                                            Decline
+                                        </button>
+                                    )}
                                 </div>
                                 {!unlockedJobTypes.value.includes(job.jobTypeId) && (
                                     <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">⚠ Need {jobType?.displayName || job.jobTypeId}!</div>
@@ -610,6 +694,8 @@ const layer = createLayer(id, function (this: any) {
         qualityBonus,
         speedBonus,
         currentChapter,
+        spawnedOnetimeJobs,
+        completedOnetimeJobs,
         jobQueue,
         activeDeliveries,
         nextJobId,
