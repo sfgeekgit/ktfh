@@ -45,7 +45,11 @@ export const G_CONF = {
 
     // ===== CHAPTER 2 BONUSES =====
     CHAPTER_2_QUALITY_BONUS: 1.10, // 10% multiplicative earnings increase
-    CHAPTER_2_SPEED_BONUS: 1.10 // 10% multiplicative speed increase (jobs complete faster)
+    CHAPTER_2_SPEED_BONUS: 1.10, // 10% multiplicative speed increase (jobs complete faster)
+
+    // ===== CHAPTER 3 BONUSES =====
+    CHAPTER_3_QUALITY_BONUS: 1.15, // 15% multiplicative earnings increase
+    CHAPTER_3_SPEED_BONUS: 1.15 // 15% multiplicative speed increase (jobs complete faster)
 } as const;
 
 // Type export for TypeScript autocomplete

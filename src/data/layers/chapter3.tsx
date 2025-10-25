@@ -81,8 +81,8 @@ const layer = createLayer(id, function (this: any) {
             )
         },
         {
-            title: "Focus on Tools",
-            choiceType: "tools",
+            title: "Quality and Safety",
+            choiceType: "quality",
             content: (
                 <div style="text-align: left; max-width: 600px; margin: 40px auto; line-height: 1.6;">
                     <p style="font-size: 18px; margin-bottom: 20px;">
@@ -107,8 +107,8 @@ const layer = createLayer(id, function (this: any) {
             )
         },
         {
-            title: "Match Their Pace",
-            choiceType: "compete",
+            title: "Speed and Scale",
+            choiceType: "speed",
             content: (
                 <div style="text-align: left; max-width: 600px; margin: 40px auto; line-height: 1.6;">
                     <p style="font-size: 18px; margin-bottom: 20px;">
@@ -154,10 +154,10 @@ const layer = createLayer(id, function (this: any) {
     function makeChoice(choice: string) {
         playerChoice.value = choice;
         // Advance to the appropriate page based on choice
-        if (choice === "tools") {
-            currentPage.value = 3; // Focus on Tools page
-        } else if (choice === "compete") {
-            currentPage.value = 4; // Match Their Pace page
+        if (choice === "quality") {
+            currentPage.value = 3; // Quality and Safety page
+        } else if (choice === "speed") {
+            currentPage.value = 4; // Speed and Scale page
         }
     }
 
@@ -181,12 +181,15 @@ const layer = createLayer(id, function (this: any) {
 
                     <div style="margin: 30px 0; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                         <div style="flex: 1; max-width: 400px; padding: 20px; border: 2px solid #4CAF50; border-radius: 10px; background: #f1f8f4;">
-                            <h3 style="color: #2e7d32; margin-bottom: 15px;">Focus on What We Do Best</h3>
+                            <h3 style="color: #2e7d32; margin-bottom: 15px;">Quality and Safety</h3>
                             <p style="font-size: 16px; margin-bottom: 15px; line-height: 1.5;">
                                 Keep building high-intelligence, human-supervised tools. Grow slower, maintain control and principles.
                             </p>
+                            <p style="font-size: 14px; margin-bottom: 15px; color: #4CAF50; font-weight: bold;">
+                                Effect: +15% earnings 
+                            </p>
                             <button
-                                onClick={() => makeChoice("tools")}
+                                onClick={() => makeChoice("quality")}
                                 style={{
                                     background: "#4CAF50",
                                     color: "white",
@@ -199,17 +202,20 @@ const layer = createLayer(id, function (this: any) {
                                     width: "100%"
                                 }}
                             >
-                                Focus on Tools
+                                Choose Quality & Safety
                             </button>
                         </div>
 
                         <div style="flex: 1; max-width: 400px; padding: 20px; border: 2px solid #FF9800; border-radius: 10px; background: #fff8f0;">
-                            <h3 style="color: #e65100; margin-bottom: 15px;">Match Their Pace</h3>
+                            <h3 style="color: #e65100; margin-bottom: 15px;">Speed and Scale</h3>
                             <p style="font-size: 16px; margin-bottom: 15px; line-height: 1.5;">
                                 Build autonomous systems. Add generality. Automate more. Less human oversight, but stay competitive.
                             </p>
+                            <p style="font-size: 14px; margin-bottom: 15px; color: #FF9800; font-weight: bold;">
+                                Effect: 15% faster job completion
+                            </p>
                             <button
-                                onClick={() => makeChoice("compete")}
+                                onClick={() => makeChoice("speed")}
                                 style={{
                                     background: "#FF9800",
                                     color: "white",
@@ -222,7 +228,7 @@ const layer = createLayer(id, function (this: any) {
                                     width: "100%"
                                 }}
                             >
-                                Compete with MegaCorp
+                                Choose Speed & Scale
                             </button>
                         </div>
                     </div>

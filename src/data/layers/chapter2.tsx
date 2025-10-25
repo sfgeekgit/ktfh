@@ -4,6 +4,20 @@ import { ref } from "vue";
 import { persistent } from "game/persistence";
 import player from "game/player";
 
+// To do:
+// This text unlocks "IQ"
+// Add IQ as a resource
+// Display it in the header
+// Starts with 1 IQ
+
+
+// to do later in chapter 2
+// New job type web scraping will pay out in data. That job will unlock in this chapter (maybe it's avaiable to unlock near the very begining of the chapter)
+// the first time a player gains "data" display their data resource in the header
+// Once the player collects more than zero data, there will be a new job "Training Run" that job will cost data to do, and pay out in IQ resc
+// the "training run" job does NOT get added to the schedule randomly like normal jobs. It only get added to the avaialbel jobs a limited number of times at certain points. (maybe the player cannot "decline" this job type so they don't soft lock themselves??? Nah, If they don't want it in their queue they can decline it, if they soft lock they can restart)
+
+
 const id = "chapter2";
 const layer = createLayer(id, function (this: any) {
     const name = "Chapter 2: Tools That Think";
@@ -171,7 +185,7 @@ const layer = createLayer(id, function (this: any) {
                                 Thorough testing. Careful deployment. Build systems you deeply understand. Slower growth, but complete control and trustworthy AI.
                             </p>
                             <p style="font-size: 14px; margin-bottom: 15px; color: #4CAF50; font-weight: bold;">
-                                Effect: +10% earnings (multiplicative)
+                                Effect: +10% earnings
                             </p>
                             <button
                                 onClick={() => makeChoice("quality")}
@@ -197,7 +211,7 @@ const layer = createLayer(id, function (this: any) {
                                 Deploy rapidly. Automate where possible. Let systems learn from real-world usage. Faster growth, stay competitive.
                             </p>
                             <p style="font-size: 14px; margin-bottom: 15px; color: #FF9800; font-weight: bold;">
-                                Effect: -10% job time (multiplicative)
+                                Effect: 10% faster job completion
                             </p>
                             <button
                                 onClick={() => makeChoice("speed")}

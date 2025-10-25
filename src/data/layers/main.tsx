@@ -87,6 +87,7 @@ const layer = createLayer(id, function (this: any) {
     const introBonusApplied = persistent<boolean>(false);
     const chapter1BonusApplied = persistent<boolean>(false);
     const chapter2BonusApplied = persistent<boolean>(false);
+    const chapter3BonusApplied = persistent<boolean>(false);
     const qualityBonus = persistent<number>(100); // Multiplicative bonus to earnings (100 = 1.0x)
     const speedBonus = persistent<number>(100);   // Multiplicative bonus to delivery time (100 = 1.0x)
     const currentChapter = persistent<number>(1); // Current chapter player is in
@@ -152,6 +153,27 @@ const layer = createLayer(id, function (this: any) {
         }
     }, { immediate: true });
 
+    // Chapter 3 - completion and bonuses
+    const chapter3Choice = computed(() => {
+        return (layers.chapter3 as any)?.playerChoice?.value || "";
+    });
+
+    const chapter3Complete = computed(() => {
+        return (layers.chapter3 as any)?.complete?.value || false;
+    });
+
+    // Watch for chapter 3 completion and apply bonuses
+    watch([chapter3Complete, chapter3Choice], ([complete, choice]) => {
+        if (complete && !chapter3BonusApplied.value && choice) {
+            if (choice === "quality") {
+                qualityBonus.value *= G_CONF.CHAPTER_3_QUALITY_BONUS;
+            } else if (choice === "speed") {
+                speedBonus.value *= G_CONF.CHAPTER_3_SPEED_BONUS;
+            }
+            chapter3BonusApplied.value = true;
+        }
+    }, { immediate: true });
+
     // Chapter transition watcher
     // All chapter trigger conditions are defined here in one place
     // Triggers can be: money thresholds, unlocked jobs, completed jobs, etc.
@@ -167,11 +189,11 @@ const layer = createLayer(id, function (this: any) {
                     break;
 
                 case 3:
-                    if (Decimal.lt(money.value, 330)) return null;
+                    if (Decimal.lt(money.value, 180)) return null;
                     break;
 
                 case 4:
-                    if (Decimal.lt(money.value, 440)) return null;
+                    if (Decimal.lt(money.value, 340)) return null;
                     break;
 
                 case 5:
@@ -554,6 +576,7 @@ const layer = createLayer(id, function (this: any) {
         introBonusApplied,
         chapter1BonusApplied,
         chapter2BonusApplied,
+        chapter3BonusApplied,
         qualityBonus,
         speedBonus,
         currentChapter,
