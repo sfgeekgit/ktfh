@@ -120,17 +120,6 @@ const layer = createLayer(id, function (this: any) {
         return (layers.chapter1 as any)?.complete?.value || false;
     });
 
-    // Watch for chapter 1 completion and apply bonuses
-    watch([chapter1Complete, chapter1Choice], ([complete, choice]) => {
-        if (complete && !chapter1BonusApplied.value && choice) {
-            if (choice === "quality") {
-                qualityBonus.value *= (1 + G_CONF.CHAPTER_1_QUALITY_BONUS / 100);
-            } else if (choice === "speed") {
-                speedBonus.value *= (1 + G_CONF.CHAPTER_1_SPEED_BONUS / 100);
-            }
-            chapter1BonusApplied.value = true;
-        }
-    }, { immediate: true });
 
     // Chapter 2 - completion and bonuses
     const chapter2Choice = computed(() => {
