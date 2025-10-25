@@ -170,6 +170,9 @@ const layer = createLayer(id, function (this: any) {
                             <p style="font-size: 16px; margin-bottom: 15px; line-height: 1.5;">
                                 Thorough testing. Careful deployment. Build systems you deeply understand. Slower growth, but complete control and trustworthy AI.
                             </p>
+                            <p style="font-size: 14px; margin-bottom: 15px; color: #4CAF50; font-weight: bold;">
+                                Effect: +10% earnings (multiplicative)
+                            </p>
                             <button
                                 onClick={() => makeChoice("quality")}
                                 style={{
@@ -192,6 +195,9 @@ const layer = createLayer(id, function (this: any) {
                             <h3 style="color: #e65100; margin-bottom: 15px;">Speed and Scale</h3>
                             <p style="font-size: 16px; margin-bottom: 15px; line-height: 1.5;">
                                 Deploy rapidly. Automate where possible. Let systems learn from real-world usage. Faster growth, stay competitive.
+                            </p>
+                            <p style="font-size: 14px; margin-bottom: 15px; color: #FF9800; font-weight: bold;">
+                                Effect: -10% job time (multiplicative)
                             </p>
                             <button
                                 onClick={() => makeChoice("speed")}

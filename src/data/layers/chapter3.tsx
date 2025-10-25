@@ -36,7 +36,7 @@ const layer = createLayer(id, function (this: any) {
                         Your phone won't stop ringing. Investors asking about your AGI timeline. Engineers being recruited away.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        A new era is begining. You're a competitor in something bigger.
+                        A new era is beginning. You're a competitor in something bigger.
                     </p>
                 </div>
             )

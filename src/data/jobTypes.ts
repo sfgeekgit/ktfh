@@ -46,13 +46,92 @@ interface JobType {
 
 // ===== JOB TYPES =====
 export const JOB_TYPES: JobType[] = [
+       {
+        id: "imgclassifier",
+        displayName: "Image Classifier",
+        description: "Find Waldo",
+        chapter: [1,2,3],
+        prereq: [],
+        unlockCost: [],
+        payout: [
+            { type: "money", min: 10, max: 50 }
+        ],
+        duration: { min: 2, max: 3 },
+        //category: "pizza",
+        cost: [
+            { type: "compute", value: 1 }
+        ]
+    },
+    {
+        id: "spellchecker",
+        displayName: "Spell Checker",
+        description: "How do you spell pepperoni?",
+        chapter: [1,2,3],
+        prereq: [
+	    //{ type: "money", value: 8 },
+            { type: "job", value: "imgclassifier" }
+	],
+        unlockCost: [            { type: "money", value: 0 }],
+        payout: [
+            { type: "money", min: 10, max: 50 }
+        ],
+        duration: { min: 2, max: 3 },
+        category: "tool",
+        cost: [
+            { type: "compute", value: 1 }
+        ]
+    },
+    {
+        id: "speechtran",
+        displayName: "Speech Transcription",
+        description: "So... Uhhhhh...",
+        chapter: [1,2,3],
+        prereq: [
+	    { type: "money", value: 20 },
+            { type: "job", value: "spellchecker" }
+	],
+        unlockCost: [            { type: "money", value: 50 }],
+        payout: [
+            { type: "money", min: 40, max: 90 }
+        ],
+        duration: { min: 2, max: 3 },
+        category: "tool",
+        cost: [
+            { type: "compute", value: 2 }
+        ]
+    },
+
+    {
+        id: "routeopt",
+        displayName: "Route Optimizer",
+        description: "Popular with salesmen",
+        chapter: [1,2,3],
+        prereq: [
+	    { type: "money", value: 80 },
+            { type: "job", value: "spellchecker" }
+	],
+        unlockCost: [            { type: "money", value: 100 }],
+        payout: [
+            { type: "money", min: 70, max: 150 }
+        ],
+        duration: { min: 2, max: 3 },
+        category: "tool",
+        cost: [
+            { type: "compute", value: 3 }
+        ]
+    },
+
+/*
     {
         id: "cheese",
         displayName: "Cheese",
         description: "Basic cheese pizza delivery",
         chapter: [1,2,3],
-        prereq: [],
-        unlockCost: [],
+        prereq: [
+	    //{ type: "money", value: 8 },
+            { type: "job", value: "imgclassifier" }
+	],
+        unlockCost: [            { type: "money", value: 0 }],
         payout: [
             { type: "money", min: 10, max: 50 }
         ],
@@ -144,4 +223,5 @@ export const JOB_TYPES: JobType[] = [
             { type: "compute", value: 3 }
         ]
     }
+    */
 ];

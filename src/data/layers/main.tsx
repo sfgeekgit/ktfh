@@ -17,7 +17,7 @@ import { JOB_TYPES } from "../jobTypes";
 interface DeliveryJob {
     id: number;
     duration: number;
-    jobTypeId: string;  // Changed from pizzaType - now uses job ID from jobTypes.ts
+    jobTypeId: string;  
     payout: DecimalSource;
 }
 
@@ -28,7 +28,7 @@ interface ActiveDelivery extends DeliveryJob {
 
 const id = "main";
 const layer = createLayer(id, function (this: any) {
-    const name = "Pizza Delivery";
+    const name = "Job Delivery";
     const color = "#FFA500";
 
     // Settings modal ref
@@ -83,11 +83,12 @@ const layer = createLayer(id, function (this: any) {
         );
     }
 
-    const unlockedJobTypes = persistent<string[]>([...G_CONF.STARTING_PIZZAS]);  // Changed from unlockedPizzas - stores job IDs
+    const unlockedJobTypes = persistent<string[]>([...G_CONF.STARTING_PIZZAS]);
     const introBonusApplied = persistent<boolean>(false);
     const chapter1BonusApplied = persistent<boolean>(false);
-    const qualityBonus = persistent<number>(0); // Percentage bonus to earnings
-    const speedBonus = persistent<number>(0);   // Percentage reduction to delivery time
+    const chapter2BonusApplied = persistent<boolean>(false);
+    const qualityBonus = persistent<number>(100); // Multiplicative bonus to earnings (100 = 1.0x)
+    const speedBonus = persistent<number>(100);   // Multiplicative bonus to delivery time (100 = 1.0x)
     const currentChapter = persistent<number>(1); // Current chapter player is in
 
     // Computed: Available GPUs (total - in use)
@@ -122,11 +123,32 @@ const layer = createLayer(id, function (this: any) {
     watch([chapter1Complete, chapter1Choice], ([complete, choice]) => {
         if (complete && !chapter1BonusApplied.value && choice) {
             if (choice === "quality") {
-                qualityBonus.value = G_CONF.CHAPTER_1_QUALITY_BONUS;
+                qualityBonus.value *= (1 + G_CONF.CHAPTER_1_QUALITY_BONUS / 100);
             } else if (choice === "speed") {
-                speedBonus.value = G_CONF.CHAPTER_1_SPEED_BONUS;
+                speedBonus.value *= (1 + G_CONF.CHAPTER_1_SPEED_BONUS / 100);
             }
             chapter1BonusApplied.value = true;
+        }
+    }, { immediate: true });
+
+    // Chapter 2 - completion and bonuses
+    const chapter2Choice = computed(() => {
+        return (layers.chapter2 as any)?.playerChoice?.value || "";
+    });
+
+    const chapter2Complete = computed(() => {
+        return (layers.chapter2 as any)?.complete?.value || false;
+    });
+
+    // Watch for chapter 2 completion and apply bonuses
+    watch([chapter2Complete, chapter2Choice], ([complete, choice]) => {
+        if (complete && !chapter2BonusApplied.value && choice) {
+            if (choice === "quality") {
+                qualityBonus.value *= G_CONF.CHAPTER_2_QUALITY_BONUS;
+            } else if (choice === "speed") {
+                speedBonus.value *= G_CONF.CHAPTER_2_SPEED_BONUS;
+            }
+            chapter2BonusApplied.value = true;
         }
     }, { immediate: true });
 
@@ -141,15 +163,15 @@ const layer = createLayer(id, function (this: any) {
             // Use early returns for failed conditions
             switch(nextChapter) {
                 case 2:
-                    if (Decimal.lt(money.value, 25)) return null;
+                    if (Decimal.lt(money.value, 50)) return null;
                     break;
 
                 case 3:
-                    if (Decimal.lt(money.value, 80)) return null;
+                    if (Decimal.lt(money.value, 330)) return null;
                     break;
 
                 case 4:
-                    if (Decimal.lt(money.value, 200)) return null;
+                    if (Decimal.lt(money.value, 440)) return null;
                     break;
 
                 case 5:
@@ -210,19 +232,15 @@ const layer = createLayer(id, function (this: any) {
             ? jobType.duration.min + Math.floor(Math.random() * (jobType.duration.max - jobType.duration.min + 1))
             : 20; // Fallback duration
 
-        // Apply speed bonus (reduce duration)
-        if (speedBonus.value > 0) {
-            duration = Math.floor(duration * (1 - speedBonus.value / 100));
-        }
+        // Apply speed bonus (higher is faster - divide to reduce time)
+        duration = Math.floor(duration / (speedBonus.value / 100));
 
         // Calculate payout from job type config (assume first payout is money)
         const payoutSpec = jobType.payout[0];
         let payout = payoutSpec.min + Math.floor(Math.random() * (payoutSpec.max - payoutSpec.min + 1));
 
-        // Apply quality bonus (increase payout)
-        if (qualityBonus.value > 0) {
-            payout = Math.floor(payout * (1 + qualityBonus.value / 100));
-        }
+        // Apply quality bonus (multiplicative)
+        payout = Math.floor(payout * (qualityBonus.value / 100));
 
         return {
             id: nextJobId.value++,
@@ -270,7 +288,7 @@ const layer = createLayer(id, function (this: any) {
                     description: (
                         <>
                             Cost: ${moneyCost}<br/>
-                            Unlock {jobType.displayName} {jobType.category} jobs
+			    {jobType.description}
                         </>
                     )
                 },
@@ -390,7 +408,13 @@ const layer = createLayer(id, function (this: any) {
                     <div style="font-size: 16px;"><strong>Money:</strong> ${format(money.value)}</div>
                     <div style="font-size: 14px;"><strong>Chapter:</strong> {currentChapter.value}</div>
                     <div style="font-size: 14px;"><strong>GPUs:</strong> {availableGPUs.value} / {gpusOwned.value} available</div>
-                    <div style="font-size: 14px;"><strong>Unlocked Pizzas:</strong> {unlockedJobTypes.value.map(id => getJobType(id)?.displayName || id).join(", ")}</div>
+                    {qualityBonus.value !== 100 && (
+                        <div style="font-size: 14px; color: #4CAF50;"><strong>Quality Bonus:</strong> {parseFloat((qualityBonus.value / 100).toFixed(2))}x earnings</div>
+                    )}
+                    {speedBonus.value !== 100 && (
+                        <div style="font-size: 14px; color: #2196F3;"><strong>Speed Bonus:</strong> {parseFloat((speedBonus.value / 100).toFixed(2))}x</div>
+                    )}
+                    {/*<div style="font-size: 14px;"><strong>Unlocked Pizzas:</strong> {unlockedJobTypes.value.map(id => getJobType(id)?.displayName || id).join(", ")}</div> */}
                 </div>
 
                 <div style="margin: 15px 0;">
@@ -435,7 +459,7 @@ const layer = createLayer(id, function (this: any) {
                             const computeRequired = jobType?.cost?.find(c => c.type === "compute")?.value || 0;
                             return (
                             <div key={job.id} style="margin: 10px 0; padding: 8px; background: white; border-radius: 5px; border: 1px solid #ddd;">
-                                <div style="font-size: 14px;"><strong>Pizza:</strong> {jobType?.displayName || job.jobTypeId}</div>
+                                <div style="font-size: 14px;"><strong>Job:</strong>{jobType?.displayName || job.jobTypeId}</div>
                                 <div style="font-size: 14px;"><strong>Duration:</strong> {job.duration}s</div>
                                 <div style="font-size: 14px;"><strong>Payout:</strong> ${format(job.payout)}</div>
                                 <div style="font-size: 14px;"><strong>Compute:</strong> {computeRequired} GPU{computeRequired !== 1 ? 's' : ''}</div>
@@ -529,6 +553,7 @@ const layer = createLayer(id, function (this: any) {
         unlockedJobTypes,  // Changed from unlockedPizzas
         introBonusApplied,
         chapter1BonusApplied,
+        chapter2BonusApplied,
         qualityBonus,
         speedBonus,
         currentChapter,

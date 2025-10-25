@@ -5,13 +5,16 @@
  * are centralized here for easy adjustment.
  */
 
+/// Level triggers are defined in data/layers/main.tsx     // Chapter transition watcher
+
 export const G_CONF = {
     // ===== WIN CONDITION =====
     WIN_AMOUNT: 10000, // $1,000,000 to win the game
 
     // ===== STARTING RESOURCES =====
-    STARTING_MONEY: 10,
-    STARTING_PIZZAS: ["cheese"], // Now uses job IDs from jobTypes.ts
+    STARTING_MONEY: 2,
+    STARTING_PIZZAS: ["imgclassifier"], // Lol pizza 
+    //STARTING_PIZZAS: ["cheese"], // Lol pizza 
     STARTING_GPUS: 1,
 
     // ===== JOB GENERATION =====
@@ -40,9 +43,9 @@ export const G_CONF = {
     GPU_BASE_COST: 50, // Cost of first GPU purchase
     GPU_COST_MULTIPLIER: 1.5, // Each GPU costs 1.5x the previous
 
-    // ===== CHAPTER 1 BONUSES =====
-    CHAPTER_1_QUALITY_BONUS: 50, // +50% earnings
-    CHAPTER_1_SPEED_BONUS: 20 // -20% delivery time
+    // ===== CHAPTER 2 BONUSES =====
+    CHAPTER_2_QUALITY_BONUS: 1.10, // 10% multiplicative earnings increase
+    CHAPTER_2_SPEED_BONUS: 1.10 // 10% multiplicative speed increase (jobs complete faster)
 } as const;
 
 // Type export for TypeScript autocomplete
