@@ -42,6 +42,8 @@ const layer = createLayer(id, function (this: any) {
 
     // Core stats (not tracked like resources)
     const iq = persistent<number>(0); // Intelligence stat, unlocked in Chapter 2
+    const autonomy = persistent<number>(0); // Autonomy stat
+    const generality = persistent<number>(0); // Generality stat
 
     // Data resource (unlocked later in Chapter 2)
     const data = createResource<DecimalSource>(0, "data");
@@ -65,8 +67,15 @@ const layer = createLayer(id, function (this: any) {
             return Decimal.gte(money.value, prereq.value as number);
         } else if (prereq.type === "data") {
             return Decimal.gte(data.value, prereq.value as number);
+        } else if (prereq.type === "iq") {
+            return iq.value >= (prereq.value as number);
+        } else if (prereq.type === "autonomy") {
+            return autonomy.value >= (prereq.value as number);
+        } else if (prereq.type === "generality") {
+            return generality.value >= (prereq.value as number);
+        } else if (prereq.type === "completedJob") {
+            return completedOnetimeJobs.value.includes(prereq.value as string);
         }
-        // Add other prereq types here as needed (iq, autonomy, generality, etc.)
         return true;
     }
 
@@ -276,8 +285,9 @@ const layer = createLayer(id, function (this: any) {
             const payoutSpec = jobType.payout[0];
             let payout = payoutSpec.min + Math.floor(Math.random() * (payoutSpec.max - payoutSpec.min + 1));
 
-            // Apply quality bonus - but not for IQ payouts
-            if (payoutSpec.type !== "iq") {
+            // Apply quality bonus - but not for stat payouts (IQ, autonomy, generality)
+            const isStatPayout = ["iq", "autonomy", "generality"].includes(payoutSpec.type);
+            if (!isStatPayout) {
                 payout = Math.floor(payout * (qualityBonus.value / 100));
             }
 
@@ -329,8 +339,9 @@ const layer = createLayer(id, function (this: any) {
         const payoutSpec = jobType.payout[0];
         let payout = payoutSpec.min + Math.floor(Math.random() * (payoutSpec.max - payoutSpec.min + 1));
 
-        // Apply quality bonus (multiplicative) - but not for IQ payouts
-        if (payoutSpec.type !== "iq") {
+        // Apply quality bonus (multiplicative) - but not for stat payouts (IQ, autonomy, generality)
+        const isStatPayout = ["iq", "autonomy", "generality"].includes(payoutSpec.type);
+        if (!isStatPayout) {
             payout = Math.floor(payout * (qualityBonus.value / 100));
         }
 
@@ -443,6 +454,10 @@ const layer = createLayer(id, function (this: any) {
                     data.value = Decimal.add(data.value, delivery.payout);
                 } else if (delivery.payoutType === "iq") {
                     iq.value += Number(delivery.payout);
+                } else if (delivery.payoutType === "autonomy") {
+                    autonomy.value += Number(delivery.payout);
+                } else if (delivery.payoutType === "generality") {
+                    generality.value += Number(delivery.payout);
                 }
 
                 // Track completed onetime jobs to prevent respawning
@@ -530,6 +545,8 @@ const layer = createLayer(id, function (this: any) {
                 <div style="margin: 15px 0; padding: 12px; border: 2px solid #FFA500; border-radius: 10px; background: #fff3e0;">
                     <div style="font-size: 16px;"><strong>Money:</strong> ${format(money.value)}</div>
                     {iq.value > 0 && <div style="font-size: 16px;"><strong>IQ:</strong> {iq.value}</div>}
+                    {autonomy.value > 0 && <div style="font-size: 16px;"><strong>Autonomy:</strong> {autonomy.value}</div>}
+                    {generality.value > 0 && <div style="font-size: 16px;"><strong>Generality:</strong> {generality.value}</div>}
                     {dataUnlocked.value && <div style="font-size: 16px;"><strong>Data:</strong> {format(data.value)}</div>}
                     <div style="font-size: 14px;"><strong>Chapter:</strong> {currentChapter.value}</div>
                     <div style="font-size: 14px;"><strong>GPUs:</strong> {availableGPUs.value} / {gpusOwned.value} available</div>
@@ -561,7 +578,7 @@ const layer = createLayer(id, function (this: any) {
                                     <div style="font-size: 14px;"><strong>Processing:</strong> {jobType?.displayName || delivery.jobTypeId}</div>
                                     <div style="font-size: 14px;"><strong>⏱️ Time:</strong> {Math.ceil(delivery.timeRemaining)}s</div>
                                     <div style="color: #2e7d32; font-size: 14px;">
-                                        <strong>💰 Earn:</strong> {delivery.payoutType === "money" ? "$" : ""}{delivery.payoutType === "iq" ? "+" : ""}{format(delivery.payout)}{delivery.payoutType === "data" ? " data" : ""}{delivery.payoutType === "iq" ? " IQ" : ""}
+                                        <strong>💰 Earn:</strong> {delivery.payoutType === "money" ? "$" : ""}{["iq", "autonomy", "generality"].includes(delivery.payoutType) ? "+" : ""}{format(delivery.payout)}{delivery.payoutType === "data" ? " data" : ""}{delivery.payoutType === "iq" ? " IQ" : ""}{delivery.payoutType === "autonomy" ? " Autonomy" : ""}{delivery.payoutType === "generality" ? " Generality" : ""}
                                     </div>
                                 </div>
                             );
@@ -590,7 +607,7 @@ const layer = createLayer(id, function (this: any) {
                                 <div style="font-size: 14px;"><strong>Job:</strong>{jobType?.displayName || job.jobTypeId}</div>
                                 <div style="font-size: 14px;"><strong>Duration:</strong> {job.duration}s</div>
                                 <div style="font-size: 14px;">
-                                    <strong>Payout:</strong> {job.payoutType === "money" ? "$" : ""}{job.payoutType === "iq" ? "+" : ""}{format(job.payout)}{job.payoutType === "data" ? " data" : ""}{job.payoutType === "iq" ? " IQ" : ""}
+                                    <strong>Payout:</strong> {job.payoutType === "money" ? "$" : ""}{["iq", "autonomy", "generality"].includes(job.payoutType) ? "+" : ""}{format(job.payout)}{job.payoutType === "data" ? " data" : ""}{job.payoutType === "iq" ? " IQ" : ""}{job.payoutType === "autonomy" ? " Autonomy" : ""}{job.payoutType === "generality" ? " Generality" : ""}
                                 </div>
                                 <div style="font-size: 14px;"><strong>Compute:</strong> {computeRequired} GPU{computeRequired !== 1 ? 's' : ''}</div>
                                 {moneyRequired > 0 && <div style="font-size: 14px;"><strong>Cost:</strong> ${moneyRequired}</div>}
@@ -684,6 +701,8 @@ const layer = createLayer(id, function (this: any) {
         best,
         total,
         iq,
+        autonomy,
+        generality,
         data,
         dataUnlocked,
         unlockedJobTypes,  // Changed from unlockedPizzas

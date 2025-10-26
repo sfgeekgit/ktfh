@@ -164,7 +164,69 @@ export const JOB_TYPES: JobType[] = [
         cost: [
             { type: "compute", value: 4 },
 	    { type: "money", value: 100 }  // Can money be a cost? It should be. This should be displayed in the avaialbe jobs part of the UI
-	    
+
+        ]
+    },
+
+    // Generality job chain - 3 sequential onetime jobs
+    {
+        id: "trun_mm1",
+        displayName: "Train Multimodal Model 1",
+        description: "Train a model with multimodal capabilities",
+        chapter: [2,3,4],
+        prereq: [],
+        unlockCost: [{ type: "data", value: 200 }],
+        payout: [
+            { type: "generality", min: 1, max: 1 }
+        ],
+        duration: { min: 30, max: 30 },
+        category: "onetime",
+        cost: [
+            { type: "compute", value: 3 },
+	    { type: "money", value: 50 },
+	    { type: "data", value: 100 }
+        ]
+    },
+
+    {
+        id: "trun_mm2",
+        displayName: "Train Multimodal Model 2",
+        description: "Further enhance multimodal capabilities",
+        chapter: [2,3,4],
+        prereq: [
+            { type: "completedJob", value: "trun_mm1" }
+        ],
+        unlockCost: [{ type: "data", value: 400 }],
+        payout: [
+            { type: "generality", min: 1, max: 1 }
+        ],
+        duration: { min: 35, max: 35 },
+        category: "onetime",
+        cost: [
+            { type: "compute", value: 4 },
+	    { type: "money", value: 100 },
+	    { type: "data", value: 200 }
+        ]
+    },
+
+    {
+        id: "trun_mm3",
+        displayName: "Train Multimodal Model 3",
+        description: "Master multimodal integration",
+        chapter: [2,3,4],
+        prereq: [
+            { type: "completedJob", value: "trun_mm2" }
+        ],
+        unlockCost: [{ type: "data", value: 800 }],
+        payout: [
+            { type: "generality", min: 1, max: 1 }
+        ],
+        duration: { min: 40, max: 40 },
+        category: "onetime",
+        cost: [
+            { type: "compute", value: 5 },
+	    { type: "money", value: 200 },
+	    { type: "data", value: 400 }
         ]
     },
 
