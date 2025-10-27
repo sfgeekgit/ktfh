@@ -85,6 +85,15 @@ const layer = createLayer(id, function (this: any) {
         return jobType.prereq.every((prereq: any) => isPrereqMet(prereq));
     }
 
+    // Check if a job type can be displayed (checks displayTrigger if present, otherwise prereq)
+    function canDisplayJob(jobType: any): boolean {
+        // Use displayTrigger if it exists and is non-empty, otherwise fall back to prereq
+        const displayConditions = (jobType.displayTrigger && jobType.displayTrigger.length > 0)
+            ? jobType.displayTrigger
+            : jobType.prereq;
+        return displayConditions.every((condition: any) => isPrereqMet(condition));
+    }
+
     // Check if a job is available in the given chapter
     function isJobInCurrentChapter(job: any, chapter: number): boolean {
         if (Array.isArray(job.chapter)) {
@@ -93,12 +102,12 @@ const layer = createLayer(id, function (this: any) {
         return job.chapter === chapter;
     }
 
-    // Get jobs that should be available for unlocking (in current chapter, prereqs met, not already unlocked)
+    // Get jobs that should be available for unlocking (in current chapter, display conditions met, not already unlocked)
     function getUnlockableJobs() {
         return JOB_TYPES.filter(job =>
             isJobInCurrentChapter(job, currentChapter.value) &&
             !unlockedJobTypes.value.includes(job.id) &&
-            canUnlockJob(job)
+            canDisplayJob(job)  // Use display conditions (displayTrigger or prereq)
         );
     }
 
@@ -112,6 +121,7 @@ const layer = createLayer(id, function (this: any) {
     const currentChapter = persistent<number>(1); // Current chapter player is in
     const spawnedOnetimeJobs = persistent<string[]>([]); // Track which onetime jobs have been spawned
     const completedOnetimeJobs = persistent<string[]>([]); // Track completed onetime jobs
+    const everVisibleJobTypes = persistent<string[]>([]); // Track which job unlock buttons have ever been shown
 
     // Computed: Available GPUs (total - in use)
     const availableGPUs = computed(() => {
@@ -226,7 +236,7 @@ const layer = createLayer(id, function (this: any) {
                     break;
 
                 case 5:
-                    if (Decimal.lt(money.value, 10000)) return null;
+                    if (Decimal.lt(money.value, 440)) return null;
                     break;
 
                 default:
@@ -249,6 +259,30 @@ const layer = createLayer(id, function (this: any) {
             }
         },
         { immediate: true }
+    );
+
+    // Track which job unlock buttons have been shown (for "sticky visibility")
+    // Once a button appears, it stays visible even if prereqs are no longer met
+    watch(
+        () => ({
+            money: money.value,
+            data: data.value,
+            iq: iq.value,
+            autonomy: autonomy.value,
+            generality: generality.value,
+            unlocked: unlockedJobTypes.value,
+            completed: completedOnetimeJobs.value,
+            chapter: currentChapter.value
+        }),
+        () => {
+            const unlockableJobs = getUnlockableJobs();
+            for (const job of unlockableJobs) {
+                if (!everVisibleJobTypes.value.includes(job.id)) {
+                    everVisibleJobTypes.value.push(job.id);
+                }
+            }
+        },
+        { immediate: true, deep: true }
     );
 
     /// const jobQueue = persistent<DeliveryJob[]>([]);
@@ -389,7 +423,7 @@ const layer = createLayer(id, function (this: any) {
 
             return createClickable(() => ({
                 display: {
-                    title: `Unlock ${jobType.displayName}`,
+                    title: jobType.category === "onetime" ? jobType.displayName : `Unlock ${jobType.displayName}`,
                     description: (
                         <>
                             Cost: {moneyCost > 0 && `$${moneyCost}`}{moneyCost > 0 && dataCost > 0 && " + "}{dataCost > 0 && `${dataCost} data`}<br/>
@@ -408,6 +442,18 @@ const layer = createLayer(id, function (this: any) {
                     return hasEnoughMoney && hasEnoughData && notUnlocked && prereqsMet;
                 },
                 onClick() {
+                    // Re-validate prerequisites to prevent console manipulation
+                    if (!canUnlockJob(jobType)) return;
+
+                    // Re-validate resources
+                    const hasEnoughMoney = moneyCost === 0 || Decimal.gte(money.value, moneyCost);
+                    const hasEnoughData = dataCost === 0 || Decimal.gte(data.value, dataCost);
+                    if (!hasEnoughMoney || !hasEnoughData) return;
+
+                    // Re-validate not already unlocked
+                    if (unlockedJobTypes.value.includes(jobType.id)) return;
+
+                    // Proceed with unlock
                     if (moneyCost > 0) {
                         money.value = Decimal.sub(money.value, moneyCost);
                     }
@@ -417,9 +463,11 @@ const layer = createLayer(id, function (this: any) {
                     unlockedJobTypes.value.push(jobType.id);
                 },
                 visibility: () => {
-                    // Show if not unlocked, prereqs are met, and in current chapter
+                    // Show if not unlocked, ever been visible (or display conditions currently met), and in current chapter
+                    const hasBeenVisible = everVisibleJobTypes.value.includes(jobType.id);
+                    const displayConditionsMet = canDisplayJob(jobType);
                     return !unlockedJobTypes.value.includes(jobType.id) &&
-                           canUnlockJob(jobType) &&
+                           (hasBeenVisible || displayConditionsMet) &&
                            isJobInCurrentChapter(jobType, currentChapter.value);
                 },
                 style: {
@@ -544,9 +592,9 @@ const layer = createLayer(id, function (this: any) {
 
                 <div style="margin: 15px 0; padding: 12px; border: 2px solid #FFA500; border-radius: 10px; background: #fff3e0;">
                     <div style="font-size: 16px;"><strong>Money:</strong> ${format(money.value)}</div>
-                    {iq.value > 0 && <div style="font-size: 16px;"><strong>IQ:</strong> {iq.value}</div>}
                     {autonomy.value > 0 && <div style="font-size: 16px;"><strong>Autonomy:</strong> {autonomy.value}</div>}
                     {generality.value > 0 && <div style="font-size: 16px;"><strong>Generality:</strong> {generality.value}</div>}
+                    {iq.value > 0 && <div style="font-size: 16px;"><strong>IQ:</strong> {iq.value}</div>}		    
                     {dataUnlocked.value && <div style="font-size: 16px;"><strong>Data:</strong> {format(data.value)}</div>}
                     <div style="font-size: 14px;"><strong>Chapter:</strong> {currentChapter.value}</div>
                     <div style="font-size: 14px;"><strong>GPUs:</strong> {availableGPUs.value} / {gpusOwned.value} available</div>
@@ -715,6 +763,7 @@ const layer = createLayer(id, function (this: any) {
         currentChapter,
         spawnedOnetimeJobs,
         completedOnetimeJobs,
+        everVisibleJobTypes,
         jobQueue,
         activeDeliveries,
         nextJobId,

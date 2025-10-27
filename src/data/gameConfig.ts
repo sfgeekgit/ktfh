@@ -12,15 +12,14 @@ export const G_CONF = {
     WIN_AMOUNT: 10000, // $1,000,000 to win the game
 
     // ===== STARTING RESOURCES =====
-    STARTING_MONEY: 2,
+    STARTING_MONEY: 0,
     STARTING_PIZZAS: ["imgclassifier"], // Lol pizza
-    //STARTING_PIZZAS: ["cheese"], // Lol pizza
     STARTING_GPUS: 1,
     STARTING_IQ: 1, // Intelligence stat, unlocked in Chapter 2
     STARTING_DATA: 0, // Data resource, unlocked in Chapter 2
 
     // ===== JOB GENERATION =====
-    JOB_GENERATION_INTERVAL: 3, // Seconds between new job checks (currently fast for dev)
+    JOB_GENERATION_INTERVAL: 5, // Seconds between new job checks (currently fast for dev)
     AUTO_JOB_LIMIT: 4, // Only auto-generate new jobs if <= this many in queue
     INITIAL_JOBS_COUNT: 3, // Number of jobs to spawn on game start
 
@@ -29,17 +28,6 @@ export const G_CONF = {
     JOB_DURATION_MAX: 30, // Maximum job duration in seconds (will add to min)
     JOB_PAYOUT_MIN: 10, // Minimum base payout
     JOB_PAYOUT_MAX: 40, // Maximum additional payout (will add to min)
-
-    // ===== PIZZA UNLOCKS =====
-    // TODO: Delete after jobTypes.ts migration confirmed working
-    // Now defined in jobTypes.ts - these are commented out but kept for reference
-    // PIZZA_TYPES: ["Cheese", "Pepperoni", "Supreme", "Hawaiian", "Meat Lovers"],
-    // PIZZA_UNLOCK_COSTS: {
-    //     Pepperoni: 50,
-    //     Supreme: 150,
-    //     Hawaiian: 400,
-    //     "Meat Lovers": 1000
-    // },
 
     // ===== GPU COSTS =====
     GPU_BASE_COST: 50, // Cost of first GPU purchase

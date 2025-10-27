@@ -15,6 +15,7 @@ import chapter1 from "./layers/chapter1"; // Chapter 1 story
 import chapter2 from "./layers/chapter2"; // Chapter 2 story
 import chapter3 from "./layers/chapter3"; // Chapter 3 story
 import chapter4 from "./layers/chapter4"; // Chapter 4 story
+import chapter5 from "./layers/chapter5"; 
 
 
 // import prestige from "./layers/prestige"; // commenting out (might re-add prestige later)
@@ -111,7 +112,7 @@ export const getInitialLayers = (
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
     player: Partial<Player>
 // ): Array<Layer> => [main, prestige];
-): Array<Layer> => [chapter1, main, chapter2, chapter3, chapter4];
+): Array<Layer> => [chapter1, main, chapter2, chapter3, chapter4, chapter5];
 
 
 /**

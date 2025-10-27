@@ -66,7 +66,7 @@ const layer = createLayer(id, function (this: any) {
                     <p style="font-size: 18px; margin-bottom: 20px;">
                         Your models develop what researchers call "Intelligence" measured as performance on cognitive tasks.
                     </p>
-		    <h2>New Resource Unlocked:  <i>IQ</i></h2> 
+		    <h2>IQ Unlocked</h2> 
 
                 </div>
             )

@@ -5,6 +5,10 @@
  * Each job type specifies unlock conditions, costs, payouts, and prerequisites.
  */
 
+// Note that prereq and displayTrigger are very similar
+// displayTrigger is optional, if it is not set, will defualt to prerequisite
+// If they are both set, the displayTrigger will allow the button to be displayed, and prereq will be needed for it to be clicked.
+
 // Prerequisite condition for unlocking a job
 interface PrereqCondition {
     type: string;  // "job", "money", "iq", "autonomy", "generality", etc.
@@ -36,7 +40,8 @@ interface JobType {
     displayName: string;     // Name shown to player
     description: string;     // Job description
     chapter: number | number[];  // Which chapter(s) this is available in
-    prereq: PrereqCondition[];  // Prerequisites to unlock (empty array if none)
+    prereq: PrereqCondition[];  // Prerequisites to display button to unlock this job type (empty array if none)
+    displayTrigger?: PrereqCondition[];  // Optional: Override prereq for display visibility (button shows earlier but might be Disabled)
     unlockCost: CostSpec[];  // Cost to unlock this job type (empty array if free)
     cost?: CostSpec[];       // Cost to run this job (compute, data, etc.) (optional)
     payout: PayoutSpec[];    // What the job pays out
@@ -67,7 +72,6 @@ export const JOB_TYPES: JobType[] = [
         description: "How do you spell pepperoni?",
         chapter: [1,2,3],
         prereq: [
-	    //{ type: "money", value: 8 },
             { type: "job", value: "imgclassifier" }
 	],
         unlockCost: [            { type: "money", value: 0 }],
@@ -149,13 +153,12 @@ export const JOB_TYPES: JobType[] = [
         displayName: "Training Run",
         description: "Train a smarter base model",
         chapter: [2,3,4],
-        prereq: [ // Can data be a prereq? It should be
+        prereq: [ 
 	    	{ type: "data", value: 100 }
 	    	],
 	    
-        unlockCost: [            { type: "data", value: 500 }], // can data be an unlock? It should be
+        unlockCost: [            { type: "data", value: 500 }], 
         payout: [
-	// to do, make a new payout that can increase the stats, this should add one to the IQ stat
             { type: "iq", min: 1, max: 1 }
         ],
         duration: { min: 40, max: 40 },	
@@ -171,15 +174,17 @@ export const JOB_TYPES: JobType[] = [
     // Generality job chain - 3 sequential onetime jobs
     {
         id: "trun_mm1",
-        displayName: "Train Multimodal Model 1",
-        description: "Train a model with multimodal capabilities",
+        displayName: "Multimodal Training Run",
+        description: "Unlock more general abilities",
         chapter: [2,3,4],
-        prereq: [],
+        prereq: [
+		    	{ type: "iq", value: 2 }
+	],
         unlockCost: [{ type: "data", value: 200 }],
         payout: [
             { type: "generality", min: 1, max: 1 }
         ],
-        duration: { min: 30, max: 30 },
+        duration: { min: 10, max: 10 },
         category: "onetime",
         cost: [
             { type: "compute", value: 3 },
@@ -190,8 +195,8 @@ export const JOB_TYPES: JobType[] = [
 
     {
         id: "trun_mm2",
-        displayName: "Train Multimodal Model 2",
-        description: "Further enhance multimodal capabilities",
+        displayName: "Multimodal Training 2",
+        description: "+1 Generality",
         chapter: [2,3,4],
         prereq: [
             { type: "completedJob", value: "trun_mm1" }
@@ -211,8 +216,8 @@ export const JOB_TYPES: JobType[] = [
 
     {
         id: "trun_mm3",
-        displayName: "Train Multimodal Model 3",
-        description: "Master multimodal integration",
+        displayName: "Deeper Multimodal Training",
+        description: "+1 Generality",
         chapter: [2,3,4],
         prereq: [
             { type: "completedJob", value: "trun_mm2" }
@@ -230,46 +235,5 @@ export const JOB_TYPES: JobType[] = [
         ]
     },
 
-/*
-    {
-        id: "cheese",
-        displayName: "Cheese",
-        description: "Basic cheese pizza delivery",
-        chapter: [1,2,3],
-        prereq: [
-	    //{ type: "money", value: 8 },
-            { type: "job", value: "imgclassifier" }
-	],
-        unlockCost: [            { type: "money", value: 0 }],
-        payout: [
-            { type: "money", min: 10, max: 50 }
-        ],
-        duration: { min: 2, max: 3 },
-        category: "pizza",
-        cost: [
-            { type: "compute", value: 1 }
-        ]
-    },
-    {
-        id: "pepperoni",
-        displayName: "Pepperoni",
-        description: "Classic pepperoni pizza delivery",
-        chapter: [1, 2,3,4,5],
-        prereq: [
-            { type: "job", value: "cheese" },
-            { type: "money", value: 40 }
-        ],
-        unlockCost: [
-            { type: "money", value: 50 }
-        ],
-        payout: [
-            { type: "money", min: 20, max: 100 }
-        ],
-        duration: { min: 10, max: 20 },
-        category: "pizza",
-        cost: [
-            { type: "compute", value: 1 }
-        ]
-    },
-    */
+
 ];
