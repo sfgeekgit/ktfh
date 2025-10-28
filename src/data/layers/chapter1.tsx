@@ -4,6 +4,7 @@ import { ref } from "vue";
 import { persistent } from "game/persistence";
 import player from "game/player";
 import { G_CONF } from "../gameConfig";
+import { save } from "util/save";
 
 const id = "chapter1";
 const layer = createLayer(id, function (this: any) {
@@ -106,12 +107,14 @@ const layer = createLayer(id, function (this: any) {
 
     function makeChoice(choiceId: string) {
         playerChoice.value = choiceId;
+        save(); // Force save after story choice to prevent data loss on refresh
         currentPage.value++;
     }
 
     function completeChapter() {
         complete.value = true;
         player.tabs = ["main"];
+        save(); // Force save after chapter completion to prevent data loss on refresh
     }
 
     function nextPage() {

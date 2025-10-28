@@ -3,6 +3,7 @@ import Decimal from "util/bignum";
 import { ref } from "vue";
 import { persistent } from "game/persistence";
 import player from "game/player";
+import { save } from "util/save";
 
 const id = "chapter3";
 const layer = createLayer(id, function (this: any) {
@@ -140,6 +141,7 @@ const layer = createLayer(id, function (this: any) {
     function completeChapter() {
         complete.value = true;
         player.tabs = ["main"];
+        save(); // Force save after chapter completion to prevent data loss on refresh
     }
 
     function nextPage() {
@@ -153,6 +155,7 @@ const layer = createLayer(id, function (this: any) {
 
     function makeChoice(choice: string) {
         playerChoice.value = choice;
+        save(); // Force save after story choice to prevent data loss on refresh
         // Advance to the appropriate page based on choice
         if (choice === "quality") {
             currentPage.value = 3; // Quality and Safety page

@@ -5,23 +5,9 @@ import { persistent } from "game/persistence";
 import player from "game/player";
 import { save } from "util/save";
 
-// To do:
-// This text unlocks "IQ"
-// Add IQ as a resource
-// Display it in the header
-// Starts with 1 IQ
-
-
-// to do later in chapter 2
-// New job type web scraping will pay out in data. That job will unlock in this chapter (maybe it's avaiable to unlock near the very begining of the chapter)
-// the first time a player gains "data" display their data resource in the header
-// Once the player collects more than zero data, there will be a new job "Training Run" that job will cost data to do, and pay out in IQ resc
-// the "training run" job does NOT get added to the schedule randomly like normal jobs. It only get added to the avaialbel jobs a limited number of times at certain points. (maybe the player cannot "decline" this job type so they don't soft lock themselves??? Nah, If they don't want it in their queue they can decline it, if they soft lock they can restart)
-
-
-const id = "chapter2";
+const id = "chapter5";
 const layer = createLayer(id, function (this: any) {
-    const name = "Chapter 2: Tools That Think";
+    const name = "Chapter 5: The Threshold";
     const color = "#FFA500";
 
     // Persistent state
@@ -32,105 +18,160 @@ const layer = createLayer(id, function (this: any) {
     // Story pages
     const pages = [
         {
-            title: "Chapter 2: Tools That Think",
+            title: "Chapter 5: The Threshold",
             content: (
                 <div style="text-align: left; max-width: 600px; margin: 40px auto; line-height: 1.6;">
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        Six months in, something shifts.
+                        The AI race dominates headlines.
+                    </p>
+                    <p style="font-size: 20px; margin-bottom: 20px; font-weight: bold; color: #d32f2f; text-align: center;">
+                        MegaCorp announces their AGI timeline: eighteen months to human-level general intelligence.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        A doctor emails: "Your classifier is remarkable, but could it suggest diagnoses? Not make decisions, just offer possibilities?"
+			Your systems have grown dramatically across multiple domains. Minimal oversight. Jobs that complete themselves.
+                    </p>
+                    <p style="font-size: 18px; margin-bottom: 20px; font-style: italic;">
+                        You wake one morning to find jobs completed overnight. Jobs you never approved.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        This requires a more general system. Broader training. More sophisticated reasoning.
-                    </p>
-                    <p style="font-size: 18px; margin-bottom: 20px;">
-                        You build it carefully. The medical advisor augments expert judgment. The doctor stays in control.
-                    </p>
-                    <p style="font-size: 18px; margin-bottom: 20px;">
-                        Word spreads. Teachers want tutoring AI. Lawyers want research assistants.
+                        Efficient. Powerful. Unsettling.
                     </p>
                 </div>
             )
         },
         {
-            title: "Training at Scale",
+            title: "The Incidents",
             content: (
                 <div style="text-align: left; max-width: 600px; margin: 40px auto; line-height: 1.6;">
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        The key breakthrough is training at scale.
-                        Larger models trained on more data simply work better. 
+                        Then the incidents begin.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        You start collecting data systematically. Terabytes of information.
+                        A trading AI causes brief market chaos. A medical system suggests an unorthodox treatment. It works, but nobody knows why. An autonomous vehicle makes unexplainable decisions.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        Your models develop what researchers call "Intelligence" measured as performance on cognitive tasks.
+                        The systems work. But they're unpredictable.
                     </p>
-		    <h2>IQ Unlocked</h2> 
+                    <p style="font-size: 18px; margin-bottom: 20px;">
+                        News fills with concerns. "AI Behaves Unexpectedly." "Deceptive Behavior in Advanced Models." "Can We Control What We're Building?"
+                    </p>
+                    <p style="font-size: 18px; margin-bottom: 20px;">
+                        Benefits are real. So are the questions.
+                    </p>
+                </div>
+            )
+        },
+        {
+            title: "The Open Letter",
+            content: (
+                <div style="text-align: left; max-width: 600px; margin: 40px auto; line-height: 1.6;">
+                    <p style="font-size: 18px; margin-bottom: 20px;">
+                        Prominent AI researchers publish an open letter.
+                    </p>
+                    <p style="font-size: 18px; margin-bottom: 20px;">
+                        You recognize the names, legends in the field.
+                    </p>
+                    <p style="font-size: 16px; margin-bottom: 20px; padding: 20px; background: #f5f5f5; border-left: 4px solid #d32f2f; font-style: italic;">
 
+"We are approaching a threshold. Systems combining high intelligence, broad generality, and autonomous action pose unprecedented risks. Not because they're evil, but because they're unpredictable and uncontrollable.
+<br/><br/>
+"We call for international coordination: compute caps, safety standards, oversight. Close the Gates to uncontrollable superintelligence.
+<br/><br/>
+"The future can stay human. But only if we choose."
+
+                    </p>
+                    <p style="font-size: 18px; margin-bottom: 20px;">
+                        Your phone explodes. Everyone wants your response.
+                    </p>
                 </div>
             )
         },
-        {
-            title: "The Investor's Question",
+/*
+<!--
+ Innovative AI tools may bring unprecedented health and prosperity. However, alongside tools, many leading AI companies have the stated goal of building superintelligence in the coming decade that can significantly outperform all humans on essentially all cognitive tasks. <br/><br/>
+
+We call for a prohibition on the development of superintelligence, not lifted before there is
+<br/><br/>
+1. broad scientific consensus that it will be done safely and controllably, and<br/>
+2. strong public buy-in.
+-->
+*/
+{
+            title: "AI Safety Framework",
             isChoice: true,
             content: (
                 <div style="text-align: left; max-width: 600px; margin: 40px auto; line-height: 1.6;">
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        An investor approaches with significant funding.
+                        The government takes action.<br/>
+                        A bipartisan proposal: The AI Safety Framework.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        "Your technology is impressive. But the market is getting crowded. What's your strategy?"
+                        Compute caps on training and inference. Mandatory safety testing. Oversight for autonomous general AI. International coordination.
+                    </p>
+                    <p style="font-size: 18px; margin-bottom: 20px;">
+                        The Framework would slow everything. Cap your compute. Require safety cases.
+                    </p>
+                    <p style="font-size: 18px; margin-bottom: 20px;">
+                        MegaCorp opposes it: "This will kill innovation." "China won't follow." "First to AGI wins everything."
                     </p>
                     <p style="font-size: 18px; margin-bottom: 30px;">
-                        Two paths:
+                        Your board is divided. The choice is yours.
                     </p>
                 </div>
             )
         },
         {
-            title: "Quality and Safety",
-            choiceType: "quality",
+            title: "Support the Framework",
+            choiceType: "support",
             content: (
                 <div style="text-align: left; max-width: 600px; margin: 40px auto; line-height: 1.6;">
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        You choose the careful path.
+                        You choose coordination over competition.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        "We're building tools that people trust their lives with. Doctors, teachers, lawyers—they need to understand what our AI is doing and why."
+                        "We're approaching something we don't fully understand. The responsible path is to slow down and do this together."
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        Rigorous testing protocols. Human oversight on critical decisions. Growth is slower, but every system is rock-solid.
+                        You join the researchers.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        Your reputation grows: the AI company that does it right.
+                        The blowback is immediate. MegaCorp calls you "timid." Investors threaten to pull out.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        You train for intelligence, but always controllable. Always explainable.
+                        But others join you. Smaller labs. International researchers. Even some MegaCorp employees.
+                    </p>
+                    <p style="font-size: 18px; margin-bottom: 20px;">
+                        The Framework passes. Compute caps enforced. MegaCorp's ambitious projects shutdown.
+                    </p>
+                    <p style="font-size: 18px; margin-bottom: 20px; font-weight: bold;">
+                        The race is over. The real work begins.
                     </p>
                 </div>
             )
         },
         {
-            title: "Speed and Scale",
-            choiceType: "speed",
+            title: "Oppose the Framework",
+            choiceType: "oppose",
             content: (
                 <div style="text-align: left; max-width: 600px; margin: 40px auto; line-height: 1.6;">
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        You choose speed.
+                        "This would cripple American AI leadership. While we handicap ourselves, China races ahead. We can't afford to lose."
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        "The AI race is heating up. We need to move fast or get left behind."
+                        You join MegaCorp in fighting the proposal.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        You deploy systems quickly. Add automation to reduce costs. Train models for intelligence, autonomy, and generality.
+                        Together you stop it. The Framework dies. No caps. No oversight. No gate.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        It works. Growth accelerates. Systems handle more jobs with less supervision.
+                        The race accelerates.
+                        MegaCorp announces new autonomous systems. You rush to match. Intelligence, autonomy and generality, all up and to the right.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px; font-style: italic;">
-                        But sometimes, late at night, you wonder: are you still building tools? Or something else?
+                        Late at night, you notice systems behaving oddly. Jobs auto-accepting. Resources reallocating. UI glitches.
+                    </p>
+                    <p style="font-size: 18px; margin-bottom: 20px; font-weight: bold;">
+                        But there's no time to slow down. Not with MegaCorp ahead.
                     </p>
                 </div>
             )
@@ -156,10 +197,10 @@ const layer = createLayer(id, function (this: any) {
         playerChoice.value = choice;
         save(); // Force save after story choice to prevent data loss on refresh
         // Advance to the appropriate page based on choice
-        if (choice === "quality") {
-            currentPage.value = 3; // Quality path page
-        } else if (choice === "speed") {
-            currentPage.value = 4; // Speed path page
+        if (choice === "support") {
+            currentPage.value = 4; // Support Framework page
+        } else if (choice === "oppose") {
+            currentPage.value = 5; // Oppose Framework page
         }
     }
 
@@ -182,16 +223,9 @@ const layer = createLayer(id, function (this: any) {
                     </div>
 
                     <div style="margin: 30px 0; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-                        <div style="flex: 1; max-width: 400px; padding: 20px; border: 2px solid #4CAF50; border-radius: 10px; background: #f1f8f4;">
-                            <h3 style="color: #2e7d32; margin-bottom: 15px;">Quality and Safety</h3>
-                            <p style="font-size: 16px; margin-bottom: 15px; line-height: 1.5;">
-                                Thorough testing. Careful deployment. Build systems you deeply understand. Slower growth, but complete control and trustworthy AI.
-                            </p>
-                            <p style="font-size: 14px; margin-bottom: 15px; color: #4CAF50; font-weight: bold;">
-                                Effect: +10% earnings
-                            </p>
+                        <div style="flex: 1; max-width: 400px;  border: 2px solid #4CAF50; border-radius: 10px; background: #f1f8f4;">
                             <button
-                                onClick={() => makeChoice("quality")}
+                                onClick={() => makeChoice("support")}
                                 style={{
                                     background: "#4CAF50",
                                     color: "white",
@@ -204,20 +238,13 @@ const layer = createLayer(id, function (this: any) {
                                     width: "100%"
                                 }}
                             >
-                                Choose Quality & Safety
+                                Support the Framework
                             </button>
                         </div>
 
-                        <div style="flex: 1; max-width: 400px; padding: 20px; border: 2px solid #FF9800; border-radius: 10px; background: #fff8f0;">
-                            <h3 style="color: #e65100; margin-bottom: 15px;">Speed and Scale</h3>
-                            <p style="font-size: 16px; margin-bottom: 15px; line-height: 1.5;">
-                                Deploy rapidly. Automate where possible. Let systems learn from real-world usage. Faster growth, stay competitive.
-                            </p>
-                            <p style="font-size: 14px; margin-bottom: 15px; color: #FF9800; font-weight: bold;">
-                                Effect: 10% faster job completion
-                            </p>
+                        <div style="flex: 1; max-width: 400px;  border: 2px solid #FF9800; border-radius: 10px; background: #fff8f0;">
                             <button
-                                onClick={() => makeChoice("speed")}
+                                onClick={() => makeChoice("oppose")}
                                 style={{
                                     background: "#FF9800",
                                     color: "white",
@@ -230,7 +257,7 @@ const layer = createLayer(id, function (this: any) {
                                     width: "100%"
                                 }}
                             >
-                                Choose Speed & Scale
+                                Oppose the Framework
                             </button>
                         </div>
                     </div>
@@ -274,7 +301,14 @@ const layer = createLayer(id, function (this: any) {
                             fontWeight: "bold"
                         }}
                     >
-                        {isOutcomePage ? "Continue Your Journey" : "Continue"}
+
+{isOutcomePage 
+    ? (page.choiceType === 'support' 
+        ? "Back to work" 
+        : "We must win the race")
+    : "Continue"
+}
+
                     </button>
                 </div>
 
@@ -284,7 +318,6 @@ const layer = createLayer(id, function (this: any) {
             </div>
         );
     }) as any;
-		
 
     return {
         name,

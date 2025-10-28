@@ -12,6 +12,7 @@ import { persistent } from "game/persistence";
 import Options from "components/modals/Options.vue";
 import { G_CONF } from "../gameConfig";
 import { JOB_TYPES } from "../jobTypes";
+import { save } from "util/save";
 
 // Job interface
 interface DeliveryJob {
@@ -253,9 +254,10 @@ const layer = createLayer(id, function (this: any) {
         (nextChapter) => {
             if (nextChapter !== null) {
                 currentChapter.value = nextChapter; // Advance to next chapter
-                jobQueue.value = []; // Clear obsolete jobs from previous chapter
+                // jobQueue.value = []; // Clear obsolete jobs from previous chapter
                 // @ts-ignore
                 player.tabs = [`chapter${nextChapter}`];
+                save(); // Force save after chapter change to prevent data loss on refresh
             }
         },
         { immediate: true }
@@ -514,6 +516,7 @@ const layer = createLayer(id, function (this: any) {
                         data.value = Decimal.sub(data.value, dataCost);
                     }
                     unlockedJobTypes.value.push(jobType.id);
+                    save(); // Force save after job unlock to prevent data loss on refresh
                 },
                 visibility: () => {
                     // Show if not unlocked, ever been visible (or display conditions currently met), and in current chapter
@@ -565,6 +568,7 @@ const layer = createLayer(id, function (this: any) {
                 const jobType = getJobType(delivery.jobTypeId);
                 if (jobType?.category === "onetime" && !completedOnetimeJobs.value.includes(delivery.jobTypeId)) {
                     completedOnetimeJobs.value.push(delivery.jobTypeId);
+                    save(); // Force save after onetime job completion to prevent stat loss on refresh
                 }
 
                 // Remove the completed delivery
