@@ -46,7 +46,7 @@ const layer = createLayer(id, function (this: any) {
                         Autonomous systems work faster. No waiting for approval, no human bottlenecks, jobs complete themselves.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        Your financial AI picks trades at machine speed. Your logistics system optimizes routes in real-time. 
+                        Your financial AI picks trades at machine speed. Your logistics system optimizes routes in realtime. 
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
                         It's like having a data center full of employees who never sleep.

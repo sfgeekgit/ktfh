@@ -224,19 +224,19 @@ const layer = createLayer(id, function (this: any) {
             // Use early returns for failed conditions
             switch(nextChapter) {
                 case 2:
-                    if (Decimal.lt(money.value, 50)) return null;
+                    if (Decimal.lt(money.value, 60)) return null;
                     break;
 
                 case 3:
-                    if (Decimal.lt(money.value, 180)) return null;
+                    if (Decimal.lt(money.value, 380)) return null;
                     break;
 
                 case 4:
-                    if (Decimal.lt(money.value, 340)) return null;
+                    if (Decimal.lt(money.value, 840)) return null;
                     break;
 
                 case 5:
-                    if (Decimal.lt(money.value, 440)) return null;
+                    if (Decimal.lt(money.value, 4400)) return null;
                     break;
 
                 default:
@@ -395,7 +395,6 @@ const layer = createLayer(id, function (this: any) {
             description: () => (
                 <>
                     Cost: ${format(Decimal.pow(G_CONF.GPU_COST_MULTIPLIER, gpusOwned.value - G_CONF.STARTING_GPUS).times(G_CONF.GPU_BASE_COST))}<br/>
-                    GPUs: {gpusOwned.value}
                 </>
             )
         },
@@ -413,6 +412,26 @@ const layer = createLayer(id, function (this: any) {
         }
     }));
 
+    // Helper function to format prerequisites for display
+    function formatPrereq(prereq: { type: string; value: string | number }): string {
+        if (prereq.type === "job") {
+            const requiredJob = getJobType(prereq.value as string);
+            return `Requires: ${requiredJob?.displayName || prereq.value}`;
+        } else if (prereq.type === "data") {
+            return `Requires: ${prereq.value} data`;
+        } else if (prereq.type === "iq") {
+            return `Requires: ${prereq.value} IQ`;
+        } else if (prereq.type === "autonomy") {
+            return `Requires: ${prereq.value} Autonomy`;
+        } else if (prereq.type === "generality") {
+            return `Requires: ${prereq.value} Generality`;
+        } else if (prereq.type === "completedJob") {
+            const requiredJob = getJobType(prereq.value as string);
+            return `Requires: Complete ${requiredJob?.displayName || prereq.value}`;
+        }
+        return "";
+    }
+
     // Job type unlock clickables
     const pizzaUnlockClickables = JOB_TYPES
         .filter(job => job.unlockCost.length > 0)  // Only jobs that cost something to unlock
@@ -421,13 +440,47 @@ const layer = createLayer(id, function (this: any) {
             const moneyCost = jobType.unlockCost.find(cost => cost.type === "money")?.value || 0;
             const dataCost = jobType.unlockCost.find(cost => cost.type === "data")?.value || 0;
 
+            // Get non-money prerequisites that should be displayed (display_prereq defaults to true)
+            const nonMoneyPrereqs = jobType.prereq.filter((prereq: any) =>
+                prereq.type !== "money" && (prereq.display_prereq !== false)
+            );
+
+            // Check for stat payouts
+            const statPayout = jobType.payout.find((p: any) => ["iq", "autonomy", "generality"].includes(p.type));
+
             return createClickable(() => ({
                 display: {
-                    title: jobType.category === "onetime" ? jobType.displayName : `Unlock ${jobType.displayName}`,
+                    title: jobType.category === "onetime" || currentChapter.value >= 3
+                        ? jobType.displayName
+                        : `Unlock ${jobType.displayName}`,
                     description: (
                         <>
                             Cost: {moneyCost > 0 && `$${moneyCost}`}{moneyCost > 0 && dataCost > 0 && " + "}{dataCost > 0 && `${dataCost} data`}<br/>
-			    {jobType.description}
+                            {nonMoneyPrereqs.length > 0 && (
+                                <>
+                                    {nonMoneyPrereqs.map((prereq: any, idx: number) => (
+                                        <span key={idx}>
+                                            {formatPrereq(prereq)}
+                                            {idx < nonMoneyPrereqs.length - 1 && <br/>}
+                                        </span>
+                                    ))}
+                                <br/></>
+
+                            )}
+			    <br/><i>{jobType.description}</i>
+                            {statPayout && (
+                                <>
+                                    <br/>
+                                    <strong>
+                                        {statPayout.type === "iq" && "IQ"}
+                                        {statPayout.type === "autonomy" && "Autonomy"}
+                                        {statPayout.type === "generality" && "Generality"}
+                                        {" +"}
+                                        {statPayout.min === statPayout.max ? statPayout.min : `${statPayout.min}-${statPayout.max}`}
+                                    </strong>
+                                </>
+                            )}
+
                         </>
                     )
                 },
@@ -589,14 +642,15 @@ const layer = createLayer(id, function (this: any) {
     const display = () => {
         return (
             <div style="padding: 0 5px;">
+		    <div style="font-size: 14px; color:white"><strong>Chapter</strong> {currentChapter.value}</div>
+                <div style="margin: 8px 0; padding: 12px; border: 2px solid #FFA500; border-radius: 10px; background: #fff3e0;">
 
-                <div style="margin: 15px 0; padding: 12px; border: 2px solid #FFA500; border-radius: 10px; background: #fff3e0;">
+
                     <div style="font-size: 16px;"><strong>Money:</strong> ${format(money.value)}</div>
                     {autonomy.value > 0 && <div style="font-size: 16px;"><strong>Autonomy:</strong> {autonomy.value}</div>}
                     {generality.value > 0 && <div style="font-size: 16px;"><strong>Generality:</strong> {generality.value}</div>}
                     {iq.value > 0 && <div style="font-size: 16px;"><strong>IQ:</strong> {iq.value}</div>}		    
                     {dataUnlocked.value && <div style="font-size: 16px;"><strong>Data:</strong> {format(data.value)}</div>}
-                    <div style="font-size: 14px;"><strong>Chapter:</strong> {currentChapter.value}</div>
                     <div style="font-size: 14px;"><strong>GPUs:</strong> {availableGPUs.value} / {gpusOwned.value} available</div>
                     {qualityBonus.value !== 100 && (
                         <div style="font-size: 14px; color: #4CAF50;"><strong>Quality Bonus:</strong> {parseFloat((qualityBonus.value / 100).toFixed(2))}x earnings</div>
@@ -650,31 +704,21 @@ const layer = createLayer(id, function (this: any) {
                             const jobType = getJobType(job.jobTypeId);
                             const computeRequired = jobType?.cost?.find(c => c.type === "compute")?.value || 0;
                             const moneyRequired = jobType?.cost?.find(c => c.type === "money")?.value || 0;
+                            // Set background color based on payout type
+                            const backgroundColor = job.payoutType === "money" ? "#ffffff" :
+                                                   job.payoutType === "data" ? "#f3f3ff" :
+                                                   "#f3f3f3";
                             return (
-                            <div key={job.id} style="margin: 10px 0; padding: 8px; background: white; border-radius: 5px; border: 1px solid #ddd;">
-                                <div style="font-size: 14px;"><strong>Job:</strong>{jobType?.displayName || job.jobTypeId}</div>
-                                <div style="font-size: 14px;"><strong>Duration:</strong> {job.duration}s</div>
+                            <div key={job.id} style={`margin: 10px 0; padding: 8px; background: ${backgroundColor}; border-radius: 5px; border: 1px solid #ddd;`}>
                                 <div style="font-size: 14px;">
-                                    <strong>Payout:</strong> {job.payoutType === "money" ? "$" : ""}{["iq", "autonomy", "generality"].includes(job.payoutType) ? "+" : ""}{format(job.payout)}{job.payoutType === "data" ? " data" : ""}{job.payoutType === "iq" ? " IQ" : ""}{job.payoutType === "autonomy" ? " Autonomy" : ""}{job.payoutType === "generality" ? " Generality" : ""}
+                                    <strong>Pay:</strong> {job.payoutType === "money" ? "$" : ""}{["iq", "autonomy", "generality"].includes(job.payoutType) ? "+" : ""}{format(job.payout)}{job.payoutType === "data" ? " data" : ""}{job.payoutType === "iq" ? " IQ" : ""}{job.payoutType === "autonomy" ? " Autonomy" : ""}{job.payoutType === "generality" ? " Generality" : ""}
                                 </div>
-                                <div style="font-size: 14px;"><strong>Compute:</strong> {computeRequired} GPU{computeRequired !== 1 ? 's' : ''}</div>
+
+
+                                <div style="font-size: 14px;"><strong>Use:</strong> {computeRequired} GPU for {job.duration} seconds</div>
                                 {moneyRequired > 0 && <div style="font-size: 14px;"><strong>Cost:</strong> ${moneyRequired}</div>}
                                 <div style="margin-top: 8px; display: flex; gap: 5px;">
-                                    <button
-                                        onClick={() => acceptJob(job)}
-                                        disabled={!canAcceptJob(job)}
-                                        style={{
-                                            background: canAcceptJob(job) ? "#4CAF50" : "#ccc",
-                                            color: "white",
-                                            padding: "6px 12px",
-                                            border: "none",
-                                            borderRadius: "4px",
-                                            cursor: canAcceptJob(job) ? "pointer" : "not-allowed",
-                                            fontSize: "13px"
-                                        }}
-                                    >
-                                        Accept
-                                    </button>
+
                                     {jobType?.category !== "onetime" && (
                                         <button
                                             onClick={() => declineJob(job.id)}
@@ -691,6 +735,24 @@ const layer = createLayer(id, function (this: any) {
                                             Decline
                                         </button>
                                     )}
+
+				    <div style="font-size: 14px;">{jobType?.displayName || job.jobTypeId}</div>
+
+				                                        <button
+                                        onClick={() => acceptJob(job)}
+                                        disabled={!canAcceptJob(job)}
+                                        style={{
+                                            background: canAcceptJob(job) ? "#4CAF50" : "#ccc",
+                                            color: "white",
+                                            padding: "6px 12px",
+                                            border: "none",
+                                            borderRadius: "4px",
+                                            cursor: canAcceptJob(job) ? "pointer" : "not-allowed",
+                                            fontSize: "13px"
+                                        }}
+                                    >
+                                        {jobType?.category === "onetime" ? "Begin" : "Accept"}
+                                    </button>
                                 </div>
                                 {!unlockedJobTypes.value.includes(job.jobTypeId) && (
                                     <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">⚠ Need {jobType?.displayName || job.jobTypeId}!</div>
