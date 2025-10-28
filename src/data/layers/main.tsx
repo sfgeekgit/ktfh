@@ -229,11 +229,11 @@ const layer = createLayer(id, function (this: any) {
                     break;
 
                 case 3:
-                    if (Decimal.lt(money.value, 380)) return null;
+                    if (Decimal.lt(money.value, 1380)) return null;
                     break;
 
                 case 4:
-                    if (Decimal.lt(money.value, 840)) return null;
+                    if (Decimal.lt(money.value, 1840)) return null;
                     break;
 
                 case 5:
@@ -340,6 +340,11 @@ const layer = createLayer(id, function (this: any) {
 
             // Mark as spawned
             spawnedOnetimeJobs.value.push(jobType.id);
+        }
+
+        // Save after spawning onetime jobs to prevent loss on refresh
+        if (onetimeJobs.length > 0) {
+            save();
         }
     }, { immediate: true, deep: true });
 
@@ -616,6 +621,9 @@ const layer = createLayer(id, function (this: any) {
             ...job,
             timeRemaining: job.duration
         });
+
+        // Save after accepting job to prevent loss on refresh (especially critical for onetime jobs)
+        save();
     }
 
     // Decline job

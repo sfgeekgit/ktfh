@@ -90,6 +90,7 @@ export const JOB_TYPES: JobType[] = [
         description: "",
         chapter: [1,2],
         prereq: [
+		{type:"compute", value:2},
 	    { type: "money", value: 20 },
             { type: "job", value: "spellchecker" }
 	],
@@ -150,14 +151,14 @@ export const JOB_TYPES: JobType[] = [
         id: "webscrape",
         displayName: "Web Scraper",
         description: "Collect Data",
-        chapter: [2,3,4],
+        chapter: [2,3,4,5],
         prereq: [],   // should unlock as soon as chapter 2 begins
 
         unlockCost: [            { type: "money", value: 100 }],
         payout: [
             { type: "data", min: 70, max: 150 }
         ],
-        duration: { min: 3, max: 6 }, // todo Make slower
+        duration: { min: 3, max: 5 }, // todo Make slower
         category: "gameplay",
         cost: [
             { type: "compute", value: 2 },
@@ -193,14 +194,10 @@ export const JOB_TYPES: JobType[] = [
 	displayTrigger: [ { type: "job", value: "chess", display_prereq: false } ],
         prereq: [ { type: "iq", value: 3 } ],
         unlockCost: [            { type: "money", value: 100 }],
-        payout: [
-            { type: "money", min: 70, max: 150 }
-        ],
-        duration: { min: 2, max: 3 },
+        payout: [                                                    { type: "money", min: 870, max: 1150 } ],
+        duration:                                                    { min: 2, max: 3 },
         category: "tool",
-        cost: [
-            { type: "compute", value: 3 }
-        ]
+        cost: [                                                  { type: "compute", value: 3 }]
     },
 
 
@@ -227,7 +224,7 @@ export const JOB_TYPES: JobType[] = [
 
     {
         id: "trun1",
-        displayName: "Training Run",
+        displayName: "Training Run",                             /// to do! Make prereq HIGHER than compute needed (so the player has spare gpus while the job runs
         description: "Train a smarter base model",
         chapter: [2,3,4],
         prereq: [ { type: "data", value: 100 } ],
