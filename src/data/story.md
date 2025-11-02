@@ -362,3 +362,41 @@ The race accelerates. MegaCorp announces new autonomous systems. You rush to mat
 *Late at night, you notice systems behaving oddly. Jobs auto-accepting. Resources reallocating. UI glitches.*
 
 **But there's no time to slow down. Not with MegaCorp ahead.**
+
+<!--
+═══════════════════════════════════════════════════════════════════════════════
+HOW TO ADD A NEW CHAPTER
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Add your chapter content to this file following the format above
+2. Update src/data/layers/chapters.tsx:
+   - Add chapter ID to the chapterIds array (line 6)
+   - Add export statement: export const chapter6 = chapters.chapter6;
+3. Update src/data/layers.tsx:
+   - Add chapter6 to the import: import { chapter1, chapter2, ..., chapter6 } from "./layers/chapters";
+   - Add chapter6 to the export object
+4. Update src/data/projEntry.tsx:
+   - Add chapter6 to the import (same as step 3)
+   - Add chapter6 to the getInitialLayers return array
+
+MARKDOWN FORMAT REFERENCE:
+# Chapter N: Title          - Chapter header
+**id:** chapterN            - Chapter ID (must match code)
+**color:** #FFA500          - Chapter color
+
+## Page 1                   - Regular page
+Paragraph text here...
+
+## Page 2 [CHOICE]          - Choice page
+**title:** Page Title
+[OPTION: choiceId]
+**button:** Button Text
+**title:** Option Title
+**description:** Description
+**effect:** Effect text
+**color:** #4CAF50
+
+## Page 3 [IF: choiceId]    - Conditional page (shows only if player chose this option)
+**title:** Outcome Title
+-->
+

@@ -11,11 +11,7 @@ import Decimal, { format, formatTime } from "util/bignum";
 import { render } from "util/vue";
 import { computed, toRaw } from "vue";
 import main from "./layers/main"; // Pizza
-import chapter1 from "./layers/chapter1"; // Chapter 1 story
-import chapter2 from "./layers/chapter2"; // Chapter 2 story
-import chapter3 from "./layers/chapter3"; // Chapter 3 story
-import chapter4 from "./layers/chapter4"; // Chapter 4 story
-import chapter5 from "./layers/chapter5"; 
+import { chapter1, chapter2, chapter3, chapter4, chapter5 } from "./layers/chapters"; // Story chapters 
 
 
 // import prestige from "./layers/prestige"; // commenting out (might re-add prestige later)
