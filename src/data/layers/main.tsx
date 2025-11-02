@@ -689,7 +689,7 @@ const layer = createLayer(id, function (this: any) {
                             const jobType = getJobType(delivery.jobTypeId);
                             return (
                                 <div key={delivery.id} style="margin: 10px 0; padding: 8px; background: white; border-radius: 5px; border: 1px solid #ddd;">
-                                    <div style="font-size: 14px;"><strong>Processing:</strong> {jobType?.displayName || delivery.jobTypeId}</div>
+                                    <div style="font-size: 14px;">{jobType.category === "onetime" ? "TRAINING" : "Job: "} {jobType?.displayName || delivery.jobTypeId}</div>
                                     <div style="font-size: 14px;"><strong>⏱️ Time:</strong> {Math.ceil(delivery.timeRemaining)}s</div>
                                     <div style="color: #2e7d32; font-size: 14px;">
                                         <strong>💰 Earn:</strong> {delivery.payoutType === "money" ? "$" : ""}{["iq", "autonomy", "generality"].includes(delivery.payoutType) ? "+" : ""}{format(delivery.payout)}{delivery.payoutType === "data" ? " data" : ""}{delivery.payoutType === "iq" ? " IQ" : ""}{delivery.payoutType === "autonomy" ? " Autonomy" : ""}{delivery.payoutType === "generality" ? " Generality" : ""}

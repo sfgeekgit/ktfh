@@ -5,6 +5,13 @@
  * Each job type specifies unlock conditions, costs, payouts, and prerequisites.
  */
 
+
+
+/// Todo, tweak UI of training runs. Maybe while they are running, don't say "processing" say "Training" or such
+// Players will just be clicking everything click click click, make it more clear to them in UI that some things happening are different
+
+
+
 // Note that prereq and displayTrigger are very similar
 // displayTrigger is optional, if it is not set, will defualt to prerequisite
 // If they are both set, the displayTrigger will allow the button to be displayed, and prereq will be needed for it to be clicked.
