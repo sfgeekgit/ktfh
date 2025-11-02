@@ -4,6 +4,7 @@ import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import tsconfigPaths from "vite-tsconfig-paths";
 import projInfo from "./src/data/projInfo";
+import storyLoaderPlugin from "./vite-plugin-story-loader";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -25,6 +26,7 @@ export default defineConfig({
         }
     },
     plugins: [
+        storyLoaderPlugin(),
         vue(),
         vueJsx({
             // options are passed on to @vue/babel-plugin-jsx
