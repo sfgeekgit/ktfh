@@ -202,6 +202,36 @@ export const JOB_TYPES: JobType[] = [
 
 
 
+    // IQ-Gated Money Jobs (Requires IQ ≥ 2)
+    {
+        id: "medicaladvisor",
+        displayName: "Medical Advisor",
+        description: "Assist with medical research queries",
+        chapter: [2, 3, 4],
+        displayTrigger: [{ type: "iq", value: 1 }],
+        prereq: [{ type: "iq", value: 2 }],
+        unlockCost: [{ type: "money", value: 5000 }],
+        payout: [{ type: "money", min: 700, max: 900 }],
+        duration: { min: 38, max: 42 },
+        cost: [{ type: "compute", value: 5 }],
+        category: "tool"
+    },
+    {
+        id: "legalresearch",
+        displayName: "Legal Research Assistant",
+        description: "Analyze case law and precedents",
+        chapter: [2, 3, 4],
+	displayTrigger: [ { type: "job", value: "medicaladvisor", display_prereq: false } ],
+        prereq: [{ type: "iq", value: 3 }],
+        unlockCost: [{ type: "money", value: 5000 }],
+        payout: [{ type: "money", min: 650, max: 800 }],
+        duration: { min: 34, max: 38 },
+        cost: [{ type: "compute", value: 4 }],
+        category: "tool"
+    },
+
+
+
     {
         id: "synthdata",
         displayName: "Synthetic Data Generator",
