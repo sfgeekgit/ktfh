@@ -68,6 +68,8 @@ const layer = createLayer(id, function (this: any) {
             return Decimal.gte(money.value, prereq.value as number);
         } else if (prereq.type === "data") {
             return Decimal.gte(data.value, prereq.value as number);
+        } else if (prereq.type === "compute") {
+            return gpusOwned.value >= (prereq.value as number);
         } else if (prereq.type === "iq") {
             return iq.value >= (prereq.value as number);
         } else if (prereq.type === "autonomy") {
@@ -426,6 +428,8 @@ const layer = createLayer(id, function (this: any) {
             return `Requires: ${requiredJob?.displayName || prereq.value}`;
         } else if (prereq.type === "data") {
             return `Requires: ${prereq.value} data`;
+        } else if (prereq.type === "compute") {
+            return `Requires: ${prereq.value} GPU${prereq.value !== 1 ? 's' : ''}`;
         } else if (prereq.type === "iq") {
             return `Requires: ${prereq.value} IQ`;
         } else if (prereq.type === "autonomy") {

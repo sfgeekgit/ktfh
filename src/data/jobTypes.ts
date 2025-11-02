@@ -199,7 +199,10 @@ export const JOB_TYPES: JobType[] = [
         description: "",
         chapter: [2,3,4,5],
 	displayTrigger: [ { type: "job", value: "chess", display_prereq: false } ],
-        prereq: [ { type: "iq", value: 3 } ],
+        prereq: [ { type: "iq", value: 3 },
+		  { type: "money", value:6000},
+		  { type: "compute", value:6}
+	],
         unlockCost: [            { type: "money", value: 100 }],
         payout: [                                                    { type: "money", min: 870, max: 1150 } ],
         duration:                                                    { min: 2, max: 3 },
@@ -261,10 +264,13 @@ export const JOB_TYPES: JobType[] = [
 
     {
         id: "trun1",
-        displayName: "Training Run",                             /// to do! Make prereq HIGHER than compute needed (so the player has spare gpus while the job runs
+        displayName: "Training Run",
         description: "Train a smarter base model",
         chapter: [2,3,4],
-        prereq: [ { type: "data", value: 100 } ],
+        prereq: [
+            { type: "data", value: 100 },
+            { type: "compute", value: 6 }
+        ],
         unlockCost: [            { type: "data", value: 200 }],
         payout: [{ type: "iq", min: 1, max: 1 } ],
         duration: { min: 35, max: 35 },
@@ -279,10 +285,11 @@ export const JOB_TYPES: JobType[] = [
     {
         id: "trun2",
         displayName: "Reinforcement Learning",
-        description: "Improves through trial and feedback",
+        description: "Training Run",
         chapter: [2,3,4],
         prereq: [
             { type: "completedJob", value: "trun1", display_prereq: false }
+	    , { type: "compute", value: 7}
         ],
         unlockCost: [{ type: "data", value: 400 }],
         payout: [{ type: "iq", min: 1, max: 1 }],
@@ -301,7 +308,8 @@ export const JOB_TYPES: JobType[] = [
         description: "AI learns multistep problem solving",
         chapter: [2,3,4],
         prereq: [
-            { type: "completedJob", value: "trun2", display_prereq: false }
+            { type: "completedJob", value: "trun2", display_prereq: false },
+            { type: "compute", value: 7 }
         ],
         unlockCost: [{ type: "data", value: 600 }],
         payout: [{ type: "iq", min: 1, max: 1 }],
@@ -320,7 +328,8 @@ export const JOB_TYPES: JobType[] = [
         description: "AI identifies intricate relationships in data",
         chapter: [2,3,4,5],
         prereq: [
-            { type: "completedJob", value: "trun3", display_prereq: false }
+            { type: "completedJob", value: "trun3", display_prereq: false },
+            { type: "compute", value: 8 }
         ],
         unlockCost: [{ type: "data", value: 800 }],
         payout: [{ type: "iq", min: 1, max: 1 }],
@@ -339,7 +348,8 @@ export const JOB_TYPES: JobType[] = [
         description: "Deepen expertise in specific domains",
         chapter: [2,3,4,5],
         prereq: [
-            { type: "completedJob", value: "trun4", display_prereq: false }
+            { type: "completedJob", value: "trun4", display_prereq: false },
+            { type: "compute", value: 8 }
         ],
         unlockCost: [{ type: "data", value: 1000 }],
         payout: [{ type: "iq", min: 1, max: 1 }],
@@ -358,7 +368,8 @@ export const JOB_TYPES: JobType[] = [
         description: "AI thinks faster and more efficiently",
         chapter: [3,4,5,6],
         prereq: [
-            { type: "completedJob", value: "trun5", display_prereq: false }
+            { type: "completedJob", value: "trun5", display_prereq: false },
+            { type: "compute", value: 9 }
         ],
         unlockCost: [{ type: "data", value: 1200 }],
         payout: [{ type: "iq", min: 1, max: 1 }],
@@ -377,7 +388,8 @@ export const JOB_TYPES: JobType[] = [
         description: "AI develops sophisticated calculation abilities",
         chapter: [3,4,5,6],
         prereq: [
-            { type: "completedJob", value: "trun6", display_prereq: false }
+            { type: "completedJob", value: "trun6", display_prereq: false },
+            { type: "compute", value: 9 }
         ],
         unlockCost: [{ type: "data", value: 1400 }],
         payout: [{ type: "iq", min: 1, max: 1 }],
@@ -396,7 +408,8 @@ export const JOB_TYPES: JobType[] = [
         description: "AI masters specialized domain expertise",
         chapter: [3,4,5,6],
         prereq: [
-            { type: "completedJob", value: "trun7", display_prereq: false }
+            { type: "completedJob", value: "trun7", display_prereq: false },
+            { type: "compute", value: 10 }
         ],
         unlockCost: [{ type: "data", value: 1600 }],
         payout: [{ type: "iq", min: 1, max: 1 }],
@@ -408,14 +421,14 @@ export const JOB_TYPES: JobType[] = [
             { type: "data", value: 200 }
         ]
     },
-
     {
         id: "trun9",
         displayName: "Advanced Reasoning Engine",
         description: "AI develops deeper logical capabilities",
         chapter: [3,4,5,6],
         prereq: [
-            { type: "completedJob", value: "trun8", display_prereq: false }
+            { type: "completedJob", value: "trun8", display_prereq: false },
+            { type: "compute", value: 10 }
         ],
         unlockCost: [{ type: "data", value: 1800 }],
         payout: [{ type: "iq", min: 1, max: 1 }],
@@ -435,7 +448,8 @@ export const JOB_TYPES: JobType[] = [
         description: "Combine text, image, audio processing",
         chapter: [2,3,4],
         prereq: [
-		    	{ type: "iq", value: 2 }
+		    	{ type: "iq", value: 2 },
+            { type: "compute", value: 5 }
 	],
         unlockCost: [{ type: "data", value: 200 }],
         payout: [
@@ -456,7 +470,8 @@ export const JOB_TYPES: JobType[] = [
         description: "Transfer knowledge between fields",
         chapter: [2,3,4],
         prereq: [
-            { type: "completedJob", value: "trun_mm1", display_prereq: false  }
+            { type: "completedJob", value: "trun_mm1", display_prereq: false  },
+            { type: "compute", value: 6 }
         ],
         unlockCost: [{ type: "data", value: 400 }],
         payout: [
@@ -477,7 +492,8 @@ export const JOB_TYPES: JobType[] = [
         description: "Better Generality",
         chapter: [2,3,4],
         prereq: [
-            { type: "completedJob", value: "trun_mm2", display_prereq: false  }
+            { type: "completedJob", value: "trun_mm2", display_prereq: false  },
+            { type: "compute", value: 7 }
         ],
         unlockCost: [{ type: "data", value: 800 }],
         payout: [
@@ -498,7 +514,8 @@ export const JOB_TYPES: JobType[] = [
         description: "AI that learns how to learn new tasks",
         chapter: [3,4,5,6],
         prereq: [
-            { type: "completedJob", value: "trun_mm3", display_prereq: false  }
+            { type: "completedJob", value: "trun_mm3", display_prereq: false  },
+            { type: "compute", value: 7 }
         ],
         unlockCost: [{ type: "data", value: 800 }],
         payout: [
