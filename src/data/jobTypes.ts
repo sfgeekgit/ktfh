@@ -20,6 +20,7 @@
 interface PrereqCondition {
     type: string;  // "job", "money", "iq", "autonomy", "generality", etc.
     value: string | number;  // job id (string) or numeric threshold
+    display_prereq?: boolean;  // Optional: whether to display this prereq in UI
 }
 
 // Cost specification
