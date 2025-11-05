@@ -231,7 +231,7 @@ const layer = createLayer(id, function (this: any) {
                     break;
 
                 case 3:
-                    if (Decimal.lt(money.value, 120)) return null;
+                    if (Decimal.lt(money.value, 170)) return null;
                     break;
 
                 case 4:

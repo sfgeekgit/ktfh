@@ -65,6 +65,7 @@ You start collecting data systematically. Terabytes of information.
 
 Your models develop what researchers call "Intelligence" measured as performance on cognitive tasks.
 
+<h1>Format me IQ UNLOCKED</h1>
 **IQ Unlocked**
 
 ## Page 3 [CHOICE]
@@ -127,6 +128,7 @@ It works. Growth accelerates. Systems handle more jobs with less supervision.
 
 The news hits like a thunderclap.
 
+Test -  does this say MegaCorp ... Research ... 
 **"MegaCorp AI Raises $8 Billion for AGI Research"**
 
 You have a rival.
@@ -233,6 +235,7 @@ Your financial AI picks trades at machine speed. Your logistics system optimizes
 
 It's like having a data center full of employees who never sleep.
 
+Format Autonomy Unlocked
 **AUTONOMY Unlocked**
 
 ## Page 3
@@ -274,7 +277,7 @@ And now, so are you.
 
 The AI race dominates headlines.
 
-**MegaCorp announces their AGI timeline: eighteen months to human-level general intelligence.**
+*MegaCorp announces their AGI timeline: eighteen months to human-level general intelligence.*
 
 Your systems have grown dramatically across multiple domains. Minimal oversight. Jobs that complete themselves.
 
@@ -303,9 +306,7 @@ Prominent AI researchers publish an open letter.
 You recognize the names, legends in the field.
 
 > "We are approaching a threshold. Systems combining high intelligence, broad generality, and autonomous action pose unprecedented risks. Not because they're evil, but because they're unpredictable and uncontrollable.
->
 > "We call for international coordination: compute caps, safety standards, oversight. Close the Gates to uncontrollable superintelligence.
->
 > "The future can stay human. But only if we choose."
 
 Your phone explodes. Everyone wants your response.
@@ -347,7 +348,7 @@ But others join you. Smaller labs. International researchers. Even some MegaCorp
 
 The Framework passes. Compute caps enforced. MegaCorp's ambitious projects shutdown.
 
-**The race is over. The real work begins.**
+The race is over. The real work begins.
 
 ## Page 6 [IF: oppose]
 **title:** Oppose the Framework
@@ -362,8 +363,10 @@ The race accelerates. MegaCorp announces new autonomous systems. You rush to mat
 
 *Late at night, you notice systems behaving oddly. Jobs auto-accepting. Resources reallocating. UI glitches.*
 
-**But there's no time to slow down. Not with MegaCorp ahead.**
+But there's no time to slow down. Not with MegaCorp ahead.
 
+
+## Page 999
 <!--
 ═══════════════════════════════════════════════════════════════════════════════
 HOW TO ADD A NEW CHAPTER
