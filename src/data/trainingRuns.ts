@@ -1,45 +1,47 @@
 /**
  * Training Run Jobs Configuration
  *
- * Defines all training run job types that increase AI capabilities (IQ, generality).
- * These are typically one-time jobs that represent major AI model improvements.
- */
+ * Defines all training run job types that increase AI stats
+ * There are 3 "trees" one for each stat (iq, generality, autonomy)
+
+*/
 
 import type { JobType } from './jobTypes';
+
+const BASE_TRAIN_DUR = 2;
 
 export const TRAINING_RUN_JOBS: JobType[] = [
     {
         id: "trun1",
-        displayName: "Training Run",
+        displayName: "Basic Training Run",
         description: "Train a smarter base model",
-        chapter: [2,3,4],
+        chapter: [2,3,4,5,6],
         prereq: [
             { type: "data", value: 100 },
             { type: "compute", value: 6 }
         ],
-        unlockCost: [            { type: "data", value: 200 }],
-        payout: [{ type: "iq", min: 1, max: 1 } ],
-        duration: { min: 35, max: 35 },
+        unlockCost: [{ type: "data", value: 200 }],
+        payout: [{ type: "iq", min: 1, max: 1 }],
+        duration: { min: BASE_TRAIN_DUR * 3.5, max: BASE_TRAIN_DUR * 3.5 },
         category: "onetime",
         cost: [
             { type: "compute", value: 4 },
-	    { type: "money", value: 500 }
-
+            { type: "money", value: 500 }
         ]
     },
 
     {
         id: "trun2",
-        displayName: "Reinforcement Learning",
-        description: "Training Run",
-        chapter: [2,3,4],
+        displayName: "Pattern Recognition Training",
+        description: "AI learns to identify patterns in data",
+        chapter: [2,3,4,5,6],
         prereq: [
-            { type: "completedJob", value: "trun1", display_prereq: false }
-	    , { type: "compute", value: 7}
+            { type: "completedJob", value: "trun1", display_prereq: false },
+            { type: "compute", value: 7 }
         ],
         unlockCost: [{ type: "data", value: 400 }],
         payout: [{ type: "iq", min: 1, max: 1 }],
-        duration: { min: 40, max: 40 },
+        duration: { min: BASE_TRAIN_DUR * 4, max: BASE_TRAIN_DUR * 4 },
         category: "onetime",
         cost: [
             { type: "compute", value: 5 },
@@ -50,19 +52,19 @@ export const TRAINING_RUN_JOBS: JobType[] = [
 
     {
         id: "trun3",
-        displayName: "Chain-of-Thought Training",
-        description: "AI learns multistep problem solving",
-        chapter: [2,3,4],
+        displayName: "Deep Learning Architecture",
+        description: "Build advanced neural network architectures",
+        chapter: [2,3,4,5,6],
         prereq: [
             { type: "completedJob", value: "trun2", display_prereq: false },
-            { type: "compute", value: 7 }
+            { type: "compute", value: 10 }
         ],
         unlockCost: [{ type: "data", value: 600 }],
         payout: [{ type: "iq", min: 1, max: 1 }],
-        duration: { min: 45, max: 45 },
+        duration: { min: BASE_TRAIN_DUR * 4.5, max: BASE_TRAIN_DUR * 4.5 },
         category: "onetime",
         cost: [
-            { type: "compute", value: 5 },
+            { type: "compute", value: 7 },
             { type: "money", value: 1000 },
             { type: "data", value: 200 }
         ]
@@ -70,19 +72,19 @@ export const TRAINING_RUN_JOBS: JobType[] = [
 
     {
         id: "trun4",
-        displayName: "Complex Pattern Recognition",
-        description: "AI identifies intricate relationships in data",
-        chapter: [2,3,4,5],
+        displayName: "Reinforcement Learning Engine",
+        description: "AI learns through trial and reward feedback",
+        chapter: [2,3,4,5,6],
         prereq: [
             { type: "completedJob", value: "trun3", display_prereq: false },
-            { type: "compute", value: 8 }
+            { type: "compute", value: 11 }
         ],
         unlockCost: [{ type: "data", value: 800 }],
         payout: [{ type: "iq", min: 1, max: 1 }],
-        duration: { min: 50, max: 50 },
+        duration: { min: BASE_TRAIN_DUR * 5, max: BASE_TRAIN_DUR * 5 },
         category: "onetime",
         cost: [
-            { type: "compute", value: 6 },
+            { type: "compute", value: 8 },
             { type: "money", value: 1250 },
             { type: "data", value: 200 }
         ]
@@ -90,19 +92,19 @@ export const TRAINING_RUN_JOBS: JobType[] = [
 
     {
         id: "trun5",
-        displayName: "Specialized Fine-Tuning",
-        description: "Deepen expertise in specific domains",
-        chapter: [2,3,4,5],
+        displayName: "Memory Enhancement",
+        description: "Increase AI's context and recall capacity",
+        chapter: [2,3,4,5,6],
         prereq: [
             { type: "completedJob", value: "trun4", display_prereq: false },
-            { type: "compute", value: 8 }
+            { type: "compute", value: 14 }
         ],
         unlockCost: [{ type: "data", value: 1000 }],
         payout: [{ type: "iq", min: 1, max: 1 }],
-        duration: { min: 55, max: 55 },
+        duration: { min: BASE_TRAIN_DUR * 5.5, max: BASE_TRAIN_DUR * 5.5 },
         category: "onetime",
         cost: [
-            { type: "compute", value: 6 },
+            { type: "compute", value: 10 },
             { type: "money", value: 1500 },
             { type: "data", value: 200 }
         ]
@@ -110,19 +112,19 @@ export const TRAINING_RUN_JOBS: JobType[] = [
 
     {
         id: "trun6",
-        displayName: "Inference Optimization",
-        description: "AI thinks faster and more efficiently",
-        chapter: [3,4,5,6],
+        displayName: "Advanced Reasoning Core",
+        description: "Develop sophisticated logical reasoning capabilities",
+        chapter: [2,3,4,5,6],
         prereq: [
             { type: "completedJob", value: "trun5", display_prereq: false },
-            { type: "compute", value: 9 }
+            { type: "compute", value: 14 }
         ],
         unlockCost: [{ type: "data", value: 1200 }],
         payout: [{ type: "iq", min: 1, max: 1 }],
-        duration: { min: 60, max: 60 },
+        duration: { min: BASE_TRAIN_DUR * 6, max: BASE_TRAIN_DUR * 6 },
         category: "onetime",
         cost: [
-            { type: "compute", value: 7 },
+            { type: "compute", value: 10 },
             { type: "money", value: 1750 },
             { type: "data", value: 200 }
         ]
@@ -130,19 +132,19 @@ export const TRAINING_RUN_JOBS: JobType[] = [
 
     {
         id: "trun7",
-        displayName: "Mathematical Reasoning",
-        description: "AI develops sophisticated calculation abilities",
-        chapter: [3,4,5,6],
+        displayName: "Chain-of-Thought Enhancer",
+        description: "Enable step-by-step reasoning processes",
+        chapter: [2,3,4,5,6],
         prereq: [
             { type: "completedJob", value: "trun6", display_prereq: false },
-            { type: "compute", value: 9 }
+            { type: "compute", value: 15 }
         ],
         unlockCost: [{ type: "data", value: 1400 }],
         payout: [{ type: "iq", min: 1, max: 1 }],
-        duration: { min: 65, max: 65 },
+        duration: { min: BASE_TRAIN_DUR * 6.5, max: BASE_TRAIN_DUR * 6.5 },
         category: "onetime",
         cost: [
-            { type: "compute", value: 7 },
+            { type: "compute", value: 10 },
             { type: "money", value: 2000 },
             { type: "data", value: 200 }
         ]
@@ -150,38 +152,38 @@ export const TRAINING_RUN_JOBS: JobType[] = [
 
     {
         id: "trun8",
-        displayName: "Expert Knowledge Base",
-        description: "AI masters specialized domain expertise",
-        chapter: [3,4,5,6],
+        displayName: "Inference Optimization",
+        description: "AI thinks faster and more efficiently",
+        chapter: [2,3,4,5,6],
         prereq: [
             { type: "completedJob", value: "trun7", display_prereq: false },
-            { type: "compute", value: 10 }
+            { type: "compute", value: 16 }
         ],
         unlockCost: [{ type: "data", value: 1600 }],
         payout: [{ type: "iq", min: 1, max: 1 }],
-        duration: { min: 70, max: 70 },
+        duration: { min: BASE_TRAIN_DUR * 7, max: BASE_TRAIN_DUR * 7 },
         category: "onetime",
         cost: [
-            { type: "compute", value: 8 },
+            { type: "compute", value: 10 },
             { type: "money", value: 2500 },
             { type: "data", value: 200 }
         ]
     },
     {
         id: "trun9",
-        displayName: "Advanced Reasoning Engine",
-        description: "AI develops deeper logical capabilities",
-        chapter: [3,4,5,6],
+        displayName: "Strategic Planning Module",
+        description: "AI develops long-term planning capabilities",
+        chapter: [2,3,4,5,6],
         prereq: [
             { type: "completedJob", value: "trun8", display_prereq: false },
-            { type: "compute", value: 10 }
+            { type: "compute", value: 17 }
         ],
         unlockCost: [{ type: "data", value: 1800 }],
         payout: [{ type: "iq", min: 1, max: 1 }],
-        duration: { min: 75, max: 75 },
+        duration: { min: BASE_TRAIN_DUR * 7.5, max: BASE_TRAIN_DUR * 7.5 },
         category: "onetime",
         cost: [
-            { type: "compute", value: 8 },
+            { type: "compute", value: 11 },
             { type: "money", value: 3000 },
             { type: "data", value: 200 }
         ]
@@ -190,89 +192,198 @@ export const TRAINING_RUN_JOBS: JobType[] = [
     // Generality job chain - sequential onetime jobs
     {
         id: "trun_mm1",
-        displayName: "Multimodal Training Run",
-        description: "Combine text, image, audio processing",
-        chapter: [2,3,4],
+        displayName: "Multimodal Integration",
+        description: "Combine text, image, and audio processing",
+        chapter: [3,4,5,6],
         prereq: [
-		    	{ type: "iq", value: 2 },
             { type: "compute", value: 5 }
-	],
+        ],
         unlockCost: [{ type: "data", value: 200 }],
         payout: [
             { type: "generality", min: 1, max: 1 }
         ],
-        duration: { min: 10, max: 10 },
+        duration: { min: BASE_TRAIN_DUR * 1, max: BASE_TRAIN_DUR * 1 },
         category: "onetime",
         cost: [
             { type: "compute", value: 3 },
-	    { type: "money", value: 50 },
-	    { type: "data", value: 100 }
+            { type: "money", value: 50 },
+            { type: "data", value: 100 }
         ]
     },
 
     {
         id: "trun_mm2",
-        displayName: "Cross-Domain Training",
+        displayName: "Cross-Domain Learning",
         description: "Transfer knowledge between fields",
-        chapter: [2,3,4],
+        chapter: [3,4,5,6],
         prereq: [
-            { type: "completedJob", value: "trun_mm1", display_prereq: false  },
+            { type: "completedJob", value: "trun_mm1", display_prereq: false },
             { type: "compute", value: 6 }
         ],
         unlockCost: [{ type: "data", value: 400 }],
         payout: [
             { type: "generality", min: 1, max: 1 }
         ],
-        duration: { min: 35, max: 35 },
+        duration: { min: BASE_TRAIN_DUR * 3.5, max: BASE_TRAIN_DUR * 3.5 },
         category: "onetime",
         cost: [
             { type: "compute", value: 4 },
-	    { type: "money", value: 100 },
-	    { type: "data", value: 200 }
+            { type: "money", value: 100 },
+            { type: "data", value: 200 }
         ]
     },
 
     {
         id: "trun_mm3",
-        displayName: "Few-Shot Learning Module",
-        description: "Better Generality",
-        chapter: [2,3,4],
+        displayName: "Meta-Learning Scaffold",
+        description: "Build frameworks for learning new tasks",
+        chapter: [3,4,5,6],
         prereq: [
-            { type: "completedJob", value: "trun_mm2", display_prereq: false  },
+            { type: "completedJob", value: "trun_mm2", display_prereq: false },
             { type: "compute", value: 7 }
         ],
         unlockCost: [{ type: "data", value: 800 }],
         payout: [
             { type: "generality", min: 1, max: 1 }
         ],
-        duration: { min: 40, max: 40 },
+        duration: { min: BASE_TRAIN_DUR * 4, max: BASE_TRAIN_DUR * 4 },
         category: "onetime",
         cost: [
             { type: "compute", value: 5 },
-	    { type: "money", value: 200 },
-	    { type: "data", value: 400 }
+            { type: "money", value: 200 },
+            { type: "data", value: 400 }
         ]
     },
 
     {
         id: "trun_mm4",
-        displayName: "Meta-Learning System",
-        description: "AI that learns how to learn new tasks",
+        displayName: "Few-Shot Learning Module",
+        description: "AI learns from minimal examples",
         chapter: [3,4,5,6],
         prereq: [
-            { type: "completedJob", value: "trun_mm3", display_prereq: false  },
+            { type: "completedJob", value: "trun_mm3", display_prereq: false },
             { type: "compute", value: 7 }
         ],
         unlockCost: [{ type: "data", value: 800 }],
         payout: [
             { type: "generality", min: 1, max: 1 }
         ],
-        duration: { min: 40, max: 40 },
+        duration: { min: BASE_TRAIN_DUR * 4, max: BASE_TRAIN_DUR * 4 },
         category: "onetime",
         cost: [
             { type: "compute", value: 5 },
-	    { type: "money", value: 200 },
-	    { type: "data", value: 400 }
+            { type: "money", value: 200 },
+            { type: "data", value: 400 }
+        ]
+    },
+
+    {
+        id: "trun_mm5",
+        displayName: "Domain Bridging Framework",
+        description: "Connect and synthesize knowledge across domains",
+        chapter: [3,4,5,6],
+        prereq: [
+            { type: "completedJob", value: "trun_mm4", display_prereq: false },
+            { type: "compute", value: 10 }
+        ],
+        unlockCost: [{ type: "data", value: 1200 }],
+        payout: [
+            { type: "generality", min: 1, max: 1 }
+        ],
+        duration: { min: BASE_TRAIN_DUR * 4.5, max: BASE_TRAIN_DUR * 4.5 },
+        category: "onetime",
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "money", value: 300 },
+            { type: "data", value: 600 }
+        ]
+    },
+
+    // Autonomy job chain - sequential onetime jobs
+    {
+        id: "trun_auto1",
+        displayName: "Basic Autonomous Systems",
+        description: "Enable basic autonomous decision-making",
+        chapter: [4,5,6],
+        prereq: [
+            { type: "compute", value: 5 }
+        ],
+        unlockCost: [{ type: "data", value: 200 }],
+        payout: [
+            { type: "autonomy", min: 1, max: 1 }
+        ],
+        duration: { min: BASE_TRAIN_DUR * 3, max: BASE_TRAIN_DUR * 3 },
+        category: "onetime",
+        cost: [
+            { type: "compute", value: 3 },
+            { type: "money", value: 100 },
+            { type: "data", value: 100 }
+        ]
+    },
+
+    {
+        id: "trun_auto2",
+        displayName: "Agentic Reasoning Training",
+        description: "Train goal-directed reasoning capabilities",
+        chapter: [4,5,6],
+        prereq: [
+            { type: "completedJob", value: "trun_auto1", display_prereq: false },
+            { type: "compute", value: 7 }
+        ],
+        unlockCost: [{ type: "data", value: 400 }],
+        payout: [
+            { type: "autonomy", min: 1, max: 1 }
+        ],
+        duration: { min: BASE_TRAIN_DUR * 3.5, max: BASE_TRAIN_DUR * 3.5 },
+        category: "onetime",
+        cost: [
+            { type: "compute", value: 5 },
+            { type: "money", value: 150 },
+            { type: "data", value: 200 }
+        ]
+    },
+
+    {
+        id: "trun_auto3",
+        displayName: "Multi-Step Task Planner",
+        description: "AI breaks down and executes complex tasks",
+        chapter: [4,5,6],
+        prereq: [
+            { type: "completedJob", value: "trun_auto2", display_prereq: false },
+            { type: "compute", value: 11 }
+        ],
+        unlockCost: [{ type: "data", value: 600 }],
+        payout: [
+            { type: "autonomy", min: 1, max: 1 }
+        ],
+        duration: { min: BASE_TRAIN_DUR * 4, max: BASE_TRAIN_DUR * 4 },
+        category: "onetime",
+        cost: [
+            { type: "compute", value: 8 },
+            { type: "money", value: 250 },
+            { type: "data", value: 400 }
+        ]
+    },
+
+    {
+        id: "trun_auto4",
+        displayName: "Goal-Conditioned Agent",
+        description: "AI pursues objectives with strategic planning",
+        chapter: [4,5,6],
+        prereq: [
+            { type: "completedJob", value: "trun_auto3", display_prereq: false },
+            { type: "compute", value: 15 }
+        ],
+        unlockCost: [{ type: "data", value: 800 }],
+        payout: [
+            { type: "autonomy", min: 1, max: 1 }
+        ],
+        duration: { min: BASE_TRAIN_DUR * 4.5, max: BASE_TRAIN_DUR * 4.5 },
+        category: "onetime",
+        cost: [
+            { type: "compute", value: 11 },
+            { type: "money", value: 400 },
+            { type: "data", value: 600 }
         ]
     },
 ];

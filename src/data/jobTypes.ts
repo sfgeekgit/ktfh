@@ -48,7 +48,7 @@ export interface DurationSpec {
 export interface JobType {
     id: string;              // Internal identifier (used for prereqs)
     displayName: string;     // Name shown to player
-    description: string;     // Job description
+    description?: string;    // Job description (optional)
     chapter: number | number[];  // Which chapter(s) this is available in
     prereq: PrereqCondition[];  // Prerequisites to display button to unlock this job type (empty array if none)
     displayTrigger?: PrereqCondition[];  // Optional: Override prereq for display visibility (button shows earlier but might be Disabled)
