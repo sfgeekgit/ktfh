@@ -94,7 +94,7 @@ function gatherLayerProps(layer: Layer) {
 
 @media (min-width: 768px) {
     .inner-tab {
-        padding: 30px 20px;
+        padding: 10px 20px;
         min-height: calc(100% - 60px);
     }
 }

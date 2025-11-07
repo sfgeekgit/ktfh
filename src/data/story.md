@@ -1,6 +1,39 @@
 # Chapter 1: The Spark
 **id:** chapter1
-**color:** #FFA500
+
+## Page Intro1
+**title:**  The Choice Before Us
+**pageType:** intro
+**button_text:** LET'S GO
+
+Close the Gates
+
+**This is big**
+
+*This is italic*
+
+todo, intro the game, the point of the game, your goal as a player, how the essay is relevant
+
+You play the role of an AI startup founder.
+
+You have choices to make, they can change much more than just your startup.
+
+Your choices will affect the growth and sucesss of your company.
+
+Your choices will affect the growth and success of humanity itself.
+
+
+## Page Intro2
+**title:** Make Choices
+**pageType:** intro
+Choose the future of humanity
+
+The game has several different endings.
+
+You can play however you want (this is only a game) but only one narrow path leads to a ending that is good for humanity.
+
+**button_text:** BEGIN GAME
+
 
 ## Page 1
 
@@ -42,7 +75,6 @@ Your company is small, but it's real. And it's growing.
 
 # Chapter 2: Tools That Think
 **id:** chapter2
-**color:** #FFA500
 
 ## Page 1
 
@@ -118,11 +150,9 @@ It works. Growth accelerates. Systems handle more jobs with less supervision.
 *But sometimes, late at night, you wonder: are you still building tools? Or something else?*
 
 ---
-<!-- Hello!! -->
 
 # Chapter 3: The Scaling Era
 **id:** chapter3
-**color:** #FFA500
 
 ## Page 1
 
@@ -211,7 +241,6 @@ You're catching up.
 
 # Chapter 4: Systems That Act
 **id:** chapter4
-**color:** #FFA500
 
 ## Page 1
 
@@ -271,7 +300,6 @@ And now, so are you.
 
 # Chapter 5: The Threshold
 **id:** chapter5
-**color:** #FFA500
 
 ## Page 1
 
@@ -386,7 +414,6 @@ HOW TO ADD A NEW CHAPTER
 MARKDOWN FORMAT REFERENCE:
 # Chapter N: Title          - Chapter header
 **id:** chapterN            - Chapter ID (must match code)
-**color:** #FFA500          - Chapter color
 
 ## Page 1                   - Regular page
 Paragraph text here...

@@ -12,7 +12,7 @@ export const G_CONF = {
     WIN_AMOUNT: 10000, // $1,000,000 to win the game
 
     // ===== STARTING RESOURCES =====
-    STARTING_MONEY: 0,
+    STARTING_MONEY: 20,
     STARTING_PIZZAS: ["imgclassifier"], // Lol pizza
     STARTING_GPUS: 1,
     STARTING_IQ: 1, // Intelligence stat, unlocked in Chapter 2

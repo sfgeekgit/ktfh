@@ -3,11 +3,35 @@ import { persistent } from "game/persistence";
 import player from "game/player";
 import { save } from "util/save";
 
+// Page type styling configuration
+const PAGE_STYLES = {
+    intro: {
+        headerColor: "#88C0D0",
+        headerSize: "40px",
+        borderColor: "#3B4252",
+        background: "#2E3440",
+        buttonColor: "#8FBCBB",
+        textAlign: "center",
+        textColor: "#E5E9F0"
+    },
+    default: {
+        headerColor: "#FFA500",
+        headerSize: "32px",
+        borderColor: "#FFA500",
+        background: "#fff3e0",
+        buttonColor: "#2196F3",
+        textAlign: "left",
+        textColor: "#000000"
+    }
+};
+
 interface StoryPage {
     title?: string;
     paragraphs: string[];
     isChoice?: boolean;
     choiceType?: string;
+    pageType?: string;
+    buttonText?: string;
     choices?: Array<{
         id: string;
         button: string;
@@ -21,14 +45,12 @@ interface StoryPage {
 interface ChapterData {
     id: string;
     title: string;
-    color: string;
     pages: StoryPage[];
 }
 
 export function createChapterLayer(chapterId: string, chapterData: ChapterData) {
     return function (this: any) {
         const name = chapterData.title;
-        const color = chapterData.color;
 
         // Persistent state
         const complete = persistent<boolean>(false);
@@ -85,16 +107,19 @@ export function createChapterLayer(chapterId: string, chapterData: ChapterData) 
                 return null;
             }
 
+            // Get styles based on page type
+            const styles = page.pageType === 'intro' ? PAGE_STYLES.intro : PAGE_STYLES.default;
+
             // Handle choice pages differently
             if (page.isChoice) {
                 return (
                     <div>
-                        <h2 style="color: #FFA500; font-size: 32px; margin-bottom: 30px;">
+                        <h2 style={`color: ${styles.headerColor}; font-size: ${styles.headerSize}; margin-bottom: 30px;`}>
                             {page.title || chapterData.title}
                         </h2>
 
-                        <div style="margin: 20px 0; padding: 30px; border: 2px solid #FFA500; border-radius: 10px; background: #fff3e0;">
-                            {renderContent(page)}
+                        <div style={`margin: 20px 0; padding: 30px; border: 2px solid ${styles.borderColor}; border-radius: 10px; background: ${styles.background}; color: ${styles.textColor};`}>
+                            {renderContent(page, styles.textAlign, styles.textColor)}
                         </div>
 
                         <div style="margin: 30px 0; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
@@ -137,47 +162,46 @@ export function createChapterLayer(chapterId: string, chapterData: ChapterData) 
                                 );
                             })}
                         </div>
-
-                        <div style="margin-top: 40px; font-size: 14px; color: #666;">
-                            Page {currentPage.value + 1} - Make your choice
-                        </div>
                     </div>
                 );
             }
 
-            // For chapter 5, handle special button text
-            const isChapter5Outcome = chapterId === 'chapter5' && isOutcomePage;
-            let buttonText = "Continue";
-            if (isOutcomePage) {
-                if (isChapter5Outcome) {
-                    buttonText = page.choiceType === 'support' ? "Back to work" : "We must win the race";
+            // Determine button text - custom text takes priority
+            let buttonText = page.buttonText || "Continue";
+            if (!page.buttonText) {
+                // Only use default logic if no custom button text is set
+                const isChapter5Outcome = chapterId === 'chapter5' && isOutcomePage;
+                if (isOutcomePage) {
+                    if (isChapter5Outcome) {
+                        buttonText = page.choiceType === 'support' ? "Back to work" : "We must win the race";
+                    } else {
+                        buttonText = "Continue Your Journey";
+                    }
                 } else {
-                    buttonText = "Continue Your Journey";
-                }
-            } else {
-                const isLastPage = currentPage.value === pages.length - 1;
-                if (isLastPage) {
-                    buttonText = chapterId === 'chapter1' ? "Let's get to work!" :
-                                chapterId === 'chapter4' ? "Continue to Main" :
-                                "Continue Your Journey";
+                    const isLastPage = currentPage.value === pages.length - 1;
+                    if (isLastPage) {
+                        buttonText = chapterId === 'chapter1' ? "Let's get to work!" :
+                                    chapterId === 'chapter4' ? "Continue to Main" :
+                                    "Continue Your Journey";
+                    }
                 }
             }
 
             return (
                 <div>
-                    <h2 style="color: #FFA500; font-size: 32px; margin-bottom: 30px;">
+                    <h2 style={`color: ${styles.headerColor}; font-size: ${styles.headerSize}; margin-bottom: 30px;`}>
                         {page.title || chapterData.title}
                     </h2>
 
-                    <div style="margin: 20px 0; padding: 30px; border: 2px solid #FFA500; border-radius: 10px; background: #fff3e0;">
-                        {renderContent(page)}
+                    <div style={`margin: 20px 0; padding: 30px; border: 2px solid ${styles.borderColor}; border-radius: 10px; background: ${styles.background}; color: ${styles.textColor};`}>
+                        {renderContent(page, styles.textAlign, styles.textColor)}
                     </div>
 
                     <div style="margin: 30px 0; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
                         <button
                             onClick={isOutcomePage ? completeChapter : nextPage}
                             style={{
-                                background: isOutcomePage ? "#4CAF50" : "#2196F3",
+                                background: isOutcomePage ? "#4CAF50" : styles.buttonColor,
                                 color: "white",
                                 padding: "15px 40px",
                                 fontSize: "20px",
@@ -190,19 +214,12 @@ export function createChapterLayer(chapterId: string, chapterData: ChapterData) 
                             {buttonText}
                         </button>
                     </div>
-
-                    <div style="margin-top: 40px; font-size: 14px; color: #666;">
-                        {isOutcomePage
-                            ? `Your choice: ${page.title}`
-                            : `Page ${currentPage.value + 1} of ${pages.length}`}
-                    </div>
                 </div>
             );
         }) as any;
 
         return {
             name,
-            color,
             display,
             complete,
             playerChoice,
@@ -211,9 +228,9 @@ export function createChapterLayer(chapterId: string, chapterData: ChapterData) 
     };
 }
 
-function renderContent(page: StoryPage) {
+function renderContent(page: StoryPage, textAlign: string = "left", textColor: string = "#000000") {
     return (
-        <div style="text-align: left; max-width: 600px; margin: 40px auto; line-height: 1.6;">
+        <div style={`text-align: ${textAlign}; max-width: 600px; margin: 40px auto; line-height: 1.6;`}>
             {page.paragraphs.map((paragraph, index) => {
                 // Handle special formatting
                 if (paragraph.startsWith('<blockquote>')) {
@@ -233,7 +250,7 @@ function renderContent(page: StoryPage) {
                     return (
                         <p
                             key={index}
-                            style="font-size: 20px; margin-bottom: 20px; font-weight: bold; color: #d32f2f; text-align: center;"
+                            style={`font-size: 20px; margin-bottom: 20px; font-weight: bold; color: ${textColor}; text-align: center;`}
                         >
                             {content}
                         </p>

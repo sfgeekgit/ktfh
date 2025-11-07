@@ -658,7 +658,7 @@ const layer = createLayer(id, function (this: any) {
     const display = () => {
         return (
             <div style="padding: 0 5px;">
-		    <div style="font-size: 14px; color:white"><strong>Chapter</strong> {currentChapter.value}</div>
+		    <div style="font-size: 16px; color: rgb(230, 218, 199);">Chapter {currentChapter.value}</div>
                 <div style="margin: 8px 0; padding: 12px; border: 2px solid #FFA500; border-radius: 10px; background: #fff3e0;">
 
 
