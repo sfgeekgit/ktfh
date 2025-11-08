@@ -19,8 +19,7 @@ interface DeliveryJob {
     id: number;
     duration: number;
     jobTypeId: string;
-    payout: DecimalSource;
-    payoutType: string; // "money", "data", etc.
+    payouts: Array<{type: string, amount: DecimalSource}>; // Support multiple payouts
 }
 
 // Active delivery interface
@@ -319,22 +318,24 @@ const layer = createLayer(id, function (this: any) {
             // Apply speed bonus
             duration = Math.floor(duration / (speedBonus.value / 100));
 
-            // Calculate payout
-            const payoutSpec = jobType.payout[0];
-            let payout = payoutSpec.min + Math.floor(Math.random() * (payoutSpec.max - payoutSpec.min + 1));
+            // Calculate payouts (support multiple payouts)
+            const payouts = jobType.payout.map((payoutSpec: any) => {
+                let amount = payoutSpec.min + Math.floor(Math.random() * (payoutSpec.max - payoutSpec.min + 1));
 
-            // Apply quality bonus - but not for stat payouts (IQ, autonomy, generality)
-            const isStatPayout = ["iq", "autonomy", "generality"].includes(payoutSpec.type);
-            if (!isStatPayout) {
-                payout = Math.floor(payout * (qualityBonus.value / 100));
-            }
+                // Apply quality bonus - but not for stat payouts (IQ, autonomy, generality)
+                const isStatPayout = ["iq", "autonomy", "generality"].includes(payoutSpec.type);
+                if (!isStatPayout) {
+                    amount = Math.floor(amount * (qualityBonus.value / 100));
+                }
+
+                return { type: payoutSpec.type, amount };
+            });
 
             const newJob: DeliveryJob = {
                 id: nextJobId.value++,
                 duration,
                 jobTypeId: jobType.id,
-                payout,
-                payoutType: payoutSpec.type
+                payouts
             };
 
             // Add to queue immediately
@@ -378,22 +379,24 @@ const layer = createLayer(id, function (this: any) {
         // Apply speed bonus (higher is faster - divide to reduce time)
         duration = Math.floor(duration / (speedBonus.value / 100));
 
-        // Calculate payout from job type config
-        const payoutSpec = jobType.payout[0];
-        let payout = payoutSpec.min + Math.floor(Math.random() * (payoutSpec.max - payoutSpec.min + 1));
+        // Calculate payouts from job type config (support multiple payouts)
+        const payouts = jobType.payout.map((payoutSpec: any) => {
+            let amount = payoutSpec.min + Math.floor(Math.random() * (payoutSpec.max - payoutSpec.min + 1));
 
-        // Apply quality bonus (multiplicative) - but not for stat payouts (IQ, autonomy, generality)
-        const isStatPayout = ["iq", "autonomy", "generality"].includes(payoutSpec.type);
-        if (!isStatPayout) {
-            payout = Math.floor(payout * (qualityBonus.value / 100));
-        }
+            // Apply quality bonus (multiplicative) - but not for stat payouts (IQ, autonomy, generality)
+            const isStatPayout = ["iq", "autonomy", "generality"].includes(payoutSpec.type);
+            if (!isStatPayout) {
+                amount = Math.floor(amount * (qualityBonus.value / 100));
+            }
+
+            return { type: payoutSpec.type, amount };
+        });
 
         return {
             id: nextJobId.value++,
             duration,
             jobTypeId: jobType.id,
-            payout,
-            payoutType: payoutSpec.type
+            payouts
         };
     }
 
@@ -464,36 +467,45 @@ const layer = createLayer(id, function (this: any) {
                     title: jobType.category === "onetime" || currentChapter.value >= 3
                         ? jobType.displayName
                         : `Unlock ${jobType.displayName}`,
-                    description: (
-                        <>
-                            Cost: {moneyCost > 0 && `$${moneyCost}`}{moneyCost > 0 && dataCost > 0 && " + "}{dataCost > 0 && `${dataCost} data`}<br/>
-                            {nonMoneyPrereqs.length > 0 && (
-                                <>
-                                    {nonMoneyPrereqs.map((prereq: any, idx: number) => (
-                                        <span key={idx}>
-                                            {formatPrereq(prereq)}
-                                            {idx < nonMoneyPrereqs.length - 1 && <br/>}
-                                        </span>
-                                    ))}
-                                <br/></>
+                    description: () => {
+                        const hasEnoughMoney = moneyCost === 0 || Decimal.gte(money.value, moneyCost);
+                        const hasEnoughData = dataCost === 0 || Decimal.gte(data.value, dataCost);
 
-                            )}
-			    <br/><i>{jobType.description}</i>
-                            {statPayout && (
-                                <>
-                                    <br/>
-                                    <strong>
-                                        {statPayout.type === "iq" && "IQ"}
-                                        {statPayout.type === "autonomy" && "Autonomy"}
-                                        {statPayout.type === "generality" && "Generality"}
-                                        {" +"}
-                                        {statPayout.min === statPayout.max ? statPayout.min : `${statPayout.min}-${statPayout.max}`}
-                                    </strong>
-                                </>
-                            )}
+                        return (
+                            <>
+                                Cost: {moneyCost > 0 && <span style={!hasEnoughMoney ? "color: rgb(131, 131, 131); font-size: 11px;" : undefined}>${moneyCost}</span>}{moneyCost > 0 && dataCost > 0 && " + "}{dataCost > 0 && <span style={!hasEnoughData ? "color: rgb(131, 131, 131); font-size: 11px;" : undefined}>{dataCost} data</span>}<br/>
+                                {nonMoneyPrereqs.length > 0 && (
+                                    <>
+                                        {nonMoneyPrereqs.map((prereq: any, idx: number) => {
+                                            const isMet = isPrereqMet(prereq);
+                                            const formatted = formatPrereq(prereq);
+                                            return (
+                                                <span key={idx}>
+                                                    Requires: <span style={!isMet ? "color: rgb(131, 131, 131); font-size: 11px;" : undefined}>{formatted.replace("Requires: ", "")}</span>
+                                                    {idx < nonMoneyPrereqs.length - 1 && <br/>}
+                                                </span>
+                                            );
+                                        })}
+                                    <br/></>
 
-                        </>
-                    )
+                                )}
+                                <br/><i>{jobType.description}</i>
+                                {statPayout && (
+                                    <>
+                                        <br/>
+                                        <strong>
+                                            {statPayout.type === "iq" && "IQ"}
+                                            {statPayout.type === "autonomy" && "Autonomy"}
+                                            {statPayout.type === "generality" && "Generality"}
+                                            {" +"}
+                                            {statPayout.min === statPayout.max ? statPayout.min : `${statPayout.min}-${statPayout.max}`}
+                                        </strong>
+                                    </>
+                                )}
+
+                            </>
+                        );
+                    }
                 },
                 canClick: () => {
                     // Check if we have enough resources
@@ -560,17 +572,19 @@ const layer = createLayer(id, function (this: any) {
             if (activeDeliveries.value[i].timeRemaining <= 0) {
                 const delivery = activeDeliveries.value[i];
 
-                // Pay out the appropriate resource based on payout type
-                if (delivery.payoutType === "money") {
-                    money.value = Decimal.add(money.value, delivery.payout);
-                } else if (delivery.payoutType === "data") {
-                    data.value = Decimal.add(data.value, delivery.payout);
-                } else if (delivery.payoutType === "iq") {
-                    iq.value += Number(delivery.payout);
-                } else if (delivery.payoutType === "autonomy") {
-                    autonomy.value += Number(delivery.payout);
-                } else if (delivery.payoutType === "generality") {
-                    generality.value += Number(delivery.payout);
+                // Pay out all payouts for this job
+                for (const payout of delivery.payouts) {
+                    if (payout.type === "money") {
+                        money.value = Decimal.add(money.value, payout.amount);
+                    } else if (payout.type === "data") {
+                        data.value = Decimal.add(data.value, payout.amount);
+                    } else if (payout.type === "iq") {
+                        iq.value += Number(payout.amount);
+                    } else if (payout.type === "autonomy") {
+                        autonomy.value += Number(payout.amount);
+                    } else if (payout.type === "generality") {
+                        generality.value += Number(payout.amount);
+                    }
                 }
 
                 // Track completed onetime jobs to prevent respawning
@@ -674,7 +688,7 @@ const layer = createLayer(id, function (this: any) {
                     {speedBonus.value !== 100 && (
                         <div style="font-size: 14px; color: #2196F3;"><strong>Speed Bonus:</strong> {parseFloat((speedBonus.value / 100).toFixed(2))}x</div>
                     )}
-                    {/*<div style="font-size: 14px;"><strong>Unlocked Pizzas:</strong> {unlockedJobTypes.value.map(id => getJobType(id)?.displayName || id).join(", ")}</div> */}
+                    {/* <div style="font-size: 14px;"><strong>Unlocked Pizzas:</strong> {unlockedJobTypes.value.map(id => getJobType(id)?.displayName || id).join(", ")}</div>  */}   
                 </div>
 
                 <div style="margin: 15px 0;">
@@ -696,7 +710,18 @@ const layer = createLayer(id, function (this: any) {
                                     <div style="font-size: 14px;">{jobType?.category === "onetime" ? "TRAINING" : "Job: "} {jobType?.displayName || delivery.jobTypeId}</div>
                                     <div style="font-size: 14px;"><strong>⏱️ Time:</strong> {Math.ceil(delivery.timeRemaining)}s</div>
                                     <div style="color: #2e7d32; font-size: 14px;">
-                                        <strong>💰 Earn:</strong> {delivery.payoutType === "money" ? "$" : ""}{["iq", "autonomy", "generality"].includes(delivery.payoutType) ? "+" : ""}{format(delivery.payout)}{delivery.payoutType === "data" ? " data" : ""}{delivery.payoutType === "iq" ? " IQ" : ""}{delivery.payoutType === "autonomy" ? " Autonomy" : ""}{delivery.payoutType === "generality" ? " Generality" : ""}
+                                        <strong>💰 Earn:</strong> {delivery.payouts.map((payout: any, idx: number) => (
+                                            <span key={idx}>
+                                                {idx > 0 && " + "}
+                                                {payout.type === "money" ? "$" : ""}
+                                                {["iq", "autonomy", "generality"].includes(payout.type) ? "+" : ""}
+                                                {format(payout.amount)}
+                                                {payout.type === "data" ? " data" : ""}
+                                                {payout.type === "iq" ? " IQ" : ""}
+                                                {payout.type === "autonomy" ? " Autonomy" : ""}
+                                                {payout.type === "generality" ? " Generality" : ""}
+                                            </span>
+                                        ))}
                                     </div>
                                 </div>
                             );
@@ -720,14 +745,25 @@ const layer = createLayer(id, function (this: any) {
                             const jobType = getJobType(job.jobTypeId);
                             const computeRequired = jobType?.cost?.find(c => c.type === "compute")?.value || 0;
                             const moneyRequired = jobType?.cost?.find(c => c.type === "money")?.value || 0;
-                            // Set background color based on payout type
-                            const backgroundColor = job.payoutType === "money" ? "#ffffff" :
-                                                   job.payoutType === "data" ? "#f3f3ff" :
+                            const primaryPayoutType = job.payouts[0]?.type || "money";
+                            const backgroundColor = primaryPayoutType === "money" ? "#ffffff" :
+                                                   primaryPayoutType === "data" ? "#f3f3ff" :
                                                    "#f3f3f3";
                             return (
                             <div key={job.id} style={`margin: 10px 0; padding: 8px; background: ${backgroundColor}; border-radius: 5px; border: 1px solid #ddd;`}>
                                 <div style="font-size: 14px;">
-                                    <strong>Pay:</strong> {job.payoutType === "money" ? "$" : ""}{["iq", "autonomy", "generality"].includes(job.payoutType) ? "+" : ""}{format(job.payout)}{job.payoutType === "data" ? " data" : ""}{job.payoutType === "iq" ? " IQ" : ""}{job.payoutType === "autonomy" ? " Autonomy" : ""}{job.payoutType === "generality" ? " Generality" : ""}
+                                    <strong>Pay:</strong> {job.payouts.map((payout: any, idx: number) => (
+                                        <span key={idx}>
+                                            {idx > 0 && " + "}
+                                            {payout.type === "money" ? "$" : ""}
+                                            {["iq", "autonomy", "generality"].includes(payout.type) ? "+" : ""}
+                                            {format(payout.amount)}
+                                            {payout.type === "data" ? " data" : ""}
+                                            {payout.type === "iq" ? " IQ" : ""}
+                                            {payout.type === "autonomy" ? " Autonomy" : ""}
+                                            {payout.type === "generality" ? " Generality" : ""}
+                                        </span>
+                                    ))}
                                 </div>
 
 
@@ -780,6 +816,8 @@ const layer = createLayer(id, function (this: any) {
                         )})
                     )}
                 </div>
+
+                    <div style="font-size: 14px;"><strong>Researched:</strong> {unlockedJobTypes.value.map(id => getJobType(id)?.displayName || id).join(", ")}</div>  
 
                 {Decimal.gte(money.value, G_CONF.WIN_AMOUNT) && (
                     <div style="margin: 15px 0; padding: 20px; background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); border-radius: 10px; text-align: center; border: 3px solid #ff6f00; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">

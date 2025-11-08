@@ -108,7 +108,7 @@ export const JOB_TYPES: JobType[] = [
 	],
         unlockCost: [            { type: "money", value: 50 }],
         payout: [
-            { type: "money", min: 40, max: 90 }
+            { type: "money", min: 70, max: 100 }
         ],
         duration: { min: 2, max: 3 },
         category: "tool",
@@ -174,7 +174,7 @@ export const JOB_TYPES: JobType[] = [
         category: "gameplay",
         cost: [
             { type: "compute", value: 2 },
-            { type: "money", value: 50 }
+            { type: "money", value: 20 }
         ]
     },
 
@@ -189,6 +189,7 @@ export const JOB_TYPES: JobType[] = [
         unlockCost: [            { type: "money", value: 100 }],
         payout: [
             { type: "money", min: 170, max: 250 }
+	    ,             { type: "data", min: 5, max: 15 }
         ],
         duration: { min: 2, max: 3 },
         category: "tool",
@@ -203,13 +204,15 @@ export const JOB_TYPES: JobType[] = [
         displayName: "Go Engine",
         description: "",
         chapter: [2,3,4,5],
-	displayTrigger: [ { type: "job", value: "chess", display_prereq: false } ],
+	displayTrigger: [ { type: "job", value: "chess"} ],
         prereq: [ { type: "iq", value: 3 },
-		  { type: "money", value:6000},
 		  { type: "compute", value:6}
 	],
-        unlockCost: [            { type: "money", value: 100 }],
-        payout: [                                                    { type: "money", min: 870, max: 1150 } ],
+        unlockCost: [            { type: "money", value: 1000 }],
+        payout: [
+		{ type: "money", min: 870, max: 1150 }
+	    ,   { type: "data", min: 15, max: 25 }
+	    ],
         duration:                                                    { min: 2, max: 3 },
         category: "tool",
         cost: [                                                  { type: "compute", value: 3 }]
