@@ -16,16 +16,16 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         displayName: "Basic Training Run",
         description: "Train a smarter base model",
         chapter: [2,3,4,5,6],
+	displayTrigger: [ { type: "data", value: 1 } ],
         prereq: [
-            { type: "data", value: 100 },
-            { type: "compute", value: 6 }
+            { type: "compute", value: 3 }
         ],
         unlockCost: [{ type: "data", value: 200 }],
         payout: [{ type: "iq", min: 1, max: 1 }],
         duration: { min: BASE_TRAIN_DUR * 3.5, max: BASE_TRAIN_DUR * 3.5 },
         category: "onetime",
         cost: [
-            { type: "compute", value: 4 },
+            { type: "compute", value: 2 },
             { type: "money", value: 500 }
         ]
     },
@@ -35,16 +35,16 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         displayName: "Pattern Recognition Training",
         description: "AI learns to identify patterns in data",
         chapter: [2,3,4,5,6],
+	displayTrigger: [{ type: "completedJob", value: "trun1"} ],            
         prereq: [
-            { type: "completedJob", value: "trun1", display_prereq: false },
-            { type: "compute", value: 7 }
+            { type: "compute", value: 4 }
         ],
         unlockCost: [{ type: "data", value: 400 }],
         payout: [{ type: "iq", min: 1, max: 1 }],
         duration: { min: BASE_TRAIN_DUR * 4, max: BASE_TRAIN_DUR * 4 },
         category: "onetime",
         cost: [
-            { type: "compute", value: 5 },
+            { type: "compute", value: 3 },
             { type: "money", value: 750 },
             { type: "data", value: 200 }
         ]
@@ -55,8 +55,8 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         displayName: "Deep Learning Architecture",
         description: "Build advanced neural network architectures",
         chapter: [2,3,4,5,6],
+        displayTrigger: [{ type: "completedJob", value: "trun2"}],
         prereq: [
-            { type: "completedJob", value: "trun2", display_prereq: false },
             { type: "compute", value: 10 }
         ],
         unlockCost: [{ type: "data", value: 600 }],
@@ -75,8 +75,8 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         displayName: "Reinforcement Learning Engine",
         description: "AI learns through trial and reward feedback",
         chapter: [2,3,4,5,6],
+        displayTrigger: [{ type: "completedJob", value: "trun3"}],
         prereq: [
-            { type: "completedJob", value: "trun3", display_prereq: false },
             { type: "compute", value: 11 }
         ],
         unlockCost: [{ type: "data", value: 800 }],
@@ -95,8 +95,8 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         displayName: "Memory Enhancement",
         description: "Increase AI's context and recall capacity",
         chapter: [2,3,4,5,6],
+        displayTrigger: [{ type: "completedJob", value: "trun4"}],
         prereq: [
-            { type: "completedJob", value: "trun4", display_prereq: false },
             { type: "compute", value: 14 }
         ],
         unlockCost: [{ type: "data", value: 1000 }],
@@ -115,8 +115,8 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         displayName: "Advanced Reasoning Core",
         description: "Develop sophisticated logical reasoning capabilities",
         chapter: [2,3,4,5,6],
+        displayTrigger: [{ type: "completedJob", value: "trun5"}],
         prereq: [
-            { type: "completedJob", value: "trun5", display_prereq: false },
             { type: "compute", value: 14 }
         ],
         unlockCost: [{ type: "data", value: 1200 }],
@@ -135,8 +135,8 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         displayName: "Chain-of-Thought Enhancer",
         description: "Enable step-by-step reasoning processes",
         chapter: [2,3,4,5,6],
+        displayTrigger: [{ type: "completedJob", value: "trun6"}],
         prereq: [
-            { type: "completedJob", value: "trun6", display_prereq: false },
             { type: "compute", value: 15 }
         ],
         unlockCost: [{ type: "data", value: 1400 }],
@@ -155,8 +155,8 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         displayName: "Inference Optimization",
         description: "AI thinks faster and more efficiently",
         chapter: [2,3,4,5,6],
+        displayTrigger: [{ type: "completedJob", value: "trun7"}],
         prereq: [
-            { type: "completedJob", value: "trun7", display_prereq: false },
             { type: "compute", value: 16 }
         ],
         unlockCost: [{ type: "data", value: 1600 }],
@@ -174,8 +174,8 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         displayName: "Strategic Planning Module",
         description: "AI develops long-term planning capabilities",
         chapter: [2,3,4,5,6],
+        displayTrigger: [{ type: "completedJob", value: "trun8"}],
         prereq: [
-            { type: "completedJob", value: "trun8", display_prereq: false },
             { type: "compute", value: 17 }
         ],
         unlockCost: [{ type: "data", value: 1800 }],
@@ -195,8 +195,9 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         displayName: "Multimodal Integration",
         description: "Combine text, image, and audio processing",
         chapter: [3,4,5,6],
+	displayTrigger: [ { type: "iq", value: 3 } ],	
         prereq: [
-            { type: "compute", value: 5 }
+            { type: "compute", value: 4 }
         ],
         unlockCost: [{ type: "data", value: 200 }],
         payout: [
@@ -216,8 +217,8 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         displayName: "Cross-Domain Learning",
         description: "Transfer knowledge between fields",
         chapter: [3,4,5,6],
+	displayTrigger: [{ type: "completedJob", value: "trun_mm1"}],
         prereq: [
-            { type: "completedJob", value: "trun_mm1", display_prereq: false },
             { type: "compute", value: 6 }
         ],
         unlockCost: [{ type: "data", value: 400 }],
@@ -238,8 +239,8 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         displayName: "Meta-Learning Scaffold",
         description: "Build frameworks for learning new tasks",
         chapter: [3,4,5,6],
+        displayTrigger: [{ type: "completedJob", value: "trun_mm2"}],
         prereq: [
-            { type: "completedJob", value: "trun_mm2", display_prereq: false },
             { type: "compute", value: 7 }
         ],
         unlockCost: [{ type: "data", value: 800 }],
@@ -260,8 +261,8 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         displayName: "Few-Shot Learning Module",
         description: "AI learns from minimal examples",
         chapter: [3,4,5,6],
+        displayTrigger: [{ type: "completedJob", value: "trun_mm3"}],
         prereq: [
-            { type: "completedJob", value: "trun_mm3", display_prereq: false },
             { type: "compute", value: 7 }
         ],
         unlockCost: [{ type: "data", value: 800 }],
@@ -282,8 +283,8 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         displayName: "Domain Bridging Framework",
         description: "Connect and synthesize knowledge across domains",
         chapter: [3,4,5,6],
+        displayTrigger: [{ type: "completedJob", value: "trun_mm4"}],
         prereq: [
-            { type: "completedJob", value: "trun_mm4", display_prereq: false },
             { type: "compute", value: 10 }
         ],
         unlockCost: [{ type: "data", value: 1200 }],
@@ -326,8 +327,8 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         displayName: "Agentic Reasoning Training",
         description: "Train goal-directed reasoning capabilities",
         chapter: [4,5,6],
+        displayTrigger: [{ type: "completedJob", value: "trun_auto1"}],
         prereq: [
-            { type: "completedJob", value: "trun_auto1", display_prereq: false },
             { type: "compute", value: 7 }
         ],
         unlockCost: [{ type: "data", value: 400 }],
@@ -348,8 +349,8 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         displayName: "Multi-Step Task Planner",
         description: "AI breaks down and executes complex tasks",
         chapter: [4,5,6],
+        displayTrigger: [{ type: "completedJob", value: "trun_auto2"}],
         prereq: [
-            { type: "completedJob", value: "trun_auto2", display_prereq: false },
             { type: "compute", value: 11 }
         ],
         unlockCost: [{ type: "data", value: 600 }],
@@ -370,8 +371,8 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         displayName: "Goal-Conditioned Agent",
         description: "AI pursues objectives with strategic planning",
         chapter: [4,5,6],
+        displayTrigger: [{ type: "completedJob", value: "trun_auto3"}],
         prereq: [
-            { type: "completedJob", value: "trun_auto3", display_prereq: false },
             { type: "compute", value: 15 }
         ],
         unlockCost: [{ type: "data", value: 800 }],

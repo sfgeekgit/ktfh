@@ -218,7 +218,7 @@ const layer = createLayer(id, function (this: any) {
 
     // Chapter transition watcher
     // All chapter trigger conditions are defined here in one place
-    // Triggers can be: money thresholds, unlocked jobs, completed jobs, etc.
+    // Triggers can be: money thresholds, stats, unlocked jobs, completed jobs, etc.
     watch(
         () => {
             const nextChapter = currentChapter.value + 1;
@@ -231,15 +231,15 @@ const layer = createLayer(id, function (this: any) {
                     break;
 
                 case 3:
-                    if (Decimal.lt(money.value, 170)) return null;
+                    if (iq.value < 3) return null;
                     break;
 
                 case 4:
-                    if (Decimal.lt(money.value, 340)) return null;
+                    if (generality.value < 3) return null;
                     break;
 
                 case 5:
-                    if (Decimal.lt(money.value, 800)) return null;
+                    if (autonomy.value < 3) return null;
                     break;
 
                 default:

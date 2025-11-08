@@ -9,6 +9,8 @@ import { TRAINING_RUN_JOBS } from './trainingRuns';
 
 
 
+// Todo,  maybe web scraper should auto unlock at start of chapter 2
+
 /// Todo, tweak UI of training runs. Maybe while they are running, don't say "processing" say "Training" or such
 // Players will just be clicking everything click click click, make it more clear to them in UI that some things happening are different
 
@@ -164,7 +166,7 @@ export const JOB_TYPES: JobType[] = [
         chapter: [2,3,4,5],
         prereq: [],   // should unlock as soon as chapter 2 begins
 
-        unlockCost: [            { type: "money", value: 100 }],
+        unlockCost: [            { type: "money", value: 50 }],
         payout: [
             { type: "data", min: 70, max: 150 }
         ],
@@ -186,7 +188,7 @@ export const JOB_TYPES: JobType[] = [
         prereq: [ { type: "iq", value: 2 } ],
         unlockCost: [            { type: "money", value: 100 }],
         payout: [
-            { type: "money", min: 70, max: 150 }
+            { type: "money", min: 170, max: 250 }
         ],
         duration: { min: 2, max: 3 },
         category: "tool",
