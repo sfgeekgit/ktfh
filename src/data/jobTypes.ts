@@ -220,6 +220,29 @@ export const JOB_TYPES: JobType[] = [
 
 
 
+
+    {
+        id: "devjob",
+        displayName: "Dev Job",
+        description: "",
+        chapter: [2,3,4,5],
+	displayTrigger: [ { type: "job", value: "chess"} ],
+        prereq: [ { type: "iq", value: 3 },
+	 	  { type: "autonomy", value: 3 },
+		  { type: "compute", value:6}
+	],
+        unlockCost: [            { type: "money", value: 1000 }],
+        payout: [
+		{ type: "money", min: 1170, max: 1550 }
+	    ,   { type: "data", min: 15, max: 25 }
+	    ],
+        duration:                                                    { min: 2, max: 3 },
+        category: "tool",
+        cost: [                                                  { type: "compute", value: 3 }]
+    },
+
+
+
     // IQ-Gated Money Jobs (Requires IQ ≥ 2)
     {
         id: "medicaladvisor",

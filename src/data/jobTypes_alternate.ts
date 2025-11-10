@@ -1312,7 +1312,6 @@ export const CHAPTER_6A_JOBS: JobType[] = [
         category: "tool"
     },
 
-    // Win condition jobs
     {
         id: "globalcoord",
         displayName: "Global Coordination AI",

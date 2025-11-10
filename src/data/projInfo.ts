@@ -21,8 +21,7 @@ export default {
         - Basic pizza delivery mechanics<br>
         - 5 pizza types to unlock<br>
         - Hire drivers<br>
-        - Accept/decline delivery jobs<br>
-        - Win condition: $1,000,000
+        - Accept/decline delivery jobs
     `,
     
     // Initial save data

@@ -8,9 +8,6 @@
 /// Level triggers are defined in data/layers/main.tsx     // Chapter transition watcher
 
 export const G_CONF = {
-    // ===== WIN CONDITION =====
-    WIN_AMOUNT: 10000, // $1,000,000 to win the game
-
     // ===== STARTING RESOURCES =====
     STARTING_MONEY: 20,
     STARTING_PIZZAS: ["imgclassifier"], // Lol pizza

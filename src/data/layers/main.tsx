@@ -817,15 +817,7 @@ const layer = createLayer(id, function (this: any) {
                     )}
                 </div>
 
-                    <div style="font-size: 14px;"><strong>Researched:</strong> {unlockedJobTypes.value.map(id => getJobType(id)?.displayName || id).join(", ")}</div>  
-
-                {Decimal.gte(money.value, G_CONF.WIN_AMOUNT) && (
-                    <div style="margin: 15px 0; padding: 20px; background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); border-radius: 10px; text-align: center; border: 3px solid #ff6f00; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-                        <h1 style="font-size: 32px; margin: 0;">🎉 YOU WIN! 🎉</h1>
-                        <p style="font-size: 18px; margin: 10px 0;">You've earned ${format(G_CONF.WIN_AMOUNT)}!</p>
-                        <p style="font-size: 14px;">You've built a successful pizza delivery empire!</p>
-                    </div>
-                )}
+                    <div style="font-size: 14px;"><strong>Researched:</strong> {unlockedJobTypes.value.map(id => getJobType(id)?.displayName || id).join(", ")}</div>
 
                 <button
                     onClick={() => optionsModal.value?.open()}
