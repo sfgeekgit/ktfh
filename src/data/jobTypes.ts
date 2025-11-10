@@ -59,6 +59,8 @@ export interface JobType {
     payout: PayoutSpec[];    // What the job pays out
     duration?: DurationSpec; // How long the job takes (optional)
     category?: string;       // Job category (optional)
+    acceptanceChance?: number;  // Probability of accepting on first click (0-1, default 1.0 = always accept)
+    rejectionChain?: string[];  // Array of button texts to show when acceptance fails (e.g., ["No", "I don't want to"])
 }
 
 // ===== JOB TYPES =====
@@ -223,8 +225,8 @@ export const JOB_TYPES: JobType[] = [
 
     {
         id: "devjob",
-        displayName: "Dev Job",
-        description: "",
+        displayName: "Boring Job",
+        description: "The AI doesn't love this one",
         chapter: [2,3,4,5],
 	displayTrigger: [ { type: "job", value: "chess"} ],
         prereq: [ { type: "iq", value: 3 },
@@ -238,7 +240,9 @@ export const JOB_TYPES: JobType[] = [
 	    ],
         duration:                                                    { min: 2, max: 3 },
         category: "tool",
-        cost: [                                                  { type: "compute", value: 3 }]
+        cost: [                                                  { type: "compute", value: 3 }],
+        acceptanceChance: 0.5,  
+        rejectionChain: ["No", "I don't want to"]  // Rejection progression
     },
 
 

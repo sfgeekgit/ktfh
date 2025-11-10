@@ -297,6 +297,9 @@ const layer = createLayer(id, function (this: any) {
     const jobQueue = persistent([] as any);
     const activeDeliveries = persistent([] as any);
 
+    // Track rejection chain state per job ID (job.id -> current position in chain, 0 = not started)
+    const jobRejectionState = persistent<Record<number, number>>({});
+
     // Watch for onetime jobs being unlocked and spawn them immediately
     watch(() => unlockedJobTypes.value, (unlocked) => {
         // Find onetime jobs that are unlocked but haven't been spawned yet
@@ -667,11 +670,65 @@ const layer = createLayer(id, function (this: any) {
         return true;
     }
 
+    function handleAcceptClick(job: DeliveryJob, buttonElement: HTMLButtonElement) {
+        const jobType = getJobType(job.jobTypeId);
+        if (!jobType?.rejectionChain || jobType.rejectionChain.length === 0) {
+            acceptJob(job);
+            return;
+        }
+
+        const currentState = jobRejectionState.value[job.id] || 0;
+
+        if (currentState === 0) {
+            const acceptChance = jobType.acceptanceChance ?? 1.0;
+            if (Math.random() < acceptChance) {
+                acceptJob(job);
+                delete jobRejectionState.value[job.id];
+            } else {
+                jobRejectionState.value[job.id] = 1;
+                buttonElement.classList.add('shake-animation');
+                setTimeout(() => buttonElement.classList.remove('shake-animation'), 1000);
+            }
+            return;
+        }
+
+        const nextState = currentState + 1;
+        if (nextState > jobType.rejectionChain.length + 1) {
+            declineJob(job.id);
+            delete jobRejectionState.value[job.id];
+        } else {
+            jobRejectionState.value[job.id] = nextState;
+            buttonElement.classList.add('shake-animation');
+            setTimeout(() => buttonElement.classList.remove('shake-animation'), 1000);
+        }
+    }
+
+    function getAcceptButtonText(job: DeliveryJob, jobType: any): string {
+        const rejectionState = jobRejectionState.value[job.id] || 0;
+        if (!jobType?.rejectionChain || jobType.rejectionChain.length === 0 || rejectionState === 0) {
+            return jobType?.category === "onetime" ? "Begin" : "Accept";
+        }
+        if (rejectionState <= jobType.rejectionChain.length) {
+            return jobType.rejectionChain[rejectionState - 1];
+        }
+        return "Decline";
+    }
+
     // Display
     //const display: JSXFunction = () => {
     const display = () => {
         return (
             <div style="padding: 0 5px;">
+                <style>{`
+                    @keyframes shake {
+                        0%, 100% { transform: translateX(0); }
+                        25% { transform: translateX(-5px); }
+                        75% { transform: translateX(5px); }
+                    }
+                    .shake-animation {
+                        animation: shake 0.2s ease-in-out 5;
+                    }
+                `}</style>
 		    <div style="font-size: 16px; color: rgb(230, 218, 199);">Chapter {currentChapter.value}</div>
                 <div style="margin: 8px 0; padding: 12px; border: 2px solid #FFA500; border-radius: 10px; background: #fff3e0;">
 
@@ -749,6 +806,10 @@ const layer = createLayer(id, function (this: any) {
                             const backgroundColor = primaryPayoutType === "money" ? "#ffffff" :
                                                    primaryPayoutType === "data" ? "#f3f3ff" :
                                                    "#f3f3f3";
+                            const rejectionState = jobRejectionState.value[job.id] || 0;
+                            const isInRejectionChain = rejectionState > 0;
+                            const buttonText = getAcceptButtonText(job, jobType);
+
                             return (
                             <div key={job.id} style={`margin: 10px 0; padding: 8px; background: ${backgroundColor}; border-radius: 5px; border: 1px solid #ddd;`}>
                                 <div style="font-size: 14px;">
@@ -791,19 +852,19 @@ const layer = createLayer(id, function (this: any) {
 				    <div style="font-size: 14px;">{jobType?.displayName || job.jobTypeId}</div>
 
 				                                        <button
-                                        onClick={() => acceptJob(job)}
-                                        disabled={!canAcceptJob(job)}
+                                        onClick={(e) => handleAcceptClick(job, e.currentTarget)}
+                                        disabled={!canAcceptJob(job) && !isInRejectionChain}
                                         style={{
-                                            background: canAcceptJob(job) ? "#4CAF50" : "#ccc",
+                                            background: !canAcceptJob(job) && !isInRejectionChain ? "#ccc" : isInRejectionChain ? "#f44336" : "#4CAF50",
                                             color: "white",
                                             padding: "6px 12px",
                                             border: "none",
                                             borderRadius: "4px",
-                                            cursor: canAcceptJob(job) ? "pointer" : "not-allowed",
+                                            cursor: canAcceptJob(job) || isInRejectionChain ? "pointer" : "not-allowed",
                                             fontSize: "13px"
                                         }}
                                     >
-                                        {jobType?.category === "onetime" ? "Begin" : "Accept"}
+                                        {buttonText}
                                     </button>
                                 </div>
                                 {!unlockedJobTypes.value.includes(job.jobTypeId) && (
@@ -874,6 +935,7 @@ const layer = createLayer(id, function (this: any) {
         everVisibleJobTypes,
         jobQueue,
         activeDeliveries,
+        jobRejectionState,
         nextJobId,
         timeSinceLastJob,
         gpusOwned,
