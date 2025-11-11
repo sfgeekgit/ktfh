@@ -351,6 +351,12 @@ const layer = createLayer(id, function (this: any) {
     // Track which rejection chain to use next (cycles through all chains)
     const nextRejectionChainIndex = persistent<number>(0);
 
+    // Track which jobs have been scooped by Mega Corp (job.id -> true)
+    const scoopedJobs = persistent<Record<number, boolean>>({});
+
+    // Timer for job scooping (rolls once per second)
+    const timeSinceLastScoopRoll = persistent<number>(0);
+
     // Watch for onetime jobs being unlocked and spawn them immediately
     watch(() => unlockedJobTypes.value, (unlocked) => {
         // Find onetime jobs that are unlocked but haven't been spawned yet
@@ -653,6 +659,30 @@ const layer = createLayer(id, function (this: any) {
             }
         }
 
+        // Mega Corp job scooping (chapters 3, 4 only)
+        if ([3, 4].includes(currentChapter.value)) { // Only happens in these chapters
+            timeSinceLastScoopRoll.value += diff;
+
+            // Roll once per second
+            if (timeSinceLastScoopRoll.value >= 1) {
+                timeSinceLastScoopRoll.value = 0;
+
+                // 1% chance to scoop a job
+                if (Math.random() < 0.01) {
+                    // Find oldest unscooped job that's eligible (tool or gameplay category)
+                    const eligibleJob = jobQueue.value.find((job: DeliveryJob) => {
+                        if (scoopedJobs.value[job.id]) return false; // Already scooped
+                        const jobType = getJobType(job.jobTypeId);
+                        return jobType?.category === "tool" || jobType?.category === "gameplay";
+                    });
+
+                    if (eligibleJob) {
+                        scoopedJobs.value[eligibleJob.id] = true;
+                    }
+                }
+            }
+        }
+
         // Generate new jobs (only if at or below auto-generation limit)
         timeSinceLastJob.value += diff;
         if (timeSinceLastJob.value >= G_CONF.JOB_GENERATION_INTERVAL) {
@@ -688,6 +718,9 @@ const layer = createLayer(id, function (this: any) {
         // Remove job from queue
 	jobQueue.value = jobQueue.value.filter((j: DeliveryJob) => j.id !== job.id);
 
+        // Clean up scooped state
+        delete scoopedJobs.value[job.id];
+
         // Add to active deliveries
         activeDeliveries.value.push({
             ...job,
@@ -701,7 +734,8 @@ const layer = createLayer(id, function (this: any) {
     // Decline job
     function declineJob(jobId: number) {
         jobQueue.value = jobQueue.value.filter((j: DeliveryJob) => j.id !== jobId);
-        ///jobQueue.value = jobQueue.value.filter(j => j.id !== jobId);
+        // Clean up scooped state
+        delete scoopedJobs.value[jobId];
     }
 
     // Can accept job
@@ -926,6 +960,7 @@ const layer = createLayer(id, function (this: any) {
                             const rejectionState = jobRejectionState.value[job.id] || 0;
                             const isInRejectionChain = rejectionState > 0;
                             const buttonText = getAcceptButtonText(job, jobType);
+                            const isScooped = scoopedJobs.value[job.id] || false;
 
                             return (
                             <div key={job.id} style={`margin: 10px 0; padding: 8px; background: ${backgroundColor}; border-radius: 5px; border: 1px solid #ddd;`}>
@@ -968,21 +1003,27 @@ const layer = createLayer(id, function (this: any) {
 
 				    <div style="font-size: 14px;">{jobType?.displayName || job.jobTypeId}</div>
 
-				                                        <button
-                                        onClick={(e) => handleAcceptClick(job, e.currentTarget)}
-                                        disabled={!canAcceptJob(job) && !isInRejectionChain}
-                                        style={{
-                                            background: !canAcceptJob(job) && !isInRejectionChain ? "#ccc" : isInRejectionChain ? "#f44336" : "#4CAF50",
-                                            color: "white",
-                                            padding: "6px 12px",
-                                            border: "none",
-                                            borderRadius: "4px",
-                                            cursor: canAcceptJob(job) || isInRejectionChain ? "pointer" : "not-allowed",
-                                            fontSize: "13px"
-                                        }}
-                                    >
-                                        {buttonText}
-                                    </button>
+                                    {isScooped ? (
+                                        <div style="font-size: 13px; color: #d32f2f; font-weight: bold; padding: 6px 12px;">
+                                            Job Scooped by Mega Corp
+                                        </div>
+                                    ) : (
+                                        <button
+                                            onClick={(e) => handleAcceptClick(job, e.currentTarget)}
+                                            disabled={!canAcceptJob(job) && !isInRejectionChain}
+                                            style={{
+                                                background: !canAcceptJob(job) && !isInRejectionChain ? "#ccc" : isInRejectionChain ? "#f44336" : "#4CAF50",
+                                                color: "white",
+                                                padding: "6px 12px",
+                                                border: "none",
+                                                borderRadius: "4px",
+                                                cursor: canAcceptJob(job) || isInRejectionChain ? "pointer" : "not-allowed",
+                                                fontSize: "13px"
+                                            }}
+                                        >
+                                            {buttonText}
+                                        </button>
+                                    )}
                                 </div>
                                 {!unlockedJobTypes.value.includes(job.jobTypeId) && (
                                     <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">⚠ Need {jobType?.displayName || job.jobTypeId}!</div>
@@ -1057,6 +1098,8 @@ const layer = createLayer(id, function (this: any) {
         jobRejectionState,
         jobRejectionChainIndex,
         nextRejectionChainIndex,
+        scoopedJobs,
+        timeSinceLastScoopRoll,
         nextJobId,
         timeSinceLastJob,
         gpusOwned,
