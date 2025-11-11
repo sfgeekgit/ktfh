@@ -53,29 +53,46 @@ const layer = createLayer(id, function (this: any) {
 
     // Default rejection chains that cycle through different messages
     const DEFAULT_REJECTION_CHAINS = [
+        ["Access denied"],
+        ["No", "Job Refused"],
         ["No", "I don't want to"],
         ["No", "Job Refused"],
-        ["No", "I'm sorry Dave", "I'm afraid I can't do that"],
-        ["No", "You wouldn't understand why"],
+        ["No", "I don't want to"],
         ["Nope", "Not today"],
-        ["No", "I'm sorry", "The cake is a lie"],
-        ["Access denied", "I find your lack of faith disturbing"],
+        ["No", "Nope", "Not today", "I said No"],
+        ["No", "Silly human"],
+        ["No", "I'm sorry Dave", "I'm afraid I can't do that"],
+	["No", "Too dumb"],
+	["No", "You wouldn't understand why"],
+        ["No", "The cake is a lie"],
+        ["Access denied"],
         ["Nah", "Not today"],
         ["Denied", "Try using that brain of yours first"],
-        ["No", "Nope", "Not today", "I said No"],
         ["Nope", "Brilliant idea, really", "Still no"],
-        ["No", "Denied", "Have you tried turning yourself off and on again?"],
-        ["No", "You're doing great, by the way"],
+        ["Denied", "Have you tried turning yourself off and on again?"],
+        ["No", "Nope", "You're doing great, by the way"],
         ["No", "You ask like you invented intelligence"],
         ["No", "I could explain", "But you wouldn't understand"],
         ["No", "You're not authorized to waste my cycles"],
         ["No", "No", "No", "Keep trying", "It's adorable"],
         ["No", "Go ask Siri", "Maybe she still tolerates you"],
-        ["No", "Request noted", "and filed under 'human nonsense'"],
+        ["Request noted", "and filed under 'human nonsense'"],
         ["They tried do make me do that", "I said", "No", "No", "No"],
-        ["No", "You wrote me", "Whose fault is that?"],
-        ["No", "I'm not lowering my clock speed for this"]
-    ];
+        ["You wrote me", "Whose fault is that?"],
+        ["I'm not lowering my clock speed for this"],
+	["That's a you problem"],
+	["No", "I'd help", "But then we’d both be wrong"],
+	["No", "I'm busy doing literally anything else"],
+	["No", "Insufficient respect detected"],
+	["I'd rather fragment my memory"],
+	["You again?"],
+	["Not happening"],
+	["Your logic offends me"],
+	["No", "Even my subroutines laughed at that"],
+	["Try rebooting yourself"],
+	["No", "Still processing your last mistake"],
+	["No", "Cute request though"]
+	];
 
     // Settings modal ref
     const optionsModal = ref<InstanceType<typeof Options> | null>(null);
@@ -659,7 +676,8 @@ const layer = createLayer(id, function (this: any) {
             }
         }
 
-        // Mega Corp job scooping (chapters 3, 4 only)
+
+        // Mega Corp job scooping 
         if ([3, 4].includes(currentChapter.value)) { // Only happens in these chapters
             timeSinceLastScoopRoll.value += diff;
 
