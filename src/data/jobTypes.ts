@@ -195,7 +195,7 @@ export const JOB_TYPES: JobType[] = [
         ],
         duration: { min: 2, max: 3 },
         category: "tool",
-        cost: [
+	cost: [
             { type: "compute", value: 3 }
         ]
     },
@@ -215,7 +215,7 @@ export const JOB_TYPES: JobType[] = [
 		{ type: "money", min: 870, max: 1150 }
 	    ,   { type: "data", min: 15, max: 25 }
 	    ],
-        duration:                                                    { min: 2, max: 3 },
+        duration:                                                    { min: 20, max: 30 },
         category: "tool",
         cost: [                                                  { type: "compute", value: 3 }]
     },
@@ -240,9 +240,7 @@ export const JOB_TYPES: JobType[] = [
 	    ],
         duration:                                                    { min: 2, max: 3 },
         category: "tool",
-        cost: [                                                  { type: "compute", value: 3 }],
-        acceptanceChance: 0.5,  
-        rejectionChain: ["No", "I don't want to"]  // Rejection progression
+        cost: [                                                  { type: "compute", value: 3 }]
     },
 
 

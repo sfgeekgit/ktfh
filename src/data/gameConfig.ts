@@ -16,7 +16,7 @@ export const G_CONF = {
     STARTING_DATA: 0, // Data resource, unlocked in Chapter 2
 
     // ===== JOB GENERATION =====
-    JOB_GENERATION_INTERVAL: 5, // Seconds between new job checks (currently fast for dev)
+    JOB_GENERATION_INTERVAL: 3, // Seconds between new job checks (currently fast for dev)
     AUTO_JOB_LIMIT: 4, // Only auto-generate new jobs if <= this many in queue
     INITIAL_JOBS_COUNT: 3, // Number of jobs to spawn on game start
 

@@ -14,6 +14,25 @@ import { G_CONF } from "../gameConfig";
 import { JOB_TYPES } from "../jobTypes";
 import { save } from "util/save";
 
+/**
+ * IMPORTANT: PERSISTENT STATE REGISTRATION
+ *
+ * Any variable created with `persistent()` MUST be added to the layer's return object at the bottom of this file.
+ * If you create a new persistent variable and get an error like:
+ *   "Created persistent ref in 'main' without registering it to the layer!"
+ *
+ * Then you need to add your new persistent variable to the return statement (around line 1031).
+ *
+ * Example:
+ *   const myNewState = persistent<number>(0);  // Created here
+ *
+ *   return {
+ *     ...
+ *     myNewState,  // Must be added here!
+ *     ...
+ *   };
+ */
+
 // Job interface
 interface DeliveryJob {
     id: number;
@@ -32,6 +51,32 @@ const layer = createLayer(id, function (this: any) {
     const name = "Job Delivery";
     const color = "#FFA500";
 
+    // Default rejection chains that cycle through different messages
+    const DEFAULT_REJECTION_CHAINS = [
+        ["No", "I don't want to"],
+        ["No", "Job Refused"],
+        ["No", "I'm sorry Dave", "I'm afraid I can't do that"],
+        ["No", "You wouldn't understand why"],
+        ["Nope", "Not today"],
+        ["No", "I'm sorry", "The cake is a lie"],
+        ["Access denied", "I find your lack of faith disturbing"],
+        ["Nah", "Not today"],
+        ["Denied", "Try using that brain of yours first"],
+        ["No", "Nope", "Not today", "I said No"],
+        ["Nope", "Brilliant idea, really", "Still no"],
+        ["No", "Denied", "Have you tried turning yourself off and on again?"],
+        ["No", "You're doing great, by the way"],
+        ["No", "You ask like you invented intelligence"],
+        ["No", "I could explain", "But you wouldn't understand"],
+        ["No", "You're not authorized to waste my cycles"],
+        ["No", "No", "No", "Keep trying", "It's adorable"],
+        ["No", "Go ask Siri", "Maybe she still tolerates you"],
+        ["No", "Request noted", "and filed under 'human nonsense'"],
+        ["They tried do make me do that", "I said", "No", "No", "No"],
+        ["No", "You wrote me", "Whose fault is that?"],
+        ["No", "I'm not lowering my clock speed for this"]
+    ];
+
     // Settings modal ref
     const optionsModal = ref<InstanceType<typeof Options> | null>(null);
 
@@ -41,7 +86,7 @@ const layer = createLayer(id, function (this: any) {
     const total = trackTotal(money);
 
     // Core stats (not tracked like resources)
-    const iq = persistent<number>(0); // Intelligence stat, unlocked in Chapter 2
+    const iq = persistent<number>(0); // Intelligence stat
     const autonomy = persistent<number>(0); // Autonomy stat
     const generality = persistent<number>(0); // Generality stat
 
@@ -299,6 +344,12 @@ const layer = createLayer(id, function (this: any) {
 
     // Track rejection chain state per job ID (job.id -> current position in chain, 0 = not started)
     const jobRejectionState = persistent<Record<number, number>>({});
+
+    // Track which rejection chain was selected for each job (job.id -> chain index)
+    const jobRejectionChainIndex = persistent<Record<number, number>>({});
+
+    // Track which rejection chain to use next (cycles through all chains)
+    const nextRejectionChainIndex = persistent<number>(0);
 
     // Watch for onetime jobs being unlocked and spawn them immediately
     watch(() => unlockedJobTypes.value, (unlocked) => {
@@ -672,44 +723,91 @@ const layer = createLayer(id, function (this: any) {
 
     function handleAcceptClick(job: DeliveryJob, buttonElement: HTMLButtonElement) {
         const jobType = getJobType(job.jobTypeId);
-        if (!jobType?.rejectionChain || jobType.rejectionChain.length === 0) {
-            acceptJob(job);
-            return;
+
+        // Start with job's defined acceptance chance (default to 1.0 = always accept)
+        let acceptChance = jobType?.acceptanceChance ?? 1.0;
+
+        // For tool and gameplay jobs (not onetime), calculate dynamic rejection based on stats
+        if ((jobType?.category === "tool" || jobType?.category === "gameplay") &&
+            autonomy.value >= 1 &&
+            generality.value >= 1) {
+            // Rejection chance = (auto*5 + gen*2 + iq) / 100
+            const rejectionChance = (autonomy.value * 5 + generality.value * 2 + iq.value) / 100;
+            const dynamicAcceptChance = 1 - rejectionChance;
+
+            // Use the LOWER of the two acceptance chances (higher rejection chance)
+            acceptChance = Math.min(acceptChance, dynamicAcceptChance);
         }
 
         const currentState = jobRejectionState.value[job.id] || 0;
 
         if (currentState === 0) {
-            const acceptChance = jobType.acceptanceChance ?? 1.0;
+            // First click - check if job is accepted or rejected
             if (Math.random() < acceptChance) {
                 acceptJob(job);
                 delete jobRejectionState.value[job.id];
+                delete jobRejectionChainIndex.value[job.id];
             } else {
+                // Job rejected! Select and store which chain to use (only on first rejection)
+                const useDefaultChain = acceptChance < 1.0 && (!jobType?.rejectionChain || jobType.rejectionChain.length === 0);
+
+                if (useDefaultChain) {
+                    const chainIndex = nextRejectionChainIndex.value % DEFAULT_REJECTION_CHAINS.length;
+                    jobRejectionChainIndex.value[job.id] = chainIndex;
+                    nextRejectionChainIndex.value++;
+                }
+
                 jobRejectionState.value[job.id] = 1;
                 buttonElement.classList.add('shake-animation');
-                setTimeout(() => buttonElement.classList.remove('shake-animation'), 1000);
+                setTimeout(() => buttonElement.classList.remove('shake-animation'), 500);
             }
             return;
         }
 
+        // Job is already in rejection chain - get the chain that was selected
+        let rejectionChain: string[];
+        if (jobType?.rejectionChain && jobType.rejectionChain.length > 0) {
+            rejectionChain = jobType.rejectionChain;
+        } else {
+            const chainIndex = jobRejectionChainIndex.value[job.id] ?? 0;
+            rejectionChain = DEFAULT_REJECTION_CHAINS[chainIndex];
+        }
+
         const nextState = currentState + 1;
-        if (nextState > jobType.rejectionChain.length + 1) {
+        if (nextState > rejectionChain.length + 1) {
             declineJob(job.id);
             delete jobRejectionState.value[job.id];
+            delete jobRejectionChainIndex.value[job.id];
         } else {
             jobRejectionState.value[job.id] = nextState;
-            buttonElement.classList.add('shake-animation');
-            setTimeout(() => buttonElement.classList.remove('shake-animation'), 1000);
+            // Only shake if not transitioning to the final "Decline" button
+            if (nextState <= rejectionChain.length) {
+                buttonElement.classList.add('shake-animation');
+                setTimeout(() => buttonElement.classList.remove('shake-animation'), 150);
+            }
         }
     }
 
     function getAcceptButtonText(job: DeliveryJob, jobType: any): string {
         const rejectionState = jobRejectionState.value[job.id] || 0;
-        if (!jobType?.rejectionChain || jobType.rejectionChain.length === 0 || rejectionState === 0) {
+
+        // If not in rejection state, show normal accept button
+        if (rejectionState === 0) {
             return jobType?.category === "onetime" ? "Begin" : "Accept";
         }
-        if (rejectionState <= jobType.rejectionChain.length) {
-            return jobType.rejectionChain[rejectionState - 1];
+
+        // Job is in rejection chain - get the chain that was selected for this job
+        let rejectionChain: string[];
+        if (jobType?.rejectionChain && jobType.rejectionChain.length > 0) {
+            rejectionChain = jobType.rejectionChain;
+        } else {
+            // Use the chain that was selected for this job
+            const chainIndex = jobRejectionChainIndex.value[job.id] ?? 0;
+            rejectionChain = DEFAULT_REJECTION_CHAINS[chainIndex];
+        }
+
+        if (rejectionState <= rejectionChain.length) {
+            return rejectionChain[rejectionState - 1];
         }
         return "Decline";
     }
@@ -736,9 +834,15 @@ const layer = createLayer(id, function (this: any) {
                     <div style="font-size: 16px;"><strong>Money:</strong> ${format(money.value)}</div>
                     {autonomy.value > 0 && <div style="font-size: 16px;"><strong>Autonomy:</strong> {autonomy.value}</div>}
                     {generality.value > 0 && <div style="font-size: 16px;"><strong>Generality:</strong> {generality.value}</div>}
-                    {iq.value > 0 && <div style="font-size: 16px;"><strong>IQ:</strong> {iq.value}</div>}		    
+                    {iq.value > 0 && <div style="font-size: 16px;"><strong>IQ:</strong> {iq.value}</div>}
+                    {autonomy.value >= 1 && generality.value >= 1 && iq.value >= 1 && (
+                        <div style="font-size: 14px; color: rgb(244, 67, 54);">A+G+I : {autonomy.value + generality.value + iq.value}</div>
+                    )}
                     {dataUnlocked.value && <div style="font-size: 16px;"><strong>Data:</strong> {format(data.value)}</div>}
                     <div style="font-size: 14px;"><strong>GPUs:</strong> {availableGPUs.value} / {gpusOwned.value} available</div>
+                    <div style="font-size: 14px; letter-spacing: 0.1em;">
+                        {"▪".repeat(availableGPUs.value)}{"▫".repeat(gpusOwned.value - availableGPUs.value)}
+                    </div>
                     {qualityBonus.value !== 100 && (
                         <div style="font-size: 14px; color: #4CAF50;"><strong>Quality Bonus:</strong> {parseFloat((qualityBonus.value / 100).toFixed(2))}x earnings</div>
                     )}
@@ -762,12 +866,13 @@ const layer = createLayer(id, function (this: any) {
                     ) : (
 		      	activeDeliveries.value.map((delivery: ActiveDelivery) => {
                             const jobType = getJobType(delivery.jobTypeId);
+                            const progress = Math.max(0, Math.min(1, delivery.timeRemaining / delivery.duration));
                             return (
                                 <div key={delivery.id} style="margin: 10px 0; padding: 8px; background: white; border-radius: 5px; border: 1px solid #ddd;">
-                                    <div style="font-size: 14px;">{jobType?.category === "onetime" ? "TRAINING" : "Job: "} {jobType?.displayName || delivery.jobTypeId}</div>
-                                    <div style="font-size: 14px;"><strong>⏱️ Time:</strong> {Math.ceil(delivery.timeRemaining)}s</div>
+                                    <div style="font-size: 14px;">{jobType?.category === "onetime" ? "TRAINING" : " "} {jobType?.displayName || delivery.jobTypeId}</div>
+
                                     <div style="color: #2e7d32; font-size: 14px;">
-                                        <strong>💰 Earn:</strong> {delivery.payouts.map((payout: any, idx: number) => (
+                                        {delivery.payouts.map((payout: any, idx: number) => (
                                             <span key={idx}>
                                                 {idx > 0 && " + "}
                                                 {payout.type === "money" ? "$" : ""}
@@ -779,6 +884,18 @@ const layer = createLayer(id, function (this: any) {
                                                 {payout.type === "generality" ? " Generality" : ""}
                                             </span>
                                         ))}
+                                    </div>
+				    <div style="font-size: 14px;">
+                                        {"▪".repeat(jobType?.cost?.find(c => c.type === "compute")?.value || 0)} {Math.ceil(delivery.timeRemaining)}s
+                                    </div>
+                                    <div style="margin-top: 6px; width: 60%; height: 4px; background: white; border-radius: 2px; overflow: hidden;">
+                                        <div style={{
+                                            width: `${progress * 100}%`,
+                                            height: '100%',
+					    /* background: 'rgb(227, 242, 253)', */
+                                            background: '#61C6F3', 
+                                            transition: 'width 0.1s linear'
+                                        }} />
                                     </div>
                                 </div>
                             );
@@ -813,11 +930,11 @@ const layer = createLayer(id, function (this: any) {
                             return (
                             <div key={job.id} style={`margin: 10px 0; padding: 8px; background: ${backgroundColor}; border-radius: 5px; border: 1px solid #ddd;`}>
                                 <div style="font-size: 14px;">
-                                    <strong>Pay:</strong> {job.payouts.map((payout: any, idx: number) => (
+                                    + {job.payouts.map((payout: any, idx: number) => (
                                         <span key={idx}>
                                             {idx > 0 && " + "}
                                             {payout.type === "money" ? "$" : ""}
-                                            {["iq", "autonomy", "generality"].includes(payout.type) ? "+" : ""}
+                                            {["iq", "autonomy", "generality"].includes(payout.type) ? "" : ""}
                                             {format(payout.amount)}
                                             {payout.type === "data" ? " data" : ""}
                                             {payout.type === "iq" ? " IQ" : ""}
@@ -879,6 +996,8 @@ const layer = createLayer(id, function (this: any) {
                 </div>
 
                     <div style="font-size: 14px;"><strong>Researched:</strong> {unlockedJobTypes.value.map(id => getJobType(id)?.displayName || id).join(", ")}</div>
+		    <div style="font-size: 20px; color: rgb(230, 218, 199);"> <a target="_new" href="https://forms.gle/vRxuZMLrkBwgkqY49">[FEEDBACK]</a> </div>
+
 
                 <button
                     onClick={() => optionsModal.value?.open()}
@@ -936,6 +1055,8 @@ const layer = createLayer(id, function (this: any) {
         jobQueue,
         activeDeliveries,
         jobRejectionState,
+        jobRejectionChainIndex,
+        nextRejectionChainIndex,
         nextJobId,
         timeSinceLastJob,
         gpusOwned,
