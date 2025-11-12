@@ -1,38 +1,6 @@
 # Chapter 1: The Spark
 **id:** chapter1
 
-## Page Intro1
-**title:**  The Choice Before Us
-**pageType:** intro
-**button_text:** LET'S GO
-
-Close the Gates
-
-**This is big**
-
-*This is italic*
-
-todo, intro the game, the point of the game, your goal as a player, how the essay is relevant
-
-You play the role of an AI startup founder.
-
-You have choices to make, they can change much more than just your startup.
-
-Your choices will affect the growth and sucesss of your company.
-
-Your choices will affect the growth and success of humanity itself.
-
-
-## Page Intro2
-**title:** Make Choices
-**pageType:** intro
-Choose the future of humanity
-
-The game has several different endings.
-
-You can play however you want (this is only a game) but only one narrow path leads to a ending that is good for humanity.
-
-**button_text:** BEGIN GAME
 
 
 ## Page 1
@@ -429,5 +397,47 @@ Paragraph text here...
 
 ## Page 3 [IF: choiceId]    - Conditional page (shows only if player chose this option)
 **title:** Outcome Title
+
+
+
+
+
+
+
+
+## Page Intro1
+**title:**  The Choice Before Us
+**pageType:** intro
+**button_text:** LET'S GO
+
+Close the Gates
+
+**This is big**
+
+*This is italic*
+
+todo, intro the game, the point of the game, your goal as a player, how the essay is relevant
+
+You play the role of an AI startup founder.
+
+You have choices to make, they can change much more than just your startup.
+
+Your choices will affect the growth and sucesss of your company.
+
+Your choices will affect the growth and success of humanity itself.
+
+
+## Page Intro2
+**title:** Make Choices
+**pageType:** intro
+Choose the future of humanity
+
+The game has several different endings.
+
+You can play however you want (this is only a game) but only one narrow path leads to a ending that is good for humanity.
+
+**button_text:** BEGIN GAME
+
+
 -->
 

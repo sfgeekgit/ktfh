@@ -107,7 +107,8 @@ export default {
             "--feature-foreground": "#000",
             "--raised-background": "#3B4252",
             "--points": "#E5E9F0",
-            "--locked": "#4c566a",
+            //"--locked": "#4c566a", // #a0782d
+	    "--locked": "#D08770",
             "--highlighted": "#434c5e",
             "--bought": "#8FBCBB",
             "--danger": "#D08770",

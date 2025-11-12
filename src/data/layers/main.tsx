@@ -49,7 +49,9 @@ interface ActiveDelivery extends DeliveryJob {
 const id = "main";
 const layer = createLayer(id, function (this: any) {
     const name = "Job Delivery";
-    const color = "#FFA500";
+    //const color = "#FFA500"; // orange // This seems to be the clickable "jobs ready to be unlocked" color, and only that?
+    const color = "#4CAF50"; // Green "begin"
+    //const color = "#E3F2FD"; 
 
     // Default rejection chains that cycle through different messages
     const DEFAULT_REJECTION_CHAINS = [
@@ -505,20 +507,20 @@ const layer = createLayer(id, function (this: any) {
     function formatPrereq(prereq: { type: string; value: string | number }): string {
         if (prereq.type === "job") {
             const requiredJob = getJobType(prereq.value as string);
-            return `Requires: ${requiredJob?.displayName || prereq.value}`;
+            return `Requires ${requiredJob?.displayName || prereq.value}`;
         } else if (prereq.type === "data") {
-            return `Requires: ${prereq.value} data`;
+            return `Requires ${prereq.value}\u00A0data`;
         } else if (prereq.type === "compute") {
-            return `Requires: ${prereq.value} GPU${prereq.value !== 1 ? 's' : ''}`;
+            return `Requires ${prereq.value} GPU${prereq.value !== 1 ? 's' : ''}`;
         } else if (prereq.type === "iq") {
-            return `Requires: ${prereq.value} IQ`;
+            return `Requires ${prereq.value}\u00A0IQ`;
         } else if (prereq.type === "autonomy") {
-            return `Requires: ${prereq.value} Autonomy`;
+            return `Requires ${prereq.value}\u00A0Autonomy`;
         } else if (prereq.type === "generality") {
-            return `Requires: ${prereq.value} Generality`;
+            return `Requires ${prereq.value}\u00A0Generality`;
         } else if (prereq.type === "completedJob") {
             const requiredJob = getJobType(prereq.value as string);
-            return `Requires: Complete ${requiredJob?.displayName || prereq.value}`;
+            return `Requires Complete ${requiredJob?.displayName || prereq.value}`;
         }
         return "";
     }
@@ -550,7 +552,7 @@ const layer = createLayer(id, function (this: any) {
 
                         return (
                             <>
-                                Cost: {moneyCost > 0 && <span style={!hasEnoughMoney ? "color: rgb(131, 131, 131); font-size: 11px;" : undefined}>${moneyCost}</span>}{moneyCost > 0 && dataCost > 0 && " + "}{dataCost > 0 && <span style={!hasEnoughData ? "color: rgb(131, 131, 131); font-size: 11px;" : undefined}>{dataCost} data</span>}<br/>
+                                Cost: {moneyCost > 0 && <span style={!hasEnoughMoney ? "color: #2E3440; font-size: 11px;" : undefined}>${moneyCost}</span>}{moneyCost > 0 && dataCost > 0 && " + "}{dataCost > 0 && <span style={!hasEnoughData ? "color: #2E3440; font-size: 11px;" : undefined}>{dataCost} data</span>}<br/>
                                 {nonMoneyPrereqs.length > 0 && (
                                     <>
                                         {nonMoneyPrereqs.map((prereq: any, idx: number) => {
@@ -558,7 +560,8 @@ const layer = createLayer(id, function (this: any) {
                                             const formatted = formatPrereq(prereq);
                                             return (
                                                 <span key={idx}>
-                                                    Requires: <span style={!isMet ? "color: rgb(131, 131, 131); font-size: 11px;" : undefined}>{formatted.replace("Requires: ", "")}</span>
+                                                   {/* Requires: <span style={!isMet ? "color: #2E3440; font-size: 11px;" : undefined}>{formatted.replace("Requires: ", "")}</span>  */}
+                                                   <span style={!isMet ? "color: #2E3440; font-size: 13px;" : undefined}>{formatted}</span> 
                                                     {idx < nonMoneyPrereqs.length - 1 && <br/>}
                                                 </span>
                                             );
@@ -685,8 +688,8 @@ const layer = createLayer(id, function (this: any) {
             if (timeSinceLastScoopRoll.value >= 1) {
                 timeSinceLastScoopRoll.value = 0;
 
-                // 1% chance to scoop a job
-                if (Math.random() < 0.01) {
+                // % chance to scoop a job
+                if (Math.random() < 0.03) {
                     // Find oldest unscooped job that's eligible (tool or gameplay category)
                     const eligibleJob = jobQueue.value.find((job: DeliveryJob) => {
                         if (scoopedJobs.value[job.id]) return false; // Already scooped
@@ -784,8 +787,11 @@ const layer = createLayer(id, function (this: any) {
             autonomy.value >= 1 &&
             generality.value >= 1) {
             // Rejection chance = (auto*5 + gen*2 + iq) / 100
-            const rejectionChance = (autonomy.value * 5 + generality.value * 2 + iq.value) / 100;
+            //const rejectionChance = (autonomy.value * 5 + generality.value * 2 + iq.value) / 100;
+	    const rejectionChance = ((autonomy.value -.5)* 3 + (generality.value -2) * 1 + (iq.value-4) * 0.5) / 100;
             const dynamicAcceptChance = 1 - rejectionChance;
+	    console.log(dynamicAcceptChance);
+	    console.log("asadf");
 
             // Use the LOWER of the two acceptance chances (higher rejection chance)
             acceptChance = Math.min(acceptChance, dynamicAcceptChance);
@@ -911,8 +917,9 @@ const layer = createLayer(id, function (this: any) {
                     </div>
                 </div>
 
-                <div style="margin: 15px 0; padding: 12px; border: 2px solid #2196F3; border-radius: 10px; background: #e3f2fd;">
-                    <h3>Active Jobs ({activeDeliveries.value.length})</h3>
+                <div style="margin: 15px 0; padding: 12px; border: 2px solid #4CAF50; border-radius: 10px; background: #e8f5e9;">
+           {/*  <div style="margin: 15px 0; padding: 12px; border: 2px solid #2196F3; border-radius: 10px; background: #e3f2fd;"> */}
+                    <h3>Active Jobs</h3>
                     {activeDeliveries.value.length === 0 ? (
                         <p style="font-style: italic;">No active jobs</p>
                     ) : (
@@ -920,7 +927,7 @@ const layer = createLayer(id, function (this: any) {
                             const jobType = getJobType(delivery.jobTypeId);
                             const progress = Math.max(0, Math.min(1, delivery.timeRemaining / delivery.duration));
                             return (
-                                <div key={delivery.id} style="margin: 10px 0; padding: 8px; background: white; border-radius: 5px; border: 1px solid #ddd;">
+                                <div key={delivery.id} style="margin: 3px 0; padding: 2px; background: white; border-radius: 5px; border: 1px solid #ddd;">
                                     <div style="font-size: 14px;">{jobType?.category === "onetime" ? "TRAINING" : " "} {jobType?.displayName || delivery.jobTypeId}</div>
 
                                     <div style="color: #2e7d32; font-size: 14px;">
@@ -936,8 +943,7 @@ const layer = createLayer(id, function (this: any) {
                                                 {payout.type === "generality" ? " Generality" : ""}
                                             </span>
                                         ))}
-                                    </div>
-				    <div style="font-size: 14px;">
+					&nbsp;&nbsp;&nbsp;
                                         {"▪".repeat(jobType?.cost?.find(c => c.type === "compute")?.value || 0)} {Math.ceil(delivery.timeRemaining)}s
                                     </div>
                                     <div style="margin-top: 6px; width: 60%; height: 4px; background: white; border-radius: 2px; overflow: hidden;">

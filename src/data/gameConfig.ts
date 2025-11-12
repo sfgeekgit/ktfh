@@ -28,7 +28,7 @@ export const G_CONF = {
 
     // ===== GPU COSTS =====
     GPU_BASE_COST: 50, // Cost of first GPU purchase
-    GPU_COST_MULTIPLIER: 1.5, // Each GPU costs 1.5x the previous
+    GPU_COST_MULTIPLIER: 1.4, // Each GPU costs 1.5x the previous
 
     // ===== CHAPTER 2 BONUSES =====
     CHAPTER_2_QUALITY_BONUS: 1.10, // 10% multiplicative earnings increase

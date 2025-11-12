@@ -9,7 +9,8 @@ button.feature,
     border: 2px solid rgba(0, 0, 0, 0.125);
     margin: var(--feature-margin);
     box-sizing: border-box;
-    color: var(--feature-foreground);
+    //color: var(--feature-foreground);
+    color: white;
     z-index: 0;
     transition: all 0.5s, z-index 0s 0.5s;
 }
@@ -22,6 +23,7 @@ button.can,
 .can button {
     background-color: var(--layer-color);
 	cursor: pointer;
+    border: 2px solid rgba(255, 165, 00, 1);
 }
 
 button.can:hover,

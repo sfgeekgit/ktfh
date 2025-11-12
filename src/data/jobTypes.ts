@@ -75,7 +75,8 @@ export const JOB_TYPES: JobType[] = [
         payout: [
             { type: "money", min: 10, max: 50 }
         ],
-        duration: { min: 2, max: 3 },
+        duration: { min: 3, max: 6 },
+        category: "tool",
         cost: [
             { type: "compute", value: 1 }
         ]
@@ -84,7 +85,7 @@ export const JOB_TYPES: JobType[] = [
         id: "spellchecker",
         displayName: "Spell Checker",
         //description: "How do you spell pepperoni?",
-        chapter: [1,2,3],
+        chapter: [1,2,3,4],
         prereq: [
             { type: "job", value: "imgclassifier", display_prereq: false  }
 	],
@@ -92,7 +93,7 @@ export const JOB_TYPES: JobType[] = [
         payout: [
             { type: "money", min: 10, max: 50 }
         ],
-        duration: { min: 2, max: 3 },
+        duration: { min: 5, max: 7 },
         category: "tool",
         cost: [
             { type: "compute", value: 1 }
@@ -102,7 +103,7 @@ export const JOB_TYPES: JobType[] = [
         id: "speechtran",
         displayName: "Speech Transcription",
         description: "",
-        chapter: [1,2],
+        chapter: [1,2,3,4],
         prereq: [
 		{type:"compute", value:2},
 	    { type: "money", value: 20 },
@@ -112,17 +113,17 @@ export const JOB_TYPES: JobType[] = [
         payout: [
             { type: "money", min: 70, max: 100 }
         ],
-        duration: { min: 2, max: 3 },
+        duration: { min: 8, max: 14 },
         category: "tool",
         cost: [
             { type: "compute", value: 2 }
         ]
     },
     {
-        id: "spamfileter",
+        id: "spamfilter",
         displayName: "Spam Filter",
         description: "",
-        chapter: [1,2,3,4],
+        chapter: [1,2,3],
         prereq: [
 	    { type: "money", value: 120 },
             { type: "job", value: "spellchecker" }
@@ -131,7 +132,7 @@ export const JOB_TYPES: JobType[] = [
         payout: [
             { type: "money", min: 140, max: 190 }
         ],
-        duration: { min: 2, max: 3 },
+        duration: { min: 10, max: 16 },
         category: "tool",
         cost: [
             { type: "compute", value: 2 }
@@ -151,7 +152,7 @@ export const JOB_TYPES: JobType[] = [
         payout: [
             { type: "money", min: 70, max: 150 }
         ],
-        duration: { min: 2, max: 3 },
+        duration: { min: 10, max: 16 },
         category: "tool",
         cost: [
             { type: "compute", value: 3 }
@@ -172,7 +173,7 @@ export const JOB_TYPES: JobType[] = [
         payout: [
             { type: "data", min: 70, max: 150 }
         ],
-        duration: { min: 3, max: 5 }, // todo Make slower
+        duration: { min: 20, max: 30 }, // todo Make slower
         category: "gameplay",
         cost: [
             { type: "compute", value: 2 },
@@ -193,7 +194,7 @@ export const JOB_TYPES: JobType[] = [
             { type: "money", min: 170, max: 250 }
 	    ,             { type: "data", min: 5, max: 15 }
         ],
-        duration: { min: 2, max: 3 },
+        duration: { min: 11, max: 20 },
         category: "tool",
 	cost: [
             { type: "compute", value: 3 }
@@ -225,8 +226,8 @@ export const JOB_TYPES: JobType[] = [
 
     {
         id: "devjob",
-        displayName: "Boring Job",
-        description: "The AI doesn't love this one",
+        displayName: "Dev Job",
+        description: "Tesing",
         chapter: [2,3,4,5],
 	displayTrigger: [ { type: "job", value: "chess"} ],
         prereq: [ { type: "iq", value: 3 },
@@ -255,7 +256,7 @@ export const JOB_TYPES: JobType[] = [
         prereq: [{ type: "iq", value: 2 }],
         unlockCost: [{ type: "money", value: 5000 }],
         payout: [{ type: "money", min: 700, max: 900 }],
-        duration: { min: 38, max: 42 },
+        duration: { min: 20, max: 25 },
         cost: [{ type: "compute", value: 5 }],
         category: "tool"
     },
@@ -268,7 +269,7 @@ export const JOB_TYPES: JobType[] = [
         prereq: [{ type: "iq", value: 3 }],
         unlockCost: [{ type: "money", value: 5000 }],
         payout: [{ type: "money", min: 650, max: 800 }],
-        duration: { min: 34, max: 38 },
+        duration: { min: 25, max: 30 },
         cost: [{ type: "compute", value: 4 }],
         category: "tool"
     },
