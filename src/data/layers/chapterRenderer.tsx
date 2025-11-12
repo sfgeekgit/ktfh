@@ -61,6 +61,12 @@ export function createChapterLayer(chapterId: string, chapterData: ChapterData) 
 
         function makeChoice(choiceId: string) {
             playerChoice.value = choiceId;
+
+            // Set framework choice for Chapter 5
+            if (chapterId === 'chapter5' && (choiceId === 'support' || choiceId === 'oppose')) {
+                player.frameworkChoice = choiceId;
+            }
+
             save();
             // Find the next page that matches this choice
             const choicePageIndex = currentPage.value;

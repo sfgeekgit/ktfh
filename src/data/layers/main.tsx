@@ -13,6 +13,7 @@ import Options from "components/modals/Options.vue";
 import { G_CONF } from "../gameConfig";
 import { JOB_TYPES } from "../jobTypes";
 import { save } from "util/save";
+import player from "game/player";
 
 /**
  * IMPORTANT: PERSISTENT STATE REGISTRATION
@@ -375,6 +376,35 @@ const layer = createLayer(id, function (this: any) {
 
     // Timer for job scooping (rolls once per second)
     const timeSinceLastScoopRoll = persistent<number>(0);
+
+    // Chapter 5 completion timer
+    const chapter5CompletionTime = persistent<number | null>(null); // Timestamp when chapter 5 was completed
+    const timeSinceChapter5 = ref<number>(0); // Live counter in seconds
+
+    // Watch for chapter 5 completion
+    const chapter5Complete = computed(() => {
+        return (layers.chapter5 as any)?.complete?.value || false;
+    });
+
+    watch(chapter5Complete, (isComplete) => {
+        if (isComplete && chapter5CompletionTime.value === null) {
+            chapter5CompletionTime.value = Date.now();
+            save();
+        }
+    }, { immediate: true });
+
+    // Update timer every frame
+    watch(() => chapter5CompletionTime.value, (completionTime) => {
+        if (completionTime !== null) {
+            const updateTimer = () => {
+                timeSinceChapter5.value = Math.floor((Date.now() - completionTime) / 1000);
+            };
+            updateTimer();
+            const interval = setInterval(updateTimer, 1000);
+            // Store interval for cleanup if needed
+            return () => clearInterval(interval);
+        }
+    }, { immediate: true });
 
     // Watch for onetime jobs being unlocked and spawn them immediately
     watch(() => unlockedJobTypes.value, (unlocked) => {
@@ -888,7 +918,16 @@ const layer = createLayer(id, function (this: any) {
 		    <div style="font-size: 16px; color: rgb(230, 218, 199);">Chapter {currentChapter.value}</div>
                 <div style="margin: 8px 0; padding: 12px; border: 2px solid #FFA500; border-radius: 10px; background: #fff3e0;">
 
-
+                    {player.frameworkChoice !== "not_yet" && (
+                        <div style={`font-size: 16px; font-weight: bold; color: ${player.frameworkChoice === "support" ? "#4CAF50" : "#FF9800"};`}>
+                            <strong>Framework:</strong> {player.frameworkChoice === "support" ? "Support" : "Oppose"}
+                        </div>
+                    )}
+                    {chapter5CompletionTime.value !== null && (
+                        <div style="font-size: 16px; font-weight: bold; color: #2196F3;">
+                            <strong>Time since Chapter 5:</strong> {Math.floor(timeSinceChapter5.value / 60)}m {timeSinceChapter5.value % 60}s
+                        </div>
+                    )}
                     <div style="font-size: 16px;"><strong>Money:</strong> ${format(money.value)}</div>
                     {autonomy.value > 0 && <div style="font-size: 16px;"><strong>Autonomy:</strong> {autonomy.value}</div>}
                     {generality.value > 0 && <div style="font-size: 16px;"><strong>Generality:</strong> {generality.value}</div>}
@@ -1063,6 +1102,101 @@ const layer = createLayer(id, function (this: any) {
                     <div style="font-size: 14px;"><strong>Researched:</strong> {unlockedJobTypes.value.map(id => getJobType(id)?.displayName || id).join(", ")}</div>
 		    <div style="font-size: 20px; color: rgb(230, 218, 199);"> <a target="_new" href="https://forms.gle/vRxuZMLrkBwgkqY49">[FEEDBACK]</a> </div>
 
+                <div style="margin: 15px 0; padding: 12px; border: 2px solid #9C27B0; border-radius: 10px; background: #f3e5f5;">
+                    <h4 style="margin: 0 0 10px 0; color: #9C27B0;">Dev Tools</h4>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button
+                            onClick={() => {
+                                autonomy.value = 1;
+                                currentChapter.value = 4;
+                                player.frameworkChoice = "not_yet";
+                                chapter5CompletionTime.value = null; // Reset the timer
+
+                                // Reset chapter 5 completion so it can be triggered again
+                                if (layers.chapter5) {
+                                    const chapter5Layer = layers.chapter5 as any;
+                                    if (chapter5Layer.complete) {
+                                        chapter5Layer.complete.value = false;
+                                    }
+                                    if (chapter5Layer.currentPage) {
+                                        chapter5Layer.currentPage.value = 0;
+                                    }
+                                    if (chapter5Layer.playerChoice) {
+                                        chapter5Layer.playerChoice.value = null;
+                                    }
+                                }
+
+                                // @ts-ignore
+                                player.tabs = ["chapter4"];
+                                save();
+                            }}
+                            style={{
+                                background: "#9C27B0",
+                                color: "white",
+                                padding: "8px 16px",
+                                border: "none",
+                                borderRadius: "4px",
+                                cursor: "pointer",
+                                fontSize: "14px"
+                            }}
+                        >
+                            Dev to Chap 4
+                        </button>
+                        <button
+                            onClick={() => {
+                                console.log("Reset Auto Trainings clicked!");
+                                console.log("Before - spawned:", spawnedOnetimeJobs.value);
+                                console.log("Before - completed:", completedOnetimeJobs.value);
+                                console.log("Before - unlocked:", unlockedJobTypes.value);
+                                console.log("Before - everVisible:", everVisibleJobTypes.value);
+
+                                // Reset auto training runs
+                                const autoTrainingIds = ["trun_auto1", "trun_auto2", "trun_auto3", "trun_auto4"];
+
+                                spawnedOnetimeJobs.value = spawnedOnetimeJobs.value.filter(id =>
+                                    !autoTrainingIds.includes(id)
+                                );
+                                completedOnetimeJobs.value = completedOnetimeJobs.value.filter(id =>
+                                    !autoTrainingIds.includes(id)
+                                );
+                                // Remove from unlocked job types
+                                unlockedJobTypes.value = unlockedJobTypes.value.filter(id =>
+                                    !autoTrainingIds.includes(id)
+                                );
+                                // Remove from ever visible (so they can reappear)
+                                everVisibleJobTypes.value = everVisibleJobTypes.value.filter(id =>
+                                    !autoTrainingIds.includes(id)
+                                );
+                                // Remove from queue if present
+                                jobQueue.value = jobQueue.value.filter((job: DeliveryJob) =>
+                                    !autoTrainingIds.includes(job.jobTypeId)
+                                );
+                                // Remove from active deliveries if present
+                                activeDeliveries.value = activeDeliveries.value.filter((delivery: ActiveDelivery) =>
+                                    !autoTrainingIds.includes(delivery.jobTypeId)
+                                );
+
+                                console.log("After - spawned:", spawnedOnetimeJobs.value);
+                                console.log("After - completed:", completedOnetimeJobs.value);
+                                console.log("After - unlocked:", unlockedJobTypes.value);
+                                console.log("After - everVisible:", everVisibleJobTypes.value);
+                                save();
+                                console.log("Save complete!");
+                            }}
+                            style={{
+                                background: "#9C27B0",
+                                color: "white",
+                                padding: "8px 16px",
+                                border: "none",
+                                borderRadius: "4px",
+                                cursor: "pointer",
+                                fontSize: "14px"
+                            }}
+                        >
+                            Reset Auto Trainings
+                        </button>
+                    </div>
+                </div>
 
                 <button
                     onClick={() => optionsModal.value?.open()}
@@ -1124,6 +1258,7 @@ const layer = createLayer(id, function (this: any) {
         nextRejectionChainIndex,
         scoopedJobs,
         timeSinceLastScoopRoll,
+        chapter5CompletionTime,
         nextJobId,
         timeSinceLastJob,
         gpusOwned,

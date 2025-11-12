@@ -27,6 +27,8 @@ export interface Player {
     modID: string;
     /** The version of the project this save was created by. Used for upgrading saves for new versions. */
     modVersion: string;
+    /** The player's choice about the framework (set at start of Chapter 5). */
+    frameworkChoice: "support" | "oppose" | "not_yet";
     /** A dictionary of layer save data. */
     layers: Record<string, LayerData<unknown>>;
 }
@@ -57,6 +59,7 @@ const player = reactive<Player>({
     keepGoing: false,
     modID: "",
     modVersion: "",
+    frameworkChoice: "not_yet",
     layers: {}
 });
 
