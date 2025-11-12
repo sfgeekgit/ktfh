@@ -379,7 +379,7 @@ const layer = createLayer(id, function (this: any) {
 
     // Chapter 5 completion timer
     const chapter5CompletionTime = persistent<number | null>(null); // Timestamp when chapter 5 was completed
-    const timeSinceChapter5 = ref<number>(0); // Live counter in seconds
+    const timeSinceChapter5 = persistent<number>(0); // Counter updated by game loop
 
     // Watch for chapter 5 completion
     const chapter5Complete = computed(() => {
@@ -389,22 +389,39 @@ const layer = createLayer(id, function (this: any) {
     watch(chapter5Complete, (isComplete) => {
         if (isComplete && chapter5CompletionTime.value === null) {
             chapter5CompletionTime.value = Date.now();
+            timeSinceChapter5.value = 0;
             save();
         }
     }, { immediate: true });
 
-    // Update timer every frame
-    watch(() => chapter5CompletionTime.value, (completionTime) => {
-        if (completionTime !== null) {
-            const updateTimer = () => {
-                timeSinceChapter5.value = Math.floor((Date.now() - completionTime) / 1000);
-            };
-            updateTimer();
-            const interval = setInterval(updateTimer, 1000);
-            // Store interval for cleanup if needed
-            return () => clearInterval(interval);
-        }
-    }, { immediate: true });
+    // News flash system
+    interface NewsFlash {
+        id: string;
+        message: string;
+        autoDismissAfter?: number; // seconds, undefined = manual dismiss only
+        createdAt: number; // timestamp for auto-dismiss tracking
+    }
+    const activeNewsFlashes = persistent<NewsFlash[]>([]);
+    const dismissedNewsIds = persistent<string[]>([]); // Track which news IDs have been shown
+
+    function addNewsFlash(id: string, message: string, autoDismissAfter?: number) {
+        if (dismissedNewsIds.value.includes(id)) return; // Already shown
+        if (activeNewsFlashes.value.find(n => n.id === id)) return; // Already active
+
+        activeNewsFlashes.value.push({
+            id,
+            message,
+            autoDismissAfter,
+            createdAt: timeSinceChapter5.value
+        });
+        save();
+    }
+
+    function dismissNewsFlash(id: string) {
+        activeNewsFlashes.value = activeNewsFlashes.value.filter(n => n.id !== id);
+        dismissedNewsIds.value.push(id);
+        save();
+    }
 
     // Watch for onetime jobs being unlocked and spawn them immediately
     watch(() => unlockedJobTypes.value, (unlocked) => {
@@ -675,6 +692,24 @@ const layer = createLayer(id, function (this: any) {
             return;
         }
 
+        // Update chapter 5 timer
+        if (chapter5CompletionTime.value !== null) {
+            timeSinceChapter5.value += diff;
+
+            // Trigger news flashes based on time (only if player opposed framework)
+            if (timeSinceChapter5.value >= 8 && player.frameworkChoice === "oppose") {
+                addNewsFlash("megacorp_agi", "🚨 Breaking: Mega Corp begins work on AGI", 20);
+            }
+        }
+
+        // Auto-dismiss news flashes
+        for (let i = activeNewsFlashes.value.length - 1; i >= 0; i--) {
+            const news = activeNewsFlashes.value[i];
+            if (news.autoDismissAfter && timeSinceChapter5.value >= news.createdAt + news.autoDismissAfter) {
+                dismissNewsFlash(news.id);
+            }
+        }
+
         // Update active deliveries
         for (let i = activeDeliveries.value.length - 1; i >= 0; i--) {
             activeDeliveries.value[i].timeRemaining -= diff;
@@ -925,7 +960,7 @@ const layer = createLayer(id, function (this: any) {
                     )}
                     {chapter5CompletionTime.value !== null && (
                         <div style="font-size: 16px; font-weight: bold; color: #2196F3;">
-                            <strong>Time since Chapter 5:</strong> {Math.floor(timeSinceChapter5.value / 60)}m {timeSinceChapter5.value % 60}s
+                            <strong>Time since Chapter 5:</strong> {Math.floor(timeSinceChapter5.value / 60)}m {Math.floor(timeSinceChapter5.value % 60)}s
                         </div>
                     )}
                     <div style="font-size: 16px;"><strong>Money:</strong> ${format(money.value)}</div>
@@ -946,8 +981,33 @@ const layer = createLayer(id, function (this: any) {
                     {speedBonus.value !== 100 && (
                         <div style="font-size: 14px; color: #2196F3;"><strong>Speed Bonus:</strong> {parseFloat((speedBonus.value / 100).toFixed(2))}x</div>
                     )}
-                    {/* <div style="font-size: 14px;"><strong>Unlocked Pizzas:</strong> {unlockedJobTypes.value.map(id => getJobType(id)?.displayName || id).join(", ")}</div>  */}   
+                    {/* <div style="font-size: 14px;"><strong>Unlocked Pizzas:</strong> {unlockedJobTypes.value.map(id => getJobType(id)?.displayName || id).join(", ")}</div>  */}
                 </div>
+
+                {activeNewsFlashes.value.length > 0 && (
+                    <div style="margin: 15px 0;">
+                        {activeNewsFlashes.value.map(news => (
+                            <div key={news.id} style="margin: 8px 0; padding: 12px; border: 2px solid #d32f2f; border-radius: 10px; background: #ffebee; display: flex; justify-content: space-between; align-items: center;">
+                                <div style="font-size: 16px; font-weight: bold; color: #c62828;">{news.message}</div>
+                                <button
+                                    onClick={() => dismissNewsFlash(news.id)}
+                                    style={{
+                                        background: "#d32f2f",
+                                        color: "white",
+                                        padding: "6px 12px",
+                                        border: "none",
+                                        borderRadius: "4px",
+                                        cursor: "pointer",
+                                        fontSize: "14px",
+                                        marginLeft: "15px"
+                                    }}
+                                >
+                                    Dismiss
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                )}
 
                 <div style="margin: 15px 0;">
                     <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
@@ -1110,7 +1170,10 @@ const layer = createLayer(id, function (this: any) {
                                 autonomy.value = 1;
                                 currentChapter.value = 4;
                                 player.frameworkChoice = "not_yet";
-                                chapter5CompletionTime.value = null; // Reset the timer
+                                chapter5CompletionTime.value = null; // Reset the timer timestamp
+                                timeSinceChapter5.value = 0; // Reset the timer counter
+                                activeNewsFlashes.value = []; // Clear news flashes
+                                dismissedNewsIds.value = []; // Reset dismissed news tracking
 
                                 // Reset chapter 5 completion so it can be triggered again
                                 if (layers.chapter5) {
@@ -1259,6 +1322,9 @@ const layer = createLayer(id, function (this: any) {
         scoopedJobs,
         timeSinceLastScoopRoll,
         chapter5CompletionTime,
+        timeSinceChapter5,
+        activeNewsFlashes,
+        dismissedNewsIds,
         nextJobId,
         timeSinceLastJob,
         gpusOwned,
