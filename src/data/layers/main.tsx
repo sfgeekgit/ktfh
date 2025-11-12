@@ -855,8 +855,6 @@ const layer = createLayer(id, function (this: any) {
             //const rejectionChance = (autonomy.value * 5 + generality.value * 2 + iq.value) / 100;
 	    const rejectionChance = ((autonomy.value -.5)* 3 + (generality.value -2) * 1 + (iq.value-4) * 0.5) / 100;
             const dynamicAcceptChance = 1 - rejectionChance;
-	    console.log(dynamicAcceptChance);
-	    console.log("asadf");
 
             // Use the LOWER of the two acceptance chances (higher rejection chance)
             acceptChance = Math.min(acceptChance, dynamicAcceptChance);
@@ -1207,12 +1205,6 @@ const layer = createLayer(id, function (this: any) {
                         </button>
                         <button
                             onClick={() => {
-                                console.log("Reset Auto Trainings clicked!");
-                                console.log("Before - spawned:", spawnedOnetimeJobs.value);
-                                console.log("Before - completed:", completedOnetimeJobs.value);
-                                console.log("Before - unlocked:", unlockedJobTypes.value);
-                                console.log("Before - everVisible:", everVisibleJobTypes.value);
-
                                 // Reset auto training runs
                                 const autoTrainingIds = ["trun_auto1", "trun_auto2", "trun_auto3", "trun_auto4"];
 
@@ -1239,12 +1231,7 @@ const layer = createLayer(id, function (this: any) {
                                     !autoTrainingIds.includes(delivery.jobTypeId)
                                 );
 
-                                console.log("After - spawned:", spawnedOnetimeJobs.value);
-                                console.log("After - completed:", completedOnetimeJobs.value);
-                                console.log("After - unlocked:", unlockedJobTypes.value);
-                                console.log("After - everVisible:", everVisibleJobTypes.value);
                                 save();
-                                console.log("Save complete!");
                             }}
                             style={{
                                 background: "#9C27B0",
