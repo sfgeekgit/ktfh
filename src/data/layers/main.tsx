@@ -14,6 +14,8 @@ import { G_CONF } from "../gameConfig";
 import { JOB_TYPES } from "../jobTypes";
 import { save } from "util/save";
 import player from "game/player";
+import { NEWS_TEXT } from "../newsText";
+import { TIMELINE } from "../timelineConfig";
 
 /**
  * IMPORTANT: PERSISTENT STATE REGISTRATION
@@ -377,11 +379,11 @@ const layer = createLayer(id, function (this: any) {
     // Timer for job scooping (rolls once per second)
     const timeSinceLastScoopRoll = persistent<number>(0);
 
-    // Chapter 5 completion timer
-    const chapter5CompletionTime = persistent<number | null>(null); // Timestamp when chapter 5 was completed
+    // Chapter 5 timer
+    const chapter5CompletionTime = persistent<number | null>(null); // Timestamp when chapter 5 was begun
     const timeSinceChapter5 = persistent<number>(0); // Counter updated by game loop
 
-    // Watch for chapter 5 completion
+    // Watch for chapter 5 beginning
     const chapter5Complete = computed(() => {
         return (layers.chapter5 as any)?.complete?.value || false;
     });
@@ -422,6 +424,21 @@ const layer = createLayer(id, function (this: any) {
         dismissedNewsIds.value.push(id);
         save();
     }
+
+    // Countdown timer (for oppose framework path)
+    const showCountdown = computed(() => {
+        return chapter5CompletionTime.value !== null &&
+               player.frameworkChoice === "oppose" &&
+               timeSinceChapter5.value >= TIMELINE.COUNTDOWN_START_TIME &&
+               timeSinceChapter5.value < TIMELINE.GAME_OVER_TIME;
+    });
+
+    const countdownRemaining = computed(() => {
+        if (!showCountdown.value) return 0;
+        const elapsed = timeSinceChapter5.value - TIMELINE.COUNTDOWN_START_TIME;
+        const remaining = TIMELINE.COUNTDOWN_DURATION - elapsed;
+        return Math.max(0, Math.floor(remaining));
+    });
 
     // Watch for onetime jobs being unlocked and spawn them immediately
     watch(() => unlockedJobTypes.value, (unlocked) => {
@@ -692,13 +709,30 @@ const layer = createLayer(id, function (this: any) {
             return;
         }
 
-        // Update chapter 5 timer
+        // Update chapter 5 timer and trigger chapter 5 events
+        // NOTE: This entire block only runs AFTER chapter 5 is begun (chapter5CompletionTime !== null)
+        // so it has zero performance impact in chapters 1-4
         if (chapter5CompletionTime.value !== null) {
             timeSinceChapter5.value += diff;
 
-            // Trigger news flashes based on time (only if player opposed framework)
-            if (timeSinceChapter5.value >= 8 && player.frameworkChoice === "oppose") {
-                addNewsFlash("megacorp_agi", "🚨 Breaking: Mega Corp begins work on AGI", 20);
+            // Trigger events based on time (only if player opposed framework)
+            // The "oppose" check here is minimal overhead (one string comparison per frame)
+            // and only runs during chapter 5 gameplay, so performance impact is negligible
+            if (player.frameworkChoice === "oppose") {
+                // News flash: Mega Corp begins AGI
+                if (timeSinceChapter5.value >= TIMELINE.NEWS_MC_AGI_START) {
+                    const newsConfig = NEWS_TEXT.mc_agi_begin;
+                    addNewsFlash("mc_agi_begin", newsConfig.message, newsConfig.autoDismissAfter);
+                }
+
+                // Check for game over (countdown reaches zero)
+                if (timeSinceChapter5.value >= TIMELINE.GAME_OVER_TIME) {
+                    // Trigger lose ending
+                    player.gameOver = true;
+                    // @ts-ignore
+                    player.tabs = ["ending_lose_agi"];
+                    save();
+                }
             }
         }
 
@@ -936,6 +970,64 @@ const layer = createLayer(id, function (this: any) {
     // Display
     //const display: JSXFunction = () => {
     const display = () => {
+        // When game is over, only show dev tools
+        if (player.gameOver) {
+            return (
+                <div style="padding: 0 5px;">
+                    <h2 style="text-align: center; color: #d32f2f; margin: 20px 0;">GAME OVER</h2>
+                    <p style="text-align: center; margin: 20px 0;">Switch to the ending tab to read the conclusion.</p>
+
+                    <div style="margin: 15px 0; padding: 12px; border: 2px solid #9C27B0; border-radius: 10px; background: #f3e5f5;">
+                        <h4 style="margin: 0 0 10px 0; color: #9C27B0;">Dev Tools</h4>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button
+                                onClick={() => {
+                                    autonomy.value = 1;
+                                    currentChapter.value = 4;
+                                    player.frameworkChoice = "not_yet";
+                                    player.gameOver = false;
+                                    chapter5CompletionTime.value = null;
+                                    timeSinceChapter5.value = 0;
+                                    activeNewsFlashes.value = [];
+                                    dismissedNewsIds.value = [];
+
+                                    if (layers.chapter5) {
+                                        const chapter5Layer = layers.chapter5 as any;
+                                        if (chapter5Layer.complete) {
+                                            chapter5Layer.complete.value = false;
+                                        }
+                                        if (chapter5Layer.currentPage) {
+                                            chapter5Layer.currentPage.value = 0;
+                                        }
+                                        if (chapter5Layer.playerChoice) {
+                                            chapter5Layer.playerChoice.value = null;
+                                        }
+                                    }
+
+                                    // @ts-ignore
+                                    player.tabs = ["main"];
+                                    console.log("Tabs set to:", player.tabs);
+                                    save();
+                                    console.log("Save complete!");
+                                }}
+                                style={{
+                                    background: "#9C27B0",
+                                    color: "white",
+                                    padding: "8px 16px",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    cursor: "pointer",
+                                    fontSize: "14px"
+                                }}
+                            >
+                                Dev to Chap 4
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
         return (
             <div style="padding: 0 5px;">
                 <style>{`
@@ -1004,6 +1096,16 @@ const layer = createLayer(id, function (this: any) {
                                 </button>
                             </div>
                         ))}
+                    </div>
+                )}
+
+                {showCountdown.value && (
+                    <div style="margin: 15px 0;">
+                        <div style="margin: 8px 0; padding: 12px; border: 2px solid #d32f2f; border-radius: 10px; background: #ffebee;">
+                            <div style="font-size: 18px; font-weight: bold; color: #c62828; text-align: center;">
+                                ⏰ Countdown to Mega Corp AGI: {countdownRemaining.value}s
+                            </div>
+                        </div>
                     </div>
                 )}
 
@@ -1168,6 +1270,7 @@ const layer = createLayer(id, function (this: any) {
                                 autonomy.value = 1;
                                 currentChapter.value = 4;
                                 player.frameworkChoice = "not_yet";
+                                player.gameOver = false; // Reset game over state
                                 chapter5CompletionTime.value = null; // Reset the timer timestamp
                                 timeSinceChapter5.value = 0; // Reset the timer counter
                                 activeNewsFlashes.value = []; // Clear news flashes
@@ -1188,7 +1291,7 @@ const layer = createLayer(id, function (this: any) {
                                 }
 
                                 // @ts-ignore
-                                player.tabs = ["chapter4"];
+                                player.tabs = ["main"];
                                 save();
                             }}
                             style={{

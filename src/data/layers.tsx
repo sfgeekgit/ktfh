@@ -1,5 +1,5 @@
 import main from "./layers/main";
-import { chapter1, chapter2, chapter3, chapter4, chapter5 } from "./layers/chapters";
+import { chapter1, chapter2, chapter3, chapter4, chapter5, ending_lose_agi } from "./layers/chapters";
 
 export default {
     main,
@@ -7,5 +7,6 @@ export default {
     chapter2,
     chapter3,
     chapter4,
-    chapter5
+    chapter5,
+    ending_lose_agi
 };

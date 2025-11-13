@@ -25,6 +25,10 @@ function update() {
     if (hasWon?.value && !player.keepGoing) {
         return;
     }
+    // Stop here if the game is over
+    if (player.gameOver) {
+        return;
+    }
     // Stop here if the player had a NaN value
     if (state.hasNaN) {
         return;

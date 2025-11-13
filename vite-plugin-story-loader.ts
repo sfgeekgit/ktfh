@@ -38,14 +38,28 @@ function parseMarkdown(content: string): StoryContent {
     let currentOption: any = null;
     let inBlockquote = false;
     let blockquoteText: string[] = [];
+    let inHtmlComment = false;
 
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
         const trimmed = line.trim();
 
-        // Handle chapter headers (# Chapter...)
-        if (trimmed.startsWith('# Chapter')) {
-            // Save previous chapter
+        // Handle HTML comments
+        if (trimmed.startsWith('<!--')) {
+            inHtmlComment = true;
+            continue;
+        }
+        if (trimmed.includes('-->')) {
+            inHtmlComment = false;
+            continue;
+        }
+        if (inHtmlComment) {
+            continue;
+        }
+
+        // Handle chapter and ending headers (# Chapter... or # Ending:...)
+        if (trimmed.startsWith('# Chapter') || trimmed.startsWith('# Ending:')) {
+            // Save previous chapter/ending
             if (currentChapter && currentPage) {
                 currentChapter.pages.push(currentPage);
             }
@@ -53,7 +67,7 @@ function parseMarkdown(content: string): StoryContent {
                 chapters[currentChapter.id] = currentChapter;
             }
 
-            // Start new chapter
+            // Start new chapter/ending
             currentChapter = {
                 id: '',
                 title: trimmed.substring(2).trim(),

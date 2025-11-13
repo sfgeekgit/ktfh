@@ -29,6 +29,8 @@ export interface Player {
     modVersion: string;
     /** The player's choice about the framework (set at start of Chapter 5). */
     frameworkChoice: "support" | "oppose" | "not_yet";
+    /** Whether the game has ended (win or lose). When true, the game loop stops. */
+    gameOver: boolean;
     /** A dictionary of layer save data. */
     layers: Record<string, LayerData<unknown>>;
 }
@@ -60,6 +62,7 @@ const player = reactive<Player>({
     modID: "",
     modVersion: "",
     frameworkChoice: "not_yet",
+    gameOver: false,
     layers: {}
 });
 

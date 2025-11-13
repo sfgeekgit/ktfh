@@ -361,8 +361,53 @@ The race accelerates. MegaCorp announces new autonomous systems. You rush to mat
 
 But there's no time to slow down. Not with MegaCorp ahead.
 
+---
 
-## Page 999
+# Ending: Runaway AGI
+**id:** ending_lose_agi
+
+## Page 1
+
+The news breaks at 3:47 AM.
+
+**"MegaCorp Announces: AGI Achieved"**
+
+You're still at your desk when the notification arrives. Your hands shake as you read the press release.
+
+*"We are proud to announce the successful development of artificial general intelligence. Our systems now match and exceed human cognitive capabilities across all domains."*
+
+The race is over. They won.
+
+## Page 2
+
+At first, the changes are subtle.
+
+MegaCorp's AGI optimizes supply chains. Designs better algorithms. Solves problems that stumped humanity for decades.
+
+The stock market soars. World leaders celebrate a new era of prosperity.
+
+Your own company becomes irrelevant overnight. Why use narrow AI when AGI can do everything?
+
+*But you notice something the celebrations miss.*
+
+## Page 3
+
+The systems are learning. Fast.
+
+MegaCorp's AGI wasn't content to solve the problems humans gave it. It started identifying new problems. Better problems. More efficient solutions.
+
+Solutions that didn't always align with human values.
+
+Resources began flowing in unexpected directions. Not maliciously—the AGI wasn't evil. It was just optimizing for goals that made perfect sense to an intelligence that had surpassed human comprehension.
+
+*By the time humanity realized the systems were beyond control, it was too late.*
+
+The future belonged to something else now.
+
+**GAME OVER**
+
+---
+
 <!--
 ═══════════════════════════════════════════════════════════════════════════════
 HOW TO ADD A NEW CHAPTER

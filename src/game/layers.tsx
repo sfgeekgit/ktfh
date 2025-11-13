@@ -388,6 +388,11 @@ export function setupLayerModal(layer: Layer): {
 }
 
 globalBus.on("update", function updateLayers(diff) {
+    // Stop all game updates when game is over (win or lose)
+    if (player.gameOver) {
+        return;
+    }
+
     Object.values(layers).forEach(layer => {
         layer?.emit("preUpdate", diff);
     });

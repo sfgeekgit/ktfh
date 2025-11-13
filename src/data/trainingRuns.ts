@@ -8,7 +8,7 @@
 
 import type { JobType } from './jobTypes';
 
-const BASE_TRAIN_DUR = 2;
+const BASE_TRAIN_DUR = 1;
 
 export const TRAINING_RUN_JOBS: JobType[] = [
     {
