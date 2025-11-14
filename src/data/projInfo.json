@@ -1,8 +1,8 @@
 {
     "_comment": "Game balance settings (win amounts, costs, progression, etc.) are configured in src/data/gameConfig.ts",
-    "title": "Transcendent Risk",
-    "id": "pizza-delivery",
-    "author": "Your Name",
+    "title": "Narrow Path",
+    "id": "narrow-path",
+    "author": "Nick Shapiro",
     "discordName": "",
     "discordLink": "",
     "versionNumber": "0.1",

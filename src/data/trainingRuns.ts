@@ -387,4 +387,27 @@ export const TRAINING_RUN_JOBS: JobType[] = [
             { type: "data", value: 600 }
         ]
     },
+
+    {
+        id: "trun_auto5",
+        displayName: "Big Auto Dev",
+        description: "Thata a lotta Autonomy",
+        chapter: [4,5,6],
+        displayTrigger: [{ type: "completedJob", value: "trun_auto4"}],
+        prereq: [
+            { type: "compute", value: 5 }
+        ],
+        unlockCost: [{ type: "data", value: 80 }],
+        payout: [
+            { type: "autonomy", min: 3, max: 3 }
+        ],
+        duration: { min: BASE_TRAIN_DUR * 1.5, max: BASE_TRAIN_DUR * 1.5 },
+        category: "onetime",
+        cost: [
+            { type: "compute", value: 11 },
+            { type: "money", value: 40 },
+            { type: "data", value: 60 }
+        ]
+    },
+
 ];

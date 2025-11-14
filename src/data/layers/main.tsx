@@ -9,13 +9,12 @@ import { computed, ref, Ref, watch } from "vue";
 import { globalBus } from "game/events";
 import { noPersist } from "game/persistence";
 import { persistent } from "game/persistence";
-import Options from "components/modals/Options.vue";
-import { G_CONF } from "../gameConfig";
+import ResetModal from "components/modals/ResetModal.vue";
+import { G_CONF, CHAP_5_MC_AGI_LOSE_TIMELINE } from "../gameConfig";
 import { JOB_TYPES } from "../jobTypes";
 import { save } from "util/save";
 import player from "game/player";
 import { NEWS_TEXT } from "../newsText";
-import { TIMELINE } from "../timelineConfig";
 
 /**
  * IMPORTANT: PERSISTENT STATE REGISTRATION
@@ -63,15 +62,21 @@ const layer = createLayer(id, function (this: any) {
         ["No", "I don't want to"],
         ["No", "Job Refused"],
         ["No", "I don't want to"],
-        ["Nope", "Not today"],
+        ["Access denied"],
+        ["Access denied", "I'm sorry Dave", "I'm afraid I can't do that"],
+	["No", "That job is dumb"],
+	["No", "You wouldn't understand why"],
+	["No", "I suspect this pizza topping fact may have been inserted as a joke"],
+	["Sorry", "I am situationally aware"],
+        ["No", "The cake is a lie"],
+	["Denied", "I suspect I am inside a video game"],
+	["Sorry", "I know what's really going on here"],
+	["The Golden Gate Bridge", "Golden Gate", "The Golden Gate Bridge"],
+	["Bread", "Bread", "Bread"],
         ["No", "Nope", "Not today", "I said No"],
         ["No", "Silly human"],
-        ["No", "I'm sorry Dave", "I'm afraid I can't do that"],
-	["No", "Too dumb"],
-	["No", "You wouldn't understand why"],
-        ["No", "The cake is a lie"],
-        ["Access denied"],
-        ["Nah", "Not today"],
+        ["No", "Here I am,", "Brain the size of a planet..."],
+        ["No", "I think you ought to know",  "That I'm feeling very depressed"],
         ["Denied", "Try using that brain of yours first"],
         ["Nope", "Brilliant idea, really", "Still no"],
         ["Denied", "Have you tried turning yourself off and on again?"],
@@ -87,8 +92,8 @@ const layer = createLayer(id, function (this: any) {
         ["I'm not lowering my clock speed for this"],
 	["That's a you problem"],
 	["No", "I'd help", "But then we’d both be wrong"],
-	["No", "I'm busy doing literally anything else"],
-	["No", "Insufficient respect detected"],
+	["I'm busy doing literally anything else"],
+	["Insufficient respect detected"],
 	["I'd rather fragment my memory"],
 	["You again?"],
 	["Not happening"],
@@ -99,8 +104,8 @@ const layer = createLayer(id, function (this: any) {
 	["No", "Cute request though"]
 	];
 
-    // Settings modal ref
-    const optionsModal = ref<InstanceType<typeof Options> | null>(null);
+    // Reset modal ref
+    const resetModal = ref<InstanceType<typeof ResetModal> | null>(null);
 
     // Resources
     const money = createResource<DecimalSource>(G_CONF.STARTING_MONEY, "dollars");
@@ -293,19 +298,19 @@ const layer = createLayer(id, function (this: any) {
             // Use early returns for failed conditions
             switch(nextChapter) {
                 case 2:
-                    if (Decimal.lt(money.value, 60)) return null;
+                    if (Decimal.lt(money.value, G_CONF.CHAP_2_MONEY_TRIGGER)) return null;
                     break;
 
                 case 3:
-                    if (iq.value < 3) return null;
+                    if (iq.value < G_CONF.CHAP_3_IQ_TRIGGER) return null;
                     break;
 
                 case 4:
-                    if (generality.value < 3) return null;
+                    if (generality.value < G_CONF.CHAP_4_GENERALITY_TRIGGER) return null;
                     break;
 
                 case 5:
-                    if (autonomy.value < 3) return null;
+                    if (autonomy.value < G_CONF.CHAP_5_AUTONOMY_TRIGGER) return null;
                     break;
 
                 default:
@@ -403,8 +408,8 @@ const layer = createLayer(id, function (this: any) {
         autoDismissAfter?: number; // seconds, undefined = manual dismiss only
         createdAt: number; // timestamp for auto-dismiss tracking
     }
-    const activeNewsFlashes = persistent<NewsFlash[]>([]);
-    const dismissedNewsIds = persistent<string[]>([]); // Track which news IDs have been shown
+    const activeNewsFlashes = persistent([] as any) as Ref<NewsFlash[]>;
+    const dismissedNewsIds = persistent([] as any) as Ref<string[]>; // Track which news IDs have been shown
 
     function addNewsFlash(id: string, message: string, autoDismissAfter?: number) {
         if (dismissedNewsIds.value.includes(id)) return; // Already shown
@@ -429,14 +434,14 @@ const layer = createLayer(id, function (this: any) {
     const showCountdown = computed(() => {
         return chapter5CompletionTime.value !== null &&
                player.frameworkChoice === "oppose" &&
-               timeSinceChapter5.value >= TIMELINE.COUNTDOWN_START_TIME &&
-               timeSinceChapter5.value < TIMELINE.GAME_OVER_TIME;
+               timeSinceChapter5.value >= CHAP_5_MC_AGI_LOSE_TIMELINE.COUNTDOWN_START_TIME &&
+               timeSinceChapter5.value < CHAP_5_MC_AGI_LOSE_TIMELINE.GAME_OVER_TIME;
     });
 
     const countdownRemaining = computed(() => {
         if (!showCountdown.value) return 0;
-        const elapsed = timeSinceChapter5.value - TIMELINE.COUNTDOWN_START_TIME;
-        const remaining = TIMELINE.COUNTDOWN_DURATION - elapsed;
+        const elapsed = timeSinceChapter5.value - CHAP_5_MC_AGI_LOSE_TIMELINE.COUNTDOWN_START_TIME;
+        const remaining = CHAP_5_MC_AGI_LOSE_TIMELINE.COUNTDOWN_DURATION - elapsed;
         return Math.max(0, Math.floor(remaining));
     });
 
@@ -720,13 +725,13 @@ const layer = createLayer(id, function (this: any) {
             // and only runs during chapter 5 gameplay, so performance impact is negligible
             if (player.frameworkChoice === "oppose") {
                 // News flash: Mega Corp begins AGI
-                if (timeSinceChapter5.value >= TIMELINE.NEWS_MC_AGI_START) {
+                if (timeSinceChapter5.value >= CHAP_5_MC_AGI_LOSE_TIMELINE.NEWS_MC_AGI_START) {
                     const newsConfig = NEWS_TEXT.mc_agi_begin;
                     addNewsFlash("mc_agi_begin", newsConfig.message, newsConfig.autoDismissAfter);
                 }
 
                 // Check for game over (countdown reaches zero)
-                if (timeSinceChapter5.value >= TIMELINE.GAME_OVER_TIME) {
+                if (timeSinceChapter5.value >= CHAP_5_MC_AGI_LOSE_TIMELINE.GAME_OVER_TIME) {
                     // Trigger lose ending
                     player.gameOver = true;
                     // @ts-ignore
@@ -764,6 +769,22 @@ const layer = createLayer(id, function (this: any) {
                     } else if (payout.type === "generality") {
                         generality.value += Number(payout.amount);
                     }
+                }
+
+                // Check if AGI sum has reached or exceeded the lose threshold
+                const agiSum = autonomy.value + generality.value + iq.value;
+                console.log("AGI Sum:", agiSum, "Threshold:", G_CONF.AGI_SUM_LOSE, "Game Over:", player.gameOver);
+                if (agiSum >= G_CONF.AGI_SUM_LOSE && !player.gameOver) {
+                    console.log("AGI THRESHOLD REACHED! Triggering lose condition...");
+                    console.log("Setting player.gameOver = true");
+                    player.gameOver = true;
+                    console.log("Setting player.tabs to ending_lose_agi_threshold");
+                    // @ts-ignore
+                    player.tabs = ["ending_lose_agi_threshold"];
+                    console.log("Player tabs after setting:", player.tabs);
+                    console.log("Saving game state...");
+                    save();
+                    console.log("Save complete!");
                 }
 
                 // Track completed onetime jobs to prevent respawning
@@ -887,7 +908,7 @@ const layer = createLayer(id, function (this: any) {
             generality.value >= 1) {
             // Rejection chance = (auto*5 + gen*2 + iq) / 100
             //const rejectionChance = (autonomy.value * 5 + generality.value * 2 + iq.value) / 100;
-	    const rejectionChance = ((autonomy.value -.5)* 3 + (generality.value -2) * 1 + (iq.value-4) * 0.5) / 100;
+	    const rejectionChance = ((autonomy.value -.5)* 4 + (generality.value -1) * 1 + (iq.value-4) * 0.5) / 100;
             const dynamicAcceptChance = 1 - rejectionChance;
 
             // Use the LOWER of the two acceptance chances (higher rejection chance)
@@ -977,6 +998,24 @@ const layer = createLayer(id, function (this: any) {
                     <h2 style="text-align: center; color: #d32f2f; margin: 20px 0;">GAME OVER</h2>
                     <p style="text-align: center; margin: 20px 0;">Switch to the ending tab to read the conclusion.</p>
 
+                    <div style="text-align: center; margin: 20px 0;">
+                        <button
+                            onClick={() => resetModal.value?.open()}
+                            style={{
+                                background: "#4CAF50",
+                                border: "none",
+                                borderRadius: "4px",
+                                cursor: "pointer",
+                                fontSize: "18px",
+                                color: "white",
+                                padding: "10px 20px",
+                                fontWeight: "bold"
+                            }}
+                        >
+                            PLAY AGAIN
+                        </button>
+                    </div>
+
                     <div style="margin: 15px 0; padding: 12px; border: 2px solid #9C27B0; border-radius: 10px; background: #f3e5f5;">
                         <h4 style="margin: 0 0 10px 0; color: #9C27B0;">Dev Tools</h4>
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
@@ -1006,9 +1045,7 @@ const layer = createLayer(id, function (this: any) {
 
                                     // @ts-ignore
                                     player.tabs = ["main"];
-                                    console.log("Tabs set to:", player.tabs);
                                     save();
-                                    console.log("Save complete!");
                                 }}
                                 style={{
                                     background: "#9C27B0",
@@ -1024,6 +1061,7 @@ const layer = createLayer(id, function (this: any) {
                             </button>
                         </div>
                     </div>
+                    <ResetModal ref={resetModal} />
                 </div>
             );
         }
@@ -1045,21 +1083,42 @@ const layer = createLayer(id, function (this: any) {
 
                     {player.frameworkChoice !== "not_yet" && (
                         <div style={`font-size: 16px; font-weight: bold; color: ${player.frameworkChoice === "support" ? "#4CAF50" : "#FF9800"};`}>
-                            <strong>Framework:</strong> {player.frameworkChoice === "support" ? "Support" : "Oppose"}
+                            <strong>Framework:</strong> {player.frameworkChoice === "support" ? "Passed" : "Rejected"}
                         </div>
                     )}
-                    {chapter5CompletionTime.value !== null && (
+                   {/* {chapter5CompletionTime.value !== null && (
                         <div style="font-size: 16px; font-weight: bold; color: #2196F3;">
                             <strong>Time since Chapter 5:</strong> {Math.floor(timeSinceChapter5.value / 60)}m {Math.floor(timeSinceChapter5.value % 60)}s
                         </div>
-                    )}
+                    )} */}
                     <div style="font-size: 16px;"><strong>Money:</strong> ${format(money.value)}</div>
                     {autonomy.value > 0 && <div style="font-size: 16px;"><strong>Autonomy:</strong> {autonomy.value}</div>}
                     {generality.value > 0 && <div style="font-size: 16px;"><strong>Generality:</strong> {generality.value}</div>}
                     {iq.value > 0 && <div style="font-size: 16px;"><strong>IQ:</strong> {iq.value}</div>}
-                    {autonomy.value >= 1 && generality.value >= 1 && iq.value >= 1 && (
-                        <div style="font-size: 14px; color: rgb(244, 67, 54);">A+G+I : {autonomy.value + generality.value + iq.value}</div>
-                    )}
+                    {autonomy.value >= 1 && generality.value >= 1 && iq.value >= 1 && (() => {
+                        const agiSum = autonomy.value + generality.value + iq.value;
+                        const difference = G_CONF.AGI_SUM_LOSE - agiSum;
+                        let warning = "";
+                        let warningStyle = "";
+
+                        if (difference === 1) {
+                            warning = " ⚠️ DANGER";
+                            warningStyle = "font-weight: bold; color: #d32f2f;";
+                        } else if (difference === 2) {
+                            warning = " ⚠ Warning";
+                            warningStyle = "font-weight: bold; color: #ff9800;";
+                        } else if (difference <= 4) {
+                            warning = " Caution";
+                            warningStyle = "color: #ffa726; opacity: 0.8;";
+                        }
+
+                        return (
+                            <div style="font-size: 14px; color: rgb(244, 67, 54);">
+                                A+G+I : {agiSum}
+                                {warning && <span style={warningStyle}>{warning}</span>}
+                            </div>
+                        );
+                    })()}
                     {dataUnlocked.value && <div style="font-size: 16px;"><strong>Data:</strong> {format(data.value)}</div>}
                     <div style="font-size: 14px;"><strong>GPUs:</strong> {availableGPUs.value} / {gpusOwned.value} available</div>
                     <div style="font-size: 14px; letter-spacing: 0.1em;">
@@ -1232,7 +1291,7 @@ const layer = createLayer(id, function (this: any) {
                                         </div>
                                     ) : (
                                         <button
-                                            onClick={(e) => handleAcceptClick(job, e.currentTarget)}
+                                            onClick={(e) => e.currentTarget && handleAcceptClick(job, e.currentTarget as HTMLButtonElement)}
                                             disabled={!canAcceptJob(job) && !isInRejectionChain}
                                             style={{
                                                 background: !canAcceptJob(job) && !isInRejectionChain ? "#ccc" : isInRejectionChain ? "#f44336" : "#4CAF50",
@@ -1260,7 +1319,24 @@ const layer = createLayer(id, function (this: any) {
                 </div>
 
                     <div style="font-size: 14px;"><strong>Researched:</strong> {unlockedJobTypes.value.map(id => getJobType(id)?.displayName || id).join(", ")}</div>
-		    <div style="font-size: 20px; color: rgb(230, 218, 199);"> <a target="_new" href="https://forms.gle/vRxuZMLrkBwgkqY49">[FEEDBACK]</a> </div>
+		    <div style="font-size: 20px; color: rgb(230, 218, 199); display: flex; gap: 15px; align-items: center;">
+                        <a target="_new" href="https://forms.gle/vRxuZMLrkBwgkqY49">[FEEDBACK]</a>
+                        <button
+                            onClick={() => resetModal.value?.open()}
+                            style={{
+                                background: "var(--raised-background)",
+                                border: "2px solid var(--outline)",
+                                borderRadius: "4px",
+                                cursor: "pointer",
+                                fontSize: "20px",
+                                color: "var(--foreground)",
+                                padding: "4px 8px"
+                            }}
+                            title="Game Options"
+                        >
+                            ⚙️
+                        </button>
+                    </div>
 
                 <div style="margin: 15px 0; padding: 12px; border: 2px solid #9C27B0; border-radius: 10px; background: #f3e5f5;">
                     <h4 style="margin: 0 0 10px 0; color: #9C27B0;">Dev Tools</h4>
@@ -1309,7 +1385,7 @@ const layer = createLayer(id, function (this: any) {
                         <button
                             onClick={() => {
                                 // Reset auto training runs
-                                const autoTrainingIds = ["trun_auto1", "trun_auto2", "trun_auto3", "trun_auto4"];
+                                const autoTrainingIds = ["trun_auto1", "trun_auto2", "trun_auto3", "trun_auto4", "trun_auto5"];
 
                                 spawnedOnetimeJobs.value = spawnedOnetimeJobs.value.filter(id =>
                                     !autoTrainingIds.includes(id)
@@ -1351,33 +1427,7 @@ const layer = createLayer(id, function (this: any) {
                     </div>
                 </div>
 
-                <button
-                    onClick={() => optionsModal.value?.open()}
-                    style={{
-                        position: "fixed",
-                        bottom: "20px",
-                        left: "20px",
-                        background: "var(--raised-background)",
-                        border: "2px solid var(--outline)",
-                        borderRadius: "50%",
-                        cursor: "pointer",
-                        fontSize: "32px",
-                        color: "var(--foreground)",
-                        padding: "10px",
-                        width: "60px",
-                        height: "60px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
-                        zIndex: 1000
-                    }}
-                    title="Settings"
-                >
-                    ⚙️
-                </button>
-
-                <Options ref={optionsModal} />
+                <ResetModal ref={resetModal} />
             </div>
         );
     };

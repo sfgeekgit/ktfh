@@ -5,30 +5,32 @@
  * are centralized here for easy adjustment.
  */
 
-/// Level triggers are defined in data/layers/main.tsx     // Chapter transition watcher
-
 export const G_CONF = {
+    // ===== CHAPTER TRIGGERS =====
+    CHAP_2_MONEY_TRIGGER: 60,     // Money required to unlock Chapter 2
+    CHAP_3_IQ_TRIGGER: 3,          // IQ level required to unlock Chapter 3
+    CHAP_4_GENERALITY_TRIGGER: 3,  // Generality level required to unlock Chapter 4
+    CHAP_5_AUTONOMY_TRIGGER: 3,    // Autonomy level required to unlock Chapter 5
+
     // ===== STARTING RESOURCES =====
-    STARTING_MONEY: 20,
+    STARTING_MONEY: 48,
     STARTING_PIZZAS: ["imgclassifier"], // Lol pizza
     STARTING_GPUS: 1,
     STARTING_IQ: 1, // Intelligence stat, unlocked in Chapter 2
     STARTING_DATA: 0, // Data resource, unlocked in Chapter 2
+
+    AGI_SUM_LOSE: 21, // Player looses the game if AGI reaches this.
+
+
 
     // ===== JOB GENERATION =====
     JOB_GENERATION_INTERVAL: 3, // Seconds between new job checks (currently fast for dev)
     AUTO_JOB_LIMIT: 4, // Only auto-generate new jobs if <= this many in queue
     INITIAL_JOBS_COUNT: 3, // Number of jobs to spawn on game start
 
-    // ===== JOB PARAMETERS =====
-    JOB_DURATION_MIN: 10, // Minimum job duration in seconds
-    JOB_DURATION_MAX: 30, // Maximum job duration in seconds (will add to min)
-    JOB_PAYOUT_MIN: 10, // Minimum base payout
-    JOB_PAYOUT_MAX: 40, // Maximum additional payout (will add to min)
-
     // ===== GPU COSTS =====
     GPU_BASE_COST: 50, // Cost of first GPU purchase
-    GPU_COST_MULTIPLIER: 1.4, // Each GPU costs 1.5x the previous
+    GPU_COST_MULTIPLIER: 1.3, // Each GPU costs this times the previous
 
     // ===== CHAPTER 2 BONUSES =====
     CHAPTER_2_QUALITY_BONUS: 1.10, // 10% multiplicative earnings increase
@@ -41,3 +43,25 @@ export const G_CONF = {
 
 // Type export for TypeScript autocomplete
 export type GameConfig = typeof G_CONF;
+
+/**
+ * Timeline Configuration for Chapter 5 Events
+ *
+ * All times are in seconds since the completion of Chapter 5.
+ * Adjust these values to change the pacing of the game.
+ */
+
+export const CHAP_5_MC_AGI_LOSE_TIMELINE = {
+    // News flash timing (oppose framework path only)
+    NEWS_MC_AGI_START: 3,           // When "Mega Corp begins AGI" news appears
+    NEWS_MC_AGI_AUTO_DISMISS: 20,   // How long until it auto-dismisses (After first being shown, not absolute timeline)
+
+    // Countdown timer (oppose framework path only)
+    COUNTDOWN_START_TIME: 10,       // When countdown timer appears
+    COUNTDOWN_DURATION: 10,         // How long the countdown lasts
+
+    // Calculated: when game ends (lose condition)
+    get GAME_OVER_TIME() {
+        return this.COUNTDOWN_START_TIME + this.COUNTDOWN_DURATION;
+    }
+} as const;

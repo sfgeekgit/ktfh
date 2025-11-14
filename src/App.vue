@@ -5,7 +5,7 @@
     <template v-else>
         <div id="modal-root" :style="theme" />
         <div class="app" :style="theme" :class="{ useHeader }">
-            
+
             <Game />
             <TPS v-if="unref(showTPS)" />
             <AddictionWarning />
@@ -13,7 +13,7 @@
             <NaNScreen />
             <CloudSaveResolver />
             <GameComponent />
-        </div>
+         </div>
     </template>
 </template>
 
@@ -28,6 +28,7 @@ import state from "game/state";
 import { render } from "util/vue";
 import type { CSSProperties } from "vue";
 import { computed, toRef, unref } from "vue";
+//import { computed, ref, toRef, unref } from "vue";
 import Game from "./components/Game.vue";
 
 import TPS from "./components/TPS.vue";

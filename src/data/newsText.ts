@@ -1,4 +1,4 @@
-import { TIMELINE } from "./timelineConfig";
+import { CHAP_5_MC_AGI_LOSE_TIMELINE } from "./gameConfig";
 
 /**
  * News Flash Text Content
@@ -15,6 +15,6 @@ interface NewsFlashConfig {
 export const NEWS_TEXT: Record<string, NewsFlashConfig> = {
     mc_agi_begin: {
         message: "🚨 Breaking: Mega Corp begins work on AGI",
-        autoDismissAfter: TIMELINE.NEWS_MC_AGI_AUTO_DISMISS
+        autoDismissAfter: CHAP_5_MC_AGI_LOSE_TIMELINE.NEWS_MC_AGI_AUTO_DISMISS
     }
 };
