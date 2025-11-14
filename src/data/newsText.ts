@@ -14,7 +14,22 @@ interface NewsFlashConfig {
 
 export const NEWS_TEXT: Record<string, NewsFlashConfig> = {
     mc_agi_begin: {
-        message: "🚨 Breaking: Mega Corp begins work on AGI",
+        message: "🚨 Breaking: MegaCorp begins work on AGI",
         autoDismissAfter: CHAP_5_MC_AGI_LOSE_TIMELINE.NEWS_MC_AGI_AUTO_DISMISS
     }
+    ,
+    n5a1: {
+        message: "🚨 Breaking: MegaCorp sued for framework violations",
+	autoDismissAfter: 90
+    }
+    , n5a2: {
+        message: "🚨 Breaking: MegaCorp caught violating international AI agreement. Again!",
+	autoDismissAfter: 90
+    }
+    , n5a3: {
+        message: "🎉 Breaking: MegaCorp SHUT DOWN by regulators",
+	autoDismissAfter: 2000
+    }
+
+
 };

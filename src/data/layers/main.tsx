@@ -10,7 +10,7 @@ import { globalBus } from "game/events";
 import { noPersist } from "game/persistence";
 import { persistent } from "game/persistence";
 import ResetModal from "components/modals/ResetModal.vue";
-import { G_CONF, CHAP_5_MC_AGI_LOSE_TIMELINE } from "../gameConfig";
+import { G_CONF, CHAP_5_MC_AGI_LOSE_TIMELINE, CHAP_5_ACCEPT_TIMELINE } from "../gameConfig";
 import { JOB_TYPES } from "../jobTypes";
 import { save } from "util/save";
 import player from "game/player";
@@ -738,6 +738,16 @@ const layer = createLayer(id, function (this: any) {
                     player.tabs = ["ending_lose_agi"];
                     save();
                 }
+            }
+
+            // Chapter 5 Accept Framework Path - News Flashes
+            if (player.frameworkChoice === "support") {
+                CHAP_5_ACCEPT_TIMELINE.forEach(({ time, newsId }) => {
+                    if (timeSinceChapter5.value >= time) {
+                        const newsConfig = NEWS_TEXT[newsId];
+                        addNewsFlash(newsId, newsConfig.message, newsConfig.autoDismissAfter);
+                    }
+                });
             }
         }
 

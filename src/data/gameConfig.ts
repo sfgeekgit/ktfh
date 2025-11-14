@@ -65,3 +65,10 @@ export const CHAP_5_MC_AGI_LOSE_TIMELINE = {
         return this.COUNTDOWN_START_TIME + this.COUNTDOWN_DURATION;
     }
 } as const;
+
+
+export const CHAP_5_ACCEPT_TIMELINE = [
+    { time: 10, newsId: "n5a1" },
+    { time: 60, newsId: "n5a2" },
+    { time: 130, newsId: "n5a3" }
+] as const;
