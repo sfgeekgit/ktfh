@@ -8,7 +8,6 @@
 import { TRAINING_RUN_JOBS } from './trainingRuns';
 
 
-
 // Todo,  maybe web scraper should auto unlock at start of chapter 2
 
 /// Todo, tweak UI of training runs. Maybe while they are running, don't say "processing" say "Training" or such

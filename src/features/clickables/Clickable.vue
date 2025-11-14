@@ -46,9 +46,9 @@ const { start, stop } = setupHoldToClick(() => emits("hold"));
 
 <style scoped>
 .clickable {
-    min-height: 120px;
-    width: 120px;
-    font-size: 10px;
+    min-height: 140px;
+    width: 140px;
+    font-size: 12px;
 }
 
 .clickable > * {

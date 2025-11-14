@@ -641,14 +641,17 @@ const layer = createLayer(id, function (this: any) {
                                 <br/><i>{jobType.description}</i>
                                 {statPayout && (
                                     <>
-                                        <br/>
-                                        <strong>
-                                            {statPayout.type === "iq" && "IQ"}
-                                            {statPayout.type === "autonomy" && "Autonomy"}
-                                            {statPayout.type === "generality" && "Generality"}
-                                            {" +"}
-                                            {statPayout.min === statPayout.max ? statPayout.min : `${statPayout.min}-${statPayout.max}`}
-                                        </strong>
+
+                                        <span style="font-size:18px;">
+                                            {"+"}
+                                            {statPayout.min === statPayout.max ? statPayout.min : `${statPayout.min}-${statPayout.max}`}{"\u00A0"}
+					    {statPayout.type === "iq" && "IQ"}
+                                        <span style="font-size:28px;">
+                                            {statPayout.type === "iq" && "🧠"}
+                                            {statPayout.type === "autonomy" && "🤖"}
+                                            {statPayout.type === "generality" && "🌐"}
+                                        </span>
+                                        </span>
                                     </>
                                 )}
 
@@ -1103,9 +1106,9 @@ const layer = createLayer(id, function (this: any) {
                     )} */}
                     <div style="font-size: 16px;"><strong>💰 Money:</strong> ${format(money.value)}</div>
                     {dataUnlocked.value && <div style="font-size: 16px;"><strong>📊 Data:</strong> {format(data.value)}</div>}
-                    {autonomy.value > 0 && <div style="font-size: 16px;"><strong>Autonomy:</strong> {autonomy.value}</div>}
-                    {generality.value > 0 && <div style="font-size: 16px;"><strong>Generality:</strong> {generality.value}</div>}
-                    {iq.value > 0 && <div style="font-size: 16px;"><strong>IQ:</strong> {iq.value}</div>}
+                    {autonomy.value > 0 && <div style="font-size: 16px;"><strong>🤖 Autonomy:</strong> {autonomy.value}</div>}
+                    {generality.value > 0 && <div style="font-size: 16px;"><strong>🌐 Generality:</strong> {generality.value}</div>}
+                    {iq.value > 0 && <div style="font-size: 16px;"><strong>🧠 IQ:</strong> {iq.value}</div>}
                     {autonomy.value >= 1 && generality.value >= 1 && iq.value >= 1 && (() => {
                         const agiSum = autonomy.value + generality.value + iq.value;
                         const difference = G_CONF.AGI_SUM_LOSE - agiSum;
@@ -1217,8 +1220,10 @@ const layer = createLayer(id, function (this: any) {
                                         <span key={idx}>
                                             {idx > 0 && " +"}
                                             {payout.type === "money" ? "💰 $" : ""}
-                                            {payout.type === "data" ? "📊" : ""}
-                                            {["iq", "autonomy", "generality"].includes(payout.type) ? "" : ""}
+                                            {payout.type === "data" ? "📊 " : ""}
+                                            {payout.type === "iq" ? "🧠 " : ""}
+                                            {payout.type === "autonomy" ? "🤖 " : ""}
+                                            {payout.type === "generality" ? "🌐 " : ""}
                                             {format(payout.amount)}
                                             {payout.type === "data" ? " data" : ""}
                                             {payout.type === "iq" ? " IQ" : ""}
@@ -1229,7 +1234,13 @@ const layer = createLayer(id, function (this: any) {
                                 </div>
 
 
-                                <div style="font-size: 14px;">{"▪".repeat(computeRequired)} for {job.duration} seconds</div>
+                                <div style="font-size: 14px;">
+                                    <div style="display: inline-flex; flex-wrap: wrap; max-width: 50px; line-height: 1; gap: 0px; vertical-align: middle;">
+                                        {Array.from({length: computeRequired}, (_, i) => (
+                                            <span key={i} style="margin:0px;">▪</span>
+                                        ))}
+                                    </div> for {job.duration} seconds
+                                </div>
                                 {moneyRequired > 0 && (
                                     <div style={`${Decimal.lt(money.value, moneyRequired) ? 'font-size: 16px; color: #d32f2f;' : 'font-size: 14px;'}`}>
                                         <strong>Cost:</strong> 💰 -${moneyRequired}
@@ -1309,8 +1320,10 @@ const layer = createLayer(id, function (this: any) {
                                             <span key={idx}>
                                                 {idx > 0 && " +"}
                                                 {payout.type === "money" ? "💰 $" : ""}
-                                                {payout.type === "data" ? "📊" : ""}
-                                                {["iq", "autonomy", "generality"].includes(payout.type) ? "+" : ""}
+                                                {payout.type === "data" ? "📊 " : ""}
+                                                {payout.type === "iq" ? "🧠 " : ""}
+                                                {payout.type === "autonomy" ? "🤖 " : ""}
+                                                {payout.type === "generality" ? "🌐 " : ""}
                                                 {format(payout.amount)}
                                                 {payout.type === "data" ? " data" : ""}
                                                 {payout.type === "iq" ? " IQ" : ""}

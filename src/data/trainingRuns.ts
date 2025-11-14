@@ -304,7 +304,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
     {
         id: "trun_auto1",
         displayName: "Basic Autonomous Systems",
-        description: "Enable basic autonomous decision-making",
+        description: "",
         chapter: [4,5,6],
         prereq: [
             { type: "compute", value: 5 }
