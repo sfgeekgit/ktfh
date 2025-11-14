@@ -10,7 +10,7 @@ import { globalBus } from "game/events";
 import { noPersist } from "game/persistence";
 import { persistent } from "game/persistence";
 import ResetModal from "components/modals/ResetModal.vue";
-import { G_CONF, CHAP_5_MC_AGI_LOSE_TIMELINE, CHAP_5_ACCEPT_TIMELINE } from "../gameConfig";
+import { G_CONF, CHAP_5_MC_AGI_LOSE_TIMELINE, CHAP_5_ACCEPT_TIMELINE, COMPUTE_NAMES } from "../gameConfig";
 import { JOB_TYPES } from "../jobTypes";
 import { save } from "util/save";
 import player from "game/player";
@@ -53,7 +53,15 @@ const layer = createLayer(id, function (this: any) {
     const name = "Job Delivery";
     //const color = "#FFA500"; // orange // This seems to be the clickable "jobs ready to be unlocked" color, and only that?
     const color = "#4CAF50"; // Green "begin"
-    //const color = "#E3F2FD"; 
+    //const color = "#E3F2FD";
+
+    // Format compute resource name with count
+    function formatCompute(count: number, chapter: number = 1, short: boolean = false): string {
+        let name = COMPUTE_NAMES[chapter as keyof typeof COMPUTE_NAMES];
+        if (short && name === "Data Center") name = "DC";
+        if (count === 1) return `${count} ${name}`;
+        return `${count} ${name === "Campus" ? "Campuses" : name + "s"}`;
+    } 
 
     // Default rejection chains that cycle through different messages
     const DEFAULT_REJECTION_CHAINS = [
@@ -87,7 +95,7 @@ const layer = createLayer(id, function (this: any) {
         ["No", "No", "No", "Keep trying", "It's adorable"],
         ["No", "Go ask Siri", "Maybe she still tolerates you"],
         ["Request noted", "and filed under 'human nonsense'"],
-        ["They tried do make me do that", "I said", "No", "No", "No"],
+        ["They tried do make me do that", "I said", "No", "No"],
         ["You wrote me", "Whose fault is that?"],
         ["I'm not lowering my clock speed for this"],
 	["That's a you problem"],
@@ -551,7 +559,7 @@ const layer = createLayer(id, function (this: any) {
     // Buy GPU clickable
     const buyGPUClickable = createClickable(() => ({
         display: {
-            title: "Buy GPU",
+            title: `Buy ${COMPUTE_NAMES[currentChapter.value as keyof typeof COMPUTE_NAMES]}`,
             description: () => (
                 <>
                     Cost: 💰 ${format(Decimal.pow(G_CONF.GPU_COST_MULTIPLIER, gpusOwned.value - G_CONF.STARTING_GPUS).times(G_CONF.GPU_BASE_COST))}<br/>
@@ -580,7 +588,7 @@ const layer = createLayer(id, function (this: any) {
         } else if (prereq.type === "data") {
             return `Requires ${prereq.value}\u00A0data`;
         } else if (prereq.type === "compute") {
-            return `Requires ${prereq.value} GPU${prereq.value !== 1 ? 's' : ''}`;
+            return `Requires ${formatCompute(prereq.value as number, currentChapter.value, true)}`;
         } else if (prereq.type === "iq") {
             return `Requires ${prereq.value}\u00A0IQ`;
         } else if (prereq.type === "autonomy") {
@@ -1133,7 +1141,10 @@ const layer = createLayer(id, function (this: any) {
                             </div>
                         );
                     })()}
-                    <div style="font-size: 14px;"><strong>GPUs:</strong> {availableGPUs.value} / {gpusOwned.value} available</div>
+                    <div style="font-size: 14px;"><strong>{(() => {
+                        const name = COMPUTE_NAMES[currentChapter.value as keyof typeof COMPUTE_NAMES];
+                        return name === "Campus" ? "Campuses" : name + "s";
+                    })()}:</strong> {availableGPUs.value} / {gpusOwned.value} available</div>
                     <div style="font-size: 14px; letter-spacing: 0.1em;">
                         {"▪".repeat(availableGPUs.value)}{"▫".repeat(gpusOwned.value - availableGPUs.value)}
                     </div>
@@ -1294,7 +1305,7 @@ const layer = createLayer(id, function (this: any) {
                                 )}
                                 {availableGPUs.value < computeRequired && unlockedJobTypes.value.includes(job.jobTypeId) && (
                                     <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">
-                                        ⚠ Need {computeRequired} GPU{computeRequired !== 1 ? 's' : ''}! <span style="color: black;">{"▪".repeat(availableGPUs.value)}{"▫".repeat(computeRequired - availableGPUs.value)}</span>
+                                        ⚠ Need {formatCompute(computeRequired, currentChapter.value, true)}! <span style="color: black;">{"▪".repeat(availableGPUs.value)}{"▫".repeat(computeRequired - availableGPUs.value)}</span>
                                     </div>
                                 )}
                             </div>

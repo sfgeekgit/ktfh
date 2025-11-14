@@ -72,3 +72,11 @@ export const CHAP_5_ACCEPT_TIMELINE = [
     { time: 60, newsId: "n5a2" },
     { time: 130, newsId: "n5a3" }
 ] as const;
+
+export const COMPUTE_NAMES = {
+    1: "GPU",
+    2: "GPU",
+    3: "Cluster",
+    4: "Data Center",
+    5: "Campus"
+} as const;
