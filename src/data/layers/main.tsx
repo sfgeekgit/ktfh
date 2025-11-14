@@ -554,7 +554,7 @@ const layer = createLayer(id, function (this: any) {
             title: "Buy GPU",
             description: () => (
                 <>
-                    Cost: ${format(Decimal.pow(G_CONF.GPU_COST_MULTIPLIER, gpusOwned.value - G_CONF.STARTING_GPUS).times(G_CONF.GPU_BASE_COST))}<br/>
+                    Cost: 💰 ${format(Decimal.pow(G_CONF.GPU_COST_MULTIPLIER, gpusOwned.value - G_CONF.STARTING_GPUS).times(G_CONF.GPU_BASE_COST))}<br/>
                 </>
             )
         },
@@ -621,7 +621,7 @@ const layer = createLayer(id, function (this: any) {
 
                         return (
                             <>
-                                Cost: {moneyCost > 0 && <span style={!hasEnoughMoney ? "color: #2E3440; font-size: 11px;" : undefined}>${moneyCost}</span>}{moneyCost > 0 && dataCost > 0 && " + "}{dataCost > 0 && <span style={!hasEnoughData ? "color: #2E3440; font-size: 11px;" : undefined}>{dataCost} data</span>}<br/>
+                                Cost: {moneyCost > 0 && <span style={!hasEnoughMoney ? "color: #2E3440; font-size: 11px;" : undefined}>💰 ${moneyCost}</span>}{moneyCost > 0 && dataCost > 0 && " + "}{dataCost > 0 && <span style={!hasEnoughData ? "color: #2E3440; font-size: 11px;" : undefined}>📊 {dataCost} data</span>}<br/>
                                 {nonMoneyPrereqs.length > 0 && (
                                     <>
                                         {nonMoneyPrereqs.map((prereq: any, idx: number) => {
@@ -1101,7 +1101,8 @@ const layer = createLayer(id, function (this: any) {
                             <strong>Time since Chapter 5:</strong> {Math.floor(timeSinceChapter5.value / 60)}m {Math.floor(timeSinceChapter5.value % 60)}s
                         </div>
                     )} */}
-                    <div style="font-size: 16px;"><strong>Money:</strong> ${format(money.value)}</div>
+                    <div style="font-size: 16px;"><strong>💰 Money:</strong> ${format(money.value)}</div>
+                    {dataUnlocked.value && <div style="font-size: 16px;"><strong>📊 Data:</strong> {format(data.value)}</div>}
                     {autonomy.value > 0 && <div style="font-size: 16px;"><strong>Autonomy:</strong> {autonomy.value}</div>}
                     {generality.value > 0 && <div style="font-size: 16px;"><strong>Generality:</strong> {generality.value}</div>}
                     {iq.value > 0 && <div style="font-size: 16px;"><strong>IQ:</strong> {iq.value}</div>}
@@ -1129,7 +1130,6 @@ const layer = createLayer(id, function (this: any) {
                             </div>
                         );
                     })()}
-                    {dataUnlocked.value && <div style="font-size: 16px;"><strong>Data:</strong> {format(data.value)}</div>}
                     <div style="font-size: 14px;"><strong>GPUs:</strong> {availableGPUs.value} / {gpusOwned.value} available</div>
                     <div style="font-size: 14px; letter-spacing: 0.1em;">
                         {"▪".repeat(availableGPUs.value)}{"▫".repeat(gpusOwned.value - availableGPUs.value)}
@@ -1172,7 +1172,7 @@ const layer = createLayer(id, function (this: any) {
                     <div style="margin: 15px 0;">
                         <div style="margin: 8px 0; padding: 12px; border: 2px solid #d32f2f; border-radius: 10px; background: #ffebee;">
                             <div style="font-size: 18px; font-weight: bold; color: #c62828; text-align: center;">
-                                ⏰ Countdown to Mega Corp AGI: {countdownRemaining.value}s
+                                ⏰ Countdown to MegaCorp AGI: {countdownRemaining.value}s
                             </div>
                         </div>
                     </div>
@@ -1183,50 +1183,6 @@ const layer = createLayer(id, function (this: any) {
                         {render(buyGPUClickable)}
                         {pizzaUnlockClickables.map(clickable => render(clickable))}
                     </div>
-                </div>
-
-                <div style="margin: 15px 0; padding: 12px; border: 2px solid #4CAF50; border-radius: 10px; background: #e8f5e9;">
-           {/*  <div style="margin: 15px 0; padding: 12px; border: 2px solid #2196F3; border-radius: 10px; background: #e3f2fd;"> */}
-                    <h3>Active Jobs</h3>
-                    {activeDeliveries.value.length === 0 ? (
-                        <p style="font-style: italic;">No active jobs</p>
-                    ) : (
-		      	activeDeliveries.value.map((delivery: ActiveDelivery) => {
-                            const jobType = getJobType(delivery.jobTypeId);
-                            const progress = Math.max(0, Math.min(1, delivery.timeRemaining / delivery.duration));
-                            return (
-                                <div key={delivery.id} style="margin: 3px 0; padding: 2px; background: white; border-radius: 5px; border: 1px solid #ddd;">
-                                    <div style="font-size: 14px;">{jobType?.category === "onetime" ? "TRAINING" : " "} {jobType?.displayName || delivery.jobTypeId}</div>
-
-                                    <div style="color: #2e7d32; font-size: 14px;">
-                                        {delivery.payouts.map((payout: any, idx: number) => (
-                                            <span key={idx}>
-                                                {idx > 0 && " + "}
-                                                {payout.type === "money" ? "$" : ""}
-                                                {["iq", "autonomy", "generality"].includes(payout.type) ? "+" : ""}
-                                                {format(payout.amount)}
-                                                {payout.type === "data" ? " data" : ""}
-                                                {payout.type === "iq" ? " IQ" : ""}
-                                                {payout.type === "autonomy" ? " Autonomy" : ""}
-                                                {payout.type === "generality" ? " Generality" : ""}
-                                            </span>
-                                        ))}
-					&nbsp;&nbsp;&nbsp;
-                                        {"▪".repeat(jobType?.cost?.find(c => c.type === "compute")?.value || 0)} {Math.ceil(delivery.timeRemaining)}s
-                                    </div>
-                                    <div style="margin-top: 6px; width: 60%; height: 4px; background: white; border-radius: 2px; overflow: hidden;">
-                                        <div style={{
-                                            width: `${progress * 100}%`,
-                                            height: '100%',
-					    /* background: 'rgb(227, 242, 253)', */
-                                            background: '#61C6F3', 
-                                            transition: 'width 0.1s linear'
-                                        }} />
-                                    </div>
-                                </div>
-                            );
-                        })
-                    )}
                 </div>
 
                 <div style="margin: 15px 0; padding: 12px; border: 2px solid #4CAF50; border-radius: 10px; background: #e8f5e9;">
@@ -1257,10 +1213,11 @@ const layer = createLayer(id, function (this: any) {
                             return (
                             <div key={job.id} style={`margin: 10px 0; padding: 8px; background: ${backgroundColor}; border-radius: 5px; border: 1px solid #ddd;`}>
                                 <div style="font-size: 14px;">
-                                    + {job.payouts.map((payout: any, idx: number) => (
+                                    +{job.payouts.map((payout: any, idx: number) => (
                                         <span key={idx}>
-                                            {idx > 0 && " + "}
-                                            {payout.type === "money" ? "$" : ""}
+                                            {idx > 0 && " +"}
+                                            {payout.type === "money" ? "💰 $" : ""}
+                                            {payout.type === "data" ? "📊" : ""}
                                             {["iq", "autonomy", "generality"].includes(payout.type) ? "" : ""}
                                             {format(payout.amount)}
                                             {payout.type === "data" ? " data" : ""}
@@ -1272,8 +1229,12 @@ const layer = createLayer(id, function (this: any) {
                                 </div>
 
 
-                                <div style="font-size: 14px;"><strong>Use:</strong> {computeRequired} GPU for {job.duration} seconds</div>
-                                {moneyRequired > 0 && <div style="font-size: 14px;"><strong>Cost:</strong> ${moneyRequired}</div>}
+                                <div style="font-size: 14px;">{"▪".repeat(computeRequired)} for {job.duration} seconds</div>
+                                {moneyRequired > 0 && (
+                                    <div style={`${Decimal.lt(money.value, moneyRequired) ? 'font-size: 16px; color: #d32f2f;' : 'font-size: 14px;'}`}>
+                                        <strong>Cost:</strong> 💰 -${moneyRequired}
+                                    </div>
+                                )}
                                 <div style="margin-top: 8px; display: flex; gap: 5px;">
 
                                     {jobType?.category !== "onetime" && (
@@ -1297,7 +1258,7 @@ const layer = createLayer(id, function (this: any) {
 
                                     {isScooped ? (
                                         <div style="font-size: 13px; color: #d32f2f; font-weight: bold; padding: 6px 12px;">
-                                            Job Scooped by Mega Corp
+                                            Job Scooped by MegaCorp
                                         </div>
                                     ) : (
                                         <button
@@ -1321,10 +1282,57 @@ const layer = createLayer(id, function (this: any) {
                                     <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">⚠ Need {jobType?.displayName || job.jobTypeId}!</div>
                                 )}
                                 {availableGPUs.value < computeRequired && unlockedJobTypes.value.includes(job.jobTypeId) && (
-                                    <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">⚠ Need {computeRequired} GPU{computeRequired !== 1 ? 's' : ''}!</div>
+                                    <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">
+                                        ⚠ Need {computeRequired} GPU{computeRequired !== 1 ? 's' : ''}! <span style="color: black;">{"▪".repeat(availableGPUs.value)}{"▫".repeat(computeRequired - availableGPUs.value)}</span>
+                                    </div>
                                 )}
                             </div>
                         )})
+                    )}
+                </div>
+
+                <div style="margin: 15px 0; padding: 12px; border: 2px solid #4CAF50; border-radius: 10px; background: #e8f5e9;">
+           {/*  <div style="margin: 15px 0; padding: 12px; border: 2px solid #2196F3; border-radius: 10px; background: #e3f2fd;"> */}
+                    <h3>Active Jobs</h3>
+                    {activeDeliveries.value.length === 0 ? (
+                        <p style="font-style: italic;">No active jobs</p>
+                    ) : (
+		      	activeDeliveries.value.map((delivery: ActiveDelivery) => {
+                            const jobType = getJobType(delivery.jobTypeId);
+                            const progress = Math.max(0, Math.min(1, delivery.timeRemaining / delivery.duration));
+                            return (
+                                <div key={delivery.id} style="margin: 3px 0; padding: 2px; background: white; border-radius: 5px; border: 1px solid #ddd;">
+                                    <div style="font-size: 14px;">{jobType?.category === "onetime" ? "TRAINING" : " "} {jobType?.displayName || delivery.jobTypeId}</div>
+
+                                    <div style="color: #2e7d32; font-size: 14px;">
+                                        {delivery.payouts.map((payout: any, idx: number) => (
+                                            <span key={idx}>
+                                                {idx > 0 && " +"}
+                                                {payout.type === "money" ? "💰 $" : ""}
+                                                {payout.type === "data" ? "📊" : ""}
+                                                {["iq", "autonomy", "generality"].includes(payout.type) ? "+" : ""}
+                                                {format(payout.amount)}
+                                                {payout.type === "data" ? " data" : ""}
+                                                {payout.type === "iq" ? " IQ" : ""}
+                                                {payout.type === "autonomy" ? " Autonomy" : ""}
+                                                {payout.type === "generality" ? " Generality" : ""}
+                                            </span>
+                                        ))}
+					&nbsp;&nbsp;&nbsp;
+                                        {"▪".repeat(jobType?.cost?.find(c => c.type === "compute")?.value || 0)} {Math.ceil(delivery.timeRemaining)}s
+                                    </div>
+                                    <div style="margin-top: 6px; width: 60%; height: 4px; background: white; border-radius: 2px; overflow: hidden;">
+                                        <div style={{
+                                            width: `${progress * 100}%`,
+                                            height: '100%',
+					    /* background: 'rgb(227, 242, 253)', */
+                                            background: '#61C6F3',
+                                            transition: 'width 0.1s linear'
+                                        }} />
+                                    </div>
+                                </div>
+                            );
+                        })
                     )}
                 </div>
 

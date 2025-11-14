@@ -176,7 +176,7 @@ export const JOB_TYPES: JobType[] = [
         duration: { min: 20, max: 30 }, // todo Make slower
         category: "gameplay",
         cost: [
-            { type: "compute", value: 2 },
+            { type: "compute", value: 1 },
             { type: "money", value: 20 }
         ]
     },
