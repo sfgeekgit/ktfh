@@ -33,7 +33,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
     {
         id: "trun2",
         displayName: "Pattern Recognition Training",
-        description: "AI learns to identify patterns in data",
+        //description: "AI learns to identify patterns in data",
         chapter: [2,3,4,5,6],
 	displayTrigger: [{ type: "completedJob", value: "trun1"} ],            
         prereq: [
@@ -53,7 +53,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
     {
         id: "trun3",
         displayName: "Deep Learning Architecture",
-        description: "Build advanced neural network architectures",
+        //description: "Build advanced neural network architectures",
         chapter: [2,3,4,5,6],
         displayTrigger: [{ type: "completedJob", value: "trun2"}],
         prereq: [
@@ -73,7 +73,8 @@ export const TRAINING_RUN_JOBS: JobType[] = [
     {
         id: "trun4",
         displayName: "Reinforcement Learning Engine",
-        description: "AI learns through trial and reward feedback",
+	//displayName: "Reinforcement Learning",
+        //description: "AI learns through trial and reward feedback",
         chapter: [2,3,4,5,6],
         displayTrigger: [{ type: "completedJob", value: "trun3"}],
         prereq: [
@@ -93,7 +94,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
     {
         id: "trun5",
         displayName: "Memory Enhancement",
-        description: "Increase AI's context and recall capacity",
+        //description: "Increase AI's context and recall capacity",
         chapter: [2,3,4,5,6],
         displayTrigger: [{ type: "completedJob", value: "trun4"}],
         prereq: [
@@ -113,7 +114,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
     {
         id: "trun6",
         displayName: "Advanced Reasoning Core",
-        description: "Develop sophisticated logical reasoning capabilities",
+        //description: "Develop sophisticated logical reasoning capabilities",
         chapter: [2,3,4,5,6],
         displayTrigger: [{ type: "completedJob", value: "trun5"}],
         prereq: [
@@ -133,7 +134,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
     {
         id: "trun7",
         displayName: "Chain-of-Thought Enhancer",
-        description: "Enable step-by-step reasoning processes",
+        //description: "Enable step-by-step reasoning processes",
         chapter: [2,3,4,5,6],
         displayTrigger: [{ type: "completedJob", value: "trun6"}],
         prereq: [
@@ -153,7 +154,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
     {
         id: "trun8",
         displayName: "Inference Optimization",
-        description: "AI thinks faster and more efficiently",
+        //description: "AI thinks faster and more efficiently",
         chapter: [2,3,4,5,6],
         displayTrigger: [{ type: "completedJob", value: "trun7"}],
         prereq: [
@@ -172,7 +173,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
     {
         id: "trun9",
         displayName: "Strategic Planning Module",
-        description: "AI develops long-term planning capabilities",
+        //description: "AI develops long-term planning capabilities",
         chapter: [2,3,4,5,6],
         displayTrigger: [{ type: "completedJob", value: "trun8"}],
         prereq: [
@@ -193,7 +194,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
     {
         id: "trun_mm1",
         displayName: "Multimodal Integration",
-        description: "Combine text, image, and audio processing",
+        description: "A more GENERAL intelligence",
         chapter: [3,4,5,6],
 	displayTrigger: [ { type: "iq", value: 3 } ],	
         prereq: [
@@ -237,7 +238,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
     {
         id: "trun_mm3",
         displayName: "Meta-Learning Scaffold",
-        description: "Build frameworks for learning new tasks",
+        //description: "Build frameworks for learning new tasks",
         chapter: [3,4,5,6],
         displayTrigger: [{ type: "completedJob", value: "trun_mm2"}],
         prereq: [
@@ -258,8 +259,8 @@ export const TRAINING_RUN_JOBS: JobType[] = [
 
     {
         id: "trun_mm4",
-        displayName: "Few-Shot Learning Module",
-        description: "AI learns from minimal examples",
+        displayName: "Few-Shot Learning",
+        // description: "AI learns from minimal examples",
         chapter: [3,4,5,6],
         displayTrigger: [{ type: "completedJob", value: "trun_mm3"}],
         prereq: [
@@ -281,7 +282,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
     {
         id: "trun_mm5",
         displayName: "Domain Bridging Framework",
-        description: "Connect and synthesize knowledge across domains",
+        //description: "Connect and synthesize knowledge across domains",
         chapter: [3,4,5,6],
         displayTrigger: [{ type: "completedJob", value: "trun_mm4"}],
         prereq: [
@@ -303,8 +304,8 @@ export const TRAINING_RUN_JOBS: JobType[] = [
     // Autonomy job chain - sequential onetime jobs
     {
         id: "trun_auto1",
-        displayName: "Basic Autonomous Systems",
-        description: "",
+        displayName: "Basic Agents",
+        description: "+1 Autonomy",
         chapter: [4,5,6],
         prereq: [
             { type: "compute", value: 5 }
@@ -325,7 +326,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
     {
         id: "trun_auto2",
         displayName: "Agentic Reasoning Training",
-        description: "Train goal-directed reasoning capabilities",
+        //description: "Train goal-directed reasoning capabilities",
         chapter: [4,5,6],
         displayTrigger: [{ type: "completedJob", value: "trun_auto1"}],
         prereq: [
@@ -347,7 +348,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
     {
         id: "trun_auto3",
         displayName: "Multi-Step Task Planner",
-        description: "AI breaks down and executes complex tasks",
+        //description: "AI breaks down and executes complex tasks",
         chapter: [4,5,6],
         displayTrigger: [{ type: "completedJob", value: "trun_auto2"}],
         prereq: [
@@ -369,7 +370,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
     {
         id: "trun_auto4",
         displayName: "Goal-Conditioned Agent",
-        description: "AI pursues objectives with strategic planning",
+        //description: "AI pursues objectives with strategic planning",
         chapter: [4,5,6],
         displayTrigger: [{ type: "completedJob", value: "trun_auto3"}],
         prereq: [
@@ -391,7 +392,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
     {
         id: "trun_auto5",
         displayName: "Big Auto Dev",
-        description: "Thata a lotta Autonomy",
+        description: "Thats alotta Autonomy",
         chapter: [4,5,6],
         displayTrigger: [{ type: "completedJob", value: "trun_auto4"}],
         prereq: [

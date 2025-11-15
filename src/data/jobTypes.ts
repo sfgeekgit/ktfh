@@ -60,6 +60,7 @@ export interface JobType {
     category?: string;       // Job category (optional)
     acceptanceChance?: number;  // Probability of accepting on first click (0-1, default 1.0 = always accept)
     rejectionChain?: string[];  // Array of button texts to show when acceptance fails (e.g., ["No", "I don't want to"])
+    is_wonder?: boolean;     // Whether this job creates a Wonder (default: false)
 }
 
 // ===== JOB TYPES =====
@@ -314,7 +315,149 @@ export const JOB_TYPES: JobType[] = [
         ]
     },
 
+
+
+//// Wonders (end game win)
+    {
+        id: "wonder1",
+        displayName: "Protein Folding",
+        description: "A boon to humanity",
+	displayTrigger: [ { type: "generality", value: "1", display_prereq: false } ],
+	chapter: [3,4,5,6],
+        prereq: [
+            { type: "compute", value: 6 },
+            { type: "iq", value: 5 },
+            { type: "generality", value: 2 }
+        ],
+        unlockCost: [{ type: "data", value: 200 }],
+        payout: [
+            { type: "wonder", min: 1, max: 1 }
+        ],
+        duration: { min: 20, max: 20 },
+        category: "onetime",
+	is_wonder: true,
+        cost: [
+            { type: "compute", value: 3 },
+            { type: "money", value: 100 },
+            { type: "data", value: 100 }
+        ]
+    },
+
+
+    {
+        id: "wonder2",
+        displayName: "Protein Folding",
+        description: "A boon to humanity",
+	displayTrigger: [ { type: "generality", value: "1", display_prereq: false } ],
+	chapter: [3,4,5,6],
+        prereq: [
+            { type: "compute", value: 6 },
+            { type: "iq", value: 5 },
+            { type: "generality", value: 2 }
+        ],
+        unlockCost: [{ type: "data", value: 200 }],
+        payout: [
+            { type: "wonder", min: 1, max: 1 }
+        ],
+        duration: { min: 20, max: 20 },
+        category: "onetime",
+	is_wonder: true,
+        cost: [
+            { type: "compute", value: 3 },
+            { type: "money", value: 100 },
+            { type: "data", value: 100 }
+        ]
+    },
+
+
+    {
+        id: "wonder3",
+        displayName: "Protein Folding",
+        description: "A boon to humanity",
+	displayTrigger: [ { type: "generality", value: "1", display_prereq: false } ],
+	chapter: [3,4,5,6],
+        prereq: [
+            { type: "compute", value: 6 },
+            { type: "iq", value: 5 },
+            { type: "generality", value: 2 }
+        ],
+        unlockCost: [{ type: "data", value: 200 }],
+        payout: [
+            { type: "wonder", min: 1, max: 1 }
+        ],
+        duration: { min: 20, max: 20 },
+        category: "onetime",
+	is_wonder: true,
+        cost: [
+            { type: "compute", value: 3 },
+            { type: "money", value: 100 },
+            { type: "data", value: 100 }
+        ]
+    },
+
+
+    {
+        id: "wonder4",
+        displayName: "Protein Folding",
+        description: "A boon to humanity",
+	displayTrigger: [ { type: "generality", value: "1", display_prereq: false } ],
+	chapter: [3,4,5,6],
+        prereq: [
+            { type: "compute", value: 6 },
+            { type: "iq", value: 5 },
+            { type: "generality", value: 2 }
+        ],
+        unlockCost: [{ type: "data", value: 200 }],
+        payout: [
+            { type: "wonder", min: 1, max: 1 }
+        ],
+        duration: { min: 20, max: 20 },
+        category: "onetime",
+	is_wonder: true,
+        cost: [
+            { type: "compute", value: 3 },
+            { type: "money", value: 100 },
+            { type: "data", value: 100 }
+        ]
+    },
+
+
+    {
+        id: "wonder5",
+        displayName: "Protein Folding",
+        description: "A boon to humanity",
+	displayTrigger: [ { type: "generality", value: "3", display_prereq: false } ],
+	chapter: [4,5,6],
+        prereq: [
+            { type: "compute", value: 6 },
+            { type: "iq", value: 5 },
+            { type: "generality", value: 2 }
+        ],
+        unlockCost: [{ type: "data", value: 200 }],
+        payout: [
+            { type: "wonder", min: 1, max: 1 }
+        ],
+        duration: { min: 20, max: 20 },
+        category: "onetime",
+	is_wonder: true,
+        cost: [
+            { type: "compute", value: 3 },
+            { type: "money", value: 100 },
+            { type: "data", value: 100 }
+        ]
+    },
+
+
+
+
     // Training runs are imported from trainingRuns.ts
     ...TRAINING_RUN_JOBS
 
+
+
+
+
 ];
+
+
+

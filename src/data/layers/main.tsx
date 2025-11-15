@@ -57,7 +57,7 @@ const layer = createLayer(id, function (this: any) {
 
     // Format compute resource name with count
     function formatCompute(count: number, chapter: number = 1, short: boolean = false): string {
-        let name = COMPUTE_NAMES[chapter as keyof typeof COMPUTE_NAMES];
+        let name: string = COMPUTE_NAMES[chapter as keyof typeof COMPUTE_NAMES];
         if (short && name === "Data Center") name = "DC";
         if (count === 1) return `${count} ${name}`;
         return `${count} ${name === "Campus" ? "Campuses" : name + "s"}`;
@@ -124,6 +124,7 @@ const layer = createLayer(id, function (this: any) {
     const iq = persistent<number>(0); // Intelligence stat
     const autonomy = persistent<number>(0); // Autonomy stat
     const generality = persistent<number>(0); // Generality stat
+    const wonder = persistent<number>(0); // Wonder stat
 
     // Data resource (unlocked later in Chapter 2)
     const data = createResource<DecimalSource>(0, "data");
@@ -155,6 +156,8 @@ const layer = createLayer(id, function (this: any) {
             return autonomy.value >= (prereq.value as number);
         } else if (prereq.type === "generality") {
             return generality.value >= (prereq.value as number);
+        } else if (prereq.type === "wonder") {
+            return wonder.value >= (prereq.value as number);
         } else if (prereq.type === "completedJob") {
             return completedOnetimeJobs.value.includes(prereq.value as string);
         }
@@ -478,8 +481,8 @@ const layer = createLayer(id, function (this: any) {
             const payouts = jobType.payout.map((payoutSpec: any) => {
                 let amount = payoutSpec.min + Math.floor(Math.random() * (payoutSpec.max - payoutSpec.min + 1));
 
-                // Apply quality bonus - but not for stat payouts (IQ, autonomy, generality)
-                const isStatPayout = ["iq", "autonomy", "generality"].includes(payoutSpec.type);
+                // Apply quality bonus - but not for stat payouts (IQ, autonomy, generality, wonder)
+                const isStatPayout = ["iq", "autonomy", "generality", "wonder"].includes(payoutSpec.type);
                 if (!isStatPayout) {
                     amount = Math.floor(amount * (qualityBonus.value / 100));
                 }
@@ -539,8 +542,8 @@ const layer = createLayer(id, function (this: any) {
         const payouts = jobType.payout.map((payoutSpec: any) => {
             let amount = payoutSpec.min + Math.floor(Math.random() * (payoutSpec.max - payoutSpec.min + 1));
 
-            // Apply quality bonus (multiplicative) - but not for stat payouts (IQ, autonomy, generality)
-            const isStatPayout = ["iq", "autonomy", "generality"].includes(payoutSpec.type);
+            // Apply quality bonus (multiplicative) - but not for stat payouts (IQ, autonomy, generality, wonder)
+            const isStatPayout = ["iq", "autonomy", "generality", "wonder"].includes(payoutSpec.type);
             if (!isStatPayout) {
                 amount = Math.floor(amount * (qualityBonus.value / 100));
             }
@@ -559,10 +562,10 @@ const layer = createLayer(id, function (this: any) {
     // Buy GPU clickable
     const buyGPUClickable = createClickable(() => ({
         display: {
-            title: `Buy ${COMPUTE_NAMES[currentChapter.value as keyof typeof COMPUTE_NAMES]}`,
+            title: () => `Buy  ${COMPUTE_NAMES[currentChapter.value as keyof typeof COMPUTE_NAMES]}`,
             description: () => (
                 <>
-                    Cost: 💰 ${format(Decimal.pow(G_CONF.GPU_COST_MULTIPLIER, gpusOwned.value - G_CONF.STARTING_GPUS).times(G_CONF.GPU_BASE_COST))}<br/>
+                     💰 ${format(Decimal.pow(G_CONF.GPU_COST_MULTIPLIER, gpusOwned.value - G_CONF.STARTING_GPUS).times(G_CONF.GPU_BASE_COST))}
                 </>
             )
         },
@@ -595,6 +598,8 @@ const layer = createLayer(id, function (this: any) {
             return `Requires ${prereq.value}\u00A0Autonomy`;
         } else if (prereq.type === "generality") {
             return `Requires ${prereq.value}\u00A0Generality`;
+        } else if (prereq.type === "wonder") {
+            return `Requires ${prereq.value}\u00A0Wonder`;
         } else if (prereq.type === "completedJob") {
             const requiredJob = getJobType(prereq.value as string);
             return `Requires Complete ${requiredJob?.displayName || prereq.value}`;
@@ -616,7 +621,7 @@ const layer = createLayer(id, function (this: any) {
             );
 
             // Check for stat payouts
-            const statPayout = jobType.payout.find((p: any) => ["iq", "autonomy", "generality"].includes(p.type));
+            const statPayout = jobType.payout.find((p: any) => ["iq", "autonomy", "generality", "wonder"].includes(p.type));
 
             return createClickable(() => ({
                 display: {
@@ -629,7 +634,7 @@ const layer = createLayer(id, function (this: any) {
 
                         return (
                             <>
-                                Cost: {moneyCost > 0 && <span style={!hasEnoughMoney ? "color: #2E3440; font-size: 11px;" : undefined}>💰 ${moneyCost}</span>}{moneyCost > 0 && dataCost > 0 && " + "}{dataCost > 0 && <span style={!hasEnoughData ? "color: #2E3440; font-size: 11px;" : undefined}>📊 {dataCost} data</span>}<br/>
+                                {moneyCost > 0 && <span style={!hasEnoughMoney ? "color: #2E3440; font-size: 11px;" : undefined}>💰 ${moneyCost}</span>}{moneyCost > 0 && dataCost > 0 && " + "}{dataCost > 0 && <span style={!hasEnoughData ? "color: #2E3440; font-size: 11px;" : undefined}>📊 {dataCost} data</span>}<br/>
                                 {nonMoneyPrereqs.length > 0 && (
                                     <>
                                         {nonMoneyPrereqs.map((prereq: any, idx: number) => {
@@ -646,18 +651,21 @@ const layer = createLayer(id, function (this: any) {
                                     <br/></>
 
                                 )}
-                                <br/><i>{jobType.description}</i>
+                                <i>{jobType.description}</i>
+				<br/>
                                 {statPayout && (
                                     <>
 
                                         <span style="font-size:18px;">
                                             {"+"}
                                             {statPayout.min === statPayout.max ? statPayout.min : `${statPayout.min}-${statPayout.max}`}{"\u00A0"}
-					    {statPayout.type === "iq" && "IQ"}
+					    {statPayout.type === "iq" && "IQ "}
+					    {statPayout.type === "wonder" && "Wonder "}
                                         <span style="font-size:28px;">
                                             {statPayout.type === "iq" && "🧠"}
                                             {statPayout.type === "autonomy" && "🤖"}
                                             {statPayout.type === "generality" && "🌐"}
+                                            {statPayout.type === "wonder" && "🌟"}
                                         </span>
                                         </span>
                                     </>
@@ -789,6 +797,8 @@ const layer = createLayer(id, function (this: any) {
                         autonomy.value += Number(payout.amount);
                     } else if (payout.type === "generality") {
                         generality.value += Number(payout.amount);
+                    } else if (payout.type === "wonder") {
+                        wonder.value += Number(payout.amount);
                     }
                 }
 
@@ -1099,6 +1109,23 @@ const layer = createLayer(id, function (this: any) {
                         animation: shake 0.2s ease-in-out 5;
                     }
                 `}</style>
+
+                {/* Sticky Wallet */}
+                <div style="position: sticky; top: 0; z-index: 10;">
+                    <div style="padding: 8px 12px; border: 1px solid #FFA500; border-radius: 8px; background: #fff3e0; width: 90%;">
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                            <span style="font-size: 18px; font-weight: bold; white-space: nowrap;"><strong>💰</strong>&nbsp;${format(money.value)}</span>
+                            {Decimal.gt(data.value, 0) && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;"><strong>📊</strong>&nbsp;{format(data.value)}</span>}
+                            {iq.value > 0 && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;"><strong>🧠</strong>&nbsp;{iq.value}</span>}
+                            {autonomy.value > 0 && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;"><strong>🤖</strong>&nbsp;{autonomy.value}</span>}
+                            {generality.value > 0 && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;"><strong>🌐</strong>&nbsp;{generality.value}</span>}
+                        </div>
+                        <div style="font-size: 14px; margin-top: 4px; letter-spacing: 0.1em;">
+                            {"▪".repeat(availableGPUs.value)}{"▫".repeat(gpusOwned.value - availableGPUs.value)}
+                        </div>
+                    </div>
+                </div>
+
 		    <div style="font-size: 16px; color: rgb(230, 218, 199);">Chapter {currentChapter.value}</div>
                 <div style="margin: 8px 0; padding: 12px; border: 2px solid #FFA500; border-radius: 10px; background: #fff3e0;">
 
@@ -1141,7 +1168,8 @@ const layer = createLayer(id, function (this: any) {
                             </div>
                         );
                     })()}
-                    <div style="font-size: 14px;"><strong>{(() => {
+                    {currentChapter.value >= 3 && <div style="font-size: 16px;"><strong>🌟 Wonders:</strong> {wonder.value}/5</div>}
+		    <div style="font-size: 14px;"><strong>{(() => {
                         const name = COMPUTE_NAMES[currentChapter.value as keyof typeof COMPUTE_NAMES];
                         return name === "Campus" ? "Campuses" : name + "s";
                     })()}:</strong> {availableGPUs.value} / {gpusOwned.value} available</div>
@@ -1235,11 +1263,13 @@ const layer = createLayer(id, function (this: any) {
                                             {payout.type === "iq" ? "🧠 " : ""}
                                             {payout.type === "autonomy" ? "🤖 " : ""}
                                             {payout.type === "generality" ? "🌐 " : ""}
+                                            {payout.type === "wonder" ? "🌟 " : ""}
                                             {format(payout.amount)}
                                             {payout.type === "data" ? " data" : ""}
                                             {payout.type === "iq" ? " IQ" : ""}
                                             {payout.type === "autonomy" ? " Autonomy" : ""}
                                             {payout.type === "generality" ? " Generality" : ""}
+                                            {payout.type === "wonder" ? " Wonder" : ""}
                                         </span>
                                     ))}
                                 </div>
@@ -1335,11 +1365,13 @@ const layer = createLayer(id, function (this: any) {
                                                 {payout.type === "iq" ? "🧠 " : ""}
                                                 {payout.type === "autonomy" ? "🤖 " : ""}
                                                 {payout.type === "generality" ? "🌐 " : ""}
+                                                {payout.type === "wonder" ? "🌟 " : ""}
                                                 {format(payout.amount)}
                                                 {payout.type === "data" ? " data" : ""}
                                                 {payout.type === "iq" ? " IQ" : ""}
                                                 {payout.type === "autonomy" ? " Autonomy" : ""}
                                                 {payout.type === "generality" ? " Generality" : ""}
+                                                {payout.type === "wonder" ? " Wonder" : ""}
                                             </span>
                                         ))}
 					&nbsp;&nbsp;&nbsp;
@@ -1483,6 +1515,7 @@ const layer = createLayer(id, function (this: any) {
         iq,
         autonomy,
         generality,
+        wonder,
         data,
         dataUnlocked,
         unlockedJobTypes,  // Changed from unlockedPizzas
