@@ -105,7 +105,7 @@ export const JOB_TYPES: JobType[] = [
         description: "",
         chapter: [1,2,3,4],
         prereq: [
-		{type:"compute", value:2},
+		{type:"compute", value:2 , display_prereq: false  },
 	    { type: "money", value: 20 },
             { type: "job", value: "spellchecker" }
 	],
@@ -143,9 +143,9 @@ export const JOB_TYPES: JobType[] = [
         id: "routeopt",
         displayName: "Route Optimizer",
         description: "Popular with salesmen",
-        chapter: [1,2,3,4],
+        chapter: [1,2,3],
         prereq: [
-	    { type: "money", value: 80 },
+	    { type: "money", value: 280 },
             { type: "job", value: "spellchecker", display_prereq: false }
 	],
         unlockCost: [            { type: "money", value: 100 }],
@@ -222,13 +222,11 @@ export const JOB_TYPES: JobType[] = [
     },
 
 
-
-
     {
         id: "devjob",
         displayName: "Dev Job",
         description: "Tesing",
-        chapter: [2,3,4,5],
+        chapter: [6],
 	displayTrigger: [ { type: "job", value: "chess"} ],
         prereq: [ { type: "iq", value: 3 },
 	 	  { type: "autonomy", value: 3 },
@@ -248,7 +246,7 @@ export const JOB_TYPES: JobType[] = [
         id: "devjob2",
         displayName: "Dev Job 2",
         description: "Tesing",
-        chapter: [2,3,4,5],
+        chapter: [6],
 	displayTrigger: [ { type: "job", value: "chess"} ],
         prereq: [ { type: "compute", value:2}
 	],

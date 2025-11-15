@@ -1,5 +1,5 @@
 import main from "./layers/main";
-import { chapter1, chapter2, chapter3, chapter4, chapter5, ending_lose_agi, ending_lose_agi_threshold } from "./layers/chapters";
+import { chapter1, chapter2, chapter3, chapter4, chapter5, ending_lose_agi, ending_lose_agi_threshold, ending_win } from "./layers/chapters";
 
 export default {
     main,
@@ -9,5 +9,6 @@ export default {
     chapter4,
     chapter5,
     ending_lose_agi,
-    ending_lose_agi_threshold
+    ending_lose_agi_threshold,
+    ending_win
 };

@@ -59,8 +59,8 @@ const layer = createLayer(id, function (this: any) {
     function formatCompute(count: number, chapter: number = 1, short: boolean = false): string {
         let name: string = COMPUTE_NAMES[chapter as keyof typeof COMPUTE_NAMES];
         if (short && name === "Data Center") name = "DC";
-        if (count === 1) return `${count} ${name}`;
-        return `${count} ${name === "Campus" ? "Campuses" : name + "s"}`;
+        if (count === 1) return `${count}\u00A0${name}`;
+        return `${count}\u00A0${name === "Campus" ? "Campuses" : name + "s"}`;
     } 
 
     // Default rejection chains that cycle through different messages
@@ -593,11 +593,11 @@ const layer = createLayer(id, function (this: any) {
         } else if (prereq.type === "compute") {
             return `Requires ${formatCompute(prereq.value as number, currentChapter.value, true)}`;
         } else if (prereq.type === "iq") {
-            return `Requires ${prereq.value}\u00A0IQ`;
+            return `Requires ${prereq.value}\u00A0IQ\u00A0🧠`;
         } else if (prereq.type === "autonomy") {
-            return `Requires ${prereq.value}\u00A0Autonomy`;
+            return `Requires ${prereq.value}\u00A0🤖`;
         } else if (prereq.type === "generality") {
-            return `Requires ${prereq.value}\u00A0Generality`;
+            return `Requires ${prereq.value}\u00A0🌐`;
         } else if (prereq.type === "wonder") {
             return `Requires ${prereq.value}\u00A0Wonder`;
         } else if (prereq.type === "completedJob") {
@@ -818,6 +818,20 @@ const layer = createLayer(id, function (this: any) {
                     console.log("Save complete!");
                 }
 
+                // Check if Wonder has reached the win threshold
+                if (wonder.value >= G_CONF.WONDER_WIN && !player.gameOver) {
+                    console.log("WONDER WIN THRESHOLD REACHED! Triggering win condition...");
+                    console.log("Setting player.gameOver = true");
+                    player.gameOver = true;
+                    console.log("Setting player.tabs to ending_win");
+                    // @ts-ignore
+                    player.tabs = ["ending_win"];
+                    console.log("Player tabs after setting:", player.tabs);
+                    console.log("Saving game state...");
+                    save();
+                    console.log("Save complete!");
+                }
+
                 // Track completed onetime jobs to prevent respawning
                 const jobType = getJobType(delivery.jobTypeId);
                 if (jobType?.category === "onetime" && !completedOnetimeJobs.value.includes(delivery.jobTypeId)) {
@@ -1027,11 +1041,16 @@ const layer = createLayer(id, function (this: any) {
             return (
                 <div style="padding: 0 5px;">
                     <h2 style="text-align: center; color: #d32f2f; margin: 20px 0;">GAME OVER</h2>
-                    <p style="text-align: center; margin: 20px 0;">Switch to the ending tab to read the conclusion.</p>
+                    <p style="text-align: center; margin: 20px 0;">Put the game over text here</p>
 
                     <div style="text-align: center; margin: 20px 0;">
                         <button
-                            onClick={() => resetModal.value?.open()}
+                            onClick={() => {
+                                if (confirm("Are you sure you want to reset the game? This will delete ALL progress and cannot be undone!")) {
+                                    localStorage.clear();
+                                    window.location.reload();
+                                }
+                            }}
                             style={{
                                 background: "#4CAF50",
                                 border: "none",
@@ -1352,9 +1371,12 @@ const layer = createLayer(id, function (this: any) {
 		      	activeDeliveries.value.map((delivery: ActiveDelivery) => {
                             const jobType = getJobType(delivery.jobTypeId);
                             const progress = Math.max(0, Math.min(1, delivery.timeRemaining / delivery.duration));
+                            const prefix = jobType?.category === "onetime"
+                                ? (jobType?.is_wonder ? "RESEARCHING" : "TRAINING")
+                                : " ";
                             return (
                                 <div key={delivery.id} style="margin: 3px 0; padding: 2px; background: white; border-radius: 5px; border: 1px solid #ddd;">
-                                    <div style="font-size: 14px;">{jobType?.category === "onetime" ? "TRAINING" : " "} {jobType?.displayName || delivery.jobTypeId}</div>
+                                    <div style="font-size: 14px;">{prefix} {jobType?.displayName || delivery.jobTypeId}</div>
 
                                     <div style="color: #2e7d32; font-size: 14px;">
                                         {delivery.payouts.map((payout: any, idx: number) => (

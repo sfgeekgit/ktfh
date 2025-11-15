@@ -3,6 +3,43 @@
 
 
 
+
+
+## Page Intro1
+**title:**  The Choice Before Us
+**pageType:** intro
+**button_text:** LET'S GO
+
+Close the Gates
+
+**This is big**
+
+*This is italic*
+
+todo, intro the game, the point of the game, your goal as a player, how the essay is relevant
+
+You play the role of an AI startup founder.
+
+You have choices to make, they can change much more than just your startup.
+
+Your choices will affect the growth and sucesss of your company.
+
+Your choices will affect the growth and success of humanity itself.
+
+
+## Page Intro2
+**title:** Make Choices
+**pageType:** intro
+Choose the future of humanity
+
+The game has several different endings.
+
+You can play however you want (this is only a game) but only one narrow path leads to a ending that is good for humanity.
+
+**button_text:** BEGIN GAME
+
+
+
 ## Page 1
 
 You've done it. After months of preparation, your AI startup is finally launching.
@@ -453,6 +490,51 @@ By the time anyone realizes control was lost, the future has already been decide
 
 ---
 
+# Ending: A Careful Victory
+**id:** ending_win
+
+## Page 1
+
+The notification arrives quietly, without fanfare.
+
+**"Wonder Project #5 Complete: Global Climate Coordination System Deployed"**
+
+You lean back in your chair, looking at the screen. Five Wonders. Five breakthroughs that genuinely help humanity without the risks of runaway AGI.
+
+Disease prediction systems that keep humans in control. Educational AI that empowers teachers. Agricultural optimization that feeds millions. Fusion reactor simulations accelerating clean energy. Climate coordination bringing nations together.
+
+*Real tools. Real benefits. Real safety.*
+
+## Page 2
+
+The news coverage is different from what MegaCorp received.
+
+No breathless announcements of artificial general intelligence. No promises of singularity. No race to superhuman capabilities.
+
+Instead: "AI Company Delivers Five Major Breakthroughs While Maintaining Safety Standards."
+
+Your systems are intelligent, yes. But bounded. Specialized. Controllable. They amplify human capability without replacing human judgment.
+
+The work took longer. The path was harder. But you did it right.
+
+## Page 3
+
+You think back to all the choices along the way.
+
+The late nights questioning whether you should move faster. The investor pressure to chase AGI. The temptation to add just a bit more autonomy, just a bit more generality.
+
+Each time, you chose the careful path. You built tools that help, not systems that replace.
+
+The future isn't about machines that think like humans. It's about machines that help humans think better.
+
+And tonight, looking at the five Wonders changing the world safely and predictably, you know you made the right choice.
+
+*The gate stayed closed. Humanity stayed in control. And the future stayed bright.*
+
+**CONGRATULATIONS - YOU WIN!**
+
+---
+
 <!--
 ═══════════════════════════════════════════════════════════════════════════════
 HOW TO ADD A NEW CHAPTER
@@ -493,40 +575,6 @@ Paragraph text here...
 
 
 
-
-
-## Page Intro1
-**title:**  The Choice Before Us
-**pageType:** intro
-**button_text:** LET'S GO
-
-Close the Gates
-
-**This is big**
-
-*This is italic*
-
-todo, intro the game, the point of the game, your goal as a player, how the essay is relevant
-
-You play the role of an AI startup founder.
-
-You have choices to make, they can change much more than just your startup.
-
-Your choices will affect the growth and sucesss of your company.
-
-Your choices will affect the growth and success of humanity itself.
-
-
-## Page Intro2
-**title:** Make Choices
-**pageType:** intro
-Choose the future of humanity
-
-The game has several different endings.
-
-You can play however you want (this is only a game) but only one narrow path leads to a ending that is good for humanity.
-
-**button_text:** BEGIN GAME
 
 
 -->
