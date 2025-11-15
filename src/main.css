@@ -68,6 +68,12 @@ ul {
 	margin: unset;
 }
 
+/* Match toast color with in-game green buttons */
+.Vue-Toastification__toast--info {
+	background-color: #4caf50;
+	color: #ffffff;
+}
+
 :disabled {
 	pointer-events: none;
 }

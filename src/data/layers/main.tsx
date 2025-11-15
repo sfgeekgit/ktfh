@@ -14,6 +14,7 @@ import { G_CONF, CHAP_5_MC_AGI_LOSE_TIMELINE, CHAP_5_ACCEPT_TIMELINE, COMPUTE_NA
 import { JOB_TYPES } from "../jobTypes";
 import { save } from "util/save";
 import player from "game/player";
+import { openLayerTab } from "util/tabs";
 import { NEWS_TEXT } from "../newsText";
 
 /**
@@ -226,6 +227,10 @@ const layer = createLayer(id, function (this: any) {
             isJobInCurrentChapter(job, currentChapter.value)
         );
     });
+
+    function openAchievementsTab() {
+        openLayerTab("achievements", { exclusive: true });
+    }
 
     // Chapter 1 - completion and bonuses (chapter1 story shows at game start via initialTabs)
     const chapter1Choice = computed(() => {
@@ -1415,8 +1420,42 @@ const layer = createLayer(id, function (this: any) {
                 </div>
 
                     <div style="font-size: 14px;"><strong>Researched:</strong> {unlockedJobTypes.value.map(id => getJobType(id)?.displayName || id).join(", ")}</div>
-		    <div style="font-size: 20px; color: rgb(230, 218, 199); display: flex; gap: 15px; align-items: center;">
-                        <a target="_new" href="https://forms.gle/vRxuZMLrkBwgkqY49">[FEEDBACK]</a>
+		    <div style="font-size: 20px; color: rgb(230, 218, 199); display: flex; gap: 10px; align-items: center;">
+                        <button
+                            onClick={() => window.open("https://forms.gle/vRxuZMLrkBwgkqY49", "_blank")}
+                            style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "6px",
+                                background: "var(--raised-background)",
+                                border: "2px solid var(--outline)",
+                                borderRadius: "4px",
+                                cursor: "pointer",
+                                fontSize: "16px",
+                                color: "#ccc",
+                                padding: "4px 10px"
+                            }}
+                        >
+                            Feedback
+                        </button>
+                        <button
+                            onClick={openAchievementsTab}
+                            style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "6px",
+                                background: "var(--raised-background)",
+                                border: "2px solid var(--outline)",
+                                borderRadius: "4px",
+                                cursor: "pointer",
+                                fontSize: "16px",
+                                color: "#ccc",
+                                padding: "4px 10px"
+                            }}
+                        >
+                            <img src="/ach/ach0.png" alt="Achievements" style="width: 16px; height: 16px; opacity:0.6" />
+                            Achievements
+                        </button>
                         <button
                             onClick={() => resetModal.value?.open()}
                             style={{
@@ -1478,6 +1517,47 @@ const layer = createLayer(id, function (this: any) {
                         >
                             Dev to Chap 4
                         </button>
+                        <button
+                            onClick={() => {
+                                if ((layers as any).achievements?.achievements) {
+                                    Object.values((layers as any).achievements.achievements).forEach((ach: any) => {
+                                        if (ach?.earned) {
+                                            ach.earned.value = false;
+                                        }
+                                    });
+                                    save();
+                                }
+                            }}
+                            style={{
+                                background: "#6a1b9a",
+                                color: "white",
+                                padding: "8px 16px",
+                                border: "none",
+                                borderRadius: "4px",
+                                cursor: "pointer",
+                                fontSize: "14px"
+                            }}
+                        >
+                            Reset Achievements
+                        </button>
+                        <button
+                            onClick={() => {
+                                gpusOwned.value = Math.max(0, gpusOwned.value - 1);
+                                save();
+                            }}
+                            style={{
+                                background: "#d32f2f",
+                                color: "white",
+                                padding: "8px 16px",
+                                border: "none",
+                                borderRadius: "4px",
+                                cursor: "pointer",
+                                fontSize: "14px"
+                            }}
+                        >
+                            Minus 1 Compute
+                        </button>
+
                         <button
                             onClick={() => {
                                 // Reset auto training runs
