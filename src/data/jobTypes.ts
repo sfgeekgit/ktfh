@@ -173,7 +173,7 @@ export const JOB_TYPES: JobType[] = [
         payout: [
             { type: "data", min: 70, max: 150 }
         ],
-        duration: { min: 20, max: 30 }, // todo Make slower
+        duration: { min: 6, max: 10 }, // todo Make slower
         category: "gameplay",
         cost: [
             { type: "compute", value: 1 },

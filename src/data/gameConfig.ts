@@ -30,7 +30,7 @@ export const G_CONF = {
     INITIAL_JOBS_COUNT: 3, // Number of jobs to spawn on game start
 
     // ===== GPU COSTS =====
-    GPU_BASE_COST: 50, // Cost of first GPU purchase
+    GPU_BASE_COST: 40, // Cost of first GPU purchase
     GPU_COST_MULTIPLIER: 1.3, // Each GPU costs this times the previous
 
     // ===== CHAPTER 2 BONUSES =====

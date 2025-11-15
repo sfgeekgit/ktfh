@@ -42,6 +42,7 @@ import player from "game/player";
 import settings, { settingFields } from "game/settings";
 import { camelToTitle, Direction } from "util/common";
 import { save } from "util/save";
+import { resetGame } from "util/reset";
 import { render } from "util/vue";
 import { computed, ref, toRefs } from "vue";
 import Tooltip from "wrappers/tooltips/Tooltip.vue";
@@ -63,10 +64,7 @@ function setTab(tab: string) {
 
 function confirmReset() {
     if (confirm("Are you sure you want to reset the game? This will delete ALL progress and cannot be undone!")) {
-        // Clear localStorage
-        localStorage.clear();
-        // Reload the page
-        window.location.reload();
+        resetGame();
     }
 }
 

@@ -36,15 +36,13 @@ import Modal from "./Modal.vue";
 import player from "game/player";
 import { layers } from "game/layers";
 import { save } from "util/save";
+import { resetGame } from "util/reset";
 
 const isOpen = ref(false);
 
 function confirmReset() {
     if (confirm("Are you sure you want to reset the game? This will delete ALL progress and cannot be undone!")) {
-        // Clear localStorage
-        localStorage.clear();
-        // Reload the page
-        window.location.reload();
+        resetGame();
     }
 }
 

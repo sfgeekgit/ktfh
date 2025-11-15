@@ -15,6 +15,7 @@ import { JOB_TYPES } from "../jobTypes";
 import { save } from "util/save";
 import player from "game/player";
 import { NEWS_TEXT } from "../newsText";
+import { resetGame } from "util/reset";
 
 /**
  * IMPORTANT: PERSISTENT STATE REGISTRATION
@@ -1051,8 +1052,7 @@ const layer = createLayer(id, function (this: any) {
                         <button
                             onClick={() => {
                                 if (confirm("Are you sure you want to reset the game? This will delete ALL progress and cannot be undone!")) {
-                                    localStorage.clear();
-                                    window.location.reload();
+                                    resetGame();
                                 }
                             }}
                             style={{

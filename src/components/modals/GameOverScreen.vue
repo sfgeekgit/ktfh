@@ -48,6 +48,7 @@ import projInfo from "data/projInfo.json";
 import player from "game/player";
 import { formatTime } from "util/bignum";
 import { loadSave, newSave } from "util/save";
+import { loadAchievementMeta, saveAchievementMeta } from "util/achievementStorage";
 //import { openLayerTab } from "util/tabs";
 import { computed, toRef } from "vue";
 import Toggle from "../fields/Toggle.vue";
@@ -68,7 +69,10 @@ function viewAchievements() {
 }
 */
 function playAgain() {
+    // Ensure achievement sidecar persisted and reapplied after fresh save
+    saveAchievementMeta();
     loadSave(newSave());
+    loadAchievementMeta();
 }
 </script>
 

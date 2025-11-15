@@ -26,6 +26,7 @@ import {
 } from "util/vue";
 import { computed, MaybeRef, MaybeRefOrGetter, unref, watchEffect } from "vue";
 import { useToast } from "vue-toastification";
+import { saveAchievementMeta } from "util/achievementStorage";
 import Achievement from "./Achievement.vue";
 
 const toast = useToast();
@@ -193,6 +194,7 @@ export function createAchievement<T extends AchievementOptions>(optionsFunc?: ()
                 }
                 earned.value = true;
                 achievement.onComplete?.();
+                saveAchievementMeta();
                 if (achievement.display != null && unref(achievement.showPopups) === true) {
                     let display = achievement.display;
                     if (typeof _display === "object" && !isJSXElement(_display)) {

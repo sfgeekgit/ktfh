@@ -5,8 +5,11 @@ import { createTreeNode } from "features/trees/tree";
 import { computed } from "vue";
 import Decimal from "util/bignum";
 import player from "game/player";
+import { loadAchievementMeta, saveAchievementMeta } from "util/achievementStorage";
 
 const id = "achievements";
+
+export let achievements: Record<string, ReturnType<typeof createAchievement>> = {};
 
 const layer = createLayer(id, function () {
     const name = "Achievements";
@@ -23,6 +26,35 @@ const layer = createLayer(id, function () {
     const defaultImage = "/ach/ach0.png";
 
     const achievementDefs = [
+
+        {
+            id: "computeCluster2",
+            title: "Buy it",
+            description: "Click that buy button",
+            requirement: () => totalCompute.value >= 2,
+            //requirementText: "Own at least 8 compute units"
+        },
+        {
+            id: "computeCluster3",
+            title: "Buy 3",
+            description: "Click that buy button",
+            requirement: () => totalCompute.value >= 3,
+            //requirementText: "Own at least 8 compute units"
+        },
+        {
+            id: "computeCluster4",
+            title: "Buy 4",
+            description: "Click that buy button",
+            requirement: () => totalCompute.value >= 4,
+            //requirementText: "Own at least 8 compute units"
+        },
+        {
+            id: "computeCluster5",
+            title: "Buy 5",
+            description: "Click that buy button",
+            requirement: () => totalCompute.value >= 5,
+            //requirementText: "Own at least 8 compute units"
+        },
         {
             id: "computeCluster",
             title: "Compute Cluster",
@@ -97,7 +129,7 @@ const layer = createLayer(id, function () {
         }
     ];
 
-    const achievements = Object.fromEntries(
+    achievements = Object.fromEntries(
         achievementDefs.map(def => [
             def.id,
             createAchievement(() => ({
@@ -116,6 +148,9 @@ const layer = createLayer(id, function () {
         achievement: (achievements as any)[def.id],
         reward: def.reward
     }));
+
+    // Load persisted meta on layer init (and whenever this layer is constructed)
+    loadAchievementMeta();
 
     const display = () => (
         <div style="padding: 10px;">

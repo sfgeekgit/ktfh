@@ -16,16 +16,17 @@ export function setupInitialStore(player: Partial<Player> = {}): Player {
             id: `${projInfo.id}-0`,
             name: "Default Save",
             tabs: projInfo.initialTabs.slice(),
-            time: Date.now(),
-            autosave: true,
-            offlineProd: true,
-            offlineTime: 0,
-            timePlayed: 0,
-            keepGoing: false,
-            modID: projInfo.id,
-            modVersion: projInfo.versionNumber,
-            layers: {}
-        },
+        time: Date.now(),
+        autosave: true,
+        offlineProd: true,
+        offlineTime: 0,
+        timePlayed: 0,
+        keepGoing: false,
+        gameOver: false,
+        modID: projInfo.id,
+        modVersion: projInfo.versionNumber,
+        layers: {}
+    },
         player
     ) as Player;
 }
