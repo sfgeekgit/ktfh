@@ -74,6 +74,17 @@ ul {
 	color: #ffffff;
 }
 
+/* Hide the info icon and progress bar on toasts */
+.Vue-Toastification__icon {
+	display: none;
+}
+
+/* Hide progress bar visually but keep it active for auto-close timing */
+.Vue-Toastification__progress-bar {
+	height: 0;
+	opacity: 0;
+}
+
 :disabled {
 	pointer-events: none;
 }

@@ -35,7 +35,9 @@ export default defineConfig({
         VitePWA({
             registerType: 'autoUpdate',
             workbox: {
-              globPatterns: ['**/*.{js,css,html,ico,png,svg}']
+              globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+              globIgnores: ['ach/**'],
+              maximumFileSizeToCacheInBytes: 10 * 1024 * 1024
             },
             manifest: {
                 name: projInfo.title,
