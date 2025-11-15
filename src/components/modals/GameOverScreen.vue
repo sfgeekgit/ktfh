@@ -35,7 +35,6 @@
         </template>
         <template v-slot:footer>
             <div class="game-over-footer">
-                <button @click="viewAchievements" class="button secondary">View Achievements</button>
                 <button @click="keepGoing" class="button">Keep Going</button>
                 <button @click="playAgain" class="button danger">Play Again</button>
             </div>
@@ -49,7 +48,7 @@ import projInfo from "data/projInfo.json";
 import player from "game/player";
 import { formatTime } from "util/bignum";
 import { loadSave, newSave } from "util/save";
-import { openLayerTab } from "util/tabs";
+//import { openLayerTab } from "util/tabs";
 import { computed, toRef } from "vue";
 import Toggle from "../fields/Toggle.vue";
 import Modal from "./Modal.vue";
@@ -63,11 +62,11 @@ const autosave = toRef(player, "autosave");
 function keepGoing() {
     player.keepGoing = true;
 }
-
+/*
 function viewAchievements() {
     openLayerTab("achievements", { exclusive: true });
 }
-
+*/
 function playAgain() {
     loadSave(newSave());
 }
