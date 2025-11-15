@@ -203,10 +203,20 @@ export function createAchievement<T extends AchievementOptions>(optionsFunc?: ()
                         }
                     }
                     toast.info(
-                        <div>
-                            <h3>Achievement earned!</h3>
-                            <div>{render(display)}</div>
-                        </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                            {achievement.image != null ? (
+                                <img
+                                    src={unref(achievement.image) as string}
+                                    alt="Achievement"
+                                    style="width: 28px; height: 28px; border-radius: 4px; object-fit: cover;"
+                                />
+                            ) : null}
+                            <div>
+                                <div style="font-weight: 700;">Achievement earned!</div>
+                                <div>{render(achievement.display)}</div>
+                            </div>
+                        </div>,
+                        { timeout: 3500 }
                     );
                 }
             }

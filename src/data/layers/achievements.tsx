@@ -17,8 +17,9 @@ const layer = createLayer(id, function () {
     const money = computed(() => mainLayer.value?.money?.value ?? 0);
 
 
-    /// "description" is what appears BRIEFLY in the pop up when first unlocked
-    // requirementText is displayed in the achivment card
+    
+    // requirementText is not used, I think
+    // Reward is not used
     const defaultImage = "/ach/ach0.png";
 
     const achievementDefs = [
@@ -29,16 +30,16 @@ const layer = createLayer(id, function () {
             reward: "Permanent badge for future runs.",
             image: "/ach/ach2.png",
             requirement: () => totalCompute.value >= 8,
-            requirementText: "Own at least 8 compute units"
+            //requirementText: "Own at least 8 compute units"
         },
         {
             id: "computeHorizon",
             title: "Compute Horizon",
-            description: "Reach 9 total compute units.",
-            reward: "Your compute reach grows ever farther.",
+            description: "This is Description Reach 9 total compute units.",
+            reward: "This is reward Your compute reach grows ever farther.",
             image: "/ach/ach2.png",
             requirement: () => totalCompute.value >= 9,
-            requirementText: "Own at least 9 compute units"
+            requirementText: "This is Req Text Own at least 9 compute units"
         },
         {
             id: "computeAscension",
@@ -100,7 +101,7 @@ const layer = createLayer(id, function () {
         achievementDefs.map(def => [
             def.id,
             createAchievement(() => ({
-            display: () => `${def.title} — ${def.requirementText}`,
+                display: () => def.title,
                 image: def.image ?? defaultImage,
                 requirements: createBooleanRequirement(def.requirement, () => <>{def.requirementText}</>)
             }))
