@@ -14,7 +14,6 @@ import { G_CONF, CHAP_5_MC_AGI_LOSE_TIMELINE, CHAP_5_ACCEPT_TIMELINE, COMPUTE_NA
 import { JOB_TYPES } from "../jobTypes";
 import { save } from "util/save";
 import player from "game/player";
-import { openLayerTab } from "util/tabs";
 import { NEWS_TEXT } from "../newsText";
 
 /**
@@ -229,7 +228,7 @@ const layer = createLayer(id, function (this: any) {
     });
 
     function openAchievementsTab() {
-        openLayerTab("achievements", { exclusive: true });
+        player.tabs = ["achievements"];
     }
 
     // Chapter 1 - completion and bonuses (chapter1 story shows at game start via initialTabs)

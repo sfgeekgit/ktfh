@@ -4,7 +4,7 @@ import { createBooleanRequirement } from "game/requirements";
 import { createTreeNode } from "features/trees/tree";
 import { computed } from "vue";
 import Decimal from "util/bignum";
-import { returnToPreviousTab } from "util/tabs";
+import player from "game/player";
 
 const id = "achievements";
 
@@ -126,7 +126,7 @@ const layer = createLayer(id, function () {
 
             <div style="text-align: center; margin-bottom: 20px;">
                 <button
-                    onClick={() => returnToPreviousTab()}
+                    onClick={() => (player.tabs = ["main"])}
                     style={{
                         background: "#4CAF50",
                         color: "white",
