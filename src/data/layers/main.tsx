@@ -809,32 +809,24 @@ const layer = createLayer(id, function (this: any) {
 
                 // Check if AGI sum has reached or exceeded the lose threshold
                 const agiSum = autonomy.value + generality.value + iq.value;
-                console.log("AGI Sum:", agiSum, "Threshold:", G_CONF.AGI_SUM_LOSE, "Game Over:", player.gameOver);
                 if (agiSum >= G_CONF.AGI_SUM_LOSE && !player.gameOver) {
-                    console.log("AGI THRESHOLD REACHED! Triggering lose condition...");
-                    console.log("Setting player.gameOver = true");
                     player.gameOver = true;
-                    console.log("Setting player.tabs to ending_lose_agi_threshold");
                     // @ts-ignore
                     player.tabs = ["ending_lose_agi_threshold"];
-                    console.log("Player tabs after setting:", player.tabs);
-                    console.log("Saving game state...");
                     save();
-                    console.log("Save complete!");
                 }
 
                 // Check if Wonder has reached the win threshold
                 if (wonder.value >= G_CONF.WONDER_WIN && !player.gameOver) {
-                    console.log("WONDER WIN THRESHOLD REACHED! Triggering win condition...");
-                    console.log("Setting player.gameOver = true");
-                    player.gameOver = true;
-                    console.log("Setting player.tabs to ending_win");
-                    // @ts-ignore
-                    player.tabs = ["ending_win"];
-                    console.log("Player tabs after setting:", player.tabs);
-                    console.log("Saving game state...");
-                    save();
-                    console.log("Save complete!");
+                    // If win and lose would both trigger, prefer the lose path
+                    if (agiSum >= G_CONF.AGI_SUM_LOSE) {
+		        // Player both won and lost at same time -> they lose! AGI is a lose even if cancer is cured. 
+                    } else {
+                        player.gameOver = true;
+                        // @ts-ignore
+                        player.tabs = ["ending_win"];
+                        save();
+                    }
                 }
 
                 // Track completed onetime jobs to prevent respawning
