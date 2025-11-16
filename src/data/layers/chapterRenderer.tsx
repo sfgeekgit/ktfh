@@ -2,6 +2,7 @@ import { ref } from "vue";
 import { persistent } from "game/persistence";
 import player from "game/player";
 import { save } from "util/save";
+import { globalBus } from "game/events";
 
 // Page type styling configuration
 const PAGE_STYLES = {
@@ -39,6 +40,7 @@ interface StoryPage {
         description: string;
         effect: string;
         color: string;
+        unlockJobId?: string;
     }>;
 }
 
@@ -61,6 +63,17 @@ export function createChapterLayer(chapterId: string, chapterData: ChapterData) 
 
         function makeChoice(choiceId: string) {
             playerChoice.value = choiceId;
+
+            // Emit choice event for downstream unlock logic (e.g., jobs)
+            const page = pages[currentPage.value];
+            const choice = page?.choices?.find(c => c.id === choiceId);
+            if (choice?.unlockJobId) {
+                globalBus.emit("storyChoice", {
+                    chapterId,
+                    choiceId,
+                    unlockJobId: choice.unlockJobId
+                });
+            }
 
             // Set framework choice for Chapter 5
             if (chapterId === 'chapter5' && (choiceId === 'support' || choiceId === 'oppose')) {

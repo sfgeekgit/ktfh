@@ -21,7 +21,7 @@ import { TRAINING_RUN_JOBS } from './trainingRuns';
 
 // Prerequisite condition for unlocking a job
 export interface PrereqCondition {
-    type: string;  // "job", "money", "iq", "autonomy", "generality", etc.
+    type: string;  // "job", "money", "iq", "autonomy", "generality", "choice", etc.
     value: string | number;  // job id (string) or numeric threshold
     display_prereq?: boolean;  // Optional: whether to display this prereq in UI
 }
@@ -75,7 +75,7 @@ export const JOB_TYPES: JobType[] = [
         payout: [
             { type: "money", min: 10, max: 50 }
         ],
-        duration: { min: 3, max: 6 },
+        duration: { min: 2, max: 4 },
         category: "tool",
         cost: [
             { type: "compute", value: 1 }
@@ -93,7 +93,7 @@ export const JOB_TYPES: JobType[] = [
         payout: [
             { type: "money", min: 10, max: 50 }
         ],
-        duration: { min: 5, max: 7 },
+        duration: { min: 3, max: 6 },
         category: "tool",
         cost: [
             { type: "compute", value: 1 }
@@ -106,12 +106,12 @@ export const JOB_TYPES: JobType[] = [
         chapter: [1,2,3,4],
         prereq: [
 		{type:"compute", value:2 , display_prereq: false  },
-	    { type: "money", value: 20 },
+	    { type: "money", value: 80 },
             { type: "job", value: "spellchecker" }
 	],
         unlockCost: [            { type: "money", value: 50 }],
         payout: [
-            { type: "money", min: 70, max: 100 }
+            { type: "money", min: 70, max: 120 }
         ],
         duration: { min: 8, max: 14 },
         category: "tool",
@@ -419,21 +419,19 @@ export const JOB_TYPES: JobType[] = [
         ]
     },
 
-
     {
         id: "wonder5",
-        displayName: "Protein Folding",
-        description: "A boon to humanity",
-	displayTrigger: [ { type: "generality", value: "3", display_prereq: false } ],
-	chapter: [4,5,6],
+        displayName: "Recursive Self Improvement",
+        description: "Dev",
+
+	chapter: [2,3,4,5,6],
         prereq: [
-            { type: "compute", value: 6 },
-            { type: "iq", value: 5 },
-            { type: "generality", value: 2 }
+            { type: "compute", value: 3 }
         ],
-        unlockCost: [{ type: "data", value: 200 }],
+        unlockCost: [{ type: "money", value: 200 }],
         payout: [
-            { type: "wonder", min: 1, max: 1 }
+            { type: "wonder", min: 3, max: 3 }
+	    , { type: "iq", min: 13, max: 13 }
         ],
         duration: { min: 20, max: 20 },
         category: "onetime",
@@ -441,10 +439,100 @@ export const JOB_TYPES: JobType[] = [
         cost: [
             { type: "compute", value: 3 },
             { type: "money", value: 100 },
-            { type: "data", value: 100 }
+            { type: "data", value: 10 }
         ]
     },
 
+
+    {
+        id: "wonder6",
+        displayName: "Autonomous Goal System",
+        description: "Dev",
+
+	chapter: [2,3,4,5,6],
+        prereq: [
+            { type: "compute", value: 3 }
+        ],
+        unlockCost: [{ type: "money", value: 200 }],
+        payout: [
+            { type: "wonder", min: 3, max: 3 },
+	     { type: "auto", min: 13, max: 13 }
+            ],
+        duration: { min: 3, max: 3 },
+        category: "onetime",
+	is_wonder: true,
+        cost: [
+            { type: "compute", value: 3 },
+            { type: "money", value: 100 },
+            { type: "data", value: 10 }
+        ]
+    },
+
+
+    {
+        id: "wonder7",
+        displayName: "Civilization Management System",
+        description: "Dev",
+
+	chapter: [2,3,4,5,6],
+        prereq: [
+            { type: "compute", value: 3 }
+        ],
+        unlockCost: [{ type: "money", value: 200 }],
+        payout: [
+            { type: "wonder", min: 3, max: 3 }
+	    , { type: "auto", min: 5, max: 5 }
+	    , { type: "generality", min: 4, max: 4 }
+            ],
+        duration: { min: 3, max: 3 },
+        category: "onetime",
+	is_wonder: true,
+        cost: [
+            { type: "compute", value: 3 },
+            { type: "money", value: 100 },
+            { type: "data", value: 10 }
+        ]
+    },
+
+
+
+
+
+
+
+    {
+        id: "med1",
+        displayName: "Medical 1",
+        description: "",
+        chapter: [1,2,3,4],
+        prereq: [{ type: "choice", value: "med1" }],   /// Unlocked via choice only!
+        unlockCost: [{ type: "money", value: 50 }],
+        payout: [
+            { type: "money", min: 140, max: 190 }
+        ],
+        duration: { min: 10, max: 16 },
+        category: "tool",
+        cost: [
+            { type: "compute", value: 2 }
+        ]
+    },
+
+    {
+        id: "climate1",
+        displayName: "Climate 1",
+        description: "",
+        chapter: [1,2,3,4],
+        prereq: [{ type: "choice", value: "climate1" }],   /// Unlocked via choice only!
+        unlockCost: [{ type: "money", value: 50 }],
+        payout: [
+            { type: "money", min: 140, max: 190 }
+        ],
+        duration: { min: 10, max: 16 },
+        category: "tool",
+        cost: [
+            { type: "compute", value: 2 }
+        ]
+    },
 
 
 
@@ -453,9 +541,5 @@ export const JOB_TYPES: JobType[] = [
 
 
 
-
-
 ];
-
-
 

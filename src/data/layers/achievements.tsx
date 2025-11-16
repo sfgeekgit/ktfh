@@ -28,8 +28,58 @@ const layer = createLayer(id, function () {
     const achievementDefs = [
 
         {
+            id: "dev01",
+            title: "Lorum Ip",
+            description: "Hi there",
+            image: "/ach/ach0.png",
+            requirement: () => totalCompute.value >= 88,
+
+        },
+
+        // New achievements mirroring dev01; update behavior later
+        ...[
+            "ach0",
+            "ach2",
+            "ach3",
+            "ach_age1",
+            "ach_age2",
+            "ach_age3",
+            "ach_badai1",
+            "ach_badai2",
+            "ach_badai3",
+            "ach_badai4",
+            "ach_burn",
+            "ach_dem1",
+            "ach_dem2",
+            "ach_edu1",
+            "ach_edu2",
+            "ach_edu3",
+            "ach_edu4",
+            "ach_fiss",
+            "ach_globe",
+            "ach_med",
+            "ach_med2",
+            "ach_medtargt",
+            "ach_molen1",
+            "ach_molen2",
+            "ach_nuc",
+            "ach_server",
+            "ach_suneng",
+            "achmed1"
+        ].map(img => ({
+            id: img,
+            title: img,
+            description: img,
+            image: `/ach/${img}.png`,
+            requirement: () => totalCompute.value >= 88
+        })),
+
+
+
+        {
             id: "computeCluster2",
             title: "Buy it",
+	    image: '/ach/ach_suneng.png',
             description: "Click that buy button",
             requirement: () => totalCompute.value >= 2,
             //requirementText: "Own at least 8 compute units"
@@ -189,8 +239,9 @@ const layer = createLayer(id, function () {
                             borderRadius: "10px",
                             border: `2px solid ${card.achievement.earned.value ? "#4CAF50" : "#333"}`,
                             background: card.achievement.earned.value ? "#e8f5e9" : "#3E4450",
-	                    color: card.achievement.earned.value ? "#555555" : "#777777",
-			    boxShadow: "0 2px 6px rgba(0,0,0,0.1)"
+                            color: card.achievement.earned.value ? "#555555" : "#777777",
+                            boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+                            width: "300px"
                         }}
                     >
                         <img
@@ -201,7 +252,7 @@ const layer = createLayer(id, function () {
                                 height: "80px",
                                 borderRadius: "8px",
                                 objectFit: "cover",
-                                opacity: card.achievement.earned.value ? 0.8 : 0.3
+                                opacity: card.achievement.earned.value ? 0.8 : 0.8
                             }}
                         />
                         <div style="flex: 1; text-align: left;">

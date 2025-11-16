@@ -11,6 +11,7 @@ declare module '@/data/story.md' {
             description: string;
             effect: string;
             color: string;
+            unlockJobId?: string;
         }>;
     }
 

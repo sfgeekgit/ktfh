@@ -130,6 +130,7 @@ const layer = createLayer(id, function (this: any) {
     // Data resource (unlocked later in Chapter 2)
     const data = createResource<DecimalSource>(0, "data");
     const dataUnlocked = persistent<boolean>(false); // Track if data has been gained
+    const choiceUnlockedJobs = persistent<string[]>([]);
 
     // GPU persistent state
     const gpusOwned = persistent<number>(G_CONF.STARTING_GPUS);
@@ -161,6 +162,8 @@ const layer = createLayer(id, function (this: any) {
             return wonder.value >= (prereq.value as number);
         } else if (prereq.type === "completedJob") {
             return completedOnetimeJobs.value.includes(prereq.value as string);
+        } else if (prereq.type === "choice") {
+            return choiceUnlockedJobs.value.includes(prereq.value as string);
         }
         return true;
     }
@@ -303,6 +306,65 @@ const layer = createLayer(id, function (this: any) {
         }
     }, { immediate: true });
 
+    // Interlude trigger helper
+    function isInterludeTriggerMet(trigger: { type: string; value: string | number }) {
+        switch (trigger.type) {
+            case "money":
+                return Decimal.gte(money.value, trigger.value as number);
+            case "data":
+                return Decimal.gte(data.value, trigger.value as number);
+            case "iq":
+                return iq.value >= (trigger.value as number);
+            case "autonomy":
+                return autonomy.value >= (trigger.value as number);
+            case "generality":
+                return generality.value >= (trigger.value as number);
+            case "completedJob":
+                return completedOnetimeJobs.value.includes(trigger.value as string);
+            case "unlockedJob":
+                return unlockedJobTypes.value.includes(trigger.value as string);
+            default:
+                return false;
+        }
+    }
+
+    function isStoryTabOpen() {
+        const currentTab = Array.isArray(player.tabs) ? player.tabs[0] : null;
+        if (currentTab == null) return false;
+        return typeof currentTab === "string" &&
+            (currentTab.startsWith("chapter") || currentTab.startsWith("ending_") || currentTab.startsWith("interlude"));
+    }
+
+    // Interlude trigger watcher (fires once per interlude, does not advance chapter state)
+    watch(
+        () => ({
+            money: money.value,
+            data: data.value,
+            iq: iq.value,
+            autonomy: autonomy.value,
+            generality: generality.value,
+            completed: completedOnetimeJobs.value,
+            unlocked: unlockedJobTypes.value,
+            currentTab: player.tabs
+        }),
+        () => {
+            if (isStoryTabOpen()) return; // Only one story/interlude at a time
+
+            for (const interlude of G_CONF.INTERLUDES) {
+                const interludeLayer = (layers as any)?.[interlude.id];
+                if (!interludeLayer || interludeLayer.complete?.value) continue; // Already done or missing
+
+                if (isInterludeTriggerMet(interlude.trigger)) {
+                    // @ts-ignore
+                    player.tabs = [interlude.id];
+                    save();
+                    break; // Only trigger one at a time
+                }
+            }
+        },
+        { immediate: true, deep: true }
+    );
+
     // Chapter transition watcher
     // All chapter trigger conditions are defined here in one place
     // Triggers can be: money thresholds, stats, unlocked jobs, completed jobs, etc.
@@ -361,6 +423,7 @@ const layer = createLayer(id, function (this: any) {
             iq: iq.value,
             autonomy: autonomy.value,
             generality: generality.value,
+            choices: choiceUnlockedJobs.value,
             unlocked: unlockedJobTypes.value,
             completed: completedOnetimeJobs.value,
             chapter: currentChapter.value
@@ -384,6 +447,16 @@ const layer = createLayer(id, function (this: any) {
 
     const jobQueue = persistent([] as any);
     const activeDeliveries = persistent([] as any);
+
+    // Listen for story choices that unlock jobs
+    globalBus.on("storyChoice", ({ unlockJobId }: { unlockJobId?: string }) => {
+        if (unlockJobId) {
+            if (!choiceUnlockedJobs.value.includes(unlockJobId)) {
+                choiceUnlockedJobs.value.push(unlockJobId);
+            }
+            save();
+        }
+    });
 
     // Track rejection chain state per job ID (job.id -> current position in chain, 0 = not started)
     const jobRejectionState = persistent<Record<number, number>>({});
@@ -625,8 +698,10 @@ const layer = createLayer(id, function (this: any) {
                 prereq.type !== "money" && (prereq.display_prereq !== false)
             );
 
-            // Check for stat payouts
-            const statPayout = jobType.payout.find((p: any) => ["iq", "autonomy", "generality", "wonder"].includes(p.type));
+            // Check for stat payouts (allow multiple)
+            const statPayouts = jobType.payout.filter((p: any) =>
+                ["iq", "autonomy", "generality", "wonder"].includes(p.type)
+            );
 
             return createClickable(() => ({
                 display: {
@@ -658,21 +733,25 @@ const layer = createLayer(id, function (this: any) {
                                 )}
                                 <i>{jobType.description}</i>
 				<br/>
-                                {statPayout && (
+                                {statPayouts.length > 0 && (
                                     <>
-
-                                        <span style="font-size:18px;">
-                                            {"+"}
-                                            {statPayout.min === statPayout.max ? statPayout.min : `${statPayout.min}-${statPayout.max}`}{"\u00A0"}
-					    {statPayout.type === "iq" && "IQ "}
-					    {statPayout.type === "wonder" && "Wonder "}
-                                        <span style="font-size:28px;">
-                                            {statPayout.type === "iq" && "🧠"}
-                                            {statPayout.type === "autonomy" && "🤖"}
-                                            {statPayout.type === "generality" && "🌐"}
-                                            {statPayout.type === "wonder" && "🌟"}
-                                        </span>
-                                        </span>
+                                        {statPayouts.map((statPayout: any, idx: number) => (
+                                            <span key={idx} style="font-size:18px;">
+                                                {"+"}
+                                                {statPayout.min === statPayout.max
+                                                    ? statPayout.min
+                                                    : `${statPayout.min}-${statPayout.max}`}{"\u00A0"}
+					            {statPayout.type === "iq" && "IQ "}
+					            {statPayout.type === "wonder" && "Wonder "}
+                                                <span style="font-size:28px;">
+                                                    {statPayout.type === "iq" && "🧠"}
+                                                    {statPayout.type === "autonomy" && "🤖"}
+                                                    {statPayout.type === "generality" && "🌐"}
+                                                    {statPayout.type === "wonder" && "🌟"}
+                                                </span>
+                                                {idx < statPayouts.length - 1 && <br />}
+                                            </span>
+                                        ))}
                                     </>
                                 )}
 
@@ -1136,7 +1215,7 @@ const layer = createLayer(id, function (this: any) {
                             {generality.value > 0 && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;"><strong>🌐</strong>&nbsp;{generality.value}</span>}
                         </div>
                         <div style="font-size: 14px; margin-top: 4px; letter-spacing: 0.1em;">
-                            {"▪".repeat(availableGPUs.value)}{"▫".repeat(gpusOwned.value - availableGPUs.value)}
+                            {"▪".repeat(Math.max(0, availableGPUs.value))}{"▫".repeat(Math.max(0, gpusOwned.value - availableGPUs.value))}
                         </div>
                     </div>
                 </div>
@@ -1189,7 +1268,7 @@ const layer = createLayer(id, function (this: any) {
                         return name === "Campus" ? "Campuses" : name + "s";
                     })()}:</strong> {availableGPUs.value} / {gpusOwned.value} available</div>
                     <div style="font-size: 14px; letter-spacing: 0.1em;">
-                        {"▪".repeat(availableGPUs.value)}{"▫".repeat(gpusOwned.value - availableGPUs.value)}
+                        {"▪".repeat(Math.max(0, availableGPUs.value))}{"▫".repeat(Math.max(0, gpusOwned.value - availableGPUs.value))}
                     </div>
                     {qualityBonus.value !== 100 && (
                         <div style="font-size: 14px; color: #4CAF50;"><strong>Quality Bonus:</strong> {parseFloat((qualityBonus.value / 100).toFixed(2))}x earnings</div>
@@ -1256,6 +1335,21 @@ const layer = createLayer(id, function (this: any) {
                     ) : (
 		        jobQueue.value.map((job: DeliveryJob) => {
                             const jobType = getJobType(job.jobTypeId);
+                            const agiWarningState = (() => {
+                                if (jobType?.category !== "onetime") return null;
+                                const currentSum = autonomy.value + generality.value + iq.value;
+                                let maxAgiGain = 0;
+                                job.payouts.forEach((p: any) => {
+                                    if (["iq", "autonomy", "generality"].includes(p.type)) {
+                                        maxAgiGain += Number(p.amount);
+                                    }
+                                });
+                                if (maxAgiGain === 0) return null;
+                                const newSum = currentSum + maxAgiGain;
+                                if (newSum >= G_CONF.AGI_SUM_LOSE) return "danger";
+                                if (newSum >= G_CONF.AGI_SUM_LOSE - 2) return "warning";
+                                return null;
+                            })();
                             const computeRequired = jobType?.cost?.find(c => c.type === "compute")?.value || 0;
                             const moneyRequired = jobType?.cost?.find(c => c.type === "money")?.value || 0;
                             const primaryPayoutType = job.payouts[0]?.type || "money";
@@ -1328,21 +1422,34 @@ const layer = createLayer(id, function (this: any) {
                                             Job Scooped by MegaCorp
                                         </div>
                                     ) : (
-                                        <button
-                                            onClick={(e) => e.currentTarget && handleAcceptClick(job, e.currentTarget as HTMLButtonElement)}
-                                            disabled={!canAcceptJob(job) && !isInRejectionChain}
-                                            style={{
-                                                background: !canAcceptJob(job) && !isInRejectionChain ? "#ccc" : isInRejectionChain ? "#f44336" : "#4CAF50",
-                                                color: "white",
-                                                padding: "6px 12px",
-                                                border: "none",
-                                                borderRadius: "4px",
-                                                cursor: canAcceptJob(job) || isInRejectionChain ? "pointer" : "not-allowed",
-                                                fontSize: "13px"
-                                            }}
-                                        >
-                                            {buttonText}
-                                        </button>
+                                        <div style="display: flex; align-items: center; gap: 6px;">
+                                            {agiWarningState && (
+                                                <span
+                                                    style={{
+                                                        fontSize: "15px",
+                                                        color: "#d32f2f",
+                                                        fontWeight: agiWarningState === "danger" ? "bold" : "normal"
+                                                    }}
+                                                >
+                                                    {agiWarningState === "danger" ? "DANGER!" : "Be Careful..."}
+                                                </span>
+                                            )}
+                                            <button
+                                                onClick={(e) => e.currentTarget && handleAcceptClick(job, e.currentTarget as HTMLButtonElement)}
+                                                disabled={!canAcceptJob(job) && !isInRejectionChain}
+                                                style={{
+                                                    background: !canAcceptJob(job) && !isInRejectionChain ? "#ccc" : isInRejectionChain ? "#f44336" : "#4CAF50",
+                                                    color: "white",
+                                                    padding: "6px 12px",
+                                                    border: "none",
+                                                    borderRadius: "4px",
+                                                    cursor: canAcceptJob(job) || isInRejectionChain ? "pointer" : "not-allowed",
+                                                    fontSize: "13px"
+                                                }}
+                                            >
+                                                {buttonText}
+                                            </button>
+                                        </div>
                                     )}
                                 </div>
                                 {!unlockedJobTypes.value.includes(job.jobTypeId) && (
@@ -1350,7 +1457,7 @@ const layer = createLayer(id, function (this: any) {
                                 )}
                                 {availableGPUs.value < computeRequired && unlockedJobTypes.value.includes(job.jobTypeId) && (
                                     <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">
-                                        ⚠ Need {formatCompute(computeRequired, currentChapter.value, true)}! <span style="color: black;">{"▪".repeat(availableGPUs.value)}{"▫".repeat(computeRequired - availableGPUs.value)}</span>
+                                        ⚠ Need {formatCompute(computeRequired, currentChapter.value, true)}! <span style="color: black;">{"▪".repeat(Math.max(0, availableGPUs.value))}{"▫".repeat(Math.max(0, computeRequired - availableGPUs.value))}</span>
                                     </div>
                                 )}
                             </div>
@@ -1393,7 +1500,7 @@ const layer = createLayer(id, function (this: any) {
                                             </span>
                                         ))}
 					&nbsp;&nbsp;&nbsp;
-                                        {"▪".repeat(jobType?.cost?.find(c => c.type === "compute")?.value || 0)} {Math.ceil(delivery.timeRemaining)}s
+                                        {"▪".repeat(Math.max(0, jobType?.cost?.find(c => c.type === "compute")?.value || 0))} {Math.ceil(delivery.timeRemaining)}s
                                     </div>
                                     <div style="margin-top: 6px; width: 60%; height: 4px; background: white; border-radius: 2px; overflow: hidden;">
                                         <div style={{
@@ -1548,6 +1655,57 @@ const layer = createLayer(id, function (this: any) {
                         >
                             Minus 1 Compute
                         </button>
+                        <button
+                            onClick={() => {
+                                iq.value += 1;
+                                save();
+                            }}
+                            style={{
+                                background: "#1976d2",
+                                color: "white",
+                                padding: "8px 16px",
+                                border: "none",
+                                borderRadius: "4px",
+                                cursor: "pointer",
+                                fontSize: "14px"
+                            }}
+                        >
+                            +1 IQ
+                        </button>
+                        <button
+                            onClick={() => {
+                                autonomy.value += 1;
+                                save();
+                            }}
+                            style={{
+                                background: "#00796b",
+                                color: "white",
+                                padding: "8px 16px",
+                                border: "none",
+                                borderRadius: "4px",
+                                cursor: "pointer",
+                                fontSize: "14px"
+                            }}
+                        >
+                            +1 Auto
+                        </button>
+                        <button
+                            onClick={() => {
+                                generality.value += 1;
+                                save();
+                            }}
+                            style={{
+                                background: "#455a64",
+                                color: "white",
+                                padding: "8px 16px",
+                                border: "none",
+                                borderRadius: "4px",
+                                cursor: "pointer",
+                                fontSize: "14px"
+                            }}
+                        >
+                            +1 Gen
+                        </button>
 
                         <button
                             onClick={() => {
@@ -1637,6 +1795,7 @@ const layer = createLayer(id, function (this: any) {
         timeSinceLastJob,
         gpusOwned,
         availableGPUs,
+        choiceUnlockedJobs,
         buyGPUClickable,
         pizzaUnlockClickables,
         display,

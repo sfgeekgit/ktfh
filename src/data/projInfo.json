@@ -1,7 +1,7 @@
 {
     "_comment": "Game balance settings (win amounts, costs, progression, etc.) are configured in src/data/gameConfig.ts",
-    "title": "Narrow Path",
-    "id": "narrow-path",
+    "title": "Intelligent Choices",
+    "id": "intelligent-choices",
     "author": "Nick Shapiro",
     "discordName": "",
     "discordLink": "",

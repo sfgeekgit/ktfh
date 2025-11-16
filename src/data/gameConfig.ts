@@ -7,10 +7,16 @@
 
 export const G_CONF = {
     // ===== CHAPTER TRIGGERS =====
-    CHAP_2_MONEY_TRIGGER: 160,     // Money required to unlock Chapter 2
+    CHAP_2_MONEY_TRIGGER: 60,     // Money required to unlock Chapter 2
     CHAP_3_IQ_TRIGGER: 3,          // IQ level required to unlock Chapter 3
     CHAP_4_GENERALITY_TRIGGER: 3,  // Generality level required to unlock Chapter 4
     CHAP_5_AUTONOMY_TRIGGER: 3,    // Autonomy level required to unlock Chapter 5
+    INTERLUDES: [
+        {
+            id: "interlude_fork1",
+            trigger: { type: "iq", value: 2 }
+        }
+    ],
 
     // ===== STARTING RESOURCES =====
     STARTING_MONEY: 48,

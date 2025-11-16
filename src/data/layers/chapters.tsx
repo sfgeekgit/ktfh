@@ -2,14 +2,16 @@ import { createLayer } from "game/layers";
 import { createChapterLayer } from "./chapterRenderer";
 import storyContent from "@/data/story.md";
 
-// List of chapter and ending IDs - add new ones here when you add them to story.md
-const chapterIds = ["chapter1", "chapter2", "chapter3", "chapter4", "chapter5"];
-const endingIds = ["ending_lose_agi", "ending_lose_agi_threshold", "ending_win"];
+// Derive story IDs from story.md content to avoid manual registration
+const storyIds = Object.keys(storyContent);
+const chapterIds = storyIds.filter(id => id.startsWith("chapter")).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+const interludeIds = storyIds.filter(id => id.startsWith("interlude")).sort();
+const endingIds = storyIds.filter(id => id.startsWith("ending_")).sort();
 
 // Dynamically create all chapter and ending layers
 const chapters: Record<string, any> = {};
 
-for (const chapterId of [...chapterIds, ...endingIds]) {
+for (const chapterId of [...chapterIds, ...interludeIds, ...endingIds]) {
     const chapterData = storyContent[chapterId];
     console.log(`Loading layer: ${chapterId}`, chapterData ? "✓ Found" : "✗ Not found");
     if (chapterData) {
@@ -21,11 +23,11 @@ for (const chapterId of [...chapterIds, ...endingIds]) {
 }
 
 // Export individual chapters and endings for the layers system
-export const chapter1 = chapters.chapter1;
-export const chapter2 = chapters.chapter2;
-export const chapter3 = chapters.chapter3;
-export const chapter4 = chapters.chapter4;
-export const chapter5 = chapters.chapter5;
-export const ending_lose_agi = chapters.ending_lose_agi;
-export const ending_lose_agi_threshold = chapters.ending_lose_agi_threshold;
-export const ending_win = chapters.ending_win;
+export const storyChapters = chapterIds.map(id => chapters[id]).filter(Boolean);
+export const storyInterludes = interludeIds.map(id => chapters[id]).filter(Boolean);
+export const storyEndings = endingIds.map(id => chapters[id]).filter(Boolean);
+export const storyLayers = [...storyChapters, ...storyInterludes, ...storyEndings];
+export const storyChapterIds = chapterIds;
+export const storyInterludeIds = interludeIds;
+export const storyEndingIds = endingIds;
+export const chaptersMap = chapters;

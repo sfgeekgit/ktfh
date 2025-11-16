@@ -16,6 +16,7 @@ interface StoryPage {
         description: string;
         effect: string;
         color: string;
+        unlockJobId?: string;
     }>;
 }
 
@@ -57,8 +58,8 @@ function parseMarkdown(content: string): StoryContent {
             continue;
         }
 
-        // Handle chapter and ending headers (# Chapter... or # Ending:...)
-        if (trimmed.startsWith('# Chapter') || trimmed.startsWith('# Ending:')) {
+        // Handle chapter, interlude, and ending headers
+        if (trimmed.startsWith('# Chapter') || trimmed.startsWith('# Interlude') || trimmed.startsWith('# Ending:')) {
             // Save previous chapter/ending
             if (currentChapter && currentPage) {
                 currentChapter.pages.push(currentPage);
@@ -156,9 +157,12 @@ function parseMarkdown(content: string): StoryContent {
                 currentOption.effect = trimmed.substring(11).trim();
                 continue;
             }
+            if (trimmed.startsWith('**unlock_job:**')) {
+                currentOption.unlockJobId = trimmed.substring(15).trim();
+                continue;
+            }
             if (trimmed.startsWith('**color:**')) {
                 currentOption.color = trimmed.substring(10).trim();
-                currentOption = null; // Done with this option
                 continue;
             }
         }

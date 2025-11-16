@@ -78,6 +78,37 @@ Your company is small, but it's real. And it's growing.
 
 ---
 
+# Interlude: The Fork in the Lab
+**id:** interlude_fork1
+
+## Page 1
+
+With IQ 2 unlocked, the team debates the next big push.
+
+Two domains are vying for attention: saving the planet, or saving lives.
+
+## Page 2 [CHOICE]
+**title:** Pick the Next Flagship
+
+Choose which domain to focus on first.
+
+
+[OPTION: climate]
+**button:** Climate
+**title:** Climate Modeling
+**description:** Aim your intelligence gains at predicting and mitigating climate risks.
+**effect:** Lean into climate work
+**color:** #4CAF50
+**unlock_job:** climate1
+
+[OPTION: medical]
+**button:** Medical
+**title:** Medical Diagnosis
+**description:** Double down on models that support clinicians and diagnostics.
+**effect:** Lean into medical work
+**color:** #FF9800
+**unlock_job:** med1
+
 # Chapter 2: Tools That Think
 **id:** chapter2
 
@@ -102,8 +133,8 @@ You start collecting data systematically. Terabytes of information.
 
 Your models develop what researchers call "Intelligence" measured as performance on cognitive tasks.
 
-<h1>Format me IQ UNLOCKED</h1>
-**IQ Unlocked**
+<h1>🧠 IQ UNLOCKED</h1>
+
 
 ## Page 3 [CHOICE]
 **title:** The Investor's Question
@@ -174,6 +205,7 @@ Your phone won't stop ringing. Investors asking about your AGI timeline. Enginee
 
 A new era is beginning. You're a competitor in something bigger.
 
+<!--
 ## Page 2
 **title:** Go Big
 
@@ -186,7 +218,7 @@ Your systems are impressive. Protein folding predictions. Climate models. Fusion
 You're advancing science.
 
 *But MegaCorp is ahead.*
-
+-->
 ## Page 3 [CHOICE]
 **title:** Emergency Meeting
 
@@ -578,4 +610,3 @@ Paragraph text here...
 
 
 -->
-

@@ -1,3 +1,5 @@
+import projInfo from "data/projInfo.json";
+import player from "game/player";
 import { save, loadSave, newSave, getUniqueID } from "util/save";
 import { saveAchievementMeta, loadAchievementMeta } from "util/achievementStorage";
 
@@ -5,7 +7,7 @@ import { saveAchievementMeta, loadAchievementMeta } from "util/achievementStorag
  * Fully reset the game: clear all localStorage and reload the page.
  * Always invoke this after user confirmation.
  */
-export function resetGame() {
+export async function resetGame() {
     // Persist current achievement sidecar first
     saveAchievementMeta();
     // Soft reset the run by loading a fresh save; achievements sidecar remains untouched
@@ -14,7 +16,11 @@ export function resetGame() {
     // Ensure active save points to the new ID
     save(fresh);
     // Reload layers with the fresh save (no reload needed)
-    loadSave(fresh);
+    await loadSave(fresh);
     // Reapply achievements from sidecar
     loadAchievementMeta();
+    // Make sure UI starts on the initial tabs
+    player.tabs = [...projInfo.initialTabs];
+    // Force a full reload so all reactive state is reinitialized
+    window.location.reload();
 }
