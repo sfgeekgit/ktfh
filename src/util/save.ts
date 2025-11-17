@@ -103,7 +103,6 @@ export function getUniqueID(): string {
 export const loadingSave = ref(false);
 
 export async function loadSave(playerObj: Partial<Player>): Promise<void> {
-    console.info("Loading save", playerObj);
     loadingSave.value = true;
 
     for (const layer in layers) {

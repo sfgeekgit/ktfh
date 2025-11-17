@@ -55,13 +55,20 @@ export function saveAchievementMeta() {
     writeAchievementMeta({ earned });
 }
 
-/** Clear meta storage and mark all achievements as not earned. */
-export function resetAchievementMeta() {
-    writeAchievementMeta({ earned: {} });
-    if (!achievementsLayer || Object.keys(achievementsLayer).length === 0) return;
-    Object.values(achievementsLayer as any).forEach((ach: any) => {
-        if (ach?.earned) {
-            ach.earned.value = false;
-        }
-    });
-}
+/**
+  COMMENTED OUT Nov 17 - Probably safe to delete 
+  This function is no longer used after implementing the new reset system.
+  The new reset (see reset.ts) preserves the achievement sidecar automatically,
+  so we never need to clear it.
+  Hello future coder. Delete this function if saves and resets are working fine.
+ */
+// /** Clear meta storage and mark all achievements as not earned. */
+// export function resetAchievementMeta() {
+//     writeAchievementMeta({ earned: {} });
+//     if (!achievementsLayer || Object.keys(achievementsLayer).length === 0) return;
+//     Object.values(achievementsLayer as any).forEach((ach: any) => {
+//         if (ach?.earned) {
+//             ach.earned.value = false;
+//         }
+//     });
+// }
