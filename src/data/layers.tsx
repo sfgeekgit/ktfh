@@ -1,16 +1,10 @@
 import main from "./layers/main";
 import achievements from "./layers/achievements";
-import { chapter1, chapter2, chapter3, chapter4, chapter5, ending_lose_agi, ending_lose_agi_threshold, ending_win } from "./layers/chapters";
+import { chaptersMap } from "./layers/chapters";
 
+// Expose all story layers dynamically generated from story.md, alongside core layers
 export default {
     main,
-    chapter1,
     achievements,
-    chapter2,
-    chapter3,
-    chapter4,
-    chapter5,
-    ending_lose_agi,
-    ending_lose_agi_threshold,
-    ending_win
+    ...chaptersMap
 };

@@ -49,6 +49,10 @@ export interface GlobalEvents {
      * This event fires when that callback is called.
      */
     fontsLoaded: VoidFunction;
+    /**
+     * Fired when a story choice is made in a chapter. Used to unlock content tied to the choice.
+     */
+    storyChoice: (payload: { chapterId: string; choiceId: string; unlockJobId?: string }) => void;
 }
 
 /** A global event bus for hooking into {@link GlobalEvents}. */
