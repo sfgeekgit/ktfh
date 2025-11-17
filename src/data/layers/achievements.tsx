@@ -200,7 +200,11 @@ const layer = createLayer(id, function () {
     }));
 
     // Load persisted meta on layer init (and whenever this layer is constructed)
-    loadAchievementMeta();
+    // IMPORTANT: This must happen AFTER the player save is loaded to ensure the sidecar
+    // overrides any achievement state from the main save. The 100ms delay ensures this.
+    setTimeout(() => {
+        loadAchievementMeta();
+    }, 100);
 
     const display = () => (
         <div style="padding: 10px;">

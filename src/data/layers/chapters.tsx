@@ -13,10 +13,8 @@ const chapters: Record<string, any> = {};
 
 for (const chapterId of [...chapterIds, ...interludeIds, ...endingIds]) {
     const chapterData = storyContent[chapterId];
-    console.log(`Loading layer: ${chapterId}`, chapterData ? "✓ Found" : "✗ Not found");
     if (chapterData) {
         chapters[chapterId] = createLayer(chapterId, createChapterLayer(chapterId, chapterData));
-        console.log(`Created layer: ${chapterId}`, chapters[chapterId]);
     } else {
         console.warn(`Story content not found for ${chapterId} in story.md`);
     }

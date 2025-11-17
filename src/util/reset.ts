@@ -1,26 +1,28 @@
-import projInfo from "data/projInfo.json";
-import player from "game/player";
-import { save, loadSave, newSave, getUniqueID } from "util/save";
-import { saveAchievementMeta, loadAchievementMeta } from "util/achievementStorage";
+import { STORAGE_KEY } from "util/achievementStorage";
 
 /**
- * Fully reset the game: clear all localStorage and reload the page.
+ * Fully reset the game: delete all localStorage EXCEPT the achievement sidecar.
+ *
+ * FUTURE-PROOFING:
+ * - Any data added to the sidecar (totalPlaythroughs, wins, losses, etc.) is automatically preserved.
+ * - However, you must ensure that data gets LOADED after reset. See achievements.tsx line ~205
+ *   for the pattern: use setTimeout to load sidecar data after main save loads.
+ * - To add new sidecar data: (1) add to sidecar storage, (2) create/extend a load function,
+ *   (3) call it with setTimeout in the appropriate layer constructor.
+ *
  * Always invoke this after user confirmation.
  */
 export async function resetGame() {
-    // Persist current achievement sidecar first
-    saveAchievementMeta();
-    // Soft reset the run by loading a fresh save; achievements sidecar remains untouched
-    // Create a new save slot but preserve the achievements sidecar
-    const fresh = newSave();
-    // Ensure active save points to the new ID
-    save(fresh);
-    // Reload layers with the fresh save (no reload needed)
-    await loadSave(fresh);
-    // Reapply achievements from sidecar
-    loadAchievementMeta();
-    // Make sure UI starts on the initial tabs
-    player.tabs = [...projInfo.initialTabs];
-    // Force a full reload so all reactive state is reinitialized
+    // Get all localStorage keys
+    const allKeys = Object.keys(localStorage);
+
+    // Delete everything EXCEPT the achievement sidecar (STORAGE_KEY from achievementStorage.ts)
+    allKeys.forEach(key => {
+        if (key !== STORAGE_KEY) {
+            localStorage.removeItem(key);
+        }
+    });
+
+    // Reload - game creates fresh save, achievement layer loads sidecar after 100ms delay
     window.location.reload();
 }
