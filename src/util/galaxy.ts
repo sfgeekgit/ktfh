@@ -1,7 +1,7 @@
 import player, { Player, stringifySave } from "game/player";
 import settings from "game/settings";
 import LZString from "lz-string";
-import { GalaxyApi, initGalaxy } from "unofficial-galaxy-sdk";
+import { GalaxyApi, initGalaxy } from "./galaxySdk";
 import { ref } from "vue";
 import { decodeSave, LoadablePlayerData, loadSave, save, setupInitialStore } from "./save";
 
