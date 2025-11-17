@@ -1,26 +1,21 @@
-# Is AI the future?
+# Intelligent Choices
 
-An incremental game under development.
-
+An incremental game. Make choices, steer AI's role in the future of humanity.
 
 ## Quick Start
 
-### Prerequisites
-- Node.js 16+
-- npm
-
-### Installation
+Prerequisites: Node.js 16+, npm
 
 ```bash
-git clone https://github.com/sfgeekgit/pizza-delivery-game.git
-cd pizza-delivery-game
+git clone <repo-url>
+cd <repo-folder>
 npm install
 npm run dev
 ```
 
-The game will open at `http://localhost:5173`
+The game runs at http://localhost:5173
 
-### Building for Production
+Build for production:
 
 ```bash
 npm run build
@@ -28,33 +23,18 @@ npm run build
 
 ## How to Play
 
-You start with a small amount of money and one driver. New delivery jobs appear in a queue automatically. Each job requires a specific pizza type and an available driver.
-
-Click Accept to start a delivery or Decline to remove it from the queue. Completed deliveries earn you money. Use your earnings to unlock new pizza types and hire additional drivers.
-
-The goal is to reach one million dollars.
+Start with limited resources and grow your AI lab by completing jobs, unlocking new capabilities, and progressing through story chapters. Your AI might lead to wonders of human thriving, or end human control of the future itself.
 
 ## Development
 
-See [DEVELOPER_NOTES.md](DEVELOPER_NOTES.md) for technical documentation.
-
-### Project Structure
-```
-pizza-delivery-game/
-├── src/
-│   ├── data/
-│   │   ├── layers/
-│   │   │   └── main.tsx       # Main game logic
-│   │   └── projEntry.tsx      # Entry point
-│   └── components/
-└── package.json
-```
+- Docs: [DEVELOPER_NOTES.md](DEVELOPER_NOTES.md)
+- Tech: Vite + Vue 3 + TypeScript. Entry point in `src/data/projEntry.tsx`, main gameplay layer in `src/data/layers/main.tsx`.
 
 ## License
 
-MIT License. See [Profectus repository](https://github.com/profectus-engine/Profectus) for framework license details.
+MIT License. Profectus framework under its upstream license.
 
 ## Credits
 
-- Game: [@sfgeekgit](https://github.com/sfgeekgit)
-- Framework: [Profectus](https://github.com/profectus-engine/Profectus)
+- Game: Nick Shapiro [@sfgeekgit](https://github.com/sfgeekgit)
+- Framework: Based on  [Profectus](https://github.com/profectus-engine/Profectus)

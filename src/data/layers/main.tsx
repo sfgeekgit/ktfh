@@ -1276,7 +1276,7 @@ const layer = createLayer(id, function (this: any) {
                     {speedBonus.value !== 100 && (
                         <div style="font-size: 14px; color: #2196F3;"><strong>Speed Bonus:</strong> {parseFloat((speedBonus.value / 100).toFixed(2))}x</div>
                     )}
-                    {/* <div style="font-size: 14px;"><strong>Unlocked Pizzas:</strong> {unlockedJobTypes.value.map(id => getJobType(id)?.displayName || id).join(", ")}</div>  */}
+
                 </div>
 
                 {activeNewsFlashes.value.length > 0 && (
@@ -1769,7 +1769,7 @@ const layer = createLayer(id, function (this: any) {
         wonder,
         data,
         dataUnlocked,
-        unlockedJobTypes,  // Changed from unlockedPizzas
+        unlockedJobTypes, 
         introBonusApplied,
         chapter1BonusApplied,
         chapter2BonusApplied,
