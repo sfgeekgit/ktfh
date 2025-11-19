@@ -901,8 +901,8 @@ Digital Learning Platforms
             { type: "data", value: 400 }
         ],
         payout: [
-            { type: "auto", min: 1, max: 1 }
-            , { type: "data", value: 700 }
+            { type: "autonomy", min: 1, max: 1 },
+            { type: "data", min: 200, max:300}
         ],
         duration: { min: 18, max: 26 },
         category: "tool",

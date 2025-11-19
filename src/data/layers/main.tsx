@@ -17,7 +17,7 @@ import player from "game/player";
 import { NEWS_TEXT } from "../newsText";
 import { resetGame } from "util/reset";
 
-const IS_DEV = false;
+const IS_DEV = true;
 
 /**
  * IMPORTANT: PERSISTENT STATE REGISTRATION
