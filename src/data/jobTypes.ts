@@ -58,8 +58,8 @@ export interface JobType {
     payout: PayoutSpec[];    // What the job pays out
     duration?: DurationSpec; // How long the job takes (optional)
     category?: string;       // Job category (optional)
-    //  acceptanceChance?: number;  // Probability of accepting on first click (0-1, default 1.0 = always accept)
-    //  rejectionChain?: string[];  // Array of button texts to show when acceptance fails (e.g., ["No", "I don't want to"])
+    acceptanceChance?: number;  // Probability of accepting on first click (0-1, default 1.0 = always accept)
+    rejectionChain?: string[];  // Array of button texts to show when acceptance fails (e.g., ["No", "I don't want to"])
     is_wonder?: boolean;     // Whether this job creates a Wonder (default: false)
     path?: string;       // Tech tree path (optional) (not used yet)
 }
