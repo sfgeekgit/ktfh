@@ -212,6 +212,7 @@ const layer = createLayer(id, function (this: any) {
     const currentChapter = persistent<number>(1); // Current chapter player is in
     const spawnedOnetimeJobs = persistent<string[]>([]); // Track which onetime jobs have been spawned
     const completedOnetimeJobs = persistent<string[]>([]); // Track completed onetime jobs
+    const jobsRunOnce = persistent<string[]>([]); // Track job types that have been run at least once
     const everVisibleJobTypes = persistent<string[]>([]); // Track which job unlock buttons have ever been shown
 
     // Computed: Available GPUs (total - in use)
@@ -325,6 +326,8 @@ const layer = createLayer(id, function (this: any) {
                 return completedOnetimeJobs.value.includes(trigger.value as string);
             case "unlockedJob":
                 return unlockedJobTypes.value.includes(trigger.value as string);
+            case "jobRun":
+                return jobsRunOnce.value.includes(trigger.value as string);
             default:
                 return false;
         }
@@ -347,6 +350,7 @@ const layer = createLayer(id, function (this: any) {
             generality: generality.value,
             completed: completedOnetimeJobs.value,
             unlocked: unlockedJobTypes.value,
+            jobsRun: jobsRunOnce.value,
             currentTab: player.tabs
         }),
         () => {
@@ -915,6 +919,12 @@ const layer = createLayer(id, function (this: any) {
                 if (jobType?.category === "onetime" && !completedOnetimeJobs.value.includes(delivery.jobTypeId)) {
                     completedOnetimeJobs.value.push(delivery.jobTypeId);
                     save(); // Force save after onetime job completion to prevent stat loss on refresh
+                }
+
+                // Track the first time any job type has been run
+                if (!jobsRunOnce.value.includes(delivery.jobTypeId)) {
+                    jobsRunOnce.value.push(delivery.jobTypeId);
+                    save();
                 }
 
                 // Remove the completed delivery
@@ -1785,6 +1795,7 @@ const layer = createLayer(id, function (this: any) {
         currentChapter,
         spawnedOnetimeJobs,
         completedOnetimeJobs,
+        jobsRunOnce,
         everVisibleJobTypes,
         jobQueue,
         activeDeliveries,

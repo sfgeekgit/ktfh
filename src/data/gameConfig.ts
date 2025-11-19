@@ -15,6 +15,10 @@ export const G_CONF = {
         {
             id: "interlude_fork1",
             trigger: { type: "iq", value: 2 }
+        },
+        {
+            id: "interlude_public_sentiment",
+            trigger: { type: "jobRun", value: "dem3" }
         }
     ],
 

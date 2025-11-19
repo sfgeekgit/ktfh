@@ -504,9 +504,656 @@ export const JOB_TYPES: JobType[] = [
     ...TRAINING_RUN_JOBS
 
 
+
+
+
+
+/*
+
+// Democracy (or not) path
+
+path "dem"  
+
+the first job (dem1) has a prereq of job spamfilter
+        prereq: [{ type: "job", value: "spamfilter" }],
+
+
+Sentiment Analysis
+└── Digital Civic Information System  //  onetime job, pays +1 generality
+    └── Public Sentiment Analysis     //   This triggers a choice by the player
+        ├── Multi-Stakeholder Dialogue Support        // prereq is choice by player
+        │   ├── Consensus Modeling 
+        │   │   └── Identify Consensus   
+        │   │       └── Democratic Consensus Synthesizer        [WONDER]
+        │   │
+        │   └── Narrative Transparency Frameworks  // onetime job, pays +1 generality
+        │       └── Misinformation Detection 
+        │           └── Information Integrity Audit
+        │               └── Civic Trust Infrastructure          [WONDER]
+        │
+        └── Targeted Persuasion                   // prereq is choice by player
+            ├── Political Microtargeting          // (pay a lot of money)
+            │   └── AI-Driven Propaganda          // (cost mid data, pay a lot of money)
+            │       └── Perception Manipulation Apparatus       [BAD WONDER]
+            │
+            └── Predictive Social Control 
+                └── Population Compliance Modeling // NOT a onetime, a regular tool, but pays +1 auto. Costs a lot of data and money, locked until chapter 5
+                    └── Algorithmic Authoritarianism            [BAD WONDER]
+
+// To do!! Bad wonders lead to bad game ending.
+
+//  TODO: Have an interlude choice trggerd by first run (not unlock, first actual run of) Public Sentiment Analysis that triggers choice
+
+*/
+
+
+    // Edu path
+
+/*
+Education Tech Tree
+
+Digital Learning Platforms
+├── Adaptive Education 
+│   ├── Personalized Curriculum Generation
+│   │   └── AI-Guided Study Coach
+│   └── Multimodal Student Teaching
+│       └── Real-Time Learning Assessment
+│           └── Virtual Tutoring Service
+│               └── Universal Education Tutor       [WONDER]
+│
+├── Language-Universal Instruction Tools
+    └── Accessible Virtual Tutoring Systems
+        └── Global Learning Network             [WONDER]
+
+*/
+
+
+
+,{
+        id: "dem1",
+        displayName: "Sentiment Analysis",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "spamfilter" }],
+        unlockCost: [{ type: "money", value: 2000 }],
+        payout: [
+            { type: "money", min: 240, max: 380 }
+        ],
+        duration: { min: 12, max: 18 },
+        category: "tool",
+        path: "dem",
+        cost: [
+            { type: "compute", value: 4 }
+        ]
+    }
+
+    ,{
+        id: "dem2",
+        displayName: "Digital Civic Information System",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "dem1" }],
+        unlockCost: [{ type: "money", value: 3500 }],
+        payout: [
+            { type: "generality", min: 1, max: 1 }
+        ],
+        duration: { min: 14, max: 20 },
+        category: "onetime",
+        path: "dem",
+        cost: [
+            { type: "compute", value: 5 },
+            { type: "data", value: 120 }
+        ]
+    }
+
+    ,{
+        id: "dem3",
+        displayName: "Public Sentiment Analysis",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "dem2" }],
+        unlockCost: [
+            { type: "money", value: 4200 },
+            { type: "data", value: 160 }
+        ],
+        payout: [
+            { type: "money", min: 360, max: 560 }
+        ],
+        duration: { min: 15, max: 22 },
+        category: "tool",
+        path: "dem",
+        cost: [
+            { type: "compute", value: 6 },
+            { type: "data", value: 140 }
+        ]
+    }
+
+    ,{
+        id: "dem4",
+        displayName: "Multi-Stakeholder Dialogue",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "choice", value: "dem4" }],
+        unlockCost: [{ type: "money", value: 3000 }],
+        payout: [
+            { type: "money", min: 280, max: 460 }
+        ],
+        duration: { min: 13, max: 19 },
+        category: "tool",
+        path: "dem",
+        cost: [
+            { type: "compute", value: 5 }
+        ]
+    }
+
+    ,{
+        id: "dem5",
+        displayName: "Consensus Modeling Engine",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "dem4" }],
+        unlockCost: [{ type: "money", value: 4200 }
+		    , { type: "data", value: 4200 }
+		    ],
+        payout: [
+            { type: "data", min: 5000, max: 5600 }
+        ],
+        duration: { min: 14, max: 20 },
+        category: "onetime",
+        path: "dem",
+        cost: [
+            { type: "compute", value: 9 },
+            { type: "money", value: 1200 }
+        ]
+    }
+
+    ,{
+        id: "dem6",
+        displayName: "Identify Consensus",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "dem5" }],
+        unlockCost: [
+            { type: "money", value: 5200 },
+            { type: "data", value: 180 }
+        ],
+        payout: [
+            { type: "money", min: 450, max: 720 }
+        ],
+        duration: { min: 15, max: 22 },
+        category: "tool",
+        path: "dem",
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "data", value: 150 }
+        ]
+    }
+
+    ,{
+        id: "dem7",
+        displayName: "Democratic Consensus Synthesizer",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "dem6" }],
+        unlockCost: [
+            { type: "money", value: 7000 },
+            { type: "data", value: 400 }
+        ],
+        payout: [
+            { type: "wonder", min: 1, max: 1 }
+        ],
+        duration: { min: 18, max: 26 },
+        category: "onetime",
+        is_wonder: true,
+        path: "dem",
+        cost: [
+            { type: "compute", value: 8 },
+            { type: "data", value: 500 }
+        ]
+    }
+
+    ,{
+        id: "dem8",
+        displayName: "Narrative Transparency Frameworks",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "dem4" }],
+        unlockCost: [
+            { type: "money", value: 3600 },
+            { type: "data", value: 120 }
+        ],
+        payout: [
+            { type: "generality", min: 1, max: 1 }
+        ],
+        duration: { min: 14, max: 20 },
+        category: "onetime",
+        path: "dem",
+        cost: [
+            { type: "compute", value: 5 },
+            { type: "data", value: 150 }
+        ]
+    }
+
+    ,{
+        id: "dem9",
+        displayName: "Misinformation Detection",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "dem8" }],
+        unlockCost: [
+            { type: "money", value: 4200 },
+            { type: "data", value: 180 }
+        ],
+        payout: [
+            { type: "money", min: 360, max: 600 }
+        ],
+        duration: { min: 15, max: 22 },
+        category: "tool",
+        path: "dem",
+        cost: [
+            { type: "compute", value: 6 },
+            { type: "data", value: 160 }
+        ]
+    }
+
+    ,{
+        id: "dem10",
+        displayName: "Information Integrity Audit",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "dem9" }],
+        unlockCost: [
+            { type: "money", value: 5200 },
+            { type: "data", value: 220 }
+        ],
+        payout: [
+            { type: "money", min: 460, max: 720 }
+        ],
+        duration: { min: 16, max: 24 },
+        category: "tool",
+        path: "dem",
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "data", value: 180 }
+        ]
+    }
+
+    ,{
+        id: "dem11",
+        displayName: "Civic Trust Infrastructure",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "dem10" }],
+        unlockCost: [
+            { type: "money", value: 7600 },
+            { type: "data", value: 500 }
+        ],
+        payout: [
+            { type: "wonder", min: 1, max: 1 }
+        ],
+        duration: { min: 18, max: 26 },
+        category: "onetime",
+        is_wonder: true,
+        path: "dem",
+        cost: [
+            { type: "compute", value: 8 },
+            { type: "data", value: 600 }
+        ]
+    }
+
+    ,{
+        id: "dem12",
+        displayName: "Targeted Persuasion",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "choice", value: "dem12" }],
+        unlockCost: [{ type: "money", value: 3200 }],
+        payout: [
+            { type: "money", min: 640, max: 860 }
+        ],
+        duration: { min: 14, max: 20 },
+        category: "tool",
+        path: "dem",
+        cost: [
+            { type: "compute", value: 5 }
+        ]
+    }
+
+    ,{
+        id: "dem13",
+        displayName: "Political Microtargeting",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "dem12" }],
+        unlockCost: [
+            { type: "money", value: 5000 }
+        ],
+        payout: [
+            { type: "money", min: 920, max: 1260 }
+        ],
+        duration: { min: 15, max: 22 },
+        category: "tool",
+        path: "dem",
+        cost: [
+            { type: "compute", value: 6 },
+            { type: "money", value: 400 }
+        ]
+    }
+
+    ,{
+        id: "dem14",
+        displayName: "AI-Driven Propaganda",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "dem13" }],
+        unlockCost: [
+            { type: "money", value: 6500 },
+            { type: "data", value: 200 }
+        ],
+        payout: [
+            { type: "money", min: 720, max: 1100 }
+        ],
+        duration: { min: 16, max: 24 },
+        category: "tool",
+        path: "dem",
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "data", value: 220 }
+        ]
+    }
+
+    ,{
+        id: "dem15",
+        displayName: "Perception Manipulation Apparatus",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "dem14" }],
+        unlockCost: [
+            { type: "money", value: 9000 },
+            { type: "data", value: 600 }
+        ],
+        payout: [
+            { type: "wonder", min: 1, max: 1 }
+        ],
+        duration: { min: 18, max: 26 },
+        category: "onetime",
+        is_wonder: true,
+        path: "dem",
+        cost: [
+            { type: "compute", value: 8 },
+            { type: "data", value: 650 }
+        ]
+    }
+
+    ,{
+        id: "dem16",
+        displayName: "Predictive Social Control",
+        chapter: [3,4,5],
+        prereq: [{ type: "job", value: "dem12" }],
+        unlockCost: [
+            { type: "money", value: 4600 },
+            { type: "data", value: 160 }
+        ],
+        payout: [
+            { type: "money", min: 420, max: 660 }
+        ],
+        duration: { min: 15, max: 22 },
+        category: "tool",
+        path: "dem",
+        cost: [
+            { type: "compute", value: 6 },
+            { type: "data", value: 180 }
+        ]
+    }
+
+    ,{
+        id: "dem17",
+        displayName: "Population Compliance Modeling",
+        chapter: [5,6],
+        prereq: [{ type: "job", value: "dem16" }],
+        unlockCost: [
+            { type: "money", value: 7200 },
+            { type: "data", value: 400 }
+        ],
+        payout: [
+            { type: "auto", min: 1, max: 1 }
+            , { type: "data", value: 700 }
+        ],
+        duration: { min: 18, max: 26 },
+        category: "tool",
+        path: "dem",
+        cost: [
+            { type: "compute", value: 8 },
+            { type: "money", value: 600 },
+            { type: "data", value: 500 }
+        ]
+    }
+
+    ,{
+        id: "dem18",
+        displayName: "Algorithmic Authoritarianism",
+        chapter: [5,6],
+        prereq: [{ type: "job", value: "dem17" }],
+        unlockCost: [
+            { type: "money", value: 11000 },
+            { type: "data", value: 800 }
+        ],
+        payout: [
+            { type: "wonder", min: 1, max: 1 }
+        ],
+        duration: { min: 20, max: 28 },
+        category: "onetime",
+        is_wonder: true,
+        path: "dem",
+        cost: [
+            { type: "compute", value: 9 },
+            { type: "data", value: 900 }
+        ]
+    }
+
+
+,{
+        id: "edu1",
+        displayName: "Digital Learning Platform",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "choice", value: "edu1" }],
+        unlockCost: [{ type: "money", value: 800 }],
+        payout: [
+            { type: "money", min: 160, max: 260 }
+        ],
+        duration: { min: 10, max: 15 },
+        category: "tool",
+        path: "edu",
+        cost: [
+            { type: "compute", value: 3 }
+        ]
+    }
+
+    ,{
+        id: "edu2",
+        displayName: "Adaptive Education",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "edu1" }],
+        unlockCost: [{ type: "money", value: 2500 }],
+        payout: [
+            { type: "money", min: 220, max: 380 }
+        ],
+        duration: { min: 12, max: 18 },
+        category: "tool",
+        path: "edu",
+        cost: [
+            { type: "compute", value: 4 }
+        ]
+    }
+
+    ,{
+        id: "edu3",
+        displayName: "Personalized Curriculum Generation",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "edu2" }],
+        unlockCost: [
+            { type: "money", value: 3800 }
+        ],
+        payout: [
+            { type: "money", min: 320, max: 520 }
+        ],
+        duration: { min: 13, max: 19 },
+        category: "tool",
+        path: "edu",
+        cost: [
+            { type: "compute", value: 5 }
+        ]
+    }
+
+    ,{
+        id: "edu4",
+        displayName: "AI-Guided Study Coach",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "edu3" }],
+        unlockCost: [
+            { type: "money", value: 4800 },
+            { type: "data", value: 150 }
+        ],
+        payout: [
+            { type: "money", min: 520, max: 800 }
+        ],
+        duration: { min: 15, max: 22 },
+        category: "tool",
+        path: "edu",
+        cost: [
+            { type: "compute", value: 6 }
+        ]
+    }
+
+    ,{
+        id: "edu5",
+        displayName: "Multimodal Student Teaching",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "edu2" }],
+        unlockCost: [{ type: "money", value: 3400 }],
+        payout: [
+            { type: "money", min: 340, max: 540 }
+        ],
+        duration: { min: 14, max: 20 },
+        category: "tool",
+        path: "edu",
+        cost: [
+            { type: "compute", value: 5 }
+        ]
+    }
+
+    ,{
+        id: "edu6",
+        displayName: "Real-Time Learning Assessment",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "edu5" }],
+        unlockCost: [
+            { type: "money", value: 4600 },
+            { type: "data", value: 120 }
+        ],
+        payout: [
+            { type: "money", min: 460, max: 680 }
+        ],
+        duration: { min: 15, max: 22 },
+        category: "tool",
+        path: "edu",
+        cost: [
+            { type: "compute", value: 6 }
+        ]
+    }
+
+    ,{
+        id: "edu7",
+        displayName: "Virtual Tutoring Service",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "edu6" }],
+        unlockCost: [
+            { type: "money", value: 6000 },
+            { type: "data", value: 200 }
+        ],
+        payout: [
+            { type: "money", min: 560, max: 880 }
+        ],
+        duration: { min: 16, max: 24 },
+        category: "tool",
+        path: "edu",
+        cost: [
+            { type: "compute", value: 7 }
+        ]
+    }
+
+    ,{
+        id: "edu8",
+        displayName: "Universal Education Tutor",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "edu7" }],
+        unlockCost: [
+            { type: "money", value: 8500 },
+            { type: "data", value: 700 }
+        ],
+        payout: [
+            { type: "wonder", min: 1, max: 1 }
+        ],
+        duration: { min: 18, max: 26 },
+        category: "onetime",
+        is_wonder: true,
+        path: "edu",
+        cost: [
+            { type: "compute", value: 8 },
+            { type: "data", value: 600 }
+        ]
+    }
+
+    ,{
+        id: "edu9",
+        displayName: "Language-Universal Instruction Tools",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "edu1" }],
+        unlockCost: [
+            { type: "money", value: 3800 }
+        ],
+        payout: [
+            { type: "money", min: 360, max: 600 }
+        ],
+        duration: { min: 14, max: 20 },
+        category: "tool",
+        path: "edu",
+        cost: [
+            { type: "compute", value: 5 }
+        ]
+    }
+
+    ,{
+        id: "edu10",
+        displayName: "Accessible Virtual Tutoring Systems",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "edu9" }],
+        unlockCost: [
+            { type: "money", value: 5200 },
+            { type: "data", value: 120 }
+        ],
+        payout: [
+            { type: "money", min: 520, max: 820 }
+        ],
+        duration: { min: 15, max: 22 },
+        category: "tool",
+        path: "edu",
+        cost: [
+            { type: "compute", value: 6 }
+        ]
+    }
+
+    ,{
+        id: "edu11",
+        displayName: "Global Learning Network",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "edu10" }],
+        unlockCost: [
+            { type: "money", value: 7800 },
+            { type: "data", value: 600 }
+        ],
+        payout: [
+            { type: "wonder", min: 1, max: 1 }
+        ],
+        duration: { min: 18, max: 26 },
+        category: "onetime",
+        is_wonder: true,
+        path: "edu",
+        cost: [
+            { type: "compute", value: 8 },
+            { type: "data", value: 700 }
+        ]
+    }
+
+
+
+
     // Climate wonder path
-
-
 
 /* // Climate tree
 

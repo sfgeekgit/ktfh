@@ -109,6 +109,40 @@ Choose which domain to focus on first.
 **color:** #FF9800
 **unlock_job:** med1
 
+---
+
+# Interlude: Sentiment Fault Lines
+**id:** interlude_public_sentiment
+
+## Page 1
+
+The first large-scale Public Sentiment Analysis finishes crunching through millions of civic comments.
+
+The dashboard lights up: protest organizers, city councils, policy shops, and campaigns all want the feed.
+
+You have to decide whether to turn this tool toward collaborative dialogue or targeted pressure.
+
+## Page 2 [CHOICE]
+**title:** Aim the Feedback Loop
+
+Choose how to use your new visibility into the public mood.
+
+[OPTION: dem4]
+**button:** Dialogue
+**title:** Multi-Stakeholder Dialogue
+**description:** Convene citizens, experts, and officials to surface common ground before conflicts ignite.
+**effect:** Unlock collaborative deliberation jobs
+**color:** #2196F3
+**unlock_job:** dem4
+
+[OPTION: dem12]
+**button:** Persuade
+**title:** Targeted Persuasion
+**description:** Channel the analysis into finely tuned campaigns that sway key demographics.
+**effect:** Unlock targeted persuasion jobs
+**color:** #E91E63
+**unlock_job:** dem12
+
 # Chapter 2: Tools That Think
 **id:** chapter2
 
