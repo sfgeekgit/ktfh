@@ -61,6 +61,7 @@ export interface JobType {
     acceptanceChance?: number;  // Probability of accepting on first click (0-1, default 1.0 = always accept)
     rejectionChain?: string[];  // Array of button texts to show when acceptance fails (e.g., ["No", "I don't want to"])
     is_wonder?: boolean;     // Whether this job creates a Wonder (default: false)
+    bad_end?: boolean;       // Optional: marks jobs that trigger a bad ending (default false)
     path?: string;       // Tech tree path (optional) (not used yet)
 }
 
@@ -319,7 +320,9 @@ export const JOB_TYPES: JobType[] = [
 
 
 //// Wonders (end game win)
-    {
+
+     /**
+{
         id: "wonder1",
         displayName: "Protein Folding",
         description: "A boon to humanity",
@@ -496,7 +499,7 @@ export const JOB_TYPES: JobType[] = [
             { type: "data", value: 10 }
         ]
     },
-
+**/
 
 
 
@@ -574,7 +577,7 @@ Digital Learning Platforms
         displayName: "Sentiment Analysis",
         chapter: [2,3,4,5],
         prereq: [{ type: "job", value: "spamfilter" }],
-        unlockCost: [{ type: "money", value: 2000 }],
+        unlockCost: [{ type: "money", value: 90 }],
         payout: [
             { type: "money", min: 240, max: 380 }
         ],
@@ -863,6 +866,7 @@ Digital Learning Platforms
         duration: { min: 18, max: 26 },
         category: "onetime",
         is_wonder: true,
+        bad_end: true,
         path: "dem",
         cost: [
             { type: "compute", value: 8 },
@@ -929,6 +933,7 @@ Digital Learning Platforms
         duration: { min: 20, max: 28 },
         category: "onetime",
         is_wonder: true,
+        bad_end: true,
         path: "dem",
         cost: [
             { type: "compute", value: 9 },

@@ -133,6 +133,10 @@ const layer = createLayer(id, function (this: any) {
     const data = createResource<DecimalSource>(0, "data");
     const dataUnlocked = persistent<boolean>(false); // Track if data has been gained
     const choiceUnlockedJobs = persistent<string[]>([]);
+    const BAD_ENDING_TABS_BY_JOB: Record<string, string> = {
+        dem15: "ending_bad_dem15",
+        dem18: "ending_bad_dem18"
+    };
 
     // GPU persistent state
     const gpusOwned = persistent<number>(G_CONF.STARTING_GPUS);
@@ -142,6 +146,14 @@ const layer = createLayer(id, function (this: any) {
     // Get job type config by ID
     function getJobType(id: string) {
         return JOB_TYPES.find(job => job.id === id);
+    }
+
+    function triggerEnding(tabId: string) {
+        if (player.gameOver) return;
+        player.gameOver = true;
+        // @ts-ignore
+        player.tabs = [tabId];
+        save();
     }
 
     // Check if a single prerequisite condition is met
@@ -541,7 +553,19 @@ const layer = createLayer(id, function (this: any) {
     });
 
     // Watch for onetime jobs being unlocked and spawn them immediately
-    watch(() => unlockedJobTypes.value, (unlocked) => {
+    watch(() => [...unlockedJobTypes.value], (unlocked, prevUnlocked) => {
+        const previouslyUnlocked = new Set(prevUnlocked ?? []);
+        for (const jobId of unlocked) {
+            if (!previouslyUnlocked.has(jobId)) {
+                const jobType = getJobType(jobId);
+                const badEndingTab = jobType?.bad_end ? BAD_ENDING_TABS_BY_JOB[jobId] : undefined;
+                if (badEndingTab) {
+                    triggerEnding(badEndingTab);
+                    break;
+                }
+            }
+        }
+
         // Find onetime jobs that are unlocked but haven't been spawned yet
         const onetimeJobs = JOB_TYPES.filter(job =>
             job.category === "onetime" &&
@@ -1720,6 +1744,42 @@ const layer = createLayer(id, function (this: any) {
                                 }}
                             >
                                 +1 Gen
+                            </button>
+
+                            <button
+                                onClick={() => {
+                                    money.value = Decimal.add(money.value, 1000);
+                                    save();
+                                }}
+                                style={{
+                                    background: "#4CAF50",
+                                    color: "white",
+                                    padding: "8px 16px",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    cursor: "pointer",
+                                    fontSize: "14px"
+                                }}
+                            >
+                                +$1K
+                            </button>
+
+                            <button
+                                onClick={() => {
+                                    data.value = Decimal.add(data.value, 500);
+                                    save();
+                                }}
+                                style={{
+                                    background: "#03A9F4",
+                                    color: "white",
+                                    padding: "8px 16px",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    cursor: "pointer",
+                                    fontSize: "14px"
+                                }}
+                            >
+                                +500 Data
                             </button>
 
                             <button
