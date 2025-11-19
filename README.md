@@ -27,7 +27,6 @@ Start with limited resources and grow your AI lab by completing jobs, unlocking 
 
 ## Development
 
-- Docs: [DEVELOPER_NOTES.md](DEVELOPER_NOTES.md)
 - Tech: Vite + Vue 3 + TypeScript. Entry point in `src/data/projEntry.tsx`, main gameplay layer in `src/data/layers/main.tsx`.
 
 ## License

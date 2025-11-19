@@ -99,7 +99,7 @@ Choose which domain to focus on first.
 **description:** Aim your intelligence gains at predicting and mitigating climate risks.
 **effect:** Lean into climate work
 **color:** #4CAF50
-**unlock_job:** climate1
+**unlock_job:** clim1
 
 [OPTION: medical]
 **button:** Medical

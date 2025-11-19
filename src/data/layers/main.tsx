@@ -17,6 +17,8 @@ import player from "game/player";
 import { NEWS_TEXT } from "../newsText";
 import { resetGame } from "util/reset";
 
+const IS_DEV = false;
+
 /**
  * IMPORTANT: PERSISTENT STATE REGISTRATION
  *
@@ -1029,7 +1031,7 @@ const layer = createLayer(id, function (this: any) {
             generality.value >= 1) {
             // Rejection chance = (auto*5 + gen*2 + iq) / 100
             //const rejectionChance = (autonomy.value * 5 + generality.value * 2 + iq.value) / 100;
-	    const rejectionChance = ((autonomy.value -.5)* 4 + (generality.value -1) * 1 + (iq.value-4) * 0.5) / 100;
+	    const rejectionChance = ((autonomy.value -.5)* 4 + (generality.value -1) * 1 + (iq.value-2) * 0.5) / 100;
             const dynamicAcceptChance = 1 - rejectionChance;
 
             // Use the LOWER of the two acceptance chances (higher rejection chance)
@@ -1138,55 +1140,57 @@ const layer = createLayer(id, function (this: any) {
                             }}
                         >
                             PLAY AGAIN
-                        </button>
-                    </div>
-
-                    <div style="margin: 15px 0; padding: 12px; border: 2px solid #9C27B0; border-radius: 10px; background: #f3e5f5;">
-                        <h4 style="margin: 0 0 10px 0; color: #9C27B0;">Dev Tools</h4>
-                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                            <button
-                                onClick={() => {
-                                    autonomy.value = 1;
-                                    currentChapter.value = 4;
-                                    player.frameworkChoice = "not_yet";
-                                    player.gameOver = false;
-                                    chapter5CompletionTime.value = null;
-                                    timeSinceChapter5.value = 0;
-                                    activeNewsFlashes.value = [];
-                                    dismissedNewsIds.value = [];
-
-                                    if (layers.chapter5) {
-                                        const chapter5Layer = layers.chapter5 as any;
-                                        if (chapter5Layer.complete) {
-                                            chapter5Layer.complete.value = false;
-                                        }
-                                        if (chapter5Layer.currentPage) {
-                                            chapter5Layer.currentPage.value = 0;
-                                        }
-                                        if (chapter5Layer.playerChoice) {
-                                            chapter5Layer.playerChoice.value = null;
-                                        }
-                                    }
-
-                                    // @ts-ignore
-                                    player.tabs = ["main"];
-                                    save();
-                                }}
-                                style={{
-                                    background: "#9C27B0",
-                                    color: "white",
-                                    padding: "8px 16px",
-                                    border: "none",
-                                    borderRadius: "4px",
-                                    cursor: "pointer",
-                                    fontSize: "14px"
-                                }}
-                            >
-                                Dev to Chap 4
                             </button>
                         </div>
-                    </div>
-                    <ResetModal ref={resetModal} />
+
+                    {IS_DEV && (
+                        <div style="margin: 15px 0; padding: 12px; border: 2px solid #9C27B0; border-radius: 10px; background: #f3e5f5;">
+                            <h4 style="margin: 0 0 10px 0; color: #9C27B0;">Dev Tools</h4>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <button
+                                    onClick={() => {
+                                        autonomy.value = 1;
+                                        currentChapter.value = 4;
+                                        player.frameworkChoice = "not_yet";
+                                        player.gameOver = false;
+                                        chapter5CompletionTime.value = null;
+                                        timeSinceChapter5.value = 0;
+                                        activeNewsFlashes.value = [];
+                                        dismissedNewsIds.value = [];
+
+                                        if (layers.chapter5) {
+                                            const chapter5Layer = layers.chapter5 as any;
+                                            if (chapter5Layer.complete) {
+                                                chapter5Layer.complete.value = false;
+                                            }
+                                            if (chapter5Layer.currentPage) {
+                                                chapter5Layer.currentPage.value = 0;
+                                            }
+                                            if (chapter5Layer.playerChoice) {
+                                                chapter5Layer.playerChoice.value = null;
+                                            }
+                                        }
+
+                                        // @ts-ignore
+                                        player.tabs = ["main"];
+                                        save();
+                                    }}
+                                    style={{
+                                        background: "#9C27B0",
+                                        color: "white",
+                                        padding: "8px 16px",
+                                        border: "none",
+                                        borderRadius: "4px",
+                                        cursor: "pointer",
+                                        fontSize: "14px"
+                                    }}
+                                >
+                                    Dev to Chap 4
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                    <ResetModal ref={resetModal} is-dev={IS_DEV} />
                 </div>
             );
         }
@@ -1571,188 +1575,190 @@ const layer = createLayer(id, function (this: any) {
                         </button>
                     </div>
 
-                <div style="margin: 15px 0; padding: 12px; border: 2px solid #9C27B0; border-radius: 10px; background: #f3e5f5;">
-                    <h4 style="margin: 0 0 10px 0; color: #9C27B0;">Dev Tools</h4>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <button
-                            onClick={() => {
-                                autonomy.value = 1;
-                                currentChapter.value = 4;
-                                player.frameworkChoice = "not_yet";
-                                player.gameOver = false; // Reset game over state
-                                chapter5CompletionTime.value = null; // Reset the timer timestamp
-                                timeSinceChapter5.value = 0; // Reset the timer counter
-                                activeNewsFlashes.value = []; // Clear news flashes
-                                dismissedNewsIds.value = []; // Reset dismissed news tracking
+                {IS_DEV && (
+                    <div style="margin: 15px 0; padding: 12px; border: 2px solid #9C27B0; border-radius: 10px; background: #f3e5f5;">
+                        <h4 style="margin: 0 0 10px 0; color: #9C27B0;">Dev Tools</h4>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button
+                                onClick={() => {
+                                    autonomy.value = 1;
+                                    currentChapter.value = 4;
+                                    player.frameworkChoice = "not_yet";
+                                    player.gameOver = false; // Reset game over state
+                                    chapter5CompletionTime.value = null; // Reset the timer timestamp
+                                    timeSinceChapter5.value = 0; // Reset the timer counter
+                                    activeNewsFlashes.value = []; // Clear news flashes
+                                    dismissedNewsIds.value = []; // Reset dismissed news tracking
 
-                                // Reset chapter 5 completion so it can be triggered again
-                                if (layers.chapter5) {
-                                    const chapter5Layer = layers.chapter5 as any;
-                                    if (chapter5Layer.complete) {
-                                        chapter5Layer.complete.value = false;
-                                    }
-                                    if (chapter5Layer.currentPage) {
-                                        chapter5Layer.currentPage.value = 0;
-                                    }
-                                    if (chapter5Layer.playerChoice) {
-                                        chapter5Layer.playerChoice.value = null;
-                                    }
-                                }
-
-                                // @ts-ignore
-                                player.tabs = ["main"];
-                                save();
-                            }}
-                            style={{
-                                background: "#9C27B0",
-                                color: "white",
-                                padding: "8px 16px",
-                                border: "none",
-                                borderRadius: "4px",
-                                cursor: "pointer",
-                                fontSize: "14px"
-                            }}
-                        >
-                            Dev to Chap 4
-                        </button>
-                        <button
-                            onClick={() => {
-                                if ((layers as any).achievements?.achievements) {
-                                    Object.values((layers as any).achievements.achievements).forEach((ach: any) => {
-                                        if (ach?.earned) {
-                                            ach.earned.value = false;
+                                    // Reset chapter 5 completion so it can be triggered again
+                                    if (layers.chapter5) {
+                                        const chapter5Layer = layers.chapter5 as any;
+                                        if (chapter5Layer.complete) {
+                                            chapter5Layer.complete.value = false;
                                         }
-                                    });
+                                        if (chapter5Layer.currentPage) {
+                                            chapter5Layer.currentPage.value = 0;
+                                        }
+                                        if (chapter5Layer.playerChoice) {
+                                            chapter5Layer.playerChoice.value = null;
+                                        }
+                                    }
+
+                                    // @ts-ignore
+                                    player.tabs = ["main"];
                                     save();
-                                }
-                            }}
-                            style={{
-                                background: "#6a1b9a",
-                                color: "white",
-                                padding: "8px 16px",
-                                border: "none",
-                                borderRadius: "4px",
-                                cursor: "pointer",
-                                fontSize: "14px"
-                            }}
-                        >
-                            Reset Achievements
-                        </button>
-                        <button
-                            onClick={() => {
-                                gpusOwned.value = Math.max(0, gpusOwned.value - 1);
-                                save();
-                            }}
-                            style={{
-                                background: "#d32f2f",
-                                color: "white",
-                                padding: "8px 16px",
-                                border: "none",
-                                borderRadius: "4px",
-                                cursor: "pointer",
-                                fontSize: "14px"
-                            }}
-                        >
-                            Minus 1 Compute
-                        </button>
-                        <button
-                            onClick={() => {
-                                iq.value += 1;
-                                save();
-                            }}
-                            style={{
-                                background: "#1976d2",
-                                color: "white",
-                                padding: "8px 16px",
-                                border: "none",
-                                borderRadius: "4px",
-                                cursor: "pointer",
-                                fontSize: "14px"
-                            }}
-                        >
-                            +1 IQ
-                        </button>
-                        <button
-                            onClick={() => {
-                                autonomy.value += 1;
-                                save();
-                            }}
-                            style={{
-                                background: "#00796b",
-                                color: "white",
-                                padding: "8px 16px",
-                                border: "none",
-                                borderRadius: "4px",
-                                cursor: "pointer",
-                                fontSize: "14px"
-                            }}
-                        >
-                            +1 Auto
-                        </button>
-                        <button
-                            onClick={() => {
-                                generality.value += 1;
-                                save();
-                            }}
-                            style={{
-                                background: "#455a64",
-                                color: "white",
-                                padding: "8px 16px",
-                                border: "none",
-                                borderRadius: "4px",
-                                cursor: "pointer",
-                                fontSize: "14px"
-                            }}
-                        >
-                            +1 Gen
-                        </button>
+                                }}
+                                style={{
+                                    background: "#9C27B0",
+                                    color: "white",
+                                    padding: "8px 16px",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    cursor: "pointer",
+                                    fontSize: "14px"
+                                }}
+                            >
+                                Dev to Chap 4
+                            </button>
+                            <button
+                                onClick={() => {
+                                    if ((layers as any).achievements?.achievements) {
+                                        Object.values((layers as any).achievements.achievements).forEach((ach: any) => {
+                                            if (ach?.earned) {
+                                                ach.earned.value = false;
+                                            }
+                                        });
+                                        save();
+                                    }
+                                }}
+                                style={{
+                                    background: "#6a1b9a",
+                                    color: "white",
+                                    padding: "8px 16px",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    cursor: "pointer",
+                                    fontSize: "14px"
+                                }}
+                            >
+                                Reset Achievements
+                            </button>
+                            <button
+                                onClick={() => {
+                                    gpusOwned.value = Math.max(0, gpusOwned.value - 1);
+                                    save();
+                                }}
+                                style={{
+                                    background: "#d32f2f",
+                                    color: "white",
+                                    padding: "8px 16px",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    cursor: "pointer",
+                                    fontSize: "14px"
+                                }}
+                            >
+                                Minus 1 Compute
+                            </button>
+                            <button
+                                onClick={() => {
+                                    iq.value += 1;
+                                    save();
+                                }}
+                                style={{
+                                    background: "#1976d2",
+                                    color: "white",
+                                    padding: "8px 16px",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    cursor: "pointer",
+                                    fontSize: "14px"
+                                }}
+                            >
+                                +1 IQ
+                            </button>
+                            <button
+                                onClick={() => {
+                                    autonomy.value += 1;
+                                    save();
+                                }}
+                                style={{
+                                    background: "#00796b",
+                                    color: "white",
+                                    padding: "8px 16px",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    cursor: "pointer",
+                                    fontSize: "14px"
+                                }}
+                            >
+                                +1 Auto
+                            </button>
+                            <button
+                                onClick={() => {
+                                    generality.value += 1;
+                                    save();
+                                }}
+                                style={{
+                                    background: "#455a64",
+                                    color: "white",
+                                    padding: "8px 16px",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    cursor: "pointer",
+                                    fontSize: "14px"
+                                }}
+                            >
+                                +1 Gen
+                            </button>
 
-                        <button
-                            onClick={() => {
-                                // Reset auto training runs
-                                const autoTrainingIds = ["trun_auto1", "trun_auto2", "trun_auto3", "trun_auto4", "trun_auto5"];
+                            <button
+                                onClick={() => {
+                                    // Reset auto training runs
+                                    const autoTrainingIds = ["trun_auto1", "trun_auto2", "trun_auto3", "trun_auto4", "trun_auto5"];
 
-                                spawnedOnetimeJobs.value = spawnedOnetimeJobs.value.filter(id =>
-                                    !autoTrainingIds.includes(id)
-                                );
-                                completedOnetimeJobs.value = completedOnetimeJobs.value.filter(id =>
-                                    !autoTrainingIds.includes(id)
-                                );
-                                // Remove from unlocked job types
-                                unlockedJobTypes.value = unlockedJobTypes.value.filter(id =>
-                                    !autoTrainingIds.includes(id)
-                                );
-                                // Remove from ever visible (so they can reappear)
-                                everVisibleJobTypes.value = everVisibleJobTypes.value.filter(id =>
-                                    !autoTrainingIds.includes(id)
-                                );
-                                // Remove from queue if present
-                                jobQueue.value = jobQueue.value.filter((job: DeliveryJob) =>
-                                    !autoTrainingIds.includes(job.jobTypeId)
-                                );
-                                // Remove from active deliveries if present
-                                activeDeliveries.value = activeDeliveries.value.filter((delivery: ActiveDelivery) =>
-                                    !autoTrainingIds.includes(delivery.jobTypeId)
-                                );
+                                    spawnedOnetimeJobs.value = spawnedOnetimeJobs.value.filter(id =>
+                                        !autoTrainingIds.includes(id)
+                                    );
+                                    completedOnetimeJobs.value = completedOnetimeJobs.value.filter(id =>
+                                        !autoTrainingIds.includes(id)
+                                    );
+                                    // Remove from unlocked job types
+                                    unlockedJobTypes.value = unlockedJobTypes.value.filter(id =>
+                                        !autoTrainingIds.includes(id)
+                                    );
+                                    // Remove from ever visible (so they can reappear)
+                                    everVisibleJobTypes.value = everVisibleJobTypes.value.filter(id =>
+                                        !autoTrainingIds.includes(id)
+                                    );
+                                    // Remove from queue if present
+                                    jobQueue.value = jobQueue.value.filter((job: DeliveryJob) =>
+                                        !autoTrainingIds.includes(job.jobTypeId)
+                                    );
+                                    // Remove from active deliveries if present
+                                    activeDeliveries.value = activeDeliveries.value.filter((delivery: ActiveDelivery) =>
+                                        !autoTrainingIds.includes(delivery.jobTypeId)
+                                    );
 
-                                save();
-                            }}
-                            style={{
-                                background: "#9C27B0",
-                                color: "white",
-                                padding: "8px 16px",
-                                border: "none",
-                                borderRadius: "4px",
-                                cursor: "pointer",
-                                fontSize: "14px"
-                            }}
-                        >
-                            Reset Auto Trainings
-                        </button>
+                                    save();
+                                }}
+                                style={{
+                                    background: "#9C27B0",
+                                    color: "white",
+                                    padding: "8px 16px",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    cursor: "pointer",
+                                    fontSize: "14px"
+                                }}
+                            >
+                                Reset Auto Trainings
+                            </button>
+                        </div>
                     </div>
-                </div>
+                )}
 
-                <ResetModal ref={resetModal} />
+                <ResetModal ref={resetModal} is-dev={IS_DEV} />
             </div>
         );
     };

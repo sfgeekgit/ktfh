@@ -11,7 +11,7 @@
 
                 <hr style="margin: 20px 0; border-color: #2196F3; opacity: 0.3;" />
 
-                <div style="margin-top: 15px;">
+                <div v-if="props.isDev" style="margin-top: 15px;">
                     <h3 style="color: #2196F3; font-size: 14px; margin-bottom: 10px;">Dev Tools</h3>
                     <button class="dev-button" @click="devToChapter4()">Dev to Chap 4</button>
                     <button class="dev-button" @click="resetAutoTrainings()" style="margin-top: 8px;">Reset Auto Trainings</button>
@@ -31,12 +31,16 @@
 </template>
 
 <script setup lang="tsx">
-import { ref } from "vue";
+import { ref, withDefaults, defineProps } from "vue";
 import Modal from "./Modal.vue";
 import player from "game/player";
 import { layers } from "game/layers";
 import { save } from "util/save";
 import { resetGame } from "util/reset";
+
+const props = withDefaults(defineProps<{ isDev?: boolean }>(), {
+    isDev: true
+});
 
 const isOpen = ref(false);
 

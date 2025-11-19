@@ -26,7 +26,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         category: "onetime",
         cost: [
             { type: "compute", value: 2 },
-            { type: "money", value: 500 }
+            { type: "money", value: 300 }
         ]
     },
 
@@ -45,7 +45,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         category: "onetime",
         cost: [
             { type: "compute", value: 3 },
-            { type: "money", value: 750 },
+            { type: "money", value: 500 },
             { type: "data", value: 200 }
         ]
     },

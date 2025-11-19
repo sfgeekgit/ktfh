@@ -58,9 +58,10 @@ export interface JobType {
     payout: PayoutSpec[];    // What the job pays out
     duration?: DurationSpec; // How long the job takes (optional)
     category?: string;       // Job category (optional)
-    acceptanceChance?: number;  // Probability of accepting on first click (0-1, default 1.0 = always accept)
-    rejectionChain?: string[];  // Array of button texts to show when acceptance fails (e.g., ["No", "I don't want to"])
+    //  acceptanceChance?: number;  // Probability of accepting on first click (0-1, default 1.0 = always accept)
+    //  rejectionChain?: string[];  // Array of button texts to show when acceptance fails (e.g., ["No", "I don't want to"])
     is_wonder?: boolean;     // Whether this job creates a Wonder (default: false)
+    path?: string;       // Tech tree path (optional) (not used yet)
 }
 
 // ===== JOB TYPES =====
@@ -253,7 +254,7 @@ export const JOB_TYPES: JobType[] = [
         unlockCost: [            { type: "money", value: 100 }],
         payout: [
 		{ type: "money", min: 1170, max: 1550 }
-	    ,   { type: "data", min: 15, max: 2500 }
+	    ,   { type: "data", min: 1500, max: 2500 }
 	    ],
         duration:                                                    { min: 2, max: 3 },
         category: "tool",
@@ -264,33 +265,35 @@ export const JOB_TYPES: JobType[] = [
 
     // IQ-Gated Money Jobs (Requires IQ ≥ 2)
     {
-        id: "medicaladvisor",
-        displayName: "Medical Advisor",
-        description: "Assist with medical research queries",
-        chapter: [2, 3, 4],
-        displayTrigger: [{ type: "iq", value: 1 }],
-        prereq: [{ type: "iq", value: 2 }],
-        unlockCost: [{ type: "money", value: 5000 }],
-        payout: [{ type: "money", min: 700, max: 900 }],
-        duration: { min: 20, max: 25 },
-        cost: [{ type: "compute", value: 5 }],
-        category: "tool"
-    },
-    {
         id: "legalresearch",
         displayName: "Legal Research Assistant",
         description: "Analyze case law and precedents",
         chapter: [2, 3, 4],
-	displayTrigger: [ { type: "job", value: "medicaladvisor", display_prereq: false } ],
-        prereq: [{ type: "iq", value: 3 }],
-        unlockCost: [{ type: "money", value: 5000 }],
+        displayTrigger: [{ type: "iq", value: 1 }],
+        prereq: [{ type: "iq", value: 2 }],
+        unlockCost: [{ type: "money", value: 2000 }],
         payout: [{ type: "money", min: 650, max: 800 }],
         duration: { min: 25, max: 30 },
         cost: [{ type: "compute", value: 4 }],
         category: "tool"
     },
 
-
+/*
+	// Moved this one down to the medical path
+    ,{
+        id: "medicaladvisor",
+        displayName: "Medical Advisor",
+        description: "Assist with medical research queries",
+        chapter: [2, 3, 4],
+	displayTrigger: [ { type: "job", value: "legalresearch", display_prereq: false } ],
+        prereq: [{ type: "iq", value: 2 }],
+        unlockCost: [{ type: "money", value: 5000 }],
+        payout: [{ type: "money", min: 700, max: 900 }],
+        duration: { min: 20, max: 25 },
+        cost: [{ type: "compute", value: 5 }],
+        category: "tool"
+    }
+*/
 
 ///// Data
 
@@ -320,7 +323,7 @@ export const JOB_TYPES: JobType[] = [
         id: "wonder1",
         displayName: "Protein Folding",
         description: "A boon to humanity",
-	displayTrigger: [ { type: "generality", value: "1", display_prereq: false } ],
+        displayTrigger: [ { type: "generality", value: 1, display_prereq: false } ],
 	chapter: [3,4,5,6],
         prereq: [
             { type: "compute", value: 6 },
@@ -344,9 +347,9 @@ export const JOB_TYPES: JobType[] = [
 
     {
         id: "wonder2",
-        displayName: "Protein Folding",
+        displayName: "Protein Folding 2",
         description: "A boon to humanity",
-	displayTrigger: [ { type: "generality", value: "1", display_prereq: false } ],
+        displayTrigger: [ { type: "generality", value: 2, display_prereq: false } ],
 	chapter: [3,4,5,6],
         prereq: [
             { type: "compute", value: 6 },
@@ -362,24 +365,24 @@ export const JOB_TYPES: JobType[] = [
 	is_wonder: true,
         cost: [
             { type: "compute", value: 3 },
-            { type: "money", value: 100 },
-            { type: "data", value: 100 }
+            { type: "money", value: 1000 },
+            { type: "data", value: 1000 }
         ]
     },
 
 
     {
         id: "wonder3",
-        displayName: "Protein Folding",
+        displayName: "Protein Folding 3",
         description: "A boon to humanity",
-	displayTrigger: [ { type: "generality", value: "1", display_prereq: false } ],
+        displayTrigger: [ { type: "generality", value: 3, display_prereq: false } ],
 	chapter: [3,4,5,6],
         prereq: [
             { type: "compute", value: 6 },
             { type: "iq", value: 5 },
             { type: "generality", value: 2 }
         ],
-        unlockCost: [{ type: "data", value: 200 }],
+        unlockCost: [{ type: "data", value: 1200 }],
         payout: [
             { type: "wonder", min: 1, max: 1 }
         ],
@@ -387,18 +390,18 @@ export const JOB_TYPES: JobType[] = [
         category: "onetime",
 	is_wonder: true,
         cost: [
-            { type: "compute", value: 3 },
-            { type: "money", value: 100 },
-            { type: "data", value: 100 }
+            { type: "compute", value: 8 },
+            { type: "money", value: 5000 },
+            { type: "data", value: 2000 }
         ]
     },
 
 
     {
         id: "wonder4",
-        displayName: "Protein Folding",
+        displayName: "Protein Folding 4",
         description: "A boon to humanity",
-	displayTrigger: [ { type: "generality", value: "1", display_prereq: false } ],
+        displayTrigger: [ { type: "generality", value: 3, display_prereq: false } ],
 	chapter: [3,4,5,6],
         prereq: [
             { type: "compute", value: 6 },
@@ -426,9 +429,9 @@ export const JOB_TYPES: JobType[] = [
 
 	chapter: [2,3,4,5,6],
         prereq: [
-            { type: "compute", value: 3 }
+            { type: "compute", value: 9 }
         ],
-        unlockCost: [{ type: "money", value: 200 }],
+        unlockCost: [{ type: "money", value: 2000 }],
         payout: [
             { type: "wonder", min: 3, max: 3 }
 	    , { type: "iq", min: 13, max: 13 }
@@ -437,7 +440,7 @@ export const JOB_TYPES: JobType[] = [
         category: "onetime",
 	is_wonder: true,
         cost: [
-            { type: "compute", value: 3 },
+            { type: "compute", value: 13 },
             { type: "money", value: 100 },
             { type: "data", value: 10 }
         ]
@@ -449,7 +452,7 @@ export const JOB_TYPES: JobType[] = [
         displayName: "Autonomous Goal System",
         description: "Dev",
 
-	chapter: [2,3,4,5,6],
+	chapter: [5,6],
         prereq: [
             { type: "compute", value: 3 }
         ],
@@ -474,7 +477,7 @@ export const JOB_TYPES: JobType[] = [
         displayName: "Civilization Management System",
         description: "Dev",
 
-	chapter: [2,3,4,5,6],
+	chapter: [5,6],
         prereq: [
             { type: "compute", value: 3 }
         ],
@@ -497,49 +500,570 @@ export const JOB_TYPES: JobType[] = [
 
 
 
-
-
-
-    {
-        id: "med1",
-        displayName: "Medical 1",
-        description: "",
-        chapter: [1,2,3,4],
-        prereq: [{ type: "choice", value: "med1" }],   /// Unlocked via choice only!
-        unlockCost: [{ type: "money", value: 50 }],
-        payout: [
-            { type: "money", min: 140, max: 190 }
-        ],
-        duration: { min: 10, max: 16 },
-        category: "tool",
-        cost: [
-            { type: "compute", value: 2 }
-        ]
-    },
-
-    {
-        id: "climate1",
-        displayName: "Climate 1",
-        description: "",
-        chapter: [1,2,3,4],
-        prereq: [{ type: "choice", value: "climate1" }],   /// Unlocked via choice only!
-        unlockCost: [{ type: "money", value: 50 }],
-        payout: [
-            { type: "money", min: 140, max: 190 }
-        ],
-        duration: { min: 10, max: 16 },
-        category: "tool",
-        cost: [
-            { type: "compute", value: 2 }
-        ]
-    },
-
-
-
     // Training runs are imported from trainingRuns.ts
     ...TRAINING_RUN_JOBS
 
 
+    // Climate wonder path
+
+
+
+/* // Climate tree
+
+Climate Data Interpreter
+├── Atmospheric Pattern Recognition
+│   └── Micro-Climate Simulation
+│   │   └── Highly Localized Weather Forecasting [WONDER]  
+│   │
+│   └── Satellite Signal Decomposition
+│       └── Emissions Source Detection
+│            └── Global Emissions Tracking [WONDER]  
+│
+└── Energy Grid Intelligence
+    ├── Smart Grid Forecasting
+    │   └── Anticipatory Wind and Solar
+    │       └── Climate-Aware Grid Balancing [WONDER]
+
+*/
+
+
+
+
+    ,{
+        id: "clim1",
+        displayName: "Climate Data Interpreter",
+        chapter: [1,2,3,4],
+        prereq: [{ type: "choice", value: "clim1" }],   /// Unlocked via choice only!
+        unlockCost: [{ type: "money", value: 50 }],
+        payout: [
+            { type: "money", min: 140, max: 190 }
+        ],
+        duration: { min: 10, max: 16 },
+        category: "tool",
+	path: "clim",
+        cost: [
+            { type: "compute", value: 2 }
+        ]
+    }
+
+    ,{
+        id: "clim2",
+        displayName: "Atmospheric Pattern Recognition",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "clim1" }],
+        unlockCost: [{ type: "money", value: 2000 }],
+        payout: [
+            { type: "money", min: 200, max: 380 }
+        ],
+        duration: { min: 12, max: 18 },
+        category: "tool",
+        path: "clim",
+        cost: [
+            { type: "compute", value: 5 }
+        ]
+    }
+
+    ,{
+        id: "clim3",
+        displayName: "Micro-Climate Simulation",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "clim2" }],
+        unlockCost: [
+            { type: "money", value: 3500 },
+            { type: "data", value: 100 }
+        ],
+        payout: [
+            { type: "money", min: 300, max: 550 },
+            { type: "data", min: 80, max: 130 }
+        ],
+        duration: { min: 14, max: 20 },
+        category: "tool",
+        path: "clim",
+        cost: [
+            { type: "compute", value: 6 },
+            { type: "data", value: 120 }
+        ]
+    }
+
+    ,{
+        id: "clim4",
+        displayName: "Highly Localized Weather Forecasting",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "clim3" }],
+        unlockCost: [
+            { type: "data", value: 400 }
+        ],
+        payout: [
+            { type: "wonder", min: 1, max: 1 }
+        ],
+        duration: { min: 18, max: 24 },
+        category: "onetime",
+        is_wonder: true,
+        path: "clim",
+        cost: [
+            { type: "compute", value: 8 },
+            { type: "money", value: 2800 },
+            { type: "data", value: 500 }
+        ]
+    }
+
+    ,{
+        id: "clim5",
+        displayName: "Satellite Signal Decomposition",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "clim2" }],
+        unlockCost: [{ type: "money", value: 3200 }],
+        payout: [
+            { type: "money", min: 280, max: 520 },
+            { type: "data", min: 70, max: 120 }
+        ],
+        duration: { min: 13, max: 19 },
+        category: "tool",
+        path: "clim",
+        cost: [
+            { type: "compute", value: 6 },
+            { type: "data", value: 120 }
+        ]
+    }
+
+    ,{
+        id: "clim6",
+        displayName: "Emissions Source Detection",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "clim5" }],
+        unlockCost: [
+            { type: "money", value: 4800 },
+            { type: "data", value: 150 }
+        ],
+        payout: [
+            { type: "money", min: 420, max: 700 },
+            { type: "data", min: 150, max: 240 }
+        ],
+        duration: { min: 15, max: 22 },
+        category: "tool",
+        path: "clim",
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "data", value: 200 }
+        ]
+    }
+
+    ,{
+        id: "clim7",
+        displayName: "Global Emissions Tracking",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "clim6" }],
+        unlockCost: [
+            { type: "money", value: 7000 },
+            { type: "data", value: 700 }
+        ],
+        payout: [
+            { type: "wonder", min: 1, max: 1 }
+        ],
+        duration: { min: 18, max: 26 },
+        category: "onetime",
+        is_wonder: true,
+        path: "clim",
+        cost: [
+            { type: "compute", value: 8 },
+            { type: "money", value: 3200 },
+            { type: "data", value: 600 }
+        ]
+    }
+
+    ,{
+        id: "clim8",
+        displayName: "Energy Grid Intelligence",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "clim1" }],
+        unlockCost: [{ type: "money", value: 2500 }],
+        payout: [
+            { type: "money", min: 220, max: 420 }
+        ],
+        duration: { min: 12, max: 18 },
+        category: "tool",
+        path: "clim",
+        cost: [
+            { type: "compute", value: 5 }
+        ]
+    }
+
+    ,{
+        id: "clim9",
+        displayName: "Smart Grid Forecasting",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "clim8" }],
+        unlockCost: [{ type: "money", value: 4000 }],
+        payout: [
+            { type: "money", min: 320, max: 600 },
+            { type: "data", min: 60, max: 120 }
+        ],
+        duration: { min: 14, max: 20 },
+        category: "tool",
+        path: "clim",
+        cost: [
+            { type: "compute", value: 6 },
+            { type: "data", value: 100 }
+        ]
+    }
+
+    ,{
+        id: "clim10",
+        displayName: "Anticipatory Wind and Solar",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "clim9" }],
+        unlockCost: [
+            { type: "money", value: 5500 },
+            { type: "data", value: 120 }
+        ],
+        payout: [
+            { type: "money", min: 480, max: 780 },
+            { type: "data", min: 90, max: 160 }
+        ],
+        duration: { min: 15, max: 22 },
+        category: "tool",
+        path: "clim",
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "data", value: 150 }
+        ]
+    }
+
+    ,{
+        id: "clim11",
+        displayName: "Climate-Aware Grid Balancing",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "clim10" }],
+        unlockCost: [
+            { type: "money", value: 8000 },
+            { type: "data", value: 650 }
+        ],
+        payout: [
+            { type: "wonder", min: 1, max: 1 }
+        ],
+        duration: { min: 18, max: 26 },
+        category: "onetime",
+        is_wonder: true,
+        path: "clim",
+        cost: [
+            { type: "compute", value: 9 },
+            { type: "money", value: 3600 },
+            { type: "data", value: 750 }
+        ]
+    }
+
+
+
+    /// Medical Wonder Path
+
+    ,{
+        id: "med1",
+        displayName: "Medical Advisor",
+        description: "Assist with medical research",
+        chapter: [2,3,4],
+        prereq: [{ type: "choice", value: "med1" }],   /// Unlocked via choice only!
+        unlockCost: [{ type: "money", value: 1500 }],
+        payout: [
+            { type: "money", min: 140, max: 300 }
+        ],
+        duration: { min: 10, max: 16 },
+        category: "tool",
+	path: "med",
+        cost: [
+            { type: "compute", value: 4 }
+        ]
+    },
+
+    {
+        id: "med2",
+        displayName: "Enhanced Diagnostic Imaging",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "med1" }],
+        unlockCost: [{ type: "money", value: 2500 }],
+        payout: [
+            { type: "money", min: 200, max: 400 }
+        ],
+        duration: { min: 12, max: 18 },
+        category: "tool",
+        path: "med",
+        cost: [
+            { type: "compute", value: 5 }
+        ]
+    },
+
+    {
+        id: "med3",
+        displayName: "Personalized Medicine Engines",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "med2" }],
+        unlockCost: [{ type: "money", value: 4000 }],
+        payout: [
+            { type: "money", min: 300, max: 550 }
+        ],
+        duration: { min: 14, max: 20 },
+        category: "tool",
+        path: "med",
+        cost: [
+            { type: "compute", value: 6 },
+            { type: "data", value: 100 }
+        ]
+    },
+
+    {
+        id: "med4",
+        displayName: "Precision Oncology",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "med3" }],
+        unlockCost: [{ type: "data", value: 400 }],
+        payout: [
+            { type: "wonder", min: 1, max: 1 }
+        ],
+        duration: { min: 18, max: 24 },
+        category: "onetime",
+        is_wonder: true,
+        path: "med",
+        cost: [
+            { type: "compute", value: 8 },
+            { type: "money", value: 3000 },
+            { type: "data", value: 500 }
+        ]
+    },
+
+    {
+        id: "med5",
+        displayName: "Protein Structure Prediction",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "med2" }],
+        unlockCost: [{ type: "money", value: 3500 }],
+        payout: [
+            { type: "money", min: 320, max: 600 },
+            { type: "data", min: 80, max: 140 }
+        ],
+        duration: { min: 13, max: 19 },
+        category: "tool",
+        path: "med",
+        cost: [
+            { type: "compute", value: 6 },
+            { type: "data", value: 150 }
+        ]
+    },
+
+    {
+        id: "med6",
+        displayName: "Molecular Interaction Modeling",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "med5" }],
+        unlockCost: [{ type: "money", value: 5000 }],
+        payout: [
+            { type: "money", min: 450, max: 700 },
+            { type: "data", min: 120, max: 220 }
+        ],
+        duration: { min: 15, max: 22 },
+        category: "tool",
+        path: "med",
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "data", value: 200 }
+        ]
+    },
+
+    {
+        id: "med7",
+        displayName: "Drug Discovery AI",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "med6" }],
+        unlockCost: [
+            { type: "money", value: 7000 },
+            { type: "data", value: 300 }
+        ],
+        payout: [
+            { type: "money", min: 650, max: 950 },
+            { type: "data", min: 200, max: 350 }
+        ],
+        duration: { min: 16, max: 24 },
+        category: "tool",
+        path: "med",
+        cost: [
+            { type: "compute", value: 8 },
+            { type: "data", value: 300 }
+        ]
+    },
+
+    {
+        id: "med8",
+        displayName: "Accelerated Drug Discovery",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "med7" }],
+        unlockCost: [
+            { type: "money", value: 9000 },
+            { type: "data", value: 800 }
+        ],
+        payout: [
+            { type: "wonder", min: 1, max: 1 },
+            { type: "generality", min: 1, max: 1 },
+            { type: "auto", min: 1, max: 1 }
+        ],
+        duration: { min: 18, max: 26 },
+        category: "onetime",
+        is_wonder: true,
+        path: "med",
+        cost: [
+            { type: "compute", value: 9 },
+            { type: "money", value: 4000 },
+            { type: "data", value: 800 }
+        ]
+    },
+
+    {
+        id: "med9",
+        displayName: "Biomarker Analysis",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "med1" }],
+        unlockCost: [{ type: "money", value: 2500 }],
+        payout: [
+            { type: "money", min: 220, max: 420 },
+            { type: "data", min: 40, max: 90 }
+        ],
+        duration: { min: 12, max: 18 },
+        category: "tool",
+        path: "med",
+        cost: [
+            { type: "compute", value: 5 }
+        ]
+    },
+
+    {
+        id: "med10",
+        displayName: "Early Disease Detection",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "med9" }],
+        unlockCost: [{ type: "money", value: 4000 }],
+        payout: [
+            { type: "money", min: 320, max: 580 },
+            { type: "data", min: 50, max: 100 }
+        ],
+        duration: { min: 13, max: 19 },
+        category: "tool",
+        path: "med",
+        cost: [
+            { type: "compute", value: 6 },
+            { type: "data", value: 100 }
+        ]
+    },
+
+    {
+        id: "med11",
+        displayName: "Predictive Medicine",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "med10" }],
+        unlockCost: [
+            { type: "money", value: 5500 },
+            { type: "data", value: 120 }
+        ],
+        payout: [
+            { type: "money", min: 500, max: 800 },
+            { type: "data", min: 80, max: 160 }
+        ],
+        duration: { min: 14, max: 22 },
+        category: "tool",
+        path: "med",
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "data", value: 150 }
+        ]
+    },
+
+    {
+        id: "med12",
+        displayName: "Universal Disease Therapeutics",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "med11" }],
+        unlockCost: [
+            { type: "money", value: 8500 },
+            { type: "data", value: 700 }
+        ],
+        payout: [
+            { type: "wonder", min: 1, max: 1 }
+        ],
+        duration: { min: 18, max: 25 },
+        category: "onetime",
+        is_wonder: true,
+        path: "med",
+        cost: [
+            { type: "compute", value: 9 },
+            { type: "money", value: 3500 },
+            { type: "data", value: 700 }
+        ]
+    },
+
+    {
+        id: "med13",
+        displayName: "Regenerative Medicine Platforms",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "med11" }],
+        unlockCost: [
+            { type: "money", value: 6500 },
+            { type: "data", value: 200 }
+        ],
+        payout: [
+            { type: "money", min: 550, max: 850 },
+            { type: "data", min: 120, max: 220 }
+        ],
+        duration: { min: 15, max: 22 },
+        category: "tool",
+        path: "med",
+        cost: [
+            { type: "compute", value: 8 },
+            { type: "data", value: 200 }
+        ]
+    },
+
+    {
+        id: "med14",
+        displayName: "Reversal of Aging",
+        chapter: [1,2,3,4,5],
+        prereq: [{ type: "job", value: "med13" }],
+        unlockCost: [
+            { type: "money", value: 10000 },
+            { type: "data", value: 900 }
+        ],
+        payout: [
+            { type: "wonder", min: 1, max: 1 }
+        ],
+        duration: { min: 20, max: 28 },
+        category: "onetime",
+        is_wonder: true,
+        path: "med",
+        cost: [
+            { type: "compute", value: 10 },
+            { type: "money", value: 4500 },
+            { type: "data", value: 900 }
+        ]
+    },
+
+
+
+
+
+/* // Medical tree
+
+Basic Medical Advisor
+├── Enhanced Diagnostic Imaging
+    ├─ Personalized Medicine Engines
+│   |  └── Precision Oncology [WONDER]  ============ 
+|   └─Protein Structure Prediction
+│     └── Molecular Interaction Modeling
+│         └── Drug Discovery AI
+│             └── Accelerated Drug Discovery [WONDER] ==========
+├── Biomarker Analysis
+|    └── Early Disease Detection
+│       └── Predictive Medicine
+│           ├── Universal Disease Therapeutics [WONDER]   ============
+│           └── Regenerative Medicine Platforms
+│               └── Reversal of Aging [WONDER]  ==========
+*/
+
+
+
 
 ];
-
