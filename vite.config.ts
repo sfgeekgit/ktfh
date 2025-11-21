@@ -9,6 +9,9 @@ import storyLoaderPlugin from "./vite-plugin-story-loader";
 // https://vitejs.dev/config/
 export default defineConfig({
     base: "./",
+    server: {
+        allowedHosts: ['.documentbrain.com', 'thechoicebeforeus.com']
+    },
     build: {
         rollupOptions: {
             output: {

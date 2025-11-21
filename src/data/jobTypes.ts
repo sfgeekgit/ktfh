@@ -115,7 +115,7 @@ export const JOB_TYPES: JobType[] = [
         payout: [
             { type: "money", min: 70, max: 120 }
         ],
-        duration: { min: 8, max: 14 },
+        duration: { min: 7, max: 10 },
         category: "tool",
         cost: [
             { type: "compute", value: 2 }
@@ -134,7 +134,7 @@ export const JOB_TYPES: JobType[] = [
         payout: [
             { type: "money", min: 140, max: 190 }
         ],
-        duration: { min: 10, max: 16 },
+        duration: { min: 8, max: 11 },
         category: "tool",
         cost: [
             { type: "compute", value: 2 }
@@ -154,7 +154,7 @@ export const JOB_TYPES: JobType[] = [
         payout: [
             { type: "money", min: 70, max: 150 }
         ],
-        duration: { min: 10, max: 16 },
+        duration: { min: 8, max: 11 },
         category: "tool",
         cost: [
             { type: "compute", value: 3 }
@@ -175,7 +175,7 @@ export const JOB_TYPES: JobType[] = [
         payout: [
             { type: "data", min: 70, max: 150 }
         ],
-        duration: { min: 6, max: 10 }, // todo Make slower
+        duration: { min: 7, max: 10 }, // todo Make slower
         category: "gameplay",
         cost: [
             { type: "compute", value: 1 },
@@ -196,7 +196,7 @@ export const JOB_TYPES: JobType[] = [
             { type: "money", min: 170, max: 250 }
 	    ,             { type: "data", min: 5, max: 15 }
         ],
-        duration: { min: 11, max: 20 },
+        duration: { min: 8, max: 11 },
         category: "tool",
 	cost: [
             { type: "compute", value: 3 }
@@ -218,7 +218,7 @@ export const JOB_TYPES: JobType[] = [
 		{ type: "money", min: 870, max: 1150 }
 	    ,   { type: "data", min: 15, max: 25 }
 	    ],
-        duration:                                                    { min: 20, max: 30 },
+        duration: { min: 11, max: 15 },
         category: "tool",
         cost: [                                                  { type: "compute", value: 3 }]
     },
@@ -274,7 +274,7 @@ export const JOB_TYPES: JobType[] = [
         prereq: [{ type: "iq", value: 2 }],
         unlockCost: [{ type: "money", value: 2000 }],
         payout: [{ type: "money", min: 650, max: 800 }],
-        duration: { min: 25, max: 30 },
+        duration: { min: 13, max: 17 },
         cost: [{ type: "compute", value: 4 }],
         category: "tool"
     },
@@ -290,7 +290,7 @@ export const JOB_TYPES: JobType[] = [
         prereq: [{ type: "iq", value: 2 }],
         unlockCost: [{ type: "money", value: 5000 }],
         payout: [{ type: "money", min: 700, max: 900 }],
-        duration: { min: 20, max: 25 },
+        duration: { min: 11, max: 15 },
         cost: [{ type: "compute", value: 5 }],
         category: "tool"
     }
@@ -309,7 +309,7 @@ export const JOB_TYPES: JobType[] = [
         payout: [
             { type: "data", min: 500, max: 550 }
         ],
-        duration: { min: 9, max: 25 },
+        duration: { min: 8, max: 11 },
         category: "gameplay",
         cost: [
             { type: "compute", value: 4 },
@@ -544,13 +544,31 @@ Sentiment Analysis
                     └── Algorithmic Authoritarianism            [BAD WONDER]
 
 // To do!! Bad wonders lead to bad game ending.
+// Done! test!
 
-//  TODO: Have an interlude choice trggerd by first run (not unlock, first actual run of) Public Sentiment Analysis that triggers choice
+
+//  TODO: Have an interlude choice trggerd by first run (not unlock, first actual run of) Public Sentiment Analysis (dem4) after choice (maybe delay somehow, like complete 5 jobs (any jobs) after unlock, then the story opens this one.
+// Done! test!
+
+to do: add mental health path startgin from  "Multi-Stakeholder Dialogue"
+This will be it's own path "mood"  but will be triggered by the good dem choice dem4
+
+// Also, these names could be better, this tree shorter, this is a placeholder atm
+
+├── Multi-Stakeholder Dialogue  (ch2)           // prereq: choice:dem4
+│   └── Mental Health Signal Tagging
+│       └── Behavioral Pattern Analysis
+│           └── Mood and Stress Classification
+│               └── Early Crisis Detection
+│                   └── Mental Health Check-ins
+│                       └── Continuous Support Monitoring
+│                           └── Mental Health Early-Warning Guardian   [GOOD WONDER]
 
 */
 
 
     // Edu path
+
 
 /*
 Education Tech Tree
@@ -581,7 +599,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 240, max: 380 }
         ],
-        duration: { min: 12, max: 18 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "dem",
         cost: [
@@ -598,7 +616,7 @@ Digital Learning Platforms
         payout: [
             { type: "generality", min: 1, max: 1 }
         ],
-        duration: { min: 14, max: 20 },
+        duration: { min: 9, max: 12 },
         category: "onetime",
         path: "dem",
         cost: [
@@ -619,7 +637,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 360, max: 560 }
         ],
-        duration: { min: 15, max: 22 },
+        duration: { min: 10, max: 13 },
         category: "tool",
         path: "dem",
         cost: [
@@ -637,7 +655,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 280, max: 460 }
         ],
-        duration: { min: 13, max: 19 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "dem",
         cost: [
@@ -656,7 +674,7 @@ Digital Learning Platforms
         payout: [
             { type: "data", min: 5000, max: 5600 }
         ],
-        duration: { min: 14, max: 20 },
+        duration: { min: 9, max: 12 },
         category: "onetime",
         path: "dem",
         cost: [
@@ -677,7 +695,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 450, max: 720 }
         ],
-        duration: { min: 15, max: 22 },
+        duration: { min: 10, max: 13 },
         category: "tool",
         path: "dem",
         cost: [
@@ -720,7 +738,7 @@ Digital Learning Platforms
         payout: [
             { type: "generality", min: 1, max: 1 }
         ],
-        duration: { min: 14, max: 20 },
+        duration: { min: 9, max: 12 },
         category: "onetime",
         path: "dem",
         cost: [
@@ -741,7 +759,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 360, max: 600 }
         ],
-        duration: { min: 15, max: 22 },
+        duration: { min: 10, max: 13 },
         category: "tool",
         path: "dem",
         cost: [
@@ -762,7 +780,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 460, max: 720 }
         ],
-        duration: { min: 16, max: 24 },
+        duration: { min: 10, max: 13 },
         category: "tool",
         path: "dem",
         cost: [
@@ -802,7 +820,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 640, max: 860 }
         ],
-        duration: { min: 14, max: 20 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "dem",
         cost: [
@@ -821,7 +839,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 920, max: 1260 }
         ],
-        duration: { min: 15, max: 22 },
+        duration: { min: 10, max: 13 },
         category: "tool",
         path: "dem",
         cost: [
@@ -842,7 +860,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 720, max: 1100 }
         ],
-        duration: { min: 16, max: 24 },
+        duration: { min: 10, max: 13 },
         category: "tool",
         path: "dem",
         cost: [
@@ -886,7 +904,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 420, max: 660 }
         ],
-        duration: { min: 15, max: 22 },
+        duration: { min: 10, max: 13 },
         category: "tool",
         path: "dem",
         cost: [
@@ -908,7 +926,7 @@ Digital Learning Platforms
             { type: "autonomy", min: 1, max: 1 },
             { type: "data", min: 200, max:300}
         ],
-        duration: { min: 18, max: 26 },
+        duration: { min: 11, max: 15 },
         category: "tool",
         path: "dem",
         cost: [
@@ -951,7 +969,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 160, max: 260 }
         ],
-        duration: { min: 10, max: 15 },
+        duration: { min: 8, max: 11 },
         category: "tool",
         path: "edu",
         cost: [
@@ -968,7 +986,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 220, max: 380 }
         ],
-        duration: { min: 12, max: 18 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "edu",
         cost: [
@@ -987,7 +1005,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 320, max: 520 }
         ],
-        duration: { min: 13, max: 19 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "edu",
         cost: [
@@ -1007,7 +1025,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 520, max: 800 }
         ],
-        duration: { min: 15, max: 22 },
+        duration: { min: 10, max: 13 },
         category: "tool",
         path: "edu",
         cost: [
@@ -1024,7 +1042,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 340, max: 540 }
         ],
-        duration: { min: 14, max: 20 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "edu",
         cost: [
@@ -1044,7 +1062,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 460, max: 680 }
         ],
-        duration: { min: 15, max: 22 },
+        duration: { min: 10, max: 13 },
         category: "tool",
         path: "edu",
         cost: [
@@ -1064,7 +1082,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 560, max: 880 }
         ],
-        duration: { min: 16, max: 24 },
+        duration: { min: 10, max: 13 },
         category: "tool",
         path: "edu",
         cost: [
@@ -1105,7 +1123,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 360, max: 600 }
         ],
-        duration: { min: 14, max: 20 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "edu",
         cost: [
@@ -1125,7 +1143,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 520, max: 820 }
         ],
-        duration: { min: 15, max: 22 },
+        duration: { min: 10, max: 13 },
         category: "tool",
         path: "edu",
         cost: [
@@ -1190,7 +1208,7 @@ Climate Data Interpreter
         payout: [
             { type: "money", min: 140, max: 190 }
         ],
-        duration: { min: 10, max: 16 },
+        duration: { min: 8, max: 11 },
         category: "tool",
 	path: "clim",
         cost: [
@@ -1207,7 +1225,7 @@ Climate Data Interpreter
         payout: [
             { type: "money", min: 200, max: 380 }
         ],
-        duration: { min: 12, max: 18 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "clim",
         cost: [
@@ -1228,7 +1246,7 @@ Climate Data Interpreter
             { type: "money", min: 300, max: 550 },
             { type: "data", min: 80, max: 130 }
         ],
-        duration: { min: 14, max: 20 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "clim",
         cost: [
@@ -1269,7 +1287,7 @@ Climate Data Interpreter
             { type: "money", min: 280, max: 520 },
             { type: "data", min: 70, max: 120 }
         ],
-        duration: { min: 13, max: 19 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "clim",
         cost: [
@@ -1291,7 +1309,7 @@ Climate Data Interpreter
             { type: "money", min: 420, max: 700 },
             { type: "data", min: 150, max: 240 }
         ],
-        duration: { min: 15, max: 22 },
+        duration: { min: 10, max: 13 },
         category: "tool",
         path: "clim",
         cost: [
@@ -1332,7 +1350,7 @@ Climate Data Interpreter
         payout: [
             { type: "money", min: 220, max: 420 }
         ],
-        duration: { min: 12, max: 18 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "clim",
         cost: [
@@ -1350,7 +1368,7 @@ Climate Data Interpreter
             { type: "money", min: 320, max: 600 },
             { type: "data", min: 60, max: 120 }
         ],
-        duration: { min: 14, max: 20 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "clim",
         cost: [
@@ -1372,7 +1390,7 @@ Climate Data Interpreter
             { type: "money", min: 480, max: 780 },
             { type: "data", min: 90, max: 160 }
         ],
-        duration: { min: 15, max: 22 },
+        duration: { min: 10, max: 13 },
         category: "tool",
         path: "clim",
         cost: [
@@ -1418,7 +1436,7 @@ Climate Data Interpreter
         payout: [
             { type: "money", min: 140, max: 300 }
         ],
-        duration: { min: 10, max: 16 },
+        duration: { min: 8, max: 11 },
         category: "tool",
 	path: "med",
         cost: [
@@ -1435,7 +1453,7 @@ Climate Data Interpreter
         payout: [
             { type: "money", min: 200, max: 400 }
         ],
-        duration: { min: 12, max: 18 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "med",
         cost: [
@@ -1452,7 +1470,7 @@ Climate Data Interpreter
         payout: [
             { type: "money", min: 300, max: 550 }
         ],
-        duration: { min: 14, max: 20 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "med",
         cost: [
@@ -1491,7 +1509,7 @@ Climate Data Interpreter
             { type: "money", min: 320, max: 600 },
             { type: "data", min: 80, max: 140 }
         ],
-        duration: { min: 13, max: 19 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "med",
         cost: [
@@ -1510,7 +1528,7 @@ Climate Data Interpreter
             { type: "money", min: 450, max: 700 },
             { type: "data", min: 120, max: 220 }
         ],
-        duration: { min: 15, max: 22 },
+        duration: { min: 10, max: 13 },
         category: "tool",
         path: "med",
         cost: [
@@ -1532,7 +1550,7 @@ Climate Data Interpreter
             { type: "money", min: 650, max: 950 },
             { type: "data", min: 200, max: 350 }
         ],
-        duration: { min: 16, max: 24 },
+        duration: { min: 10, max: 13 },
         category: "tool",
         path: "med",
         cost: [
@@ -1576,7 +1594,7 @@ Climate Data Interpreter
             { type: "money", min: 220, max: 420 },
             { type: "data", min: 40, max: 90 }
         ],
-        duration: { min: 12, max: 18 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "med",
         cost: [
@@ -1594,7 +1612,7 @@ Climate Data Interpreter
             { type: "money", min: 320, max: 580 },
             { type: "data", min: 50, max: 100 }
         ],
-        duration: { min: 13, max: 19 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "med",
         cost: [
@@ -1616,7 +1634,7 @@ Climate Data Interpreter
             { type: "money", min: 500, max: 800 },
             { type: "data", min: 80, max: 160 }
         ],
-        duration: { min: 14, max: 22 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "med",
         cost: [
@@ -1661,7 +1679,7 @@ Climate Data Interpreter
             { type: "money", min: 550, max: 850 },
             { type: "data", min: 120, max: 220 }
         ],
-        duration: { min: 15, max: 22 },
+        duration: { min: 10, max: 13 },
         category: "tool",
         path: "med",
         cost: [
