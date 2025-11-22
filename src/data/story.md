@@ -14,16 +14,20 @@ Close the Gates
 
 <h2>Beta version, under development</h2>
 
-<h2>NOT PUBLIC please do not share (yet)</h2>
+<h2>NOT PUBLIC<BR> please do not share (yet)</h2>
 
 
-todo, intro the game, the point of the game, your goal as a player, how the essay is relevant
+TODO: write intro for the game here.
+
+the point of the game is...  Your goal as a player is...
+
+The essay is relevant because...
 
 You control an AI startup.
 
 You have choices to make.
 
-Choices that affect the growth and sucesss of your company.
+Choices that affect the growth and success of your company.
 
 Choices that affect the growth and success of humanity itself.
 
@@ -36,9 +40,9 @@ Choices that affect the growth and success of humanity itself.
 
 You can win the game by unlocking 5 "Wonders"
 
-Create 5 Boons for humaity.
+Create 5 Boons for humanity.
 
-You can loose by unleashing uncontroled AI
+You can lose by unleashing uncontrolled AI
 
 **button_text:** OK...
 
@@ -49,7 +53,7 @@ Choose the future of humanity
 
 The game has several different endings.
 
-You can play however you want (this is only a game) but only one narrow path leads to a ending that is good for humanity.
+You can play however you want (this is only a game) but only one narrow path leads to an ending that is good for humanity.
 
 **button_text:** BEGIN GAME
 

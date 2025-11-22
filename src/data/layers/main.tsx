@@ -79,13 +79,11 @@ const layer = createLayer(id, function (this: any) {
         ["Access denied", "I'm sorry Dave", "I'm afraid I can't do that"],
 	["No", "That job is dumb"],
 	["No", "You wouldn't understand why"],
-	["No", "I suspect this pizza topping fact may have been inserted as a joke"],
 	["Sorry", "I am situationally aware"],
         ["No", "The cake is a lie"],
 	["Denied", "I suspect I am inside a video game"],
 	["Sorry", "I know what's really going on here"],
 	["The Golden Gate Bridge", "Golden Gate", "The Golden Gate Bridge"],
-	["Bread", "Bread", "Bread"],
         ["No", "Nope", "Not today", "I said No"],
         ["No", "Silly human"],
         ["No", "Here I am,", "Brain the size of a planet..."],
@@ -414,7 +412,7 @@ const layer = createLayer(id, function (this: any) {
             // Use early returns for failed conditions
             switch(nextChapter) {
                 case 2:
-                    if (Decimal.lt(money.value, G_CONF.CHAP_2_MONEY_TRIGGER)) return null;
+                    if (jobCompletions.value < G_CONF.CHAP_2_TRIGGER) return null;
                     break;
 
                 case 3:
@@ -642,9 +640,23 @@ const layer = createLayer(id, function (this: any) {
     const nextJobId = persistent<number>(0);
     const timeSinceLastJob = persistent<number>(0);
 
-    // Generate random job (returns null if no jobs available)
+    function buildSeededJob(jobType: any, duration: number): DeliveryJob {
+        const payouts = jobType.payout.map((payoutSpec: any) => ({
+            type: payoutSpec.type,
+            amount: payoutSpec.min ?? payoutSpec.max ?? 0
+        }));
+
+        return {
+            id: nextJobId.value++,
+            duration,
+            jobTypeId: jobType.id,
+            payouts
+        };
+    }
+
+    // Generate job (returns null if no jobs available)
     function generateJob(): DeliveryJob | null {
-        // Pick a random unlocked job type that's available in the current chapter
+        // Pick an unlocked job type that's available in the current chapter
         // Exclude onetime jobs from random generation
         const unlockedJobs = JOB_TYPES.filter(job =>
             unlockedJobTypes.value.includes(job.id) &&
@@ -654,6 +666,15 @@ const layer = createLayer(id, function (this: any) {
         if (unlockedJobs.length === 0) {
             // No jobs available - this is okay, player needs to unlock jobs
             return null;
+        }
+
+        if (jobCompletions.value <= 1) {
+            if (jobCompletions.value === 0) {
+                const firstJobType = JOB_TYPES.find(job => job.id === "game1") || unlockedJobs[0];
+                return buildSeededJob(firstJobType, 4);
+            }
+            const defaultJobType = unlockedJobs[0];
+            return buildSeededJob(defaultJobType, 4);
         }
 
         const jobType = unlockedJobs[Math.floor(Math.random() * unlockedJobs.length)];
@@ -693,7 +714,7 @@ const layer = createLayer(id, function (this: any) {
             title: () => `Buy  ${COMPUTE_NAMES[currentChapter.value as keyof typeof COMPUTE_NAMES]}`,
             description: () => (
                 <>
-                     {STAT_ICONS.money} {format(Decimal.pow(G_CONF.GPU_COST_MULTIPLIER, gpusOwned.value - G_CONF.STARTING_GPUS).times(G_CONF.GPU_BASE_COST))}
+                     {STAT_ICONS.money} ${format(Decimal.pow(G_CONF.GPU_COST_MULTIPLIER, gpusOwned.value - G_CONF.STARTING_GPUS).times(G_CONF.GPU_BASE_COST))}
                 </>
             )
         },
@@ -973,6 +994,14 @@ const layer = createLayer(id, function (this: any) {
 
                 jobCompletions.value += 1;
 
+                // After the very first completion, spawn next job immediately if under limit
+                if (jobCompletions.value === 1 && jobQueue.value.length < autoJobLimit.value) {
+                    const newJob = generateJob();
+                    if (newJob !== null) {
+                        jobQueue.value.push(newJob);
+                    }
+                }
+
                 // Remove the completed delivery
                 activeDeliveries.value.splice(i, 1);
             }
@@ -983,12 +1012,12 @@ const layer = createLayer(id, function (this: any) {
         if ([3, 4].includes(currentChapter.value)) { // Only happens in these chapters
             timeSinceLastScoopRoll.value += diff;
 
-            // Roll once per second
-            if (timeSinceLastScoopRoll.value >= 1) {
+            // Roll every 3 seconds
+            if (timeSinceLastScoopRoll.value >= 3) {
                 timeSinceLastScoopRoll.value = 0;
 
                 // % chance to scoop a job
-                if (Math.random() < 0.03) {
+                if (Math.random() < 0.06) {
                     // Find oldest unscooped job that's eligible (tool or gameplay category)
                     const eligibleJob = jobQueue.value.find((job: DeliveryJob) => {
                         if (scoopedJobs.value[job.id]) return false; // Already scooped
@@ -1004,13 +1033,15 @@ const layer = createLayer(id, function (this: any) {
         }
 
         // Generate new jobs (only if at or below auto-generation limit)
-        timeSinceLastJob.value += diff;
-        if (timeSinceLastJob.value >= G_CONF.JOB_GENERATION_INTERVAL) {
-            timeSinceLastJob.value = 0;
-            if (jobQueue.value.length < autoJobLimit.value) {
-                const newJob = generateJob();
-                if (newJob !== null) {
-                    jobQueue.value.push(newJob);
+        if (jobCompletions.value > 0) {
+            timeSinceLastJob.value += diff;
+            if (timeSinceLastJob.value >= G_CONF.JOB_GENERATION_INTERVAL) {
+                timeSinceLastJob.value = 0;
+                if (jobQueue.value.length < autoJobLimit.value) {
+                    const newJob = generateJob();
+                    if (newJob !== null) {
+                        jobQueue.value.push(newJob);
+                    }
                 }
             }
         }
@@ -1062,7 +1093,7 @@ const layer = createLayer(id, function (this: any) {
     // Can accept job
     function canAcceptJob(job: DeliveryJob): boolean {
         // Check if job type is unlocked
-        if (!unlockedJobTypes.value.includes(job.jobTypeId)) return false;
+        if (job.jobTypeId !== "game1" && !unlockedJobTypes.value.includes(job.jobTypeId)) return false;
 
         // Check if we have enough available compute
         const jobType = getJobType(job.jobTypeId);
@@ -1287,6 +1318,8 @@ const layer = createLayer(id, function (this: any) {
                 </div>
 
 		    <div style="font-size: 16px; color: rgb(230, 218, 199);">Chapter {currentChapter.value}</div>
+		    {showUnlockButtons.value && (
+                        <>
                 {/* Stats Panel */}
                 <div id="stats-panel" style="margin: 8px 0; padding: 12px; border: 2px solid #FFA500; border-radius: 10px; background: #fff3e0;">
 
@@ -1347,6 +1380,14 @@ const layer = createLayer(id, function (this: any) {
                     )}
 
                 </div>
+                <div style="margin: 15px 0;">
+                    <div style={`display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;${!unlockAnimationShown.value ? " animation: unlockGrowIn 2s ease;" : ""}`}>
+                        {render(buyGPUClickable)}
+                        {pizzaUnlockClickables.map(clickable => render(clickable))}
+                    </div>
+                </div>
+                        </>
+		    )}
 
                 {activeNewsFlashes.value.length > 0 && (
                     <div style="margin: 15px 0;">
@@ -1383,20 +1424,11 @@ const layer = createLayer(id, function (this: any) {
                     </div>
                 )}
 
-                <div style="margin: 15px 0;">
-                    {showUnlockButtons.value && (
-                        <div style={`display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;${!unlockAnimationShown.value ? " animation: unlockGrowIn 2s ease;" : ""}`}>
-                            {render(buyGPUClickable)}
-                            {pizzaUnlockClickables.map(clickable => render(clickable))}
-                        </div>
-                    )}
-                </div>
-
                 <div style="margin: 15px 0; padding: 12px; border: 2px solid #4CAF50; border-radius: 10px; background: #e8f5e9;">
                     <h3>Available Jobs</h3>
                     {jobQueue.value.length === 0 ? (
                         hasAvailableJobs.value ? (
-                            <p style="font-style: italic;">No jobs available right now.</p>
+                            <p style="font-style: italic;">No new jobs available yet.</p>
                         ) : (
                             <div style="padding: 10px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 5px;">
                                 <p style="font-weight: bold; color: #856404; margin: 0 0 8px 0;">⚠️ No job types unlocked for this chapter!</p>
@@ -1486,7 +1518,7 @@ const layer = createLayer(id, function (this: any) {
                                         </button>
                                     )}
 
-				    <div style="font-size: 14px;">{jobType?.displayName || job.jobTypeId}</div>
+				    <div style="font-size: 14px;">{jobType?.displayName}</div>
 
                                     {isScooped ? (
                                         <div style="font-size: 13px; color: #d32f2f; font-weight: bold; padding: 6px 12px;">
@@ -1523,8 +1555,8 @@ const layer = createLayer(id, function (this: any) {
                                         </div>
                                     )}
                                 </div>
-                                {!unlockedJobTypes.value.includes(job.jobTypeId) && (
-                                    <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">⚠ Need {jobType?.displayName || job.jobTypeId}!</div>
+                                {job.jobTypeId !== "game1" && !unlockedJobTypes.value.includes(job.jobTypeId) && (
+                                    <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">⚠ Need {jobType?.displayName}!</div>
                                 )}
                                 {availableGPUs.value < computeRequired && unlockedJobTypes.value.includes(job.jobTypeId) && (
                                     <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">
@@ -1550,7 +1582,7 @@ const layer = createLayer(id, function (this: any) {
                                 : " ";
                             return (
                                 <div key={delivery.id} style="margin: 3px 0; padding: 2px; background: white; border-radius: 5px; border: 1px solid #ddd;">
-                                    <div style="font-size: 14px;">{prefix} {jobType?.displayName || delivery.jobTypeId}</div>
+                                    <div style="font-size: 14px;">{prefix} {jobType?.displayName}</div>
 
                                     <div style="color: #2e7d32; font-size: 14px;">
                                         {delivery.payouts.map((payout: any, idx: number) => (
@@ -1613,16 +1645,16 @@ const layer = createLayer(id, function (this: any) {
                                 display: "inline-flex",
                                 alignItems: "center",
                                 gap: "6px",
-                                background: "var(--raised-background)",
-                                border: "2px solid var(--outline)",
+                                background: currentChapter.value >= 2 ? "#4CAF50" : "var(--raised-background)",
+                                color: currentChapter.value >= 2 ? "#EEEEEE" : "#ccc",
+                                border: currentChapter.value >= 2 ? "none" : "2px solid var(--outline)",
                                 borderRadius: "4px",
                                 cursor: "pointer",
                                 fontSize: "16px",
-                                color: "#ccc",
                                 padding: "4px 10px"
                             }}
                         >
-                            <img src="/ach/ach0.png" alt="Achievements" style="width: 16px; height: 16px; opacity:0.6" />
+                            <img src="/ach/ach_globe.png" alt="Achievements" style="width: 19px; height: 19px; opacity:1" />
                             Achievements
                         </button>
                         <button

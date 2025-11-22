@@ -101,6 +101,27 @@ export const JOB_TYPES: JobType[] = [
             { type: "compute", value: 1 }
         ]
     },
+
+    {
+        id: "game1",
+        displayName: "Digit Recognition",
+        chapter: [99],
+        prereq: [
+	    {type:"compute", value:999 , display_prereq: false  },
+	],
+        unlockCost: [            { type: "money", value: 10 }],
+        payout: [
+            { type: "money", min: 20, max: 20 }
+        ],
+        duration: { min: 5, max: 5 },
+        category: "tool",
+        cost: [
+            { type: "compute", value: 1 }
+        ]
+    },
+
+
+
     {
         id: "speechtran",
         displayName: "Speech Transcription",

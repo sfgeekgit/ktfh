@@ -6,11 +6,17 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import projInfo from "./src/data/projInfo";
 import storyLoaderPlugin from "./vite-plugin-story-loader";
 
+const allowedHostsEnv = process.env.VITE_ALLOWED_HOSTS || "";
+const allowedHosts = allowedHostsEnv
+    .split(",")
+    .map(h => h.trim())
+    .filter(Boolean);
+
 // https://vitejs.dev/config/
 export default defineConfig({
     base: "./",
     server: {
-        allowedHosts: ['.documentbrain.com', '.thechoicebeforeus.com']
+        allowedHosts: allowedHosts.length > 0 ? allowedHosts : undefined
     },
     build: {
         rollupOptions: {
