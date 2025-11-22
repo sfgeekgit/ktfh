@@ -10,7 +10,7 @@ import storyLoaderPlugin from "./vite-plugin-story-loader";
 export default defineConfig({
     base: "./",
     server: {
-        allowedHosts: ['.documentbrain.com', 'thechoicebeforeus.com']
+        allowedHosts: ['.documentbrain.com', '.thechoicebeforeus.com']
     },
     build: {
         rollupOptions: {

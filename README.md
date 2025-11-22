@@ -1,4 +1,4 @@
-# Intelligent Choices
+# The Choice Before Us
 
 An incremental game. Make choices, steer AI's role in the future of humanity.
 

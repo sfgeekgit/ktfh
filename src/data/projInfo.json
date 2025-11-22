@@ -1,6 +1,6 @@
 {
     "_comment": "Game balance settings (win amounts, costs, progression, etc.) are configured in src/data/gameConfig.ts",
-    "title": "Intelligent Choices",
+    "title": "The Choice Before Us",
     "id": "intelligent-choices",
     "author": "Nick Shapiro",
     "discordName": "",

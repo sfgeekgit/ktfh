@@ -7,7 +7,7 @@
 
 export const G_CONF = {
     // ===== CHAPTER TRIGGERS =====
-    CHAP_2_MONEY_TRIGGER: 60,     // Money required to unlock Chapter 2
+    CHAP_2_MONEY_TRIGGER: 250,     // Money required to unlock Chapter 2
     CHAP_3_IQ_TRIGGER: 3,          // IQ level required to unlock Chapter 3
     CHAP_4_GENERALITY_TRIGGER: 3,  // Generality level required to unlock Chapter 4
     CHAP_5_AUTONOMY_TRIGGER: 3,    // Autonomy level required to unlock Chapter 5
@@ -35,9 +35,9 @@ export const G_CONF = {
 
 
     // ===== JOB GENERATION =====
-    JOB_GENERATION_INTERVAL: 3, // Seconds between new job checks (currently fast for dev)
+    JOB_GENERATION_INTERVAL: 2.5, // Seconds between new job checks (currently fast for dev)
     AUTO_JOB_LIMIT: 4, // Only auto-generate new jobs if <= this many in queue
-    INITIAL_JOBS_COUNT: 3, // Number of jobs to spawn on game start
+    INITIAL_JOBS_COUNT: 1, // Number of jobs to spawn on game start
 
     // ===== GPU COSTS =====
     GPU_BASE_COST: 40, // Cost of first GPU purchase
@@ -87,7 +87,17 @@ export const CHAP_5_ACCEPT_TIMELINE = [
 export const COMPUTE_NAMES = {
     1: "GPU",
     2: "GPU",
-    3: "Cluster",
+    3: "GPU Cluster",
     4: "Data Center",
-    5: "Campus"
+    5: "Data Center"
+} as const;
+
+// Centralized stat icons
+export const STAT_ICONS = {
+    money: "💰",
+    data: "📊",
+    iq: "🧠",
+    autonomy: "🤖",
+    generality: "💠",
+    wonder: "🌈"
 } as const;

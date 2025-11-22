@@ -10,14 +10,15 @@ import { globalBus } from "game/events";
 import { noPersist } from "game/persistence";
 import { persistent } from "game/persistence";
 import ResetModal from "components/modals/ResetModal.vue";
-import { G_CONF, CHAP_5_MC_AGI_LOSE_TIMELINE, CHAP_5_ACCEPT_TIMELINE, COMPUTE_NAMES } from "../gameConfig";
+import { G_CONF, CHAP_5_MC_AGI_LOSE_TIMELINE, CHAP_5_ACCEPT_TIMELINE, COMPUTE_NAMES, STAT_ICONS } from "../gameConfig";
 import { JOB_TYPES } from "../jobTypes";
 import { save } from "util/save";
 import player from "game/player";
 import { NEWS_TEXT } from "../newsText";
 import { resetGame } from "util/reset";
 
-const IS_DEV = true;
+//const IS_DEV = true;
+const IS_DEV = false;
 
 /**
  * IMPORTANT: PERSISTENT STATE REGISTRATION
@@ -63,7 +64,8 @@ const layer = createLayer(id, function (this: any) {
         let name: string = COMPUTE_NAMES[chapter as keyof typeof COMPUTE_NAMES];
         if (short && name === "Data Center") name = "DC";
         if (count === 1) return `${count}\u00A0${name}`;
-        return `${count}\u00A0${name === "Campus" ? "Campuses" : name + "s"}`;
+	////return `${count}\u00A0${name === "Campus" ? "Campuses" : name + "s"}`;
+	return `${count}\u00A0${name + "s"}`;
     } 
 
     // Default rejection chains that cycle through different messages
@@ -226,6 +228,9 @@ const layer = createLayer(id, function (this: any) {
     const completedOnetimeJobs = persistent<string[]>([]); // Track completed onetime jobs
     const jobsRunOnce = persistent<string[]>([]); // Track job types that have been run at least once
     const everVisibleJobTypes = persistent<string[]>([]); // Track which job unlock buttons have ever been shown
+    const jobCompletions = persistent<number>(0); // Total jobs completed
+    const initialJobSeeded = persistent<boolean>(false); // Track initial job spawn
+    const unlockAnimationShown = persistent<boolean>(false); // Gate unlock button animation to first reveal
 
     // Computed: Available GPUs (total - in use)
     const availableGPUs = computed(() => {
@@ -238,12 +243,27 @@ const layer = createLayer(id, function (this: any) {
         return gpusOwned.value - gpusInUse;
     });
 
+    // Cap auto-job generation by current compute so early game only spawns what can be run
+    const autoJobLimit = computed(() => Math.min(gpusOwned.value, G_CONF.AUTO_JOB_LIMIT));
+
     // Computed: Check if there are any unlocked jobs available in current chapter
     const hasAvailableJobs = computed(() => {
         return JOB_TYPES.some(job =>
             unlockedJobTypes.value.includes(job.id) &&
             isJobInCurrentChapter(job, currentChapter.value)
         );
+    });
+
+    // Computed: show unlock buttons after early progress
+    const showUnlockButtons = computed(() => jobCompletions.value >= 2);
+
+    // Mark unlock animation as done after first reveal (slightly longer than animation duration)
+    watch(showUnlockButtons, show => {
+        if (show && !unlockAnimationShown.value) {
+            setTimeout(() => {
+                unlockAnimationShown.value = true;
+            }, 2100);
+        }
     });
 
     function openAchievementsTab() {
@@ -673,7 +693,7 @@ const layer = createLayer(id, function (this: any) {
             title: () => `Buy  ${COMPUTE_NAMES[currentChapter.value as keyof typeof COMPUTE_NAMES]}`,
             description: () => (
                 <>
-                     💰 ${format(Decimal.pow(G_CONF.GPU_COST_MULTIPLIER, gpusOwned.value - G_CONF.STARTING_GPUS).times(G_CONF.GPU_BASE_COST))}
+                     {STAT_ICONS.money} {format(Decimal.pow(G_CONF.GPU_COST_MULTIPLIER, gpusOwned.value - G_CONF.STARTING_GPUS).times(G_CONF.GPU_BASE_COST))}
                 </>
             )
         },
@@ -701,11 +721,11 @@ const layer = createLayer(id, function (this: any) {
         } else if (prereq.type === "compute") {
             return `Requires ${formatCompute(prereq.value as number, currentChapter.value, true)}`;
         } else if (prereq.type === "iq") {
-            return `Requires ${prereq.value}\u00A0IQ\u00A0🧠`;
+            return `Requires ${prereq.value}\u00A0IQ\u00A0${STAT_ICONS.iq}`;
         } else if (prereq.type === "autonomy") {
-            return `Requires ${prereq.value}\u00A0🤖`;
+            return `Requires ${prereq.value}\u00A0${STAT_ICONS.autonomy}`;
         } else if (prereq.type === "generality") {
-            return `Requires ${prereq.value}\u00A0🌐`;
+            return `Requires ${prereq.value}\u00A0${STAT_ICONS.generality}`;
         } else if (prereq.type === "wonder") {
             return `Requires ${prereq.value}\u00A0Wonder`;
         } else if (prereq.type === "completedJob") {
@@ -744,7 +764,7 @@ const layer = createLayer(id, function (this: any) {
 
                         return (
                             <>
-                                {moneyCost > 0 && <span style={!hasEnoughMoney ? "color: #2E3440; font-size: 11px;" : undefined}>💰 ${moneyCost}</span>}{moneyCost > 0 && dataCost > 0 && " + "}{dataCost > 0 && <span style={!hasEnoughData ? "color: #2E3440; font-size: 11px;" : undefined}>📊 {dataCost} data</span>}<br/>
+                                {moneyCost > 0 && <span style={!hasEnoughMoney ? "color: #2E3440; font-size: 11px;" : undefined}>{STAT_ICONS.money} ${moneyCost}</span>}{moneyCost > 0 && dataCost > 0 && " + "}{dataCost > 0 && <span style={!hasEnoughData ? "color: #2E3440; font-size: 11px;" : undefined}>{STAT_ICONS.data} {dataCost} data</span>}<br/>
                                 {nonMoneyPrereqs.length > 0 && (
                                     <>
                                         {nonMoneyPrereqs.map((prereq: any, idx: number) => {
@@ -771,13 +791,13 @@ const layer = createLayer(id, function (this: any) {
                                                 {statPayout.min === statPayout.max
                                                     ? statPayout.min
                                                     : `${statPayout.min}-${statPayout.max}`}{"\u00A0"}
-					            {statPayout.type === "iq" && "IQ "}
-					            {statPayout.type === "wonder" && "Wonder "}
+                                                {statPayout.type === "iq" && "IQ "}
+                                                {statPayout.type === "wonder" && "Wonder "}
                                                 <span style="font-size:28px;">
-                                                    {statPayout.type === "iq" && "🧠"}
-                                                    {statPayout.type === "autonomy" && "🤖"}
-                                                    {statPayout.type === "generality" && "🌐"}
-                                                    {statPayout.type === "wonder" && "🌟"}
+                                                    {statPayout.type === "iq" && STAT_ICONS.iq}
+                                                    {statPayout.type === "autonomy" && STAT_ICONS.autonomy}
+                                                    {statPayout.type === "generality" && STAT_ICONS.generality}
+                                                    {statPayout.type === "wonder" && STAT_ICONS.wonder}
                                                 </span>
                                                 {idx < statPayouts.length - 1 && <br />}
                                             </span>
@@ -951,6 +971,8 @@ const layer = createLayer(id, function (this: any) {
                     save();
                 }
 
+                jobCompletions.value += 1;
+
                 // Remove the completed delivery
                 activeDeliveries.value.splice(i, 1);
             }
@@ -985,7 +1007,7 @@ const layer = createLayer(id, function (this: any) {
         timeSinceLastJob.value += diff;
         if (timeSinceLastJob.value >= G_CONF.JOB_GENERATION_INTERVAL) {
             timeSinceLastJob.value = 0;
-            if (jobQueue.value.length <= G_CONF.AUTO_JOB_LIMIT) {
+            if (jobQueue.value.length < autoJobLimit.value) {
                 const newJob = generateJob();
                 if (newJob !== null) {
                     jobQueue.value.push(newJob);
@@ -993,14 +1015,15 @@ const layer = createLayer(id, function (this: any) {
             }
         }
 
-        // Initial jobs
-        if (jobQueue.value.length === 0 && activeDeliveries.value.length === 0) {
-            for (let i = 0; i < G_CONF.INITIAL_JOBS_COUNT; i++) {
+        // Initial jobs (seed once on a fresh game)
+        if (!initialJobSeeded.value && jobQueue.value.length === 0 && activeDeliveries.value.length === 0) {
+            for (let i = 0; i < Math.min(1, G_CONF.INITIAL_JOBS_COUNT); i++) {
                 const newJob = generateJob();
                 if (newJob !== null) {
                     jobQueue.value.push(newJob);
                 }
             }
+            initialJobSeeded.value = true;
         }
     });
 
@@ -1240,17 +1263,22 @@ const layer = createLayer(id, function (this: any) {
                     .shake-animation {
                         animation: shake 0.2s ease-in-out 5;
                     }
+                    @keyframes unlockGrowIn {
+                        from { transform: scale(0.8); opacity: 0; }
+                        to { transform: scale(1); opacity: 1; }
+                    }
                 `}</style>
 
                 {/* Sticky Wallet */}
-                <div style="position: sticky; top: 0; z-index: 10;">
+                <div id="sticky-wallet" style="position: sticky; top: 0; z-index: 10;">
                     <div style="padding: 8px 12px; border: 1px solid #FFA500; border-radius: 8px; background: #fff3e0; width: 90%;">
                         <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                            <span style="font-size: 18px; font-weight: bold; white-space: nowrap;"><strong>💰</strong>&nbsp;${format(money.value)}</span>
-                            {Decimal.gt(data.value, 0) && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;"><strong>📊</strong>&nbsp;{format(data.value)}</span>}
-                            {iq.value > 0 && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;"><strong>🧠</strong>&nbsp;{iq.value}</span>}
-                            {autonomy.value > 0 && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;"><strong>🤖</strong>&nbsp;{autonomy.value}</span>}
-                            {generality.value > 0 && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;"><strong>🌐</strong>&nbsp;{generality.value}</span>}
+                            <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">{STAT_ICONS.money}{"\u00A0"}{format(money.value)}</span>
+                            {Decimal.gt(data.value, 0) && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">{STAT_ICONS.data}{"\u00A0"}{format(data.value)}</span>}
+                            {iq.value > 0 && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">{STAT_ICONS.iq}{"\u00A0"}{iq.value}</span>}
+                            {autonomy.value > 0 && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">{STAT_ICONS.autonomy}{"\u00A0"}{autonomy.value}</span>}
+                            {generality.value > 0 && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">{STAT_ICONS.generality}{"\u00A0"}{generality.value}</span>}
+                            {wonder.value > 0 && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">{STAT_ICONS.wonder}{"\u00A0"}{wonder.value}</span>}
                         </div>
                         <div style="font-size: 14px; margin-top: 4px; letter-spacing: 0.1em;">
                             {"▪".repeat(Math.max(0, availableGPUs.value))}{"▫".repeat(Math.max(0, gpusOwned.value - availableGPUs.value))}
@@ -1259,7 +1287,8 @@ const layer = createLayer(id, function (this: any) {
                 </div>
 
 		    <div style="font-size: 16px; color: rgb(230, 218, 199);">Chapter {currentChapter.value}</div>
-                <div style="margin: 8px 0; padding: 12px; border: 2px solid #FFA500; border-radius: 10px; background: #fff3e0;">
+                {/* Stats Panel */}
+                <div id="stats-panel" style="margin: 8px 0; padding: 12px; border: 2px solid #FFA500; border-radius: 10px; background: #fff3e0;">
 
                     {player.frameworkChoice !== "not_yet" && (
                         <div style={`font-size: 16px; font-weight: bold; color: ${player.frameworkChoice === "support" ? "#4CAF50" : "#FF9800"};`}>
@@ -1271,11 +1300,12 @@ const layer = createLayer(id, function (this: any) {
                             <strong>Time since Chapter 5:</strong> {Math.floor(timeSinceChapter5.value / 60)}m {Math.floor(timeSinceChapter5.value % 60)}s
                         </div>
                     )} */}
-                    <div style="font-size: 16px;"><strong>💰 Money:</strong> ${format(money.value)}</div>
-                    {dataUnlocked.value && <div style="font-size: 16px;"><strong>📊 Data:</strong> {format(data.value)}</div>}
-                    {autonomy.value > 0 && <div style="font-size: 16px;"><strong>🤖 Autonomy:</strong> {autonomy.value}</div>}
-                    {generality.value > 0 && <div style="font-size: 16px;"><strong>🌐 Generality:</strong> {generality.value}</div>}
-                    {iq.value > 0 && <div style="font-size: 16px;"><strong>🧠 IQ:</strong> {iq.value}</div>}
+                    <div style="font-size: 16px;"><strong>{STAT_ICONS.money} Money:</strong> {format(money.value)}</div>
+                    {IS_DEV && <div style="font-size: 14px;"><strong>✅ Jobs completed:</strong> {jobCompletions.value}</div>}
+                    {dataUnlocked.value && <div style="font-size: 16px;"><strong>{STAT_ICONS.data} Data:</strong> {format(data.value)}</div>}
+                    {autonomy.value > 0 && <div style="font-size: 16px;"><strong>{STAT_ICONS.autonomy} Autonomy:</strong> {autonomy.value}</div>}
+                    {generality.value > 0 && <div style="font-size: 16px;"><strong>{STAT_ICONS.generality} Generality:</strong> {generality.value}</div>}
+                    {iq.value > 0 && <div style="font-size: 16px;"><strong>{STAT_ICONS.iq} IQ:</strong> {iq.value}</div>}
                     {autonomy.value >= 1 && generality.value >= 1 && iq.value >= 1 && (() => {
                         const agiSum = autonomy.value + generality.value + iq.value;
                         const difference = G_CONF.AGI_SUM_LOSE - agiSum;
@@ -1300,10 +1330,11 @@ const layer = createLayer(id, function (this: any) {
                             </div>
                         );
                     })()}
-                    {currentChapter.value >= 3 && <div style="font-size: 16px;"><strong>🌟 Wonders:</strong> {wonder.value}/5</div>}
+                    {(currentChapter.value >= 3 || wonder.value > 0) && <div style="font-size: 16px;"><strong>{STAT_ICONS.wonder} Wonders:</strong> {wonder.value}/5</div>}
 		    <div style="font-size: 14px;"><strong>{(() => {
                         const name = COMPUTE_NAMES[currentChapter.value as keyof typeof COMPUTE_NAMES];
-                        return name === "Campus" ? "Campuses" : name + "s";
+                        //return name === "Campus" ? "Campuses" : name + "s";
+			return name + "s";
                     })()}:</strong> {availableGPUs.value} / {gpusOwned.value} available</div>
                     <div style="font-size: 14px; letter-spacing: 0.1em;">
                         {"▪".repeat(Math.max(0, availableGPUs.value))}{"▫".repeat(Math.max(0, gpusOwned.value - availableGPUs.value))}
@@ -1353,17 +1384,19 @@ const layer = createLayer(id, function (this: any) {
                 )}
 
                 <div style="margin: 15px 0;">
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
-                        {render(buyGPUClickable)}
-                        {pizzaUnlockClickables.map(clickable => render(clickable))}
-                    </div>
+                    {showUnlockButtons.value && (
+                        <div style={`display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;${!unlockAnimationShown.value ? " animation: unlockGrowIn 2s ease;" : ""}`}>
+                            {render(buyGPUClickable)}
+                            {pizzaUnlockClickables.map(clickable => render(clickable))}
+                        </div>
+                    )}
                 </div>
 
                 <div style="margin: 15px 0; padding: 12px; border: 2px solid #4CAF50; border-radius: 10px; background: #e8f5e9;">
-                    <h3>Available Jobs ({jobQueue.value.length})</h3>
+                    <h3>Available Jobs</h3>
                     {jobQueue.value.length === 0 ? (
                         hasAvailableJobs.value ? (
-                            <p style="font-style: italic;">No jobs available. New jobs arrive every {G_CONF.JOB_GENERATION_INTERVAL} seconds.</p>
+                            <p style="font-style: italic;">No jobs available right now.</p>
                         ) : (
                             <div style="padding: 10px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 5px;">
                                 <p style="font-weight: bold; color: #856404; margin: 0 0 8px 0;">⚠️ No job types unlocked for this chapter!</p>
@@ -1405,12 +1438,12 @@ const layer = createLayer(id, function (this: any) {
                                     +{job.payouts.map((payout: any, idx: number) => (
                                         <span key={idx}>
                                             {idx > 0 && " +"}
-                                            {payout.type === "money" ? "💰 $" : ""}
-                                            {payout.type === "data" ? "📊 " : ""}
-                                            {payout.type === "iq" ? "🧠 " : ""}
-                                            {payout.type === "autonomy" ? "🤖 " : ""}
-                                            {payout.type === "generality" ? "🌐 " : ""}
-                                            {payout.type === "wonder" ? "🌟 " : ""}
+                                            {payout.type === "money" ? `${STAT_ICONS.money} $` : ""}
+                                            {payout.type === "data" ? `${STAT_ICONS.data} ` : ""}
+                                            {payout.type === "iq" ? `${STAT_ICONS.iq} ` : ""}
+                                            {payout.type === "autonomy" ? `${STAT_ICONS.autonomy} ` : ""}
+                                            {payout.type === "generality" ? `${STAT_ICONS.generality} ` : ""}
+                                            {payout.type === "wonder" ? `${STAT_ICONS.wonder} ` : ""}
                                             {format(payout.amount)}
                                             {payout.type === "data" ? " data" : ""}
                                             {payout.type === "iq" ? " IQ" : ""}
@@ -1431,12 +1464,12 @@ const layer = createLayer(id, function (this: any) {
                                 </div>
                                 {moneyRequired > 0 && (
                                     <div style={`${Decimal.lt(money.value, moneyRequired) ? 'font-size: 16px; color: #d32f2f;' : 'font-size: 14px;'}`}>
-                                        <strong>Cost:</strong> 💰 -${moneyRequired}
+                                        <strong>Cost:</strong> {STAT_ICONS.money} -${moneyRequired}
                                     </div>
                                 )}
                                 <div style="margin-top: 8px; display: flex; gap: 5px;">
 
-                                    {jobType?.category !== "onetime" && (
+                                    {jobCompletions.value > 0 && jobType?.category !== "onetime" && (
                                         <button
                                             onClick={() => declineJob(job.id)}
                                             style={{
@@ -1523,12 +1556,12 @@ const layer = createLayer(id, function (this: any) {
                                         {delivery.payouts.map((payout: any, idx: number) => (
                                             <span key={idx}>
                                                 {idx > 0 && " +"}
-                                                {payout.type === "money" ? "💰 $" : ""}
-                                                {payout.type === "data" ? "📊 " : ""}
-                                                {payout.type === "iq" ? "🧠 " : ""}
-                                                {payout.type === "autonomy" ? "🤖 " : ""}
-                                                {payout.type === "generality" ? "🌐 " : ""}
-                                                {payout.type === "wonder" ? "🌟 " : ""}
+                                                {payout.type === "money" ? `${STAT_ICONS.money} $` : ""}
+                                                {payout.type === "data" ? `${STAT_ICONS.data} ` : ""}
+                                                {payout.type === "iq" ? `${STAT_ICONS.iq} ` : ""}
+                                                {payout.type === "autonomy" ? `${STAT_ICONS.autonomy} ` : ""}
+                                                {payout.type === "generality" ? `${STAT_ICONS.generality} ` : ""}
+                                                {payout.type === "wonder" ? `${STAT_ICONS.wonder} ` : ""}
                                                 {format(payout.amount)}
                                                 {payout.type === "data" ? " data" : ""}
                                                 {payout.type === "iq" ? " IQ" : ""}
@@ -1745,6 +1778,23 @@ const layer = createLayer(id, function (this: any) {
                             >
                                 +1 Gen
                             </button>
+                            <button
+                                onClick={() => {
+                                    wonder.value += 1;
+                                    save();
+                                }}
+                                style={{
+                                    background: "#ff9800",
+                                    color: "white",
+                                    padding: "8px 16px",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    cursor: "pointer",
+                                    fontSize: "14px"
+                                }}
+                            >
+                                +1 Wonder
+                            </button>
 
                             <button
                                 onClick={() => {
@@ -1857,6 +1907,8 @@ const layer = createLayer(id, function (this: any) {
         completedOnetimeJobs,
         jobsRunOnce,
         everVisibleJobTypes,
+        jobCompletions,
+        initialJobSeeded,
         jobQueue,
         activeDeliveries,
         jobRejectionState,
@@ -1872,6 +1924,8 @@ const layer = createLayer(id, function (this: any) {
         timeSinceLastJob,
         gpusOwned,
         availableGPUs,
+        showUnlockButtons,
+        unlockAnimationShown,
         choiceUnlockedJobs,
         buyGPUClickable,
         pizzaUnlockClickables,

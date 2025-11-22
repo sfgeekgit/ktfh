@@ -12,22 +12,37 @@
 
 Close the Gates
 
-**This is big**
+<h2>Beta version, under development</h2>
 
-*This is italic*
+<h2>NOT PUBLIC please do not share (yet)</h2>
+
 
 todo, intro the game, the point of the game, your goal as a player, how the essay is relevant
 
-You play the role of an AI startup founder.
+You control an AI startup.
 
-You have choices to make, they can change much more than just your startup.
+You have choices to make.
 
-Your choices will affect the growth and sucesss of your company.
+Choices that affect the growth and sucesss of your company.
 
-Your choices will affect the growth and success of humanity itself.
+Choices that affect the growth and success of humanity itself.
+
+*Italic text*
 
 
 ## Page Intro2
+**title:** Don't Die
+**pageType:** intro
+
+You can win the game by unlocking 5 "Wonders"
+
+Create 5 Boons for humaity.
+
+You can loose by unleashing uncontroled AI
+
+**button_text:** OK...
+
+## Page Intro3
 **title:** Make Choices
 **pageType:** intro
 Choose the future of humanity
@@ -228,7 +243,6 @@ It works. Growth accelerates. Systems handle more jobs with less supervision.
 
 The news hits like a thunderclap.
 
-Test -  does this say MegaCorp ... Research ... 
 **"MegaCorp AI Raises $8 Billion for AGI Research"**
 
 You have a rival.
@@ -375,8 +389,6 @@ And now, so are you.
 ## Page 1
 
 The AI race dominates headlines.
-
-*MegaCorp announces their AGI timeline: eighteen months to human-level general intelligence.*
 
 Your systems have grown dramatically across multiple domains. Minimal oversight. Jobs that complete themselves.
 

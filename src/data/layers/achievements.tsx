@@ -36,45 +36,6 @@ const layer = createLayer(id, function () {
 
         },
 
-        // New achievements mirroring dev01; update behavior later
-        ...[
-            "ach0",
-            "ach2",
-            "ach3",
-            "ach_age1",
-            "ach_age2",
-            "ach_age3",
-            "ach_badai1",
-            "ach_badai2",
-            "ach_badai3",
-            "ach_badai4",
-            "ach_burn",
-            "ach_dem1",
-            "ach_dem2",
-            "ach_edu1",
-            "ach_edu2",
-            "ach_edu3",
-            "ach_edu4",
-            "ach_fiss",
-            "ach_globe",
-            "ach_med",
-            "ach_med2",
-            "ach_medtargt",
-            "ach_molen1",
-            "ach_molen2",
-            "ach_nuc",
-            "ach_server",
-            "ach_suneng",
-            "achmed1"
-        ].map(img => ({
-            id: img,
-            title: img,
-            description: img,
-            image: `/ach/${img}.png`,
-            requirement: () => totalCompute.value >= 88
-        })),
-
-
 
         {
             id: "computeCluster2",
@@ -176,8 +137,51 @@ const layer = createLayer(id, function () {
             image: "/ach/ach2.png",
             requirement: () => Decimal.gte(money.value, 800),
             requirementText: "Reach $800"
-        }
-    ];
+        },
+
+
+
+        // New achievements mirroring dev01; update behavior later
+        ...[
+            "ach0",
+            "ach2",
+            "ach3",
+            "ach_age1",
+            "ach_age2",
+            "ach_age3",
+            "ach_badai1",
+            "ach_badai2",
+            "ach_badai3",
+            "ach_badai4",
+            "ach_burn",
+            "ach_dem1",
+            "ach_dem2",
+            "ach_edu1",
+            "ach_edu2",
+            "ach_edu3",
+            "ach_edu4",
+            "ach_fiss",
+            "ach_globe",
+            "ach_med",
+            "ach_med2",
+            "ach_medtargt",
+            "ach_molen1",
+            "ach_molen2",
+            "ach_nuc",
+            "ach_server",
+            "ach_suneng",
+            "achmed1"
+        ].map(img => ({
+            id: img,
+            title: img,
+            description: img,
+            image: `/ach/${img}.png`,
+            requirement: () => totalCompute.value >= 88
+        })),
+
+
+
+];
 
     achievements = Object.fromEntries(
         achievementDefs.map(def => [

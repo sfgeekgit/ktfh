@@ -75,7 +75,7 @@ requestAnimationFrame(async () => {
         useRegisterSW({
             immediate: true,
             onOfflineReady() {
-                toast.info("App ready to work offline");
+            //    toast.info("App ready to work offline");
             },
             onRegisterError: console.warn,
             onRegistered: console.info
