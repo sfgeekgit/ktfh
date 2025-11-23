@@ -8,6 +8,12 @@
 import { TRAINING_RUN_JOBS } from './trainingRuns';
 
 
+// Todo "Universal Modeling Engine"     as a wonder from the TRAINING RUNS
+// Autonomous Scientific Discovery Engine    as a wonder from the TRAINING RUNS
+// AI-Orchestrated Megascale Engineering 
+
+
+
 // Todo,  maybe web scraper should auto unlock at start of chapter 2
 
 /// Todo, tweak UI of training runs. Maybe while they are running, don't say "processing" say "Training" or such
@@ -90,6 +96,7 @@ export const JOB_TYPES: JobType[] = [
         chapter: [1,2,3,4],
         prereq: [
             { type: "job", value: "imgclassifier", display_prereq: false  }
+	    , 		{type:"compute", value:2 , display_prereq: false  }
 	],
         unlockCost: [            { type: "money", value: 10 }],
         payout: [
@@ -129,7 +136,7 @@ export const JOB_TYPES: JobType[] = [
         chapter: [1,2,3,4],
         prereq: [
 		{type:"compute", value:2 , display_prereq: false  },
-	    { type: "money", value: 80 },
+	    { type: "money", value: 50 },
             { type: "job", value: "spellchecker" }
 	],
         unlockCost: [            { type: "money", value: 50 }],
@@ -148,10 +155,10 @@ export const JOB_TYPES: JobType[] = [
         description: "",
         chapter: [1,2,3],
         prereq: [
-	    { type: "money", value: 120 },
+	    { type: "money", value: 80 },
             { type: "job", value: "spellchecker" }
 	],
-        unlockCost: [            { type: "money", value: 150 }],
+        unlockCost: [            { type: "money", value: 80 }],
         payout: [
             { type: "money", min: 140, max: 190 }
         ],
@@ -192,7 +199,7 @@ export const JOB_TYPES: JobType[] = [
         chapter: [2,3,4,5],
         prereq: [],   // should unlock as soon as chapter 2 begins
 
-        unlockCost: [            { type: "money", value: 50 }],
+        unlockCost: [            { type: "money", value: 10 }],
         payout: [
             { type: "data", min: 70, max: 150 }
         ],
@@ -245,44 +252,6 @@ export const JOB_TYPES: JobType[] = [
     },
 
 
-    {
-        id: "devjob",
-        displayName: "Dev Job",
-        description: "Tesing",
-        chapter: [6],
-	displayTrigger: [ { type: "job", value: "chess"} ],
-        prereq: [ { type: "iq", value: 3 },
-	 	  { type: "autonomy", value: 3 },
-		  { type: "compute", value:6}
-	],
-        unlockCost: [            { type: "money", value: 1000 }],
-        payout: [
-		{ type: "money", min: 1170, max: 1550 }
-	    ,   { type: "data", min: 15, max: 25 }
-	    ],
-        duration:                                                    { min: 2, max: 3 },
-        category: "tool",
-        cost: [                                                  { type: "compute", value: 3 }]
-    },
-
-    {
-        id: "devjob2",
-        displayName: "Dev Job 2",
-        description: "Tesing",
-        chapter: [6],
-	displayTrigger: [ { type: "job", value: "chess"} ],
-        prereq: [ { type: "compute", value:2}
-	],
-        unlockCost: [            { type: "money", value: 100 }],
-        payout: [
-		{ type: "money", min: 1170, max: 1550 }
-	    ,   { type: "data", min: 1500, max: 2500 }
-	    ],
-        duration:                                                    { min: 2, max: 3 },
-        category: "tool",
-        cost: [                                                  { type: "compute", value: 3 }]
-    },
-
 
 
     // IQ-Gated Money Jobs (Requires IQ ≥ 2)
@@ -300,22 +269,6 @@ export const JOB_TYPES: JobType[] = [
         category: "tool"
     },
 
-/*
-	// Moved this one down to the medical path
-    ,{
-        id: "medicaladvisor",
-        displayName: "Medical Advisor",
-        description: "Assist with medical research queries",
-        chapter: [2, 3, 4],
-	displayTrigger: [ { type: "job", value: "legalresearch", display_prereq: false } ],
-        prereq: [{ type: "iq", value: 2 }],
-        unlockCost: [{ type: "money", value: 5000 }],
-        payout: [{ type: "money", min: 700, max: 900 }],
-        duration: { min: 11, max: 15 },
-        cost: [{ type: "compute", value: 5 }],
-        category: "tool"
-    }
-*/
 
 ///// Data
 
@@ -343,108 +296,6 @@ export const JOB_TYPES: JobType[] = [
 //// Wonders (end game win)
 
      /**
-{
-        id: "wonder1",
-        displayName: "Protein Folding",
-        description: "A boon to humanity",
-        displayTrigger: [ { type: "generality", value: 1, display_prereq: false } ],
-	chapter: [3,4,5,6],
-        prereq: [
-            { type: "compute", value: 6 },
-            { type: "iq", value: 5 },
-            { type: "generality", value: 2 }
-        ],
-        unlockCost: [{ type: "data", value: 200 }],
-        payout: [
-            { type: "wonder", min: 1, max: 1 }
-        ],
-        duration: { min: 20, max: 20 },
-        category: "onetime",
-	is_wonder: true,
-        cost: [
-            { type: "compute", value: 3 },
-            { type: "money", value: 100 },
-            { type: "data", value: 100 }
-        ]
-    },
-
-
-    {
-        id: "wonder2",
-        displayName: "Protein Folding 2",
-        description: "A boon to humanity",
-        displayTrigger: [ { type: "generality", value: 2, display_prereq: false } ],
-	chapter: [3,4,5,6],
-        prereq: [
-            { type: "compute", value: 6 },
-            { type: "iq", value: 5 },
-            { type: "generality", value: 2 }
-        ],
-        unlockCost: [{ type: "data", value: 200 }],
-        payout: [
-            { type: "wonder", min: 1, max: 1 }
-        ],
-        duration: { min: 20, max: 20 },
-        category: "onetime",
-	is_wonder: true,
-        cost: [
-            { type: "compute", value: 3 },
-            { type: "money", value: 1000 },
-            { type: "data", value: 1000 }
-        ]
-    },
-
-
-    {
-        id: "wonder3",
-        displayName: "Protein Folding 3",
-        description: "A boon to humanity",
-        displayTrigger: [ { type: "generality", value: 3, display_prereq: false } ],
-	chapter: [3,4,5,6],
-        prereq: [
-            { type: "compute", value: 6 },
-            { type: "iq", value: 5 },
-            { type: "generality", value: 2 }
-        ],
-        unlockCost: [{ type: "data", value: 1200 }],
-        payout: [
-            { type: "wonder", min: 1, max: 1 }
-        ],
-        duration: { min: 20, max: 20 },
-        category: "onetime",
-	is_wonder: true,
-        cost: [
-            { type: "compute", value: 8 },
-            { type: "money", value: 5000 },
-            { type: "data", value: 2000 }
-        ]
-    },
-
-
-    {
-        id: "wonder4",
-        displayName: "Protein Folding 4",
-        description: "A boon to humanity",
-        displayTrigger: [ { type: "generality", value: 3, display_prereq: false } ],
-	chapter: [3,4,5,6],
-        prereq: [
-            { type: "compute", value: 6 },
-            { type: "iq", value: 5 },
-            { type: "generality", value: 2 }
-        ],
-        unlockCost: [{ type: "data", value: 200 }],
-        payout: [
-            { type: "wonder", min: 1, max: 1 }
-        ],
-        duration: { min: 20, max: 20 },
-        category: "onetime",
-	is_wonder: true,
-        cost: [
-            { type: "compute", value: 3 },
-            { type: "money", value: 100 },
-            { type: "data", value: 100 }
-        ]
-    },
 
     {
         id: "wonder5",
@@ -530,6 +381,30 @@ export const JOB_TYPES: JobType[] = [
 
 
 
+/*
+
+Science & Engineering Tech Tree
+
+
+
+Scientific Data Processing                        
+└── Rapid Science Modeling 
+    └── Scientific Prediction Work             
+        └── Structure Prediction         
+            └── Molecular Structure Prediction 
+                ├── Nanotechnology
+	        │    └──Molecular Manufacturing   [WONDER]
+		│       └──Materials Modeling Work    
+                │          └── Materials Discovery        [WONDER]
+                │
+                └── Physics Pattern Recognition
+		    └──Energy Modeling           // fusion-scale modeling + simulation
+                       └── Fusion Energy              [WONDER]
+                
+
+*/
+
+
 
 
 /*
@@ -568,13 +443,12 @@ Sentiment Analysis
 // Done! test!
 
 
-//  TODO: Have an interlude choice trggerd by first run (not unlock, first actual run of) Public Sentiment Analysis (dem4) after choice (maybe delay somehow, like complete 5 jobs (any jobs) after unlock, then the story opens this one.
-// Done! test!
 
-to do: add mental health path startgin from  "Multi-Stakeholder Dialogue"
-This will be it's own path "mood"  but will be triggered by the good dem choice dem4
+XX to do: add mental health path startgin from  "Multi-Stakeholder Dialogue"  (update, skip it)
+This will be it's own path "menheal"  but will be triggered by the good dem choice dem4
 
 // Also, these names could be better, this tree shorter, this is a placeholder atm
+
 
 ├── Multi-Stakeholder Dialogue  (ch2)           // prereq: choice:dem4
 │   └── Mental Health Signal Tagging
@@ -585,6 +459,8 @@ This will be it's own path "mood"  but will be triggered by the good dem choice 
 │                       └── Continuous Support Monitoring
 │                           └── Mental Health Early-Warning Guardian   [GOOD WONDER]
 
+
+Update -- Not doing Mental health tree/wonder. 
 */
 
 

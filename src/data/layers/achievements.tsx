@@ -23,50 +23,20 @@ const layer = createLayer(id, function () {
     
     // requirementText is not used, I think
     // Reward is not used
+    // Title is used for both the toast and the card
     const defaultImage = "/ach/ach0.png";
 
     const achievementDefs = [
-
-        {
-            id: "dev01",
-            title: "Lorum Ip",
-            description: "Hi there",
-            image: "/ach/ach0.png",
-            requirement: () => totalCompute.value >= 88,
-
-        },
-
-
-        {
-            id: "computeCluster2",
-            title: "Buy it",
-	    image: '/ach/ach_suneng.png',
-            description: "Click that buy button",
-            requirement: () => totalCompute.value >= 2,
-            //requirementText: "Own at least 8 compute units"
-        },
-        {
-            id: "computeCluster3",
-            title: "Buy 3",
-            description: "Click that buy button",
-            requirement: () => totalCompute.value >= 3,
-            //requirementText: "Own at least 8 compute units"
-        },
         {
             id: "computeCluster4",
-            title: "Buy 4",
-            description: "Click that buy button",
+            title: "Quad Compute",
+            description: "Own 4 GPUs",
             requirement: () => totalCompute.value >= 4,
-            //requirementText: "Own at least 8 compute units"
+            requirementText: "Own at least requirementText"
         },
-        {
-            id: "computeCluster5",
-            title: "Buy 5",
-            description: "Click that buy button",
-            requirement: () => totalCompute.value >= 5,
-            //requirementText: "Own at least 8 compute units"
-        },
-        {
+
+
+	{
             id: "computeCluster",
             title: "Compute Cluster",
             description: "Reach 8 total compute units.",
@@ -74,15 +44,6 @@ const layer = createLayer(id, function () {
             image: "/ach/ach2.png",
             requirement: () => totalCompute.value >= 8,
             //requirementText: "Own at least 8 compute units"
-        },
-        {
-            id: "computeHorizon",
-            title: "Compute Horizon",
-            description: "This is Description Reach 9 total compute units.",
-            reward: "This is reward Your compute reach grows ever farther.",
-            image: "/ach/ach2.png",
-            requirement: () => totalCompute.value >= 9,
-            requirementText: "This is Req Text Own at least 9 compute units"
         },
         {
             id: "computeAscension",

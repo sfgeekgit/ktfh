@@ -1012,8 +1012,10 @@ const layer = createLayer(id, function (this: any) {
         if ([3, 4].includes(currentChapter.value)) { // Only happens in these chapters
             timeSinceLastScoopRoll.value += diff;
 
-            // Roll every 3 seconds
-            if (timeSinceLastScoopRoll.value >= 3) {
+            // Roll every 6s in chapter 3, every 3s in chapter 4
+            const scoopInterval = currentChapter.value === 3 ? 6 : 3;
+
+            if (timeSinceLastScoopRoll.value >= scoopInterval) {
                 timeSinceLastScoopRoll.value = 0;
 
                 // % chance to scoop a job
