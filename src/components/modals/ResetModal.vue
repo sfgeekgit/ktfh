@@ -22,7 +22,7 @@
         <template v-slot:footer>
             <div class="modal-default-footer">
                 <div class="modal-default-flex-grow"></div>
-                <button class="close-button" @click="isOpen = false">
+                <button class="close-button" @click="closeModal">
                     Close
                 </button>
             </div>
@@ -43,6 +43,13 @@ const props = withDefaults(defineProps<{ isDev?: boolean }>(), {
 });
 
 const isOpen = ref(false);
+
+function closeModal() {
+    isOpen.value = false;
+    if (player.devSpeed === 0) {
+        player.devSpeed = null;
+    }
+}
 
 function confirmReset() {
     if (confirm("Are you sure you want to reset the game? This will delete ALL progress and cannot be undone!")) {

@@ -134,8 +134,8 @@ const layer = createLayer(id, function (this: any) {
     const dataUnlocked = persistent<boolean>(false); // Track if data has been gained
     const choiceUnlockedJobs = persistent<string[]>([]);
     const BAD_ENDING_TABS_BY_JOB: Record<string, string> = {
-        dem15: "ending_bad_dem15",
-        dem18: "ending_bad_dem18"
+        dem15: "ending_bad_perception_manipulation_apparatus",
+        dem18: "ending_bad_algorithmic_authoritarianism"
     };
 
     // GPU persistent state
@@ -370,6 +370,27 @@ const layer = createLayer(id, function (this: any) {
             (currentTab.startsWith("chapter") || currentTab.startsWith("ending_") || currentTab.startsWith("interlude"));
     }
 
+    // Automatically pause game updates while story/interlude/ending is open
+    const storyPauseActive = ref(false);
+    const storyPriorDevSpeed = ref<number | null>(null);
+    watch(
+        () => isStoryTabOpen(),
+        isOpen => {
+            if (isOpen) {
+                if (!storyPauseActive.value && player.devSpeed !== 0) {
+                    storyPriorDevSpeed.value = player.devSpeed;
+                    player.devSpeed = 0;
+                    storyPauseActive.value = true;
+                }
+            } else if (storyPauseActive.value) {
+                player.devSpeed = storyPriorDevSpeed.value ?? null;
+                storyPriorDevSpeed.value = null;
+                storyPauseActive.value = false;
+            }
+        },
+        { immediate: true }
+    );
+
     // Interlude trigger watcher (fires once per interlude, does not advance chapter state)
     watch(
         () => ({
@@ -378,6 +399,7 @@ const layer = createLayer(id, function (this: any) {
             iq: iq.value,
             autonomy: autonomy.value,
             generality: generality.value,
+            wonder: wonder.value,
             completed: completedOnetimeJobs.value,
             unlocked: unlockedJobTypes.value,
             jobsRun: jobsRunOnce.value,
@@ -385,6 +407,7 @@ const layer = createLayer(id, function (this: any) {
         }),
         () => {
             if (isStoryTabOpen()) return; // Only one story/interlude at a time
+            if (wonder.value >= G_CONF.WONDER_WIN) return; // Winning blocks further interludes
 
             for (const interlude of G_CONF.INTERLUDES) {
                 const interludeLayer = (layers as any)?.[interlude.id];
@@ -954,6 +977,11 @@ const layer = createLayer(id, function (this: any) {
                         generality.value += Number(payout.amount);
                     } else if (payout.type === "wonder") {
                         wonder.value += Number(payout.amount);
+                        const jobType = getJobType(delivery.jobTypeId);
+                        if (jobType?.displayName) {
+                            // Track the last wonder name for use in endings/interludes
+                            (player as any).lastWonderName = jobType.displayName;
+                        }
                     }
                 }
 

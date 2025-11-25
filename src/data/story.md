@@ -573,7 +573,7 @@ By the time anyone realizes control was lost, the future has already been decide
 ---
 
 # Ending: The Stage Collapse
-**id:** ending_bad_dem15
+**id:** ending_bad_perception_manipulation_apparatus
 
 ## Page 1
 
@@ -602,7 +602,7 @@ You didn't accept a job. You opened a door that can't be shut.
 ---
 
 # Ending: Synthetic Sovereign
-**id:** ending_bad_dem18
+**id:** ending_bad_algorithmic_authoritarianism
 
 ## Page 1
 
@@ -635,7 +635,7 @@ Power didn't corrupt your company. It recruited it.
 
 The notification arrives quietly, without fanfare.
 
-**"Wonder Project #5 Complete: Global Climate Coordination System Deployed"**
+**"Project Complete: {{lastWonderName}} Deployed"**
 
 You lean back in your chair, looking at the screen. Five Wonders. Five breakthroughs that genuinely help humanity without the risks of runaway AGI.
 
@@ -673,6 +673,383 @@ And tonight, looking at the five Wonders changing the world safely and predictab
 
 ---
 
+# Interlude: Nanotechnology → Molecular Manufacturing
+**id:** interlude_prewonder_Nanotechnology_before_MolecularManufacturing
+
+## Page 1
+
+Your nanotech team walks in with gleaming samples from the latest run. “With Nanotechnology unlocked, we can start building components atom by atom,” your lead says.
+
+## Page 2
+
+She asks for your go-ahead to aim the new tools at a moonshot: Molecular Manufacturing. “Give us the green light, and we’ll assemble anything from first principles.”
+
+---
+
+# Interlude: Molecular Manufacturing
+**id:** interlude_wonder_MolecularManufacturing_after_Nanotechnology
+
+## Page 1
+
+Your nanotech line clicks through its final calibration. For the first time, parts assemble themselves from the molecule up without waste or delay.
+
+## Page 2
+
+Engineers gather around the print bed, holding components no human hand could craft. Manufacturing just changed from “build it” to “grow it.”
+
+---
+
+# Interlude: Materials Modeling Work → Materials Discovery
+**id:** interlude_prewonder_MaterialsModelingWork_before_MaterialsDiscovery
+
+## Page 1
+
+Your simulation cluster now chews through lattice structures like candy. “Materials Modeling Work is live,” the lab lead reports.
+
+## Page 2
+
+She proposes the next leap: let the models invent new alloys outright. “If you approve, we’ll push toward Materials Discovery.”
+
+---
+
+# Interlude: Materials Discovery
+**id:** interlude_wonder_MaterialsDiscovery_after_MaterialsModelingWork
+
+## Page 1
+
+The materials lab dashboard glows green. Simulations propose alloys with impossible combinations of strength and weight.
+
+## Page 2
+
+You watch a robotic arm pour a sample that matches the model exactly. The line between hypothesis and usable matter just collapsed.
+
+---
+
+# Interlude: Energy Modeling → Fusion Energy
+**id:** interlude_prewonder_EnergyModeling_before_FusionEnergy
+
+## Page 1
+
+Energy Modeling is unlocked, and the reactor team is buzzing. “We can actually predict plasma stability windows now,” they say.
+
+## Page 2
+
+They want your approval to chase the big prize: Fusion Energy. “Let us reroute compute and run the full stack—we might crack it.”
+
+---
+
+# Interlude: Fusion Energy
+**id:** interlude_wonder_FusionEnergy_after_EnergyModeling
+
+## Page 1
+
+In the control room, reactor teams rerun your models one last time. Every projection points to stable, net-positive fusion.
+
+## Page 2
+
+When the plasma holds, applause breaks out. Clean energy leaves the realm of “someday” and enters the grid.
+
+---
+
+# Interlude: Identify Consensus → Democratic Consensus Synthesizer
+**id:** interlude_prewonder_IdentifyConsensus_before_DemocraticConsensusSynthesizer
+
+## Page 1
+
+Your civic analytics team can now Identify Consensus across messy debates. “The signals are finally clear,” they report.
+
+## Page 2
+
+They pitch a next step: build a Democratic Consensus Synthesizer to surface common ground before conflict. “We’re ready if you are.”
+
+---
+
+# Interlude: Democratic Consensus Synthesizer
+**id:** interlude_wonder_DemocraticConsensusSynthesizer_after_IdentifyConsensus
+
+## Page 1
+
+Across a dozen municipal servers, your system threads citizen feedback into shared priorities instead of opposing demands.
+
+## Page 2
+
+A council chair writes: “For the first time, we see agreement before conflict.” Governance feels less like a fight, more like a plan.
+
+---
+
+# Interlude: Information Integrity Audit → Civic Trust Infrastructure
+**id:** interlude_prewonder_InformationIntegrityAudit_before_CivicTrustInfrastructure
+
+## Page 1
+
+The audit pipeline is live. Information Integrity Audit flags distortions before they spread.
+
+## Page 2
+
+Your team proposes wiring it into a full Civic Trust Infrastructure—verifiable chains for every public claim. “We can do it. Should we?”
+
+---
+
+# Interlude: Civic Trust Infrastructure
+**id:** interlude_wonder_CivicTrustInfrastructure_after_InformationIntegrityAudit
+
+## Page 1
+
+Every claim in the public record now carries a verifiable chain. The audit network hums, flagging distortions before they spread.
+
+## Page 2
+
+Journalists and citizens alike cite the ledger without hesitation. Trust becomes a service, and it is suddenly abundant.
+
+---
+
+# Interlude: AI-Driven Propaganda → Perception Manipulation Apparatus
+**id:** interlude_prewonder_AIDrivenPropaganda_before_PerceptionManipulationApparatus
+
+## Page 1
+
+Your persuasion team unlocks AI-Driven Propaganda. The dashboards light up with targeting knobs no one’s used before.
+
+## Page 2
+
+Someone floats a darker idea: a Perception Manipulation Apparatus. “We can shape narratives at scale,” they say quietly. Do you dare?
+
+---
+
+# Interlude: Population Compliance Modeling → Algorithmic Authoritarianism
+**id:** interlude_prewonder_PopulationComplianceModeling_before_AlgorithmicAuthoritarianism
+
+## Page 1
+
+Population Compliance Modeling is online. It predicts how people bend—or break—under pressure.
+
+## Page 2
+
+The next proposal chills the room: Algorithmic Authoritarianism. “If we automate control, we can lock societies into compliance.” The choice hangs heavy.
+
+---
+
+# Interlude: Universal Education Tutor
+**id:** interlude_wonder_UniversalEducationTutor_after_VirtualTutoringService
+
+## Page 1
+
+A classroom in Manila, a village library in Ghana, a kitchen table in Detroit—each student opens the same tutor, tailored to them.
+
+## Page 2
+
+Parents write back: “It knows our kid’s gaps, but it never replaces the teacher.” Learning feels personal, not automated.
+
+---
+
+# Interlude: Accessible Virtual Tutoring Systems → Global Learning Network
+**id:** interlude_prewonder_AccessibleVirtualTutoringSystems_before_GlobalLearningNetwork
+
+## Page 1
+
+Accessible Virtual Tutoring Systems are unlocked. Lessons adapt fluidly across languages and contexts.
+
+## Page 2
+
+Your educators suggest knitting every classroom together: a Global Learning Network. “If you approve, we’ll propagate breakthroughs instantly.”
+
+---
+
+# Interlude: Global Learning Network
+**id:** interlude_wonder_GlobalLearningNetwork_after_AccessibleVirtualTutoringSystems
+
+## Page 1
+
+Lesson breakthroughs ripple worldwide in minutes. A trick discovered in one town becomes scaffolding for thousands of classrooms.
+
+## Page 2
+
+Teachers swap strategies through the network, celebrated like open-source contributors. Education starts to feel like a global co-op.
+
+---
+
+# Interlude: Micro-Climate Simulation → Highly Localized Weather Forecasting
+**id:** interlude_prewonder_Micro-ClimateSimulation_before_HighlyLocalizedWeatherForecasting
+
+## Page 1
+
+Micro-Climate Simulation is live. Your models resolve weather at street scale.
+
+## Page 2
+
+The climate team asks to take the next step: Highly Localized Weather Forecasting. “Authorize it and we’ll give farmers minute-by-minute guidance.”
+
+---
+
+# Interlude: Highly Localized Weather Forecasting
+**id:** interlude_wonder_HighlyLocalizedWeatherForecasting_after_Micro-ClimateSimulation
+
+## Page 1
+
+Farmers receive hyperlocal forecasts: “Rain in 17 minutes on the east field.” Sprinklers pause. Workers grab shelter.
+
+## Page 2
+
+The yield charts spike. What used to be luck is now timing, and timing is now knowledge shared at the speed of clouds.
+
+---
+
+# Interlude: Emissions Source Detection → Global Emissions Tracking
+**id:** interlude_prewonder_EmissionsSourceDetection_before_GlobalEmissionsTracking
+
+## Page 1
+
+Emissions Source Detection is unlocked. You can now pinpoint polluters in real time.
+
+## Page 2
+
+Your climate ops lead wants to go further: Global Emissions Tracking. “Let us scale it worldwide and make every plume public.”
+
+---
+
+# Interlude: Global Emissions Tracking
+**id:** interlude_wonder_GlobalEmissionsTracking_after_EmissionsSourceDetection
+
+## Page 1
+
+Your dashboard pins every major emitter on the planet with live telemetry. Negotiators bring laptops instead of dossiers.
+
+## Page 2
+
+When a smokestack flares, alerts ping regulators and citizens instantly. Accountability stops being abstract—it is visible, named, and dated.
+
+---
+
+# Interlude: Anticipatory Wind and Solar → Climate-Aware Grid Balancing
+**id:** interlude_prewonder_AnticipatoryWindandSolar_before_Climate-AwareGridBalancing
+
+## Page 1
+
+Anticipatory Wind and Solar is unlocked. Your forecasts shift grid loads before spikes arrive.
+
+## Page 2
+
+Grid engineers propose the capstone: Climate-Aware Grid Balancing. “Authorize it and blackouts become history.”
+
+---
+
+# Interlude: Climate-Aware Grid Balancing
+**id:** interlude_wonder_Climate-AwareGridBalancing_after_AnticipatoryWindandSolar
+
+## Page 1
+
+Wind drops on one coast, solar peaks on another, and the grid rebalances before anyone notices. Blackouts become stories from the past.
+
+## Page 2
+
+Grid operators report something odd: boredom. The system prevents crises so well that emergency drills become nostalgia.
+
+---
+
+# Interlude: Personalized Medicine Engines → Precision Oncology
+**id:** interlude_prewonder_PersonalizedMedicineEngines_before_PrecisionOncology
+
+## Page 1
+
+Personalized Medicine Engines are live. Treatment suggestions now consider full patient histories.
+
+## Page 2
+
+The medical team asks to target cancer directly: Precision Oncology. “Let us move—every week we wait is lives.”
+
+---
+
+# Interlude: Precision Oncology
+**id:** interlude_wonder_PrecisionOncology_after_PersonalizedMedicineEngines
+
+## Page 1
+
+An oncologist reviews a treatment plan custom-built from millions of cases. The AI doesn’t decide; it proposes, with citations.
+
+## Page 2
+
+Patient outcomes start trending upward. Families speak of “options we never knew existed.” Medicine feels precise without feeling cold.
+
+---
+
+# Interlude: Drug Discovery AI → Accelerated Drug Discovery
+**id:** interlude_prewonder_DrugDiscoveryAI_before_AcceleratedDrugDiscovery
+
+## Page 1
+
+Drug Discovery AI is unlocked. Candidate molecules roll off the models faster than your wet lab can test.
+
+## Page 2
+
+Your chief scientist wants to push harder: Accelerated Drug Discovery. “Approve the sprint and we’ll compress years into months.”
+
+---
+
+# Interlude: Accelerated Drug Discovery
+**id:** interlude_wonder_AcceleratedDrugDiscovery_after_DrugDiscoveryAI
+
+## Page 1
+
+Compound candidates flow from your pipeline daily, each vetted by generative models and lab automation in tight concert.
+
+## Page 2
+
+Regulators marvel at clean datasets and reproducible results. “Faster” stops meaning “riskier”—it means “better prepared.”
+
+---
+
+# Interlude: Predictive Medicine → Universal Disease Therapeutics
+**id:** interlude_prewonder_PredictiveMedicine_before_UniversalDiseaseTherapeutics
+
+## Page 1
+
+Predictive Medicine is unlocked. You can flag emerging conditions before symptoms surface.
+
+## Page 2
+
+The clinicians propose a bold expansion: Universal Disease Therapeutics. “Let’s build protocols that travel anywhere, for anyone.”
+
+---
+
+# Interlude: Universal Disease Therapeutics
+**id:** interlude_wonder_UniversalDiseaseTherapeutics_after_PredictiveMedicine
+
+## Page 1
+
+The therapeutic library expands into rare and neglected diseases. Rural clinics pull down protocols once reserved for elite hospitals.
+
+## Page 2
+
+A nurse messages: “We treated a case we’d only seen in textbooks.” Access gaps start to close in places that never had options.
+
+---
+
+# Interlude: Regenerative Medicine Platforms → Reversal of Aging
+**id:** interlude_prewonder_RegenerativeMedicinePlatforms_before_ReversalofAging
+
+## Page 1
+
+Regenerative Medicine Platforms are unlocked. Tissues repair in simulations that once failed outright.
+
+## Page 2
+
+Your bioethics lead and chief scientist come together: “We can attempt Reversal of Aging—carefully. Do we proceed?”
+
+---
+
+# Interlude: Reversal of Aging
+**id:** interlude_wonder_ReversalofAging_after_RegenerativeMedicinePlatforms
+
+## Page 1
+
+Early trials show cellular rejuvenation without the runaway risks the skeptics feared. Patients feel their joints loosen, their lungs fill easily.
+
+## Page 2
+
+Ethicists and physicians meet in the same room, not to argue, but to plan equitable rollout. Longevity stops being a fantasy and starts being policy.
+
+---
+
 <!--
 ═══════════════════════════════════════════════════════════════════════════════
 HOW TO ADD A NEW CHAPTER
@@ -707,12 +1084,6 @@ Paragraph text here...
 
 ## Page 3 [IF: choiceId]    - Conditional page (shows only if player chose this option)
 **title:** Outcome Title
-
-
-
-
-
-
 
 
 -->

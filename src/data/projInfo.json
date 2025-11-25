@@ -20,6 +20,6 @@
     "defaultDecimalsShown": 0,
     "defaultShowSmall": false,
     "allowGoBack": false,
-    "disableHealthWarning": false
+    "disableHealthWarning": true
 
 }

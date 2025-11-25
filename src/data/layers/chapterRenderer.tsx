@@ -248,12 +248,16 @@ export function createChapterLayer(chapterId: string, chapterData: ChapterData) 
 }
 
 function renderContent(page: StoryPage, textAlign: string = "left", textColor: string = "#000000") {
+    const lastWonderName = (player as any).lastWonderName ?? "";
+
     return (
         <div style={`text-align: ${textAlign}; max-width: 600px; margin: 40px auto; line-height: 1.6;`}>
             {page.paragraphs.map((paragraph, index) => {
+                const contentWithVars = paragraph.replace(/{{lastWonderName}}/g, lastWonderName);
+
                 // Handle special formatting
-                if (paragraph.startsWith('<blockquote>')) {
-                    const content = paragraph.substring(12, paragraph.length - 13);
+                if (contentWithVars.startsWith('<blockquote>')) {
+                    const content = contentWithVars.substring(12, contentWithVars.length - 13);
                     return (
                         <p
                             key={index}
@@ -264,8 +268,8 @@ function renderContent(page: StoryPage, textAlign: string = "left", textColor: s
                 }
 
                 // Handle bold headlines (like "MegaCorp AI Raises $8 Billion")
-                if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
-                    const content = paragraph.substring(2, paragraph.length - 2);
+                if (contentWithVars.startsWith('**') && contentWithVars.endsWith('**')) {
+                    const content = contentWithVars.substring(2, contentWithVars.length - 2);
                     return (
                         <p
                             key={index}
@@ -277,8 +281,8 @@ function renderContent(page: StoryPage, textAlign: string = "left", textColor: s
                 }
 
                 // Handle italic paragraphs
-                if (paragraph.startsWith('*') && paragraph.endsWith('*')) {
-                    const content = paragraph.substring(1, paragraph.length - 1);
+                if (contentWithVars.startsWith('*') && contentWithVars.endsWith('*')) {
+                    const content = contentWithVars.substring(1, contentWithVars.length - 1);
                     return (
                         <p key={index} style="font-size: 18px; margin-bottom: 20px; font-style: italic;">
                             {content}
@@ -291,7 +295,7 @@ function renderContent(page: StoryPage, textAlign: string = "left", textColor: s
                     <p
                         key={index}
                         style="font-size: 18px; margin-bottom: 20px;"
-                        innerHTML={paragraph.replace(/<br\/>/g, '<br/>')}
+                        innerHTML={contentWithVars.replace(/<br\/>/g, '<br/>')}
                     />
                 );
             })}

@@ -29,7 +29,7 @@ const layer = createLayer(id, function () {
     // Title is used for both the toast and the card
     const defaultImage = "/ach/ach_gen.png";
 
-    const achievementDefs = [
+    const baseAchievementDefs = [
 
         {
             id: "computeCluster4",
@@ -48,33 +48,6 @@ const layer = createLayer(id, function () {
             image: "/ach/ach2.png",
             requirement: () => totalCompute.value >= 8,
             //requirementText: "Own at least 8 compute units"
-        },
-        {
-            id: "computeAscension",
-            title: "Compute Ascension",
-            description: "Reach 10 total compute units.",
-            reward: "Ascend beyond previous limits.",
-            image: "/ach/ach2.png",
-            requirement: () => totalCompute.value >= 10,
-            requirementText: "Own at least 10 compute units"
-        },
-        {
-            id: "computeLegend",
-            title: "Compute Legend",
-            description: "Reach 11 total compute units.",
-            reward: "Legendary compute mastery.",
-            //image: "/ach/ach2.png",
-            requirement: () => totalCompute.value >= 11,
-            requirementText: "Own at least 11 compute units"
-        },
-        {
-            id: "computeMyth",
-            title: "Compute Myth",
-            description: "Reach 17 total compute units.",
-            reward: "A mythical level of compute.",
-            //image: "/ach/ach2.png",
-            requirement: () => totalCompute.value >= 17,
-            requirementText: "Own at least 17 compute units"
         },
         {
             id: "computeElder",
@@ -97,119 +70,122 @@ const layer = createLayer(id, function () {
         {
             id: "wonderMolecularManufacturing",
             title: "Molecular Manufacturing",
-            description: "Complete the Molecular Manufacturing wonder.",
+	    image: "/ach/ach_molen2.png",
             requirement: () => completedOnetimeJobs.value.includes("sci7"),
             requirementText: "Complete Molecular Manufacturing"
         },
         {
             id: "wonderMaterialsDiscovery",
             title: "Materials Discovery",
-            description: "Complete the Materials Discovery wonder.",
+	    image: "/ach/ach_fiss.png",
             requirement: () => completedOnetimeJobs.value.includes("sci9"),
             requirementText: "Complete Materials Discovery"
         },
         {
             id: "wonderFusionEnergy",
             title: "Fusion Energy",
-            description: "Complete the Fusion Energy wonder.",
+	    image: "/ach/ach_suneng.png",
             requirement: () => completedOnetimeJobs.value.includes("sci12"),
             requirementText: "Complete Fusion Energy"
         },
         {
             id: "wonderDemocraticConsensusSynthesizer",
             title: "Democratic Consensus Synthesizer",
-            description: "Complete the Democratic Consensus Synthesizer wonder.",
+	    image: "/ach/ach_fiss.png",
             requirement: () => completedOnetimeJobs.value.includes("dem7"),
             requirementText: "Complete Democratic Consensus Synthesizer"
         },
         {
             id: "wonderCivicTrustInfrastructure",
             title: "Civic Trust Infrastructure",
-            description: "Complete the Civic Trust Infrastructure wonder.",
             requirement: () => completedOnetimeJobs.value.includes("dem11"),
             requirementText: "Complete Civic Trust Infrastructure"
         },
         {
             id: "wonderPerceptionManipulationApparatus",
             title: "Perception Manipulation Apparatus",
-            description: "Complete the Perception Manipulation Apparatus wonder.",
             requirement: () => completedOnetimeJobs.value.includes("dem15"),
             requirementText: "Complete Perception Manipulation Apparatus"
         },
         {
             id: "wonderAlgorithmicAuthoritarianism",
             title: "Algorithmic Authoritarianism",
-            description: "Complete the Algorithmic Authoritarianism wonder.",
+            image: "/ach/ach_badai1.png",	    
             requirement: () => completedOnetimeJobs.value.includes("dem18"),
             requirementText: "Complete Algorithmic Authoritarianism"
         },
         {
             id: "wonderUniversalEducationTutor",
             title: "Universal Education Tutor",
-            description: "Complete the Universal Education Tutor wonder.",
             requirement: () => completedOnetimeJobs.value.includes("edu8"),
             requirementText: "Complete Universal Education Tutor"
         },
         {
             id: "wonderGlobalLearningNetwork",
             title: "Global Learning Network",
-            description: "Complete the Global Learning Network wonder.",
             requirement: () => completedOnetimeJobs.value.includes("edu11"),
             requirementText: "Complete Global Learning Network"
         },
         {
             id: "wonderHighlyLocalizedWeatherForecasting",
             title: "Highly Localized Weather Forecasting",
-            description: "Complete the Highly Localized Weather Forecasting wonder.",
             requirement: () => completedOnetimeJobs.value.includes("clim4"),
             requirementText: "Complete Highly Localized Weather Forecasting"
         },
         {
             id: "wonderGlobalEmissionsTracking",
             title: "Global Emissions Tracking",
-            description: "Complete the Global Emissions Tracking wonder.",
             requirement: () => completedOnetimeJobs.value.includes("clim7"),
             requirementText: "Complete Global Emissions Tracking"
         },
         {
             id: "wonderClimateAwareGridBalancing",
             title: "Climate-Aware Grid Balancing",
-            description: "Complete the Climate-Aware Grid Balancing wonder.",
             requirement: () => completedOnetimeJobs.value.includes("clim11"),
             requirementText: "Complete Climate-Aware Grid Balancing"
         },
         {
             id: "wonderPrecisionOncology",
             title: "Precision Oncology",
-            description: "Complete the Precision Oncology wonder.",
+	    image: "/ach/ach_medtargt.png",	
             requirement: () => completedOnetimeJobs.value.includes("med4"),
             requirementText: "Complete Precision Oncology"
         },
         {
             id: "wonderAcceleratedDrugDiscovery",
             title: "Accelerated Drug Discovery",
-            description: "Complete the Accelerated Drug Discovery wonder.",
             requirement: () => completedOnetimeJobs.value.includes("med8"),
             requirementText: "Complete Accelerated Drug Discovery"
         },
         {
             id: "wonderUniversalDiseaseTherapeutics",
             title: "Universal Disease Therapeutics",
-            description: "Complete the Universal Disease Therapeutics wonder.",
             requirement: () => completedOnetimeJobs.value.includes("med12"),
             requirementText: "Complete Universal Disease Therapeutics"
         },
         {
             id: "wonderReversalOfAging",
             title: "Reversal of Aging",
-            description: "Complete the Reversal of Aging wonder.",
+            image: "/ach/ach_age2.png",
             requirement: () => completedOnetimeJobs.value.includes("med14"),
             requirementText: "Complete Reversal of Aging"
+        },
+        {
+            id: "agiOverload",
+            title: "AGI Overload",
+	    image: "/ach/ach_badai3.png",			
+            description: "Exceed A+G+I safety threshold.",
+            requirement: () =>
+                player.gameOver === true &&
+                Array.isArray(player.tabs) &&
+                player.tabs.includes("ending_lose_agi_threshold"),
+            requirementText: "Lose by exceeding the A+G+I threshold"
         },
         {
             id: "worker",
             title: "Worker",
             description: "Complete 1,000 jobs.",
+            image: "/ach/ach_tasks.png",
             requirement: () => jobCompletions.value >= 1000,
             requirementText: "Complete 1,000 jobs"
         },
@@ -217,8 +193,7 @@ const layer = createLayer(id, function () {
             id: "money1",
             title: "Series A",
             description: "Reach $5000",
-            //reward: "Proof of concept cash milestone.",
-            image: "/ach/ach2.png",
+            image: "/ach/ach_cash1.png",
             requirement: () => Decimal.gte(money.value, 5000),
             requirementText: "Reach $5000"
         },
@@ -226,7 +201,7 @@ const layer = createLayer(id, function () {
             id: "money2",
             title: "Funded",
             description: "Reach $50,000",
-            image: "/ach/ach2.png",
+            image: "/ach/ach_cash2.png",
             requirement: () => Decimal.gte(money.value, 50000),
             requirementText: "Reach $50000"
         },
@@ -234,19 +209,29 @@ const layer = createLayer(id, function () {
 	
 
 
-        // Auto-generated achievements from /public/ach/ directory
-        // Run 'node scripts/ach_img_names.js' to regenerate the list
-        ...achievementImages.map(img => ({
-            id: img,
-            title: img,
-            description: img,
-            image: `/ach/${img}.png`,
-            requirement: () => totalCompute.value >= 88
-        })),
+    ];
 
+    // Track used images so auto-generated achievements do not reuse them
+    const usedImages = new Set(baseAchievementDefs.map(def => def.image ?? defaultImage));
 
+    // Auto-generated achievements from /public/ach/ directory
+    // Run 'node scripts/ach_img_names.js' to regenerate the list
+    const autoGeneratedAchievements = achievementImages.flatMap(img => {
+        const imagePath = `/ach/${img}.png`;
+        if (usedImages.has(imagePath)) return [];
+        usedImages.add(imagePath);
+        return [
+            {
+                id: img,
+                title: img,
+                description: img,
+                image: imagePath,
+                requirement: () => totalCompute.value >= 88
+            }
+        ];
+    });
 
-];
+    const achievementDefs = [...baseAchievementDefs, ...autoGeneratedAchievements];
 
     achievements = Object.fromEntries(
         achievementDefs.map(def => [

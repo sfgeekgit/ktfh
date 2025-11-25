@@ -11,16 +11,7 @@ export const G_CONF = {
     CHAP_3_IQ_TRIGGER: 3,          // IQ level required to unlock Chapter 3
     CHAP_4_GENERALITY_TRIGGER: 3,  // Generality level required to unlock Chapter 4
     CHAP_5_AUTONOMY_TRIGGER: 3,    // Autonomy level required to unlock Chapter 5
-    INTERLUDES: [
-        {
-            id: "interlude_fork1",
-            trigger: { type: "iq", value: 2 }
-        },
-        {
-            id: "interlude_public_sentiment",
-            trigger: { type: "jobRun", value: "dem3" }
-        }
-    ],
+
 
     // ===== STARTING RESOURCES =====
     STARTING_MONEY: 48,
@@ -43,6 +34,140 @@ export const G_CONF = {
     GPU_BASE_COST: 40, // Cost of first GPU purchase
     GPU_COST_MULTIPLIER: 1.3, // Each GPU costs this times the previous
 
+
+
+
+
+    INTERLUDES: [
+        {
+            id: "interlude_fork1",
+            trigger: { type: "iq", value: 2 }
+        },
+        {
+            id: "interlude_public_sentiment",
+            trigger: { type: "jobRun", value: "dem3" }
+        },
+        {
+            id: "interlude_prewonder_Nanotechnology_before_MolecularManufacturing",
+            trigger: { type: "unlockedJob", value: "sci6" }
+        },
+        {
+            id: "interlude_wonder_MolecularManufacturing_after_Nanotechnology",
+            trigger: { type: "completedJob", value: "sci7" }
+        },
+        {
+            id: "interlude_prewonder_MaterialsModelingWork_before_MaterialsDiscovery",
+            trigger: { type: "unlockedJob", value: "sci8" }
+        },
+        {
+            id: "interlude_wonder_MaterialsDiscovery_after_MaterialsModelingWork",
+            trigger: { type: "completedJob", value: "sci9" }
+        },
+        {
+            id: "interlude_prewonder_EnergyModeling_before_FusionEnergy",
+            trigger: { type: "unlockedJob", value: "sci11" }
+        },
+        {
+            id: "interlude_wonder_FusionEnergy_after_EnergyModeling",
+            trigger: { type: "completedJob", value: "sci12" }
+        },
+        {
+            id: "interlude_prewonder_IdentifyConsensus_before_DemocraticConsensusSynthesizer",
+            trigger: { type: "unlockedJob", value: "dem6" }
+        },
+        {
+            id: "interlude_wonder_DemocraticConsensusSynthesizer_after_IdentifyConsensus",
+            trigger: { type: "completedJob", value: "dem7" }
+        },
+        {
+            id: "interlude_prewonder_InformationIntegrityAudit_before_CivicTrustInfrastructure",
+            trigger: { type: "unlockedJob", value: "dem10" }
+        },
+        {
+            id: "interlude_wonder_CivicTrustInfrastructure_after_InformationIntegrityAudit",
+            trigger: { type: "completedJob", value: "dem11" }
+        },
+        {
+            id: "interlude_prewonder_AIDrivenPropaganda_before_PerceptionManipulationApparatus",
+            trigger: { type: "unlockedJob", value: "dem14" }
+        },
+        {
+            id: "interlude_prewonder_PopulationComplianceModeling_before_AlgorithmicAuthoritarianism",
+            trigger: { type: "unlockedJob", value: "dem17" }
+        },
+        {
+            id: "interlude_prewonder_VirtualTutoringService_before_UniversalEducationTutor",
+            trigger: { type: "unlockedJob", value: "edu7" }
+        },
+        {
+            id: "interlude_wonder_UniversalEducationTutor_after_VirtualTutoringService",
+            trigger: { type: "completedJob", value: "edu8" }
+        },
+        {
+            id: "interlude_prewonder_AccessibleVirtualTutoringSystems_before_GlobalLearningNetwork",
+            trigger: { type: "unlockedJob", value: "edu10" }
+        },
+        {
+            id: "interlude_wonder_GlobalLearningNetwork_after_AccessibleVirtualTutoringSystems",
+            trigger: { type: "completedJob", value: "edu11" }
+        },
+        {
+            id: "interlude_prewonder_Micro-ClimateSimulation_before_HighlyLocalizedWeatherForecasting",
+            trigger: { type: "unlockedJob", value: "clim3" }
+        },
+        {
+            id: "interlude_wonder_HighlyLocalizedWeatherForecasting_after_Micro-ClimateSimulation",
+            trigger: { type: "completedJob", value: "clim4" }
+        },
+        {
+            id: "interlude_prewonder_EmissionsSourceDetection_before_GlobalEmissionsTracking",
+            trigger: { type: "unlockedJob", value: "clim6" }
+        },
+        {
+            id: "interlude_wonder_GlobalEmissionsTracking_after_EmissionsSourceDetection",
+            trigger: { type: "completedJob", value: "clim7" }
+        },
+        {
+            id: "interlude_prewonder_AnticipatoryWindandSolar_before_Climate-AwareGridBalancing",
+            trigger: { type: "unlockedJob", value: "clim10" }
+        },
+        {
+            id: "interlude_wonder_Climate-AwareGridBalancing_after_AnticipatoryWindandSolar",
+            trigger: { type: "completedJob", value: "clim11" }
+        },
+        {
+            id: "interlude_prewonder_PersonalizedMedicineEngines_before_PrecisionOncology",
+            trigger: { type: "unlockedJob", value: "med3" }
+        },
+        {
+            id: "interlude_wonder_PrecisionOncology_after_PersonalizedMedicineEngines",
+            trigger: { type: "completedJob", value: "med4" }
+        },
+        {
+            id: "interlude_prewonder_DrugDiscoveryAI_before_AcceleratedDrugDiscovery",
+            trigger: { type: "unlockedJob", value: "med7" }
+        },
+        {
+            id: "interlude_wonder_AcceleratedDrugDiscovery_after_DrugDiscoveryAI",
+            trigger: { type: "completedJob", value: "med8" }
+        },
+        {
+            id: "interlude_prewonder_PredictiveMedicine_before_UniversalDiseaseTherapeutics",
+            trigger: { type: "unlockedJob", value: "med11" }
+        },
+        {
+            id: "interlude_wonder_UniversalDiseaseTherapeutics_after_PredictiveMedicine",
+            trigger: { type: "completedJob", value: "med12" }
+        },
+        {
+            id: "interlude_prewonder_RegenerativeMedicinePlatforms_before_ReversalofAging",
+            trigger: { type: "unlockedJob", value: "med13" }
+        },
+        {
+            id: "interlude_wonder_ReversalofAging_after_RegenerativeMedicinePlatforms",
+            trigger: { type: "completedJob", value: "med14" }
+        }
+    ],
     // ===== CHAPTER 2 BONUSES =====
     CHAPTER_2_QUALITY_BONUS: 1.10, // 10% multiplicative earnings increase
     CHAPTER_2_SPEED_BONUS: 1.10, // 10% multiplicative speed increase (jobs complete faster)

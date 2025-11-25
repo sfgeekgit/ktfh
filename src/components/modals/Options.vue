@@ -1,3 +1,4 @@
+<!-- NOTE: This options modal is currently not exposed to players in the UI. -->
 <template>
     <Modal v-model="isOpen">
         <template v-slot:header>
