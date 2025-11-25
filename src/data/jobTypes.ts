@@ -406,6 +406,244 @@ Scientific Data Processing
 
 
 
+    ,{
+        id: "sci1",
+        displayName: "Scientific Data Processing",
+        chapter: [2,3,4,5],
+        prereq: [],
+        unlockCost: [{ type: "money", value: 100 }],
+        payout: [
+            { type: "money", min: 180, max: 260 },
+            { type: "data", min: 20, max: 30 }
+        ],
+        duration: { min: 3, max: 4 },
+        category: "tool",
+        path: "sci",
+        cost: [
+            { type: "compute", value: 3 }
+        ]
+    }
+
+    ,{
+        id: "sci2",
+        displayName: "Rapid Science Modeling",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "sci1" }],
+        unlockCost: [{ type: "money", value: 200 }],
+        payout: [
+            { type: "money", min: 240, max: 380 }
+        ],
+        duration: { min: 2, max: 8 },
+        category: "tool",
+        path: "sci",
+        cost: [
+            { type: "compute", value: 4 }
+        ]
+    }
+
+    ,{
+        id: "sci3",
+        displayName: "Scientific Prediction Work",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "sci2" }],
+        unlockCost: [{ type: "money", value: 300 }],
+        payout: [
+            { type: "money", min: 320, max: 520 }
+        ],
+        duration: { min: 3, max: 9 },
+        category: "tool",
+        path: "sci",
+        cost: [
+            { type: "compute", value: 5 }
+        ]
+    }
+
+    ,{
+        id: "sci4",
+        displayName: "Structure Prediction",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "sci3" }],
+        unlockCost: [{ type: "money", value: 500 }],
+        payout: [
+            { type: "money", min: 420, max: 660 }
+        ],
+        duration: { min: 4, max: 8 },
+        category: "tool",
+        path: "sci",
+        cost: [
+            { type: "compute", value: 6 },
+            { type: "data", value: 120 }
+        ]
+    }
+
+    ,{
+        id: "sci5",
+        displayName: "Molecular Structure Prediction",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "sci4" }],
+        unlockCost: [
+            { type: "money", value: 500 },
+            { type: "data", value: 120 }
+        ],
+        payout: [
+            { type: "money", min: 520, max: 820 }
+        ],
+        duration: { min: 5, max: 22 },
+        category: "tool",
+        path: "sci",
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "data", value: 140 }
+        ]
+    }
+
+    ,{
+        id: "sci6",
+        displayName: "Nanotechnology",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "sci5" }],
+        unlockCost: [
+            { type: "money", value: 600 },
+            { type: "data", value: 180 }
+        ],
+        payout: [
+            { type: "money", min: 620, max: 980 }
+        ],
+        duration: { min: 16, max: 24 },
+        category: "tool",
+        path: "sci",
+        cost: [
+            { type: "compute", value: 8 },
+            { type: "data", value: 160 }
+        ]
+    }
+
+    ,{
+        id: "sci7",
+        displayName: "Molecular Manufacturing",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "sci6" }],
+        unlockCost: [
+            { type: "money", value: 8500 },
+            { type: "data", value: 600 }
+        ],
+        payout: [
+            { type: "wonder", min: 1, max: 1 }
+        ],
+        duration: { min: 18, max: 26 },
+        category: "onetime",
+        is_wonder: true,
+        path: "sci",
+        cost: [
+            { type: "compute", value: 9 },
+            { type: "data", value: 700 }
+        ]
+    }
+
+    ,{
+        id: "sci8",
+        displayName: "Materials Modeling Work",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "sci7" }],
+        unlockCost: [
+            { type: "money", value: 5200 },
+            { type: "data", value: 200 }
+        ],
+        payout: [
+            { type: "money", min: 520, max: 820 }
+        ],
+        duration: { min: 15, max: 22 },
+        category: "tool",
+        path: "sci",
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "data", value: 150 }
+        ]
+    }
+
+    ,{
+        id: "sci9",
+        displayName: "Materials Discovery",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "sci8" }],
+        unlockCost: [
+            { type: "money", value: 9000 },
+            { type: "data", value: 700 }
+        ],
+        payout: [
+            { type: "wonder", min: 1, max: 1 }
+        ],
+        duration: { min: 18, max: 26 },
+        category: "onetime",
+        is_wonder: true,
+        path: "sci",
+        cost: [
+            { type: "compute", value: 9 },
+            { type: "data", value: 800 }
+        ]
+    }
+
+    ,{
+        id: "sci10",
+        displayName: "Physics Pattern Recognition",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "sci5" }],
+        unlockCost: [{ type: "money", value: 5200 }],
+        payout: [
+            { type: "money", min: 520, max: 820 }
+        ],
+        duration: { min: 15, max: 22 },
+        category: "tool",
+        path: "sci",
+        cost: [
+            { type: "compute", value: 6 },
+            { type: "data", value: 140 }
+        ]
+    }
+
+    ,{
+        id: "sci11",
+        displayName: "Energy Modeling",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "sci10" }],
+        unlockCost: [
+            { type: "money", value: 7000 },
+            { type: "data", value: 200 }
+        ],
+        payout: [
+            { type: "money", min: 720, max: 1100 }
+        ],
+        duration: { min: 16, max: 24 },
+        category: "tool",
+        path: "sci",
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "data", value: 200 }
+        ]
+    }
+
+    ,{
+        id: "sci12",
+        displayName: "Fusion Energy",
+        chapter: [2,3,4,5],
+        prereq: [{ type: "job", value: "sci11" }],
+        unlockCost: [
+            { type: "money", value: 10000 },
+            { type: "data", value: 800 }
+        ],
+        payout: [
+            { type: "wonder", min: 1, max: 1 }
+        ],
+        duration: { min: 20, max: 28 },
+        category: "onetime",
+        is_wonder: true,
+        path: "sci",
+        cost: [
+            { type: "compute", value: 9 },
+            { type: "data", value: 900 }
+        ]
+    }
+
 
 /*
 

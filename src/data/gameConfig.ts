@@ -7,7 +7,7 @@
 
 export const G_CONF = {
     // ===== CHAPTER TRIGGERS =====
-    CHAP_2_TRIGGER: 15,  // Make this 15 seems right           // Jobs completed required to unlock Chapter 2
+    CHAP_2_TRIGGER: 4,  // Make this 15 seems right           // Jobs completed required to unlock Chapter 2
     CHAP_3_IQ_TRIGGER: 3,          // IQ level required to unlock Chapter 3
     CHAP_4_GENERALITY_TRIGGER: 3,  // Generality level required to unlock Chapter 4
     CHAP_5_AUTONOMY_TRIGGER: 3,    // Autonomy level required to unlock Chapter 5
@@ -99,5 +99,5 @@ export const STAT_ICONS = {
     iq: "🧠",
     autonomy: "🤖",
     generality: "💠",
-    wonder: "🌈"
+    wonder: "⭐" // "🏆" // "⭐" // 🌈 
 } as const;

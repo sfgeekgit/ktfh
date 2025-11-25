@@ -17,8 +17,8 @@ import player from "game/player";
 import { NEWS_TEXT } from "../newsText";
 import { resetGame } from "util/reset";
 
-//const IS_DEV = true;
-const IS_DEV = false;
+const IS_DEV = true;
+//const IS_DEV = false;
 
 /**
  * IMPORTANT: PERSISTENT STATE REGISTRATION
@@ -1122,7 +1122,8 @@ const layer = createLayer(id, function (this: any) {
             // Rejection chance = (auto*5 + gen*2 + iq) / 100
             //const rejectionChance = (autonomy.value * 5 + generality.value * 2 + iq.value) / 100;
 	    const rejectionChance = ((autonomy.value -.5)* 4 + (generality.value -1) * 1 + (iq.value-2) * 0.5) / 100;
-            const dynamicAcceptChance = 1 - rejectionChance;
+            // Do not let dynamic acceptance drop below 60%
+            const dynamicAcceptChance = Math.max(0.6, 1 - rejectionChance);
 
             // Use the LOWER of the two acceptance chances (higher rejection chance)
             acceptChance = Math.min(acceptChance, dynamicAcceptChance);
@@ -1233,53 +1234,6 @@ const layer = createLayer(id, function (this: any) {
                             </button>
                         </div>
 
-                    {IS_DEV && (
-                        <div style="margin: 15px 0; padding: 12px; border: 2px solid #9C27B0; border-radius: 10px; background: #f3e5f5;">
-                            <h4 style="margin: 0 0 10px 0; color: #9C27B0;">Dev Tools</h4>
-                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                                <button
-                                    onClick={() => {
-                                        autonomy.value = 1;
-                                        currentChapter.value = 4;
-                                        player.frameworkChoice = "not_yet";
-                                        player.gameOver = false;
-                                        chapter5CompletionTime.value = null;
-                                        timeSinceChapter5.value = 0;
-                                        activeNewsFlashes.value = [];
-                                        dismissedNewsIds.value = [];
-
-                                        if (layers.chapter5) {
-                                            const chapter5Layer = layers.chapter5 as any;
-                                            if (chapter5Layer.complete) {
-                                                chapter5Layer.complete.value = false;
-                                            }
-                                            if (chapter5Layer.currentPage) {
-                                                chapter5Layer.currentPage.value = 0;
-                                            }
-                                            if (chapter5Layer.playerChoice) {
-                                                chapter5Layer.playerChoice.value = null;
-                                            }
-                                        }
-
-                                        // @ts-ignore
-                                        player.tabs = ["main"];
-                                        save();
-                                    }}
-                                    style={{
-                                        background: "#9C27B0",
-                                        color: "white",
-                                        padding: "8px 16px",
-                                        border: "none",
-                                        borderRadius: "4px",
-                                        cursor: "pointer",
-                                        fontSize: "14px"
-                                    }}
-                                >
-                                    Dev to Chap 4
-                                </button>
-                            </div>
-                        </div>
-                    )}
                     <ResetModal ref={resetModal} is-dev={IS_DEV} />
                 </div>
             );
@@ -1425,6 +1379,26 @@ const layer = createLayer(id, function (this: any) {
                         </div>
                     </div>
                 )}
+                    {(currentChapter.value >= 2) && (
+                        <button
+                            onClick={openAchievementsTab}
+                            style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "6px",
+                                background: currentChapter.value >= 2 ? "#4CAF50" : "var(--raised-background)",
+                                color: currentChapter.value >= 2 ? "#EEEEEE" : "#ccc",
+                                border: currentChapter.value >= 2 ? "none" : "2px solid var(--outline)",
+                                borderRadius: "4px",
+                                cursor: "pointer",
+                                fontSize: "16px",
+                                padding: "4px 10px"
+                            }}
+                        >
+                            <img src="/ach/ach_gen.png" alt="Achievements" style="width: 35px; height: 35px; opacity:1" />
+                            Achievements
+                        </button>
+)}
 
                 <div style="margin: 15px 0; padding: 12px; border: 2px solid #4CAF50; border-radius: 10px; background: #e8f5e9;">
                     <h3>Available Jobs</h3>
@@ -1543,7 +1517,7 @@ const layer = createLayer(id, function (this: any) {
                                                 onClick={(e) => e.currentTarget && handleAcceptClick(job, e.currentTarget as HTMLButtonElement)}
                                                 disabled={!canAcceptJob(job) && !isInRejectionChain}
                                                 style={{
-                                                    background: !canAcceptJob(job) && !isInRejectionChain ? "#ccc" : isInRejectionChain ? "#f44336" : "#4CAF50",
+                                                    background: !canAcceptJob(job) && !isInRejectionChain ? "#ccc" : buttonText === "Decline" ? "#f44336" : "#4CAF50",
                                                     color: "white",
                                                     padding: "6px 12px",
                                                     border: "none",
@@ -1656,7 +1630,7 @@ const layer = createLayer(id, function (this: any) {
                                 padding: "4px 10px"
                             }}
                         >
-                            <img src="/ach/ach_globe.png" alt="Achievements" style="width: 19px; height: 19px; opacity:1" />
+                            <img src="/ach/ach_gen.png" alt="Achievements" style="width: 35px; height: 35px; opacity:1" />
                             Achievements
                         </button>
                         <button

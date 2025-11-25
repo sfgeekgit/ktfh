@@ -6,6 +6,7 @@ import { computed } from "vue";
 import Decimal from "util/bignum";
 import player from "game/player";
 import { loadAchievementMeta, saveAchievementMeta } from "util/achievementStorage";
+import { achievementImages } from "../generated/achievementImages";
 
 const id = "achievements";
 
@@ -18,15 +19,18 @@ const layer = createLayer(id, function () {
     const mainLayer = computed(() => layers.main as any);
     const totalCompute = computed(() => mainLayer.value?.gpusOwned?.value ?? 0);
     const money = computed(() => mainLayer.value?.money?.value ?? 0);
+    const jobCompletions = computed(() => mainLayer.value?.jobCompletions?.value ?? 0);
+    const completedOnetimeJobs = computed(() => mainLayer.value?.completedOnetimeJobs?.value ?? []);
 
 
     
     // requirementText is not used, I think
     // Reward is not used
     // Title is used for both the toast and the card
-    const defaultImage = "/ach/ach0.png";
+    const defaultImage = "/ach/ach_gen.png";
 
     const achievementDefs = [
+
         {
             id: "computeCluster4",
             title: "Quad Compute",
@@ -91,48 +95,148 @@ const layer = createLayer(id, function () {
             requirementText: "Own at least 19 compute units"
         },
         {
-            id: "moneySpark",
-            title: "Cash Spark",
-            description: "Amass $800 for the first time.",
-            reward: "Proof of concept cash milestone.",
+            id: "wonderMolecularManufacturing",
+            title: "Molecular Manufacturing",
+            description: "Complete the Molecular Manufacturing wonder.",
+            requirement: () => completedOnetimeJobs.value.includes("sci7"),
+            requirementText: "Complete Molecular Manufacturing"
+        },
+        {
+            id: "wonderMaterialsDiscovery",
+            title: "Materials Discovery",
+            description: "Complete the Materials Discovery wonder.",
+            requirement: () => completedOnetimeJobs.value.includes("sci9"),
+            requirementText: "Complete Materials Discovery"
+        },
+        {
+            id: "wonderFusionEnergy",
+            title: "Fusion Energy",
+            description: "Complete the Fusion Energy wonder.",
+            requirement: () => completedOnetimeJobs.value.includes("sci12"),
+            requirementText: "Complete Fusion Energy"
+        },
+        {
+            id: "wonderDemocraticConsensusSynthesizer",
+            title: "Democratic Consensus Synthesizer",
+            description: "Complete the Democratic Consensus Synthesizer wonder.",
+            requirement: () => completedOnetimeJobs.value.includes("dem7"),
+            requirementText: "Complete Democratic Consensus Synthesizer"
+        },
+        {
+            id: "wonderCivicTrustInfrastructure",
+            title: "Civic Trust Infrastructure",
+            description: "Complete the Civic Trust Infrastructure wonder.",
+            requirement: () => completedOnetimeJobs.value.includes("dem11"),
+            requirementText: "Complete Civic Trust Infrastructure"
+        },
+        {
+            id: "wonderPerceptionManipulationApparatus",
+            title: "Perception Manipulation Apparatus",
+            description: "Complete the Perception Manipulation Apparatus wonder.",
+            requirement: () => completedOnetimeJobs.value.includes("dem15"),
+            requirementText: "Complete Perception Manipulation Apparatus"
+        },
+        {
+            id: "wonderAlgorithmicAuthoritarianism",
+            title: "Algorithmic Authoritarianism",
+            description: "Complete the Algorithmic Authoritarianism wonder.",
+            requirement: () => completedOnetimeJobs.value.includes("dem18"),
+            requirementText: "Complete Algorithmic Authoritarianism"
+        },
+        {
+            id: "wonderUniversalEducationTutor",
+            title: "Universal Education Tutor",
+            description: "Complete the Universal Education Tutor wonder.",
+            requirement: () => completedOnetimeJobs.value.includes("edu8"),
+            requirementText: "Complete Universal Education Tutor"
+        },
+        {
+            id: "wonderGlobalLearningNetwork",
+            title: "Global Learning Network",
+            description: "Complete the Global Learning Network wonder.",
+            requirement: () => completedOnetimeJobs.value.includes("edu11"),
+            requirementText: "Complete Global Learning Network"
+        },
+        {
+            id: "wonderHighlyLocalizedWeatherForecasting",
+            title: "Highly Localized Weather Forecasting",
+            description: "Complete the Highly Localized Weather Forecasting wonder.",
+            requirement: () => completedOnetimeJobs.value.includes("clim4"),
+            requirementText: "Complete Highly Localized Weather Forecasting"
+        },
+        {
+            id: "wonderGlobalEmissionsTracking",
+            title: "Global Emissions Tracking",
+            description: "Complete the Global Emissions Tracking wonder.",
+            requirement: () => completedOnetimeJobs.value.includes("clim7"),
+            requirementText: "Complete Global Emissions Tracking"
+        },
+        {
+            id: "wonderClimateAwareGridBalancing",
+            title: "Climate-Aware Grid Balancing",
+            description: "Complete the Climate-Aware Grid Balancing wonder.",
+            requirement: () => completedOnetimeJobs.value.includes("clim11"),
+            requirementText: "Complete Climate-Aware Grid Balancing"
+        },
+        {
+            id: "wonderPrecisionOncology",
+            title: "Precision Oncology",
+            description: "Complete the Precision Oncology wonder.",
+            requirement: () => completedOnetimeJobs.value.includes("med4"),
+            requirementText: "Complete Precision Oncology"
+        },
+        {
+            id: "wonderAcceleratedDrugDiscovery",
+            title: "Accelerated Drug Discovery",
+            description: "Complete the Accelerated Drug Discovery wonder.",
+            requirement: () => completedOnetimeJobs.value.includes("med8"),
+            requirementText: "Complete Accelerated Drug Discovery"
+        },
+        {
+            id: "wonderUniversalDiseaseTherapeutics",
+            title: "Universal Disease Therapeutics",
+            description: "Complete the Universal Disease Therapeutics wonder.",
+            requirement: () => completedOnetimeJobs.value.includes("med12"),
+            requirementText: "Complete Universal Disease Therapeutics"
+        },
+        {
+            id: "wonderReversalOfAging",
+            title: "Reversal of Aging",
+            description: "Complete the Reversal of Aging wonder.",
+            requirement: () => completedOnetimeJobs.value.includes("med14"),
+            requirementText: "Complete Reversal of Aging"
+        },
+        {
+            id: "worker",
+            title: "Worker",
+            description: "Complete 1,000 jobs.",
+            requirement: () => jobCompletions.value >= 1000,
+            requirementText: "Complete 1,000 jobs"
+        },
+        {
+            id: "money1",
+            title: "Series A",
+            description: "Reach $5000",
+            //reward: "Proof of concept cash milestone.",
             image: "/ach/ach2.png",
-            requirement: () => Decimal.gte(money.value, 800),
-            requirementText: "Reach $800"
+            requirement: () => Decimal.gte(money.value, 5000),
+            requirementText: "Reach $5000"
+        },
+        {
+            id: "money2",
+            title: "Funded",
+            description: "Reach $50,000",
+            image: "/ach/ach2.png",
+            requirement: () => Decimal.gte(money.value, 50000),
+            requirementText: "Reach $50000"
         },
 
+	
 
 
-        // New achievements mirroring dev01; update behavior later
-        ...[
-            "ach0",
-            "ach2",
-            "ach3",
-            "ach_age1",
-            "ach_age2",
-            "ach_age3",
-            "ach_badai1",
-            "ach_badai2",
-            "ach_badai3",
-            "ach_badai4",
-            "ach_burn",
-            "ach_dem1",
-            "ach_dem2",
-            "ach_edu1",
-            "ach_edu2",
-            "ach_edu3",
-            "ach_edu4",
-            "ach_fiss",
-            "ach_globe",
-            "ach_med",
-            "ach_med2",
-            "ach_medtargt",
-            "ach_molen1",
-            "ach_molen2",
-            "ach_nuc",
-            "ach_server",
-            "ach_suneng",
-            "achmed1"
-        ].map(img => ({
+        // Auto-generated achievements from /public/ach/ directory
+        // Run 'node scripts/ach_img_names.js' to regenerate the list
+        ...achievementImages.map(img => ({
             id: img,
             title: img,
             description: img,
@@ -150,7 +254,10 @@ const layer = createLayer(id, function () {
             createAchievement(() => ({
                 display: () => def.title,
                 image: def.image ?? defaultImage,
-                requirements: createBooleanRequirement(def.requirement, () => <>{def.requirementText}</>)
+                requirements: createBooleanRequirement(
+                    def.requirement,
+                    () => <>{("requirementText" in def && def.requirementText) || ""}</>
+                )
             }))
         ])
     ) as Record<string, ReturnType<typeof createAchievement>>;
@@ -161,7 +268,7 @@ const layer = createLayer(id, function () {
         description: def.description,
         image: def.image ?? defaultImage,
         achievement: (achievements as any)[def.id],
-        reward: def.reward
+        reward: "reward" in def ? def.reward : undefined
     }));
 
     // Load persisted meta on layer init (and whenever this layer is constructed)

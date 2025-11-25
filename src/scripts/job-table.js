@@ -38,7 +38,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 function loadJobTypes() {
-  const tsPath = path.resolve(__dirname, '../src/data/jobTypes.ts');
+  const tsPath = path.resolve(__dirname, '../data/jobTypes.ts');
   const source = fs.readFileSync(tsPath, 'utf8');
 
   // Transpile to CommonJS and eval in a local module scope.
