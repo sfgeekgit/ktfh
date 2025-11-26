@@ -2,9 +2,6 @@
 **id:** chapter1
 
 
-
-
-
 ## Page Intro1
 **title:**  The Choice Before Us
 **pageType:** intro
@@ -19,19 +16,15 @@ Close the Gates
 
 TODO: write intro for the game here.
 
-the point of the game is...  Your goal as a player is...
+The point of the game is to explore the potential boons and dangers of AGI
 
 The essay is relevant because...
 
-You control an AI startup.
-
-You have choices to make.
+In this game, you make choices that control an AI startup.
 
 Choices that affect the growth and success of your company.
 
 Choices that affect the growth and success of humanity itself.
-
-*Italic text*
 
 
 ## Page Intro2
@@ -60,16 +53,17 @@ You can play however you want (this is only a game) but only one narrow path lea
 
 
 ## Page 1
-
+**title:** Chapter 1: The Spark
 You've done it. After months of preparation, your AI startup is finally launching.
 
 The idea is simple: build AI tools that help people, not replace them.
 
-Image sorting. Document translation. Transcription work.
+It won't be easy, but you feel ready for the task ahead.
 
 Today, your first system goes live.
 
 ## Page 2
+**title:**  Chapter 1
 
 The initial deployments exceed expectations.
 
@@ -80,12 +74,14 @@ These systems are predictable. Controllable. They do exactly what you trained th
 The feedback is immediate: "This saved me so much time." "I can finally focus on the important work."
 
 ## Page 3
+**title:**  Chapter 1
 
 The technology is straightforward. Narrow AI, the researchers call it. Neural networks trained on specific tasks. When given an image, they classify it. When given audio, they transcribe it.
 
 Simple inputs, reliable outputs. Nothing fancy. Just useful.
 
 ## Page 4
+**title:**  Chapter 1
 
 At night, you read about other companies pursuing something different.
 
@@ -101,7 +97,7 @@ Your company is small, but it's real. And it's growing.
 **id:** interlude_fork1
 
 ## Page 1
-
+**title:**  Which story will we follow?
 With IQ 2 unlocked, the team debates the next big push.
 
 Two domains are vying for attention: saving the planet, or saving lives.
@@ -166,6 +162,7 @@ Choose how to use your new visibility into the public mood.
 **id:** chapter2
 
 ## Page 1
+**title:**  Chapter 2: Tools That Think
 
 Six months in, something shifts.
 
@@ -244,7 +241,7 @@ It works. Growth accelerates. Systems handle more jobs with less supervision.
 **id:** chapter3
 
 ## Page 1
-
+**title:**  Chapter 3
 The news hits like a thunderclap.
 
 **"MegaCorp AI Raises $8 Billion for AGI Research"**
@@ -257,20 +254,7 @@ Your phone won't stop ringing. Investors asking about your AGI timeline. Enginee
 
 A new era is beginning. You're a competitor in something bigger.
 
-<!--
-## Page 2
-**title:** Go Big
 
-You double down on scaling. More computation yields better performance.
-
-Training runs at Petascale, then Exascale, always hungry for more.
-
-Your systems are impressive. Protein folding predictions. Climate models. Fusion reactor simulations.
-
-You're advancing science.
-
-*But MegaCorp is ahead.*
--->
 ## Page 3 [CHOICE]
 **title:** Emergency Meeting
 
@@ -330,7 +314,7 @@ You're catching up.
 
 # Chapter 4: Systems That Act
 **id:** chapter4
-
+**title:** Chapter 4: Systems That Act
 ## Page 1
 
 MegaCorp announces "The Year of the Agent."
@@ -391,7 +375,7 @@ And now, so are you.
 **id:** chapter5
 
 ## Page 1
-
+**title:** Chapter 5: The Threshold
 The AI race dominates headlines.
 
 Your systems have grown dramatically across multiple domains. Minimal oversight. Jobs that complete themselves.
@@ -675,61 +659,79 @@ And tonight, looking at the five Wonders changing the world safely and predictab
 
 # Interlude: Nanotechnology → Molecular Manufacturing
 **id:** interlude_prewonder_Nanotechnology_before_MolecularManufacturing
+**story_trigger:** Nanotechnology
+**next_wonder:** Molecular Manufacturing
 
 ## Page 1
+**title:** Atom-Scale Assembly
 
 Your nanotech team walks in with gleaming samples from the latest run. “With Nanotechnology unlocked, we can start building components atom by atom,” your lead says.
 
-## Page 2
 
 She asks for your go-ahead to aim the new tools at a moonshot: Molecular Manufacturing. “Give us the green light, and we’ll assemble anything from first principles.”
+
+<h3>New Wonder Available: ⭐ Molecular Manufacturing </h3>
 
 ---
 
 # Interlude: Molecular Manufacturing
 **id:** interlude_wonder_MolecularManufacturing_after_Nanotechnology
+**wonder_trigger:** Molecular Manufacturing
 
 ## Page 1
+**title:** Molecular Manufacturing
 
 Your nanotech line clicks through its final calibration. For the first time, parts assemble themselves from the molecule up without waste or delay.
 
 ## Page 2
+**title:**
 
 Engineers gather around the print bed, holding components no human hand could craft. Manufacturing just changed from “build it” to “grow it.”
+
+<h3>+1 Wonder ⭐ Molecular Manufacturing </h3>
 
 ---
 
 # Interlude: Materials Modeling Work → Materials Discovery
 **id:** interlude_prewonder_MaterialsModelingWork_before_MaterialsDiscovery
+**story_trigger:** Materials Modeling Work
+**next_wonder:** Materials Discovery
 
 ## Page 1
+**title:** Designing the Impossible
 
 Your simulation cluster now chews through lattice structures like candy. “Materials Modeling Work is live,” the lab lead reports.
 
-## Page 2
 
 She proposes the next leap: let the models invent new alloys outright. “If you approve, we’ll push toward Materials Discovery.”
+
+<h3>New Wonder Available: ⭐ Materials Discovery </h3>
 
 ---
 
 # Interlude: Materials Discovery
 **id:** interlude_wonder_MaterialsDiscovery_after_MaterialsModelingWork
+**wonder_trigger:** Materials Discovery
 
 ## Page 1
+**title:** Materials Discovery
 
 The materials lab dashboard glows green. Simulations propose alloys with impossible combinations of strength and weight.
 
 ## Page 2
+**title:**
 
 You watch a robotic arm pour a sample that matches the model exactly. The line between hypothesis and usable matter just collapsed.
 
----
+<h3>+1 Wonder ⭐ Materials Discovery </h3>
 
-# Interlude: We can build this
+---
+# Interlude: Energy Modeling → Fusion Energy
 **id:** interlude_prewonder_EnergyModeling_before_FusionEnergy
 **story_trigger:** Energy Modeling
 **next_wonder:** Fusion Energy
 ## Page 1
+**title:** We can build this
 
 Energy Modeling is unlocked, and the reactor team is buzzing. “We can actually predict plasma stability windows now,” they say.
 
@@ -739,15 +741,16 @@ They want your approval to chase the big prize: Fusion Energy. “Let us reroute
 
 ---
 
-# Interlude: Fusion Energy
+# Interlude: 
 **id:** interlude_wonder_FusionEnergy_after_EnergyModeling
 **wonder_trigger:** Fusion Energy
 ## Page 1
+**title:** Fusion Energy
 
 In the control room, reactor teams rerun your models one last time. Every projection points to stable, net-positive fusion.
 
 ## Page 2
-
+**title:** 
 When the plasma holds, applause breaks out. Clean energy leaves the realm of “someday” and enters the grid.
 
 <h3>+1 Wonder ⭐ Fusion Energy </h3>
@@ -756,300 +759,403 @@ When the plasma holds, applause breaks out. Clean energy leaves the realm of “
 
 # Interlude: Identify Consensus → Democratic Consensus Synthesizer
 **id:** interlude_prewonder_IdentifyConsensus_before_DemocraticConsensusSynthesizer
+**story_trigger:** Identify Consensus
+**next_wonder:** Democratic Consensus Synthesizer
 
 ## Page 1
+**title:** Finding Common Ground
 
 Your civic analytics team can now Identify Consensus across messy debates. “The signals are finally clear,” they report.
 
-## Page 2
 
 They pitch a next step: build a Democratic Consensus Synthesizer to surface common ground before conflict. “We’re ready if you are.”
+
+<h3>New Wonder Available: ⭐ Democratic Consensus Synthesizer </h3>
 
 ---
 
 # Interlude: Democratic Consensus Synthesizer
 **id:** interlude_wonder_DemocraticConsensusSynthesizer_after_IdentifyConsensus
+**wonder_trigger:** Democratic Consensus Synthesizer
 
 ## Page 1
+**title:** Democratic Consensus Synthesizer
 
 Across a dozen municipal servers, your system threads citizen feedback into shared priorities instead of opposing demands.
 
 ## Page 2
+**title:**
 
 A council chair writes: “For the first time, we see agreement before conflict.” Governance feels less like a fight, more like a plan.
+
+<h3>+1 Wonder ⭐ Democratic Consensus Synthesizer </h3>
 
 ---
 
 # Interlude: Information Integrity Audit → Civic Trust Infrastructure
 **id:** interlude_prewonder_InformationIntegrityAudit_before_CivicTrustInfrastructure
+**story_trigger:** Information Integrity Audit
+**next_wonder:** Civic Trust Infrastructure
 
 ## Page 1
+**title:** Proof Over Propaganda
 
 The audit pipeline is live. Information Integrity Audit flags distortions before they spread.
 
-## Page 2
 
 Your team proposes wiring it into a full Civic Trust Infrastructure—verifiable chains for every public claim. “We can do it. Should we?”
+
+<h3>New Wonder Available: ⭐ Civic Trust Infrastructure </h3>
 
 ---
 
 # Interlude: Civic Trust Infrastructure
 **id:** interlude_wonder_CivicTrustInfrastructure_after_InformationIntegrityAudit
+**wonder_trigger:** Civic Trust Infrastructure
 
 ## Page 1
+**title:** Civic Trust Infrastructure
 
 Every claim in the public record now carries a verifiable chain. The audit network hums, flagging distortions before they spread.
 
 ## Page 2
+**title:**
 
 Journalists and citizens alike cite the ledger without hesitation. Trust becomes a service, and it is suddenly abundant.
+
+<h3>+1 Wonder ⭐ Civic Trust Infrastructure </h3>
 
 ---
 
 # Interlude: AI-Driven Propaganda → Perception Manipulation Apparatus
 **id:** interlude_prewonder_AIDrivenPropaganda_before_PerceptionManipulationApparatus
+**story_trigger:** AI-Driven Propaganda
+**next_wonder:** Perception Manipulation Apparatus
 
 ## Page 1
+**title:** Pulling Narrative Levers
 
 Your persuasion team unlocks AI-Driven Propaganda. The dashboards light up with targeting knobs no one’s used before.
 
-## Page 2
 
 Someone floats a darker idea: a Perception Manipulation Apparatus. “We can shape narratives at scale,” they say quietly. Do you dare?
+
+<h3>New Wonder Available: ⭐ Perception Manipulation Apparatus </h3>
 
 ---
 
 # Interlude: Population Compliance Modeling → Algorithmic Authoritarianism
 **id:** interlude_prewonder_PopulationComplianceModeling_before_AlgorithmicAuthoritarianism
+**story_trigger:** Population Compliance Modeling
+**next_wonder:** Algorithmic Authoritarianism
 
 ## Page 1
+**title:** Modeling Obedience
 
 Population Compliance Modeling is online. It predicts how people bend—or break—under pressure.
 
-## Page 2
 
 The next proposal chills the room: Algorithmic Authoritarianism. “If we automate control, we can lock societies into compliance.” The choice hangs heavy.
+
+<h3>New Wonder Available: ⭐ Algorithmic Authoritarianism </h3>
 
 ---
 
 # Interlude: Universal Education Tutor
 **id:** interlude_wonder_UniversalEducationTutor_after_VirtualTutoringService
+**wonder_trigger:** Universal Education Tutor
 
 ## Page 1
+**title:**  Universal Education Tutor
 
 A classroom in Manila, a village library in Ghana, a kitchen table in Detroit—each student opens the same tutor, tailored to them.
 
 ## Page 2
+**title:**
 
 Parents write back: “It knows our kid’s gaps, but it never replaces the teacher.” Learning feels personal, not automated.
+
+<h3>+1 Wonder ⭐ Universal Education Tutor </h3>
 
 ---
 
 # Interlude: Accessible Virtual Tutoring Systems → Global Learning Network
 **id:** interlude_prewonder_AccessibleVirtualTutoringSystems_before_GlobalLearningNetwork
+**story_trigger:** Accessible Virtual Tutoring Systems
+**next_wonder:** Global Learning Network
 
 ## Page 1
+**title:** Every Classroom Connected
 
 Accessible Virtual Tutoring Systems are unlocked. Lessons adapt fluidly across languages and contexts.
 
-## Page 2
 
 Your educators suggest knitting every classroom together: a Global Learning Network. “If you approve, we’ll propagate breakthroughs instantly.”
+
+<h3>New Wonder Available: ⭐ Global Learning Network </h3>
 
 ---
 
 # Interlude: Global Learning Network
 **id:** interlude_wonder_GlobalLearningNetwork_after_AccessibleVirtualTutoringSystems
+**wonder_trigger:** Global Learning Network
 
 ## Page 1
+**title:** Global Learning Network
 
 Lesson breakthroughs ripple worldwide in minutes. A trick discovered in one town becomes scaffolding for thousands of classrooms.
 
 ## Page 2
+**title:**
 
 Teachers swap strategies through the network, celebrated like open-source contributors. Education starts to feel like a global co-op.
+
+<h3>+1 Wonder ⭐ Global Learning Network </h3>
 
 ---
 
 # Interlude: Micro-Climate Simulation → Highly Localized Weather Forecasting
 **id:** interlude_prewonder_Micro-ClimateSimulation_before_HighlyLocalizedWeatherForecasting
+**story_trigger:** Micro-Climate Simulation
+**next_wonder:** Highly Localized Weather Forecasting
 
 ## Page 1
+**title:** Forecasts at Street Scale
 
 Micro-Climate Simulation is live. Your models resolve weather at street scale.
 
-## Page 2
 
 The climate team asks to take the next step: Highly Localized Weather Forecasting. “Authorize it and we’ll give farmers minute-by-minute guidance.”
+
+<h3>New Wonder Available: ⭐ Highly Localized Weather Forecasting </h3>
 
 ---
 
 # Interlude: Highly Localized Weather Forecasting
 **id:** interlude_wonder_HighlyLocalizedWeatherForecasting_after_Micro-ClimateSimulation
+**wonder_trigger:** Highly Localized Weather Forecasting
 
 ## Page 1
+**title:** Highly Localized Weather Forecasting
 
 Farmers receive hyperlocal forecasts: “Rain in 17 minutes on the east field.” Sprinklers pause. Workers grab shelter.
 
 ## Page 2
+**title:**
 
 The yield charts spike. What used to be luck is now timing, and timing is now knowledge shared at the speed of clouds.
+
+<h3>+1 Wonder ⭐ Highly Localized Weather Forecasting </h3>
 
 ---
 
 # Interlude: Emissions Source Detection → Global Emissions Tracking
 **id:** interlude_prewonder_EmissionsSourceDetection_before_GlobalEmissionsTracking
+**story_trigger:** Emissions Source Detection
+**next_wonder:** Global Emissions Tracking
 
 ## Page 1
+**title:** Pinpointing Every Plume
 
 Emissions Source Detection is unlocked. You can now pinpoint polluters in real time.
 
-## Page 2
 
 Your climate ops lead wants to go further: Global Emissions Tracking. “Let us scale it worldwide and make every plume public.”
+
+<h3>New Wonder Available: ⭐ Global Emissions Tracking </h3>
 
 ---
 
 # Interlude: Global Emissions Tracking
 **id:** interlude_wonder_GlobalEmissionsTracking_after_EmissionsSourceDetection
+**wonder_trigger:** Global Emissions Tracking
 
 ## Page 1
+**title:** Global Emissions Tracking
 
 Your dashboard pins every major emitter on the planet with live telemetry. Negotiators bring laptops instead of dossiers.
 
 ## Page 2
+**title:**
 
 When a smokestack flares, alerts ping regulators and citizens instantly. Accountability stops being abstract—it is visible, named, and dated.
+
+<h3>+1 Wonder ⭐ Global Emissions Tracking </h3>
 
 ---
 
 # Interlude: Anticipatory Wind and Solar → Climate-Aware Grid Balancing
 **id:** interlude_prewonder_AnticipatoryWindandSolar_before_Climate-AwareGridBalancing
+**story_trigger:** Anticipatory Wind and Solar
+**next_wonder:** Climate-Aware Grid Balancing
 
 ## Page 1
+**title:** Balancing Ahead of Time
 
 Anticipatory Wind and Solar is unlocked. Your forecasts shift grid loads before spikes arrive.
 
-## Page 2
 
 Grid engineers propose the capstone: Climate-Aware Grid Balancing. “Authorize it and blackouts become history.”
+
+<h3>New Wonder Available: ⭐ Climate-Aware Grid Balancing </h3>
 
 ---
 
 # Interlude: Climate-Aware Grid Balancing
 **id:** interlude_wonder_Climate-AwareGridBalancing_after_AnticipatoryWindandSolar
+**wonder_trigger:** Climate-Aware Grid Balancing
 
 ## Page 1
+**title:** Climate-Aware Grid Balancing
 
 Wind drops on one coast, solar peaks on another, and the grid rebalances before anyone notices. Blackouts become stories from the past.
 
 ## Page 2
+**title:**
 
 Grid operators report something odd: boredom. The system prevents crises so well that emergency drills become nostalgia.
+
+<h3>+1 Wonder ⭐ Climate-Aware Grid Balancing </h3>
 
 ---
 
 # Interlude: Personalized Medicine Engines → Precision Oncology
 **id:** interlude_prewonder_PersonalizedMedicineEngines_before_PrecisionOncology
+**story_trigger:** Personalized Medicine Engines
+**next_wonder:** Precision Oncology
 
 ## Page 1
+**title:** Personalized, Then Precise
 
 Personalized Medicine Engines are live. Treatment suggestions now consider full patient histories.
 
-## Page 2
 
 The medical team asks to target cancer directly: Precision Oncology. “Let us move—every week we wait is lives.”
+
+<h3>New Wonder Available: ⭐ Precision Oncology </h3>
 
 ---
 
 # Interlude: Precision Oncology
 **id:** interlude_wonder_PrecisionOncology_after_PersonalizedMedicineEngines
+**wonder_trigger:** Precision Oncology
 
 ## Page 1
+**title:** Precision Oncology
 
 An oncologist reviews a treatment plan custom-built from millions of cases. The AI doesn’t decide; it proposes, with citations.
 
 ## Page 2
+**title:**
 
 Patient outcomes start trending upward. Families speak of “options we never knew existed.” Medicine feels precise without feeling cold.
+
+<h3>+1 Wonder ⭐ Precision Oncology </h3>
 
 ---
 
 # Interlude: Drug Discovery AI → Accelerated Drug Discovery
 **id:** interlude_prewonder_DrugDiscoveryAI_before_AcceleratedDrugDiscovery
+**story_trigger:** Drug Discovery AI
+**next_wonder:** Accelerated Drug Discovery
 
 ## Page 1
+**title:** Faster Molecule Sprints
 
 Drug Discovery AI is unlocked. Candidate molecules roll off the models faster than your wet lab can test.
 
-## Page 2
 
 Your chief scientist wants to push harder: Accelerated Drug Discovery. “Approve the sprint and we’ll compress years into months.”
+
+<h3>New Wonder Available: ⭐ Accelerated Drug Discovery </h3>
 
 ---
 
 # Interlude: Accelerated Drug Discovery
 **id:** interlude_wonder_AcceleratedDrugDiscovery_after_DrugDiscoveryAI
+**wonder_trigger:** Accelerated Drug Discovery
 
 ## Page 1
+**title:** Accelerated Drug Discovery
 
 Compound candidates flow from your pipeline daily, each vetted by generative models and lab automation in tight concert.
 
 ## Page 2
+**title:**
 
 Regulators marvel at clean datasets and reproducible results. “Faster” stops meaning “riskier”—it means “better prepared.”
+
+<h3>+1 Wonder ⭐ Accelerated Drug Discovery </h3>
 
 ---
 
 # Interlude: Predictive Medicine → Universal Disease Therapeutics
 **id:** interlude_prewonder_PredictiveMedicine_before_UniversalDiseaseTherapeutics
+**story_trigger:** Predictive Medicine
+**next_wonder:** Universal Disease Therapeutics
 
 ## Page 1
+**title:** Seeing Illness Early
 
 Predictive Medicine is unlocked. You can flag emerging conditions before symptoms surface.
 
-## Page 2
 
 The clinicians propose a bold expansion: Universal Disease Therapeutics. “Let’s build protocols that travel anywhere, for anyone.”
+
+<h3>New Wonder Available: ⭐ Universal Disease Therapeutics </h3>
 
 ---
 
 # Interlude: Universal Disease Therapeutics
 **id:** interlude_wonder_UniversalDiseaseTherapeutics_after_PredictiveMedicine
+**wonder_trigger:** Universal Disease Therapeutics
 
 ## Page 1
+**title:** Universal Disease Therapeutics
 
 The therapeutic library expands into rare and neglected diseases. Rural clinics pull down protocols once reserved for elite hospitals.
 
 ## Page 2
+**title:**
 
 A nurse messages: “We treated a case we’d only seen in textbooks.” Access gaps start to close in places that never had options.
+
+<h3>+1 Wonder ⭐ Universal Disease Therapeutics </h3>
 
 ---
 
 # Interlude: Regenerative Medicine Platforms → Reversal of Aging
 **id:** interlude_prewonder_RegenerativeMedicinePlatforms_before_ReversalofAging
+**story_trigger:** Regenerative Medicine Platforms
+**next_wonder:** Reversal of Aging
 
 ## Page 1
+**title:** Rebuilding What Breaks
 
 Regenerative Medicine Platforms are unlocked. Tissues repair in simulations that once failed outright.
 
-## Page 2
 
 Your bioethics lead and chief scientist come together: “We can attempt Reversal of Aging—carefully. Do we proceed?”
+
+<h3>New Wonder Available: ⭐ Reversal of Aging </h3>
 
 ---
 
 # Interlude: Reversal of Aging
 **id:** interlude_wonder_ReversalofAging_after_RegenerativeMedicinePlatforms
+**wonder_trigger:** Reversal of Aging
 
 ## Page 1
+**title:** Reversal of Aging
 
 Early trials show cellular rejuvenation without the runaway risks the skeptics feared. Patients feel their joints loosen, their lungs fill easily.
 
 ## Page 2
+**title:**
 
 Ethicists and physicians meet in the same room, not to argue, but to plan equitable rollout. Longevity stops being a fantasy and starts being policy.
+
+<h3>+1 Wonder ⭐ Reversal of Aging </h3>
 
 ---
 

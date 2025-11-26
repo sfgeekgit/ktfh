@@ -427,7 +427,7 @@ Scientific Data Processing
         displayName: "Rapid Science Modeling",
         chapter: [2,3,4,5],
         prereq: [{ type: "job", value: "sci1" }],
-        unlockCost: [{ type: "money", value: 200 }],
+        unlockCost: [{ type: "money", value: 250 }],
         payout: [
             { type: "money", min: 144, max: 173 }
         ],
@@ -444,7 +444,7 @@ Scientific Data Processing
         displayName: "Scientific Prediction Work",
         chapter: [2,3,4,5],
         prereq: [{ type: "job", value: "sci2" }],
-        unlockCost: [{ type: "money", value: 300 }],
+        unlockCost: [{ type: "money", value: 500 }],
         payout: [
             { type: "money", min: 192, max: 230 }
         ],
@@ -461,7 +461,7 @@ Scientific Data Processing
         displayName: "Structure Prediction",
         chapter: [2,3,4,5],
         prereq: [{ type: "job", value: "sci3" }],
-        unlockCost: [{ type: "money", value: 500 }],
+        unlockCost: [{ type: "money", value: 700 }],
         payout: [
             { type: "money", min: 252, max: 302 }
         ],
@@ -480,7 +480,7 @@ Scientific Data Processing
         chapter: [2,3,4,5],
         prereq: [{ type: "job", value: "sci4" }],
         unlockCost: [
-            { type: "money", value: 500 },
+            { type: "money", value: 900 },
             { type: "data", value: 120 }
         ],
         payout: [
@@ -501,8 +501,8 @@ Scientific Data Processing
         chapter: [2,3,4,5],
         prereq: [{ type: "job", value: "sci5" }],
         unlockCost: [
-            { type: "money", value: 600 },
-            { type: "data", value: 180 }
+            { type: "money", value: 1200 },
+            { type: "data", value: 400 }
         ],
         payout: [
             { type: "money", min: 372, max: 446 }
@@ -522,7 +522,7 @@ Scientific Data Processing
         chapter: [2,3,4,5],
         prereq: [{ type: "job", value: "sci6" }],
         unlockCost: [
-            { type: "money", value: 8500 },
+            { type: "money", value: 2000 },
             { type: "data", value: 600 }
         ],
         payout: [
@@ -767,8 +767,8 @@ Digital Learning Platforms
         chapter: [2,3,4,5],
         prereq: [{ type: "job", value: "dem2" }],
         unlockCost: [
-            { type: "money", value: 4200 },
-            { type: "data", value: 160 }
+            { type: "money", value: 1000 },
+            { type: "data", value: 300 }
         ],
         payout: [
             { type: "money", min: 216, max: 259 }
@@ -787,7 +787,7 @@ Digital Learning Platforms
         displayName: "Multi-Stakeholder Dialogue",
         chapter: [2,3,4,5],
         prereq: [{ type: "choice", value: "dem4" }],
-        unlockCost: [{ type: "money", value: 3000 }],
+        unlockCost: [{ type: "money", value: 1500 }],
         payout: [
             { type: "money", min: 168, max: 202 }
         ],

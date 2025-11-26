@@ -131,10 +131,11 @@ export function createChapterLayer(chapterId: string, chapterData: ChapterData) 
 
             // Handle choice pages differently
             if (page.isChoice) {
+                const titleText = page.title !== undefined ? page.title : chapterData.title;
                 return (
                     <div>
                         <h2 style={`color: ${styles.headerColor}; font-size: ${styles.headerSize}; margin-bottom: 30px;`}>
-                            {page.title || chapterData.title}
+                            {titleText}
                         </h2>
 
                         <div style={`margin: 20px 0; padding: 30px; border: 2px solid ${styles.borderColor}; border-radius: 10px; background: ${styles.background}; color: ${styles.textColor};`}>
@@ -206,10 +207,11 @@ export function createChapterLayer(chapterId: string, chapterData: ChapterData) 
                 }
             }
 
+            const titleText = page.title !== undefined ? page.title : chapterData.title;
             return (
                 <div>
                     <h2 style={`color: ${styles.headerColor}; font-size: ${styles.headerSize}; margin-bottom: 30px;`}>
-                        {page.title || chapterData.title}
+                        {titleText}
                     </h2>
 
                     <div style={`margin: 20px 0; padding: 30px; border: 2px solid ${styles.borderColor}; border-radius: 10px; background: ${styles.background}; color: ${styles.textColor};`}>
