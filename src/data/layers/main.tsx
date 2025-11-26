@@ -535,7 +535,7 @@ const layer = createLayer(id, function (this: any) {
     const clearJobsVisible = computed(() => {
         if (jobQueue.value.length === 0) return false;
         if (jobQueue.value.length < autoJobLimit.value) return false;
-        return jobQueue.value.every(job => {
+        return jobQueue.value.every((job: DeliveryJob) => {
             const jobType = getJobType(job.jobTypeId);
             const isOnetime = jobType?.category === "onetime";
             const isScooped = !!scoopedJobs.value[job.id];
@@ -1153,8 +1153,8 @@ const layer = createLayer(id, function (this: any) {
     }
 
     function clearAvailableJobs() {
-        const preserved = jobQueue.value.filter(j => getJobType(j.jobTypeId)?.category === "onetime");
-        const preservedIds = new Set(preserved.map(j => j.id));
+        const preserved = jobQueue.value.filter((j: DeliveryJob) => getJobType(j.jobTypeId)?.category === "onetime");
+        const preservedIds = new Set(preserved.map((j: DeliveryJob) => j.id));
         jobQueue.value = preserved;
         scoopedJobs.value = Object.fromEntries(Object.entries(scoopedJobs.value).filter(([id]) => preservedIds.has(Number(id))));
         save();
