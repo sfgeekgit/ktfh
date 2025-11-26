@@ -81,7 +81,7 @@ export const JOB_TYPES: JobType[] = [
         prereq: [],
         unlockCost: [],
         payout: [
-            { type: "money", min: 10, max: 50 }
+            { type: "money", min: 20, max: 30 }
         ],
         duration: { min: 2, max: 4 },
         category: "tool",
@@ -100,7 +100,7 @@ export const JOB_TYPES: JobType[] = [
 	],
         unlockCost: [            { type: "money", value: 10 }],
         payout: [
-            { type: "money", min: 10, max: 50 }
+            { type: "money", min: 25, max: 35 }
         ],
         duration: { min: 3, max: 6 },
         category: "tool",
@@ -135,13 +135,13 @@ export const JOB_TYPES: JobType[] = [
         description: "",
         chapter: [1,2,3,4],
         prereq: [
-		{type:"compute", value:2 , display_prereq: false  },
+		{type:"compute", value:3 , display_prereq: false  },
 	    { type: "money", value: 50 },
             { type: "job", value: "spellchecker" }
 	],
         unlockCost: [            { type: "money", value: 50 }],
         payout: [
-            { type: "money", min: 70, max: 120 }
+            { type: "money", min: 40, max: 55 }
         ],
         duration: { min: 7, max: 10 },
         category: "tool",
@@ -155,14 +155,14 @@ export const JOB_TYPES: JobType[] = [
         description: "",
         chapter: [1,2,3],
         prereq: [
-	    { type: "money", value: 80 },
+	    { type: "money", value: 70 },
             { type: "job", value: "spellchecker" }
 	],
         unlockCost: [            { type: "money", value: 80 }],
         payout: [
-            { type: "money", min: 140, max: 190 }
+            { type: "money", min: 40, max: 60 }
         ],
-        duration: { min: 8, max: 11 },
+        duration: { min: 5, max: 9 },
         category: "tool",
         cost: [
             { type: "compute", value: 2 }
@@ -176,11 +176,11 @@ export const JOB_TYPES: JobType[] = [
         chapter: [1,2,3],
         prereq: [
 	    { type: "money", value: 280 },
-            { type: "job", value: "spellchecker", display_prereq: false }
+            { type: "job", value: "speechtran", display_prereq: false }
 	],
         unlockCost: [            { type: "money", value: 100 }],
         payout: [
-            { type: "money", min: 70, max: 150 }
+            { type: "money", min: 50, max: 80 }
         ],
         duration: { min: 8, max: 11 },
         category: "tool",
@@ -201,7 +201,7 @@ export const JOB_TYPES: JobType[] = [
 
         unlockCost: [            { type: "money", value: 10 }],
         payout: [
-            { type: "data", min: 70, max: 150 }
+            { type: "data", min: 80, max: 110 }
         ],
         duration: { min: 7, max: 10 }, // todo Make slower
         category: "gameplay",
@@ -219,9 +219,9 @@ export const JOB_TYPES: JobType[] = [
         chapter: [2,3,4,5],
 	displayTrigger: [ { type: "iq", value: 1 } ],
         prereq: [ { type: "iq", value: 2 } ],
-        unlockCost: [            { type: "money", value: 100 }],
+        unlockCost: [            { type: "money", value: 300 }],
         payout: [
-            { type: "money", min: 170, max: 250 }
+            { type: "money", min: 80, max: 100 }
 	    ,             { type: "data", min: 5, max: 15 }
         ],
         duration: { min: 8, max: 11 },
@@ -241,9 +241,9 @@ export const JOB_TYPES: JobType[] = [
         prereq: [ { type: "iq", value: 3 },
 		  { type: "compute", value:6}
 	],
-        unlockCost: [            { type: "money", value: 1000 }],
+        unlockCost: [            { type: "money", value: 500 }],
         payout: [
-		{ type: "money", min: 870, max: 1150 }
+		{ type: "money", min: 90, max: 110 }
 	    ,   { type: "data", min: 15, max: 25 }
 	    ],
         duration: { min: 11, max: 15 },
@@ -252,8 +252,7 @@ export const JOB_TYPES: JobType[] = [
     },
 
 
-
-
+    /*
     // IQ-Gated Money Jobs (Requires IQ ≥ 2)
     {
         id: "legalresearch",
@@ -268,7 +267,7 @@ export const JOB_TYPES: JobType[] = [
         cost: [{ type: "compute", value: 4 }],
         category: "tool"
     },
-
+    */
 
 ///// Data
 
@@ -385,7 +384,7 @@ export const JOB_TYPES: JobType[] = [
 
 Science & Engineering Tech Tree
 
-
+Job 1 is trigged by route opt
 
 Scientific Data Processing                        
 └── Rapid Science Modeling 
@@ -410,11 +409,10 @@ Scientific Data Processing
         id: "sci1",
         displayName: "Scientific Data Processing",
         chapter: [2,3,4,5],
-        prereq: [],
+	prereq: [{ type: "job", value: "routeopt" }],
         unlockCost: [{ type: "money", value: 100 }],
         payout: [
-            { type: "money", min: 180, max: 260 },
-            { type: "data", min: 20, max: 30 }
+            { type: "data", min: 80, max: 130 }
         ],
         duration: { min: 3, max: 4 },
         category: "tool",
@@ -431,7 +429,7 @@ Scientific Data Processing
         prereq: [{ type: "job", value: "sci1" }],
         unlockCost: [{ type: "money", value: 200 }],
         payout: [
-            { type: "money", min: 240, max: 380 }
+            { type: "money", min: 144, max: 173 }
         ],
         duration: { min: 2, max: 8 },
         category: "tool",
@@ -448,7 +446,7 @@ Scientific Data Processing
         prereq: [{ type: "job", value: "sci2" }],
         unlockCost: [{ type: "money", value: 300 }],
         payout: [
-            { type: "money", min: 320, max: 520 }
+            { type: "money", min: 192, max: 230 }
         ],
         duration: { min: 3, max: 9 },
         category: "tool",
@@ -465,7 +463,7 @@ Scientific Data Processing
         prereq: [{ type: "job", value: "sci3" }],
         unlockCost: [{ type: "money", value: 500 }],
         payout: [
-            { type: "money", min: 420, max: 660 }
+            { type: "money", min: 252, max: 302 }
         ],
         duration: { min: 4, max: 8 },
         category: "tool",
@@ -486,7 +484,7 @@ Scientific Data Processing
             { type: "data", value: 120 }
         ],
         payout: [
-            { type: "money", min: 520, max: 820 }
+            { type: "money", min: 312, max: 374 }
         ],
         duration: { min: 5, max: 22 },
         category: "tool",
@@ -507,7 +505,7 @@ Scientific Data Processing
             { type: "data", value: 180 }
         ],
         payout: [
-            { type: "money", min: 620, max: 980 }
+            { type: "money", min: 372, max: 446 }
         ],
         duration: { min: 16, max: 24 },
         category: "tool",
@@ -550,7 +548,7 @@ Scientific Data Processing
             { type: "data", value: 200 }
         ],
         payout: [
-            { type: "money", min: 520, max: 820 }
+            { type: "money", min: 312, max: 374 }
         ],
         duration: { min: 15, max: 22 },
         category: "tool",
@@ -590,7 +588,7 @@ Scientific Data Processing
         prereq: [{ type: "job", value: "sci5" }],
         unlockCost: [{ type: "money", value: 5200 }],
         payout: [
-            { type: "money", min: 520, max: 820 }
+            { type: "money", min: 312, max: 374 }
         ],
         duration: { min: 15, max: 22 },
         category: "tool",
@@ -611,7 +609,7 @@ Scientific Data Processing
             { type: "data", value: 200 }
         ],
         payout: [
-            { type: "money", min: 720, max: 1100 }
+            { type: "money", min: 432, max: 518 }
         ],
         duration: { min: 16, max: 24 },
         category: "tool",
@@ -732,7 +730,8 @@ Digital Learning Platforms
         prereq: [{ type: "job", value: "spamfilter" }],
         unlockCost: [{ type: "money", value: 90 }],
         payout: [
-            { type: "money", min: 240, max: 380 }
+            { type: "money", min: 144, max: 173 }
+	    ,             { type: "data", min: 10, max: 20 }
         ],
         duration: { min: 9, max: 12 },
         category: "tool",
@@ -746,17 +745,19 @@ Digital Learning Platforms
         id: "dem2",
         displayName: "Digital Civic Information System",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "dem1" }],
-        unlockCost: [{ type: "money", value: 3500 }],
+        prereq: [{ type: "job", value: "dem1", display_prereq: false },
+	  	 { type: "iq", value: 2 }
+		 , { type: "compute", value: 6 }],
+        unlockCost: [{ type: "money", value: 400 }],
         payout: [
             { type: "generality", min: 1, max: 1 }
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 20, max: 25 },
         category: "onetime",
         path: "dem",
         cost: [
-            { type: "compute", value: 5 },
-            { type: "data", value: 120 }
+            { type: "compute", value: 4 },
+            { type: "data", value: 150 }
         ]
     }
 
@@ -770,7 +771,7 @@ Digital Learning Platforms
             { type: "data", value: 160 }
         ],
         payout: [
-            { type: "money", min: 360, max: 560 }
+            { type: "money", min: 216, max: 259 }
         ],
         duration: { min: 10, max: 13 },
         category: "tool",
@@ -788,7 +789,7 @@ Digital Learning Platforms
         prereq: [{ type: "choice", value: "dem4" }],
         unlockCost: [{ type: "money", value: 3000 }],
         payout: [
-            { type: "money", min: 280, max: 460 }
+            { type: "money", min: 168, max: 202 }
         ],
         duration: { min: 9, max: 12 },
         category: "tool",
@@ -828,7 +829,7 @@ Digital Learning Platforms
             { type: "data", value: 180 }
         ],
         payout: [
-            { type: "money", min: 450, max: 720 }
+            { type: "money", min: 270, max: 324 }
         ],
         duration: { min: 10, max: 13 },
         category: "tool",
@@ -892,7 +893,7 @@ Digital Learning Platforms
             { type: "data", value: 180 }
         ],
         payout: [
-            { type: "money", min: 360, max: 600 }
+            { type: "money", min: 216, max: 259 }
         ],
         duration: { min: 10, max: 13 },
         category: "tool",
@@ -913,7 +914,7 @@ Digital Learning Platforms
             { type: "data", value: 220 }
         ],
         payout: [
-            { type: "money", min: 460, max: 720 }
+            { type: "money", min: 276, max: 331 }
         ],
         duration: { min: 10, max: 13 },
         category: "tool",
@@ -953,7 +954,7 @@ Digital Learning Platforms
         prereq: [{ type: "choice", value: "dem12" }],
         unlockCost: [{ type: "money", value: 3200 }],
         payout: [
-            { type: "money", min: 640, max: 860 }
+            { type: "money", min: 384, max: 461 }
         ],
         duration: { min: 9, max: 12 },
         category: "tool",
@@ -972,7 +973,7 @@ Digital Learning Platforms
             { type: "money", value: 5000 }
         ],
         payout: [
-            { type: "money", min: 920, max: 1260 }
+            { type: "money", min: 552, max: 662 }
         ],
         duration: { min: 10, max: 13 },
         category: "tool",
@@ -993,7 +994,7 @@ Digital Learning Platforms
             { type: "data", value: 200 }
         ],
         payout: [
-            { type: "money", min: 720, max: 1100 }
+            { type: "money", min: 432, max: 518 }
         ],
         duration: { min: 10, max: 13 },
         category: "tool",
@@ -1037,7 +1038,7 @@ Digital Learning Platforms
             { type: "data", value: 160 }
         ],
         payout: [
-            { type: "money", min: 420, max: 660 }
+            { type: "money", min: 252, max: 302 }
         ],
         duration: { min: 10, max: 13 },
         category: "tool",
@@ -1102,7 +1103,7 @@ Digital Learning Platforms
         prereq: [{ type: "choice", value: "edu1" }],
         unlockCost: [{ type: "money", value: 800 }],
         payout: [
-            { type: "money", min: 160, max: 260 }
+            { type: "money", min: 96, max: 115 }
         ],
         duration: { min: 8, max: 11 },
         category: "tool",
@@ -1119,7 +1120,7 @@ Digital Learning Platforms
         prereq: [{ type: "job", value: "edu1" }],
         unlockCost: [{ type: "money", value: 2500 }],
         payout: [
-            { type: "money", min: 220, max: 380 }
+            { type: "money", min: 132, max: 158 }
         ],
         duration: { min: 9, max: 12 },
         category: "tool",
@@ -1138,7 +1139,7 @@ Digital Learning Platforms
             { type: "money", value: 3800 }
         ],
         payout: [
-            { type: "money", min: 320, max: 520 }
+            { type: "money", min: 192, max: 230 }
         ],
         duration: { min: 9, max: 12 },
         category: "tool",
@@ -1158,7 +1159,7 @@ Digital Learning Platforms
             { type: "data", value: 150 }
         ],
         payout: [
-            { type: "money", min: 520, max: 800 }
+            { type: "money", min: 312, max: 374 }
         ],
         duration: { min: 10, max: 13 },
         category: "tool",
@@ -1175,7 +1176,7 @@ Digital Learning Platforms
         prereq: [{ type: "job", value: "edu2" }],
         unlockCost: [{ type: "money", value: 3400 }],
         payout: [
-            { type: "money", min: 340, max: 540 }
+            { type: "money", min: 204, max: 245 }
         ],
         duration: { min: 9, max: 12 },
         category: "tool",
@@ -1195,7 +1196,7 @@ Digital Learning Platforms
             { type: "data", value: 120 }
         ],
         payout: [
-            { type: "money", min: 460, max: 680 }
+            { type: "money", min: 276, max: 331 }
         ],
         duration: { min: 10, max: 13 },
         category: "tool",
@@ -1215,7 +1216,7 @@ Digital Learning Platforms
             { type: "data", value: 200 }
         ],
         payout: [
-            { type: "money", min: 560, max: 880 }
+            { type: "money", min: 336, max: 403 }
         ],
         duration: { min: 10, max: 13 },
         category: "tool",
@@ -1256,7 +1257,7 @@ Digital Learning Platforms
             { type: "money", value: 3800 }
         ],
         payout: [
-            { type: "money", min: 360, max: 600 }
+            { type: "money", min: 216, max: 259 }
         ],
         duration: { min: 9, max: 12 },
         category: "tool",
@@ -1276,7 +1277,7 @@ Digital Learning Platforms
             { type: "data", value: 120 }
         ],
         payout: [
-            { type: "money", min: 520, max: 820 }
+            { type: "money", min: 312, max: 374 }
         ],
         duration: { min: 10, max: 13 },
         category: "tool",
@@ -1341,7 +1342,7 @@ Climate Data Interpreter
         prereq: [{ type: "choice", value: "clim1" }],   /// Unlocked via choice only!
         unlockCost: [{ type: "money", value: 50 }],
         payout: [
-            { type: "money", min: 140, max: 190 }
+            { type: "money", min: 84, max: 101 }
         ],
         duration: { min: 8, max: 11 },
         category: "tool",
@@ -1358,7 +1359,7 @@ Climate Data Interpreter
         prereq: [{ type: "job", value: "clim1" }],
         unlockCost: [{ type: "money", value: 2000 }],
         payout: [
-            { type: "money", min: 200, max: 380 }
+            { type: "money", min: 120, max: 144 }
         ],
         duration: { min: 9, max: 12 },
         category: "tool",
@@ -1378,7 +1379,7 @@ Climate Data Interpreter
             { type: "data", value: 100 }
         ],
         payout: [
-            { type: "money", min: 300, max: 550 },
+            { type: "money", min: 180, max: 216 },
             { type: "data", min: 80, max: 130 }
         ],
         duration: { min: 9, max: 12 },
@@ -1419,7 +1420,7 @@ Climate Data Interpreter
         prereq: [{ type: "job", value: "clim2" }],
         unlockCost: [{ type: "money", value: 3200 }],
         payout: [
-            { type: "money", min: 280, max: 520 },
+            { type: "money", min: 168, max: 202 },
             { type: "data", min: 70, max: 120 }
         ],
         duration: { min: 9, max: 12 },
@@ -1441,7 +1442,7 @@ Climate Data Interpreter
             { type: "data", value: 150 }
         ],
         payout: [
-            { type: "money", min: 420, max: 700 },
+            { type: "money", min: 252, max: 302 },
             { type: "data", min: 150, max: 240 }
         ],
         duration: { min: 10, max: 13 },
@@ -1479,11 +1480,11 @@ Climate Data Interpreter
     ,{
         id: "clim8",
         displayName: "Energy Grid Intelligence",
-        chapter: [1,2,3,4,5],
+        chapter: [3,4,5],
         prereq: [{ type: "job", value: "clim1" }],
         unlockCost: [{ type: "money", value: 2500 }],
         payout: [
-            { type: "money", min: 220, max: 420 }
+            { type: "money", min: 132, max: 158 }
         ],
         duration: { min: 9, max: 12 },
         category: "tool",
@@ -1496,11 +1497,11 @@ Climate Data Interpreter
     ,{
         id: "clim9",
         displayName: "Smart Grid Forecasting",
-        chapter: [1,2,3,4,5],
+        chapter: [3,4,5],
         prereq: [{ type: "job", value: "clim8" }],
         unlockCost: [{ type: "money", value: 4000 }],
         payout: [
-            { type: "money", min: 320, max: 600 },
+            { type: "money", min: 192, max: 230 },
             { type: "data", min: 60, max: 120 }
         ],
         duration: { min: 9, max: 12 },
@@ -1515,14 +1516,14 @@ Climate Data Interpreter
     ,{
         id: "clim10",
         displayName: "Anticipatory Wind and Solar",
-        chapter: [1,2,3,4,5],
+        chapter: [4,5],
         prereq: [{ type: "job", value: "clim9" }],
         unlockCost: [
             { type: "money", value: 5500 },
             { type: "data", value: 120 }
         ],
         payout: [
-            { type: "money", min: 480, max: 780 },
+            { type: "money", min: 288, max: 346 },
             { type: "data", min: 90, max: 160 }
         ],
         duration: { min: 10, max: 13 },
@@ -1537,7 +1538,7 @@ Climate Data Interpreter
     ,{
         id: "clim11",
         displayName: "Climate-Aware Grid Balancing",
-        chapter: [1,2,3,4,5],
+        chapter: [4,5],
         prereq: [{ type: "job", value: "clim10" }],
         unlockCost: [
             { type: "money", value: 8000 },
@@ -1569,7 +1570,7 @@ Climate Data Interpreter
         prereq: [{ type: "choice", value: "med1" }],   /// Unlocked via choice only!
         unlockCost: [{ type: "money", value: 1500 }],
         payout: [
-            { type: "money", min: 140, max: 300 }
+            { type: "money", min: 84, max: 101 }
         ],
         duration: { min: 8, max: 11 },
         category: "tool",
@@ -1586,7 +1587,7 @@ Climate Data Interpreter
         prereq: [{ type: "job", value: "med1" }],
         unlockCost: [{ type: "money", value: 2500 }],
         payout: [
-            { type: "money", min: 200, max: 400 }
+            { type: "money", min: 120, max: 144 }
         ],
         duration: { min: 9, max: 12 },
         category: "tool",
@@ -1603,7 +1604,7 @@ Climate Data Interpreter
         prereq: [{ type: "job", value: "med2" }],
         unlockCost: [{ type: "money", value: 4000 }],
         payout: [
-            { type: "money", min: 300, max: 550 }
+            { type: "money", min: 180, max: 216 }
         ],
         duration: { min: 9, max: 12 },
         category: "tool",
@@ -1641,7 +1642,7 @@ Climate Data Interpreter
         prereq: [{ type: "job", value: "med2" }],
         unlockCost: [{ type: "money", value: 3500 }],
         payout: [
-            { type: "money", min: 320, max: 600 },
+            { type: "money", min: 192, max: 230 },
             { type: "data", min: 80, max: 140 }
         ],
         duration: { min: 9, max: 12 },
@@ -1660,7 +1661,7 @@ Climate Data Interpreter
         prereq: [{ type: "job", value: "med5" }],
         unlockCost: [{ type: "money", value: 5000 }],
         payout: [
-            { type: "money", min: 450, max: 700 },
+            { type: "money", min: 270, max: 324 },
             { type: "data", min: 120, max: 220 }
         ],
         duration: { min: 10, max: 13 },
@@ -1682,7 +1683,7 @@ Climate Data Interpreter
             { type: "data", value: 300 }
         ],
         payout: [
-            { type: "money", min: 650, max: 950 },
+            { type: "money", min: 390, max: 468 },
             { type: "data", min: 200, max: 350 }
         ],
         duration: { min: 10, max: 13 },
@@ -1726,7 +1727,7 @@ Climate Data Interpreter
         prereq: [{ type: "job", value: "med1" }],
         unlockCost: [{ type: "money", value: 2500 }],
         payout: [
-            { type: "money", min: 220, max: 420 },
+            { type: "money", min: 132, max: 158 },
             { type: "data", min: 40, max: 90 }
         ],
         duration: { min: 9, max: 12 },
@@ -1744,7 +1745,7 @@ Climate Data Interpreter
         prereq: [{ type: "job", value: "med9" }],
         unlockCost: [{ type: "money", value: 4000 }],
         payout: [
-            { type: "money", min: 320, max: 580 },
+            { type: "money", min: 192, max: 230 },
             { type: "data", min: 50, max: 100 }
         ],
         duration: { min: 9, max: 12 },
@@ -1766,7 +1767,7 @@ Climate Data Interpreter
             { type: "data", value: 120 }
         ],
         payout: [
-            { type: "money", min: 500, max: 800 },
+            { type: "money", min: 300, max: 360 },
             { type: "data", min: 80, max: 160 }
         ],
         duration: { min: 9, max: 12 },
@@ -1811,7 +1812,7 @@ Climate Data Interpreter
             { type: "data", value: 200 }
         ],
         payout: [
-            { type: "money", min: 550, max: 850 },
+            { type: "money", min: 330, max: 396 },
             { type: "data", min: 120, max: 220 }
         ],
         duration: { min: 10, max: 13 },

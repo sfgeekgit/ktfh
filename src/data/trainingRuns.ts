@@ -20,13 +20,13 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         prereq: [
             { type: "compute", value: 3 }
         ],
-        unlockCost: [{ type: "data", value: 200 }],
+        unlockCost: [{ type: "data", value: 100 }],
         payout: [{ type: "iq", min: 1, max: 1 }],
         duration: { min: BASE_TRAIN_DUR * 3.5, max: BASE_TRAIN_DUR * 3.5 },
         category: "onetime",
         cost: [
             { type: "compute", value: 2 },
-            { type: "money", value: 300 }
+            { type: "money", value: 200 }
         ]
     },
 
