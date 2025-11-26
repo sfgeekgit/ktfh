@@ -725,22 +725,23 @@ You watch a robotic arm pour a sample that matches the model exactly. The line b
 
 ---
 
-# Interlude: Energy Modeling → Fusion Energy
+# Interlude: We can build this
 **id:** interlude_prewonder_EnergyModeling_before_FusionEnergy
-
+**story_trigger:** Energy Modeling
+**next_wonder:** Fusion Energy
 ## Page 1
 
 Energy Modeling is unlocked, and the reactor team is buzzing. “We can actually predict plasma stability windows now,” they say.
 
-## Page 2
-
 They want your approval to chase the big prize: Fusion Energy. “Let us reroute compute and run the full stack—we might crack it.”
+
+<h3>New Wonder Available: ⭐ Fusion Energy </h3>
 
 ---
 
 # Interlude: Fusion Energy
 **id:** interlude_wonder_FusionEnergy_after_EnergyModeling
-
+**wonder_trigger:** Fusion Energy
 ## Page 1
 
 In the control room, reactor teams rerun your models one last time. Every projection points to stable, net-positive fusion.
@@ -748,6 +749,8 @@ In the control room, reactor teams rerun your models one last time. Every projec
 ## Page 2
 
 When the plasma holds, applause breaks out. Clean energy leaves the realm of “someday” and enters the grid.
+
+<h3>+1 Wonder ⭐ Fusion Energy </h3>
 
 ---
 

@@ -239,7 +239,7 @@ export const JOB_TYPES: JobType[] = [
         chapter: [2,3,4,5],
 	displayTrigger: [ { type: "job", value: "chess"} ],
         prereq: [ { type: "iq", value: 3 },
-		  { type: "compute", value:6}
+		  { type: "compute", value:5}
 	],
         unlockCost: [            { type: "money", value: 500 }],
         payout: [
@@ -303,7 +303,7 @@ export const JOB_TYPES: JobType[] = [
 
 	chapter: [2,3,4,5,6],
         prereq: [
-            { type: "compute", value: 9 }
+            { type: "compute", value: 8 }
         ],
         unlockCost: [{ type: "money", value: 2000 }],
         payout: [
@@ -314,7 +314,7 @@ export const JOB_TYPES: JobType[] = [
         category: "onetime",
 	is_wonder: true,
         cost: [
-            { type: "compute", value: 13 },
+            { type: "compute", value: 12 },
             { type: "money", value: 100 },
             { type: "data", value: 10 }
         ]
@@ -452,7 +452,7 @@ Scientific Data Processing
         category: "tool",
         path: "sci",
         cost: [
-            { type: "compute", value: 5 }
+            { type: "compute", value: 4 }
         ]
     }
 
@@ -469,7 +469,7 @@ Scientific Data Processing
         category: "tool",
         path: "sci",
         cost: [
-            { type: "compute", value: 6 },
+            { type: "compute", value: 5 },
             { type: "data", value: 120 }
         ]
     }
@@ -490,7 +490,7 @@ Scientific Data Processing
         category: "tool",
         path: "sci",
         cost: [
-            { type: "compute", value: 7 },
+            { type: "compute", value: 5 },
             { type: "data", value: 140 }
         ]
     }
@@ -511,7 +511,7 @@ Scientific Data Processing
         category: "tool",
         path: "sci",
         cost: [
-            { type: "compute", value: 8 },
+            { type: "compute", value: 6 },
             { type: "data", value: 160 }
         ]
     }
@@ -533,7 +533,7 @@ Scientific Data Processing
         is_wonder: true,
         path: "sci",
         cost: [
-            { type: "compute", value: 9 },
+            { type: "compute", value: 7 },
             { type: "data", value: 700 }
         ]
     }
@@ -554,7 +554,7 @@ Scientific Data Processing
         category: "tool",
         path: "sci",
         cost: [
-            { type: "compute", value: 7 },
+            { type: "compute", value: 5 },
             { type: "data", value: 150 }
         ]
     }
@@ -576,7 +576,7 @@ Scientific Data Processing
         is_wonder: true,
         path: "sci",
         cost: [
-            { type: "compute", value: 9 },
+            { type: "compute", value: 7 },
             { type: "data", value: 800 }
         ]
     }
@@ -594,14 +594,14 @@ Scientific Data Processing
         category: "tool",
         path: "sci",
         cost: [
-            { type: "compute", value: 6 },
+            { type: "compute", value: 5 },
             { type: "data", value: 140 }
         ]
     }
 
     ,{
         id: "sci11",
-        displayName: "Energy Modeling",
+        displayName: "Atomic Energy Modeling",
         chapter: [2,3,4,5],
         prereq: [{ type: "job", value: "sci10" }],
         unlockCost: [
@@ -615,7 +615,7 @@ Scientific Data Processing
         category: "tool",
         path: "sci",
         cost: [
-            { type: "compute", value: 7 },
+            { type: "compute", value: 5 },
             { type: "data", value: 200 }
         ]
     }
@@ -637,7 +637,7 @@ Scientific Data Processing
         is_wonder: true,
         path: "sci",
         cost: [
-            { type: "compute", value: 9 },
+            { type: "compute", value: 7 },
             { type: "data", value: 900 }
         ]
     }
@@ -747,7 +747,7 @@ Digital Learning Platforms
         chapter: [2,3,4,5],
         prereq: [{ type: "job", value: "dem1", display_prereq: false },
 	  	 { type: "iq", value: 2 }
-		 , { type: "compute", value: 6 }],
+		 , { type: "compute", value: 5 }],
         unlockCost: [{ type: "money", value: 400 }],
         payout: [
             { type: "generality", min: 1, max: 1 }
@@ -777,7 +777,7 @@ Digital Learning Platforms
         category: "tool",
         path: "dem",
         cost: [
-            { type: "compute", value: 6 },
+            { type: "compute", value: 5 },
             { type: "data", value: 140 }
         ]
     }
@@ -814,7 +814,7 @@ Digital Learning Platforms
         category: "onetime",
         path: "dem",
         cost: [
-            { type: "compute", value: 9 },
+            { type: "compute", value: 8 },
             { type: "money", value: 1200 }
         ]
     }
@@ -835,7 +835,7 @@ Digital Learning Platforms
         category: "tool",
         path: "dem",
         cost: [
-            { type: "compute", value: 7 },
+            { type: "compute", value: 6 },
             { type: "data", value: 150 }
         ]
     }
@@ -857,7 +857,7 @@ Digital Learning Platforms
         is_wonder: true,
         path: "dem",
         cost: [
-            { type: "compute", value: 8 },
+            { type: "compute", value: 7 },
             { type: "data", value: 500 }
         ]
     }
@@ -899,7 +899,7 @@ Digital Learning Platforms
         category: "tool",
         path: "dem",
         cost: [
-            { type: "compute", value: 6 },
+            { type: "compute", value: 5 },
             { type: "data", value: 160 }
         ]
     }
@@ -920,7 +920,7 @@ Digital Learning Platforms
         category: "tool",
         path: "dem",
         cost: [
-            { type: "compute", value: 7 },
+            { type: "compute", value: 6 },
             { type: "data", value: 180 }
         ]
     }
@@ -942,7 +942,7 @@ Digital Learning Platforms
         is_wonder: true,
         path: "dem",
         cost: [
-            { type: "compute", value: 8 },
+            { type: "compute", value: 7 },
             { type: "data", value: 600 }
         ]
     }
@@ -979,7 +979,7 @@ Digital Learning Platforms
         category: "tool",
         path: "dem",
         cost: [
-            { type: "compute", value: 6 },
+            { type: "compute", value: 5 },
             { type: "money", value: 400 }
         ]
     }
@@ -1000,7 +1000,7 @@ Digital Learning Platforms
         category: "tool",
         path: "dem",
         cost: [
-            { type: "compute", value: 7 },
+            { type: "compute", value: 6 },
             { type: "data", value: 220 }
         ]
     }
@@ -1023,7 +1023,7 @@ Digital Learning Platforms
         bad_end: true,
         path: "dem",
         cost: [
-            { type: "compute", value: 8 },
+            { type: "compute", value: 7 },
             { type: "data", value: 650 }
         ]
     }
@@ -1044,7 +1044,7 @@ Digital Learning Platforms
         category: "tool",
         path: "dem",
         cost: [
-            { type: "compute", value: 6 },
+            { type: "compute", value: 5 },
             { type: "data", value: 180 }
         ]
     }
@@ -1066,7 +1066,7 @@ Digital Learning Platforms
         category: "tool",
         path: "dem",
         cost: [
-            { type: "compute", value: 8 },
+            { type: "compute", value: 7 },
             { type: "money", value: 600 },
             { type: "data", value: 500 }
         ]
@@ -1090,7 +1090,7 @@ Digital Learning Platforms
         bad_end: true,
         path: "dem",
         cost: [
-            { type: "compute", value: 9 },
+            { type: "compute", value: 8 },
             { type: "data", value: 900 }
         ]
     }
@@ -1129,7 +1129,7 @@ Digital Learning Platforms
             { type: "compute", value: 4 }
         ]
     }
-
+    /*
     ,{
         id: "edu3",
         displayName: "Personalized Curriculum Generation",
@@ -1165,10 +1165,10 @@ Digital Learning Platforms
         category: "tool",
         path: "edu",
         cost: [
-            { type: "compute", value: 6 }
+            { type: "compute", value: 5 }
         ]
     }
-
+    */
     ,{
         id: "edu5",
         displayName: "Multimodal Student Teaching",
@@ -1202,7 +1202,7 @@ Digital Learning Platforms
         category: "tool",
         path: "edu",
         cost: [
-            { type: "compute", value: 6 }
+            { type: "compute", value: 5 }
         ]
     }
 
@@ -1222,7 +1222,7 @@ Digital Learning Platforms
         category: "tool",
         path: "edu",
         cost: [
-            { type: "compute", value: 7 }
+            { type: "compute", value: 6 }
         ]
     }
 
@@ -1243,7 +1243,7 @@ Digital Learning Platforms
         is_wonder: true,
         path: "edu",
         cost: [
-            { type: "compute", value: 8 },
+            { type: "compute", value: 7 },
             { type: "data", value: 600 }
         ]
     }
@@ -1283,7 +1283,7 @@ Digital Learning Platforms
         category: "tool",
         path: "edu",
         cost: [
-            { type: "compute", value: 6 }
+            { type: "compute", value: 5 }
         ]
     }
 
@@ -1304,7 +1304,7 @@ Digital Learning Platforms
         is_wonder: true,
         path: "edu",
         cost: [
-            { type: "compute", value: 8 },
+            { type: "compute", value: 7 },
             { type: "data", value: 700 }
         ]
     }
@@ -1386,7 +1386,7 @@ Climate Data Interpreter
         category: "tool",
         path: "clim",
         cost: [
-            { type: "compute", value: 6 },
+            { type: "compute", value: 5 },
             { type: "data", value: 120 }
         ]
     }
@@ -1407,12 +1407,12 @@ Climate Data Interpreter
         is_wonder: true,
         path: "clim",
         cost: [
-            { type: "compute", value: 8 },
+            { type: "compute", value: 7 },
             { type: "money", value: 2800 },
             { type: "data", value: 500 }
         ]
     }
-
+    /*
     ,{
         id: "clim5",
         displayName: "Satellite Signal Decomposition",
@@ -1427,16 +1427,16 @@ Climate Data Interpreter
         category: "tool",
         path: "clim",
         cost: [
-            { type: "compute", value: 6 },
+            { type: "compute", value: 5 },
             { type: "data", value: 120 }
         ]
     }
-
+    */
     ,{
         id: "clim6",
         displayName: "Emissions Source Detection",
         chapter: [1,2,3,4,5],
-        prereq: [{ type: "job", value: "clim5" }],
+        prereq: [{ type: "job", value: "clim4" }],
         unlockCost: [
             { type: "money", value: 4800 },
             { type: "data", value: 150 }
@@ -1449,7 +1449,7 @@ Climate Data Interpreter
         category: "tool",
         path: "clim",
         cost: [
-            { type: "compute", value: 7 },
+            { type: "compute", value: 6 },
             { type: "data", value: 200 }
         ]
     }
@@ -1471,7 +1471,7 @@ Climate Data Interpreter
         is_wonder: true,
         path: "clim",
         cost: [
-            { type: "compute", value: 8 },
+            { type: "compute", value: 7 },
             { type: "money", value: 3200 },
             { type: "data", value: 600 }
         ]
@@ -1508,7 +1508,7 @@ Climate Data Interpreter
         category: "tool",
         path: "clim",
         cost: [
-            { type: "compute", value: 6 },
+            { type: "compute", value: 5 },
             { type: "data", value: 100 }
         ]
     }
@@ -1530,7 +1530,7 @@ Climate Data Interpreter
         category: "tool",
         path: "clim",
         cost: [
-            { type: "compute", value: 7 },
+            { type: "compute", value: 6 },
             { type: "data", value: 150 }
         ]
     }
@@ -1552,7 +1552,7 @@ Climate Data Interpreter
         is_wonder: true,
         path: "clim",
         cost: [
-            { type: "compute", value: 9 },
+            { type: "compute", value: 8 },
             { type: "money", value: 3600 },
             { type: "data", value: 750 }
         ]
@@ -1610,7 +1610,7 @@ Climate Data Interpreter
         category: "tool",
         path: "med",
         cost: [
-            { type: "compute", value: 6 },
+            { type: "compute", value: 5 },
             { type: "data", value: 100 }
         ]
     },
@@ -1629,7 +1629,7 @@ Climate Data Interpreter
         is_wonder: true,
         path: "med",
         cost: [
-            { type: "compute", value: 8 },
+            { type: "compute", value: 7 },
             { type: "money", value: 3000 },
             { type: "data", value: 500 }
         ]
@@ -1649,7 +1649,7 @@ Climate Data Interpreter
         category: "tool",
         path: "med",
         cost: [
-            { type: "compute", value: 6 },
+            { type: "compute", value: 5 },
             { type: "data", value: 150 }
         ]
     },
@@ -1668,7 +1668,7 @@ Climate Data Interpreter
         category: "tool",
         path: "med",
         cost: [
-            { type: "compute", value: 7 },
+            { type: "compute", value: 6 },
             { type: "data", value: 200 }
         ]
     },
@@ -1690,7 +1690,7 @@ Climate Data Interpreter
         category: "tool",
         path: "med",
         cost: [
-            { type: "compute", value: 8 },
+            { type: "compute", value: 7 },
             { type: "data", value: 300 }
         ]
     },
@@ -1714,7 +1714,7 @@ Climate Data Interpreter
         is_wonder: true,
         path: "med",
         cost: [
-            { type: "compute", value: 9 },
+            { type: "compute", value: 8 },
             { type: "money", value: 4000 },
             { type: "data", value: 800 }
         ]
@@ -1752,7 +1752,7 @@ Climate Data Interpreter
         category: "tool",
         path: "med",
         cost: [
-            { type: "compute", value: 6 },
+            { type: "compute", value: 5 },
             { type: "data", value: 100 }
         ]
     },
@@ -1774,7 +1774,7 @@ Climate Data Interpreter
         category: "tool",
         path: "med",
         cost: [
-            { type: "compute", value: 7 },
+            { type: "compute", value: 6 },
             { type: "data", value: 150 }
         ]
     },
@@ -1796,7 +1796,7 @@ Climate Data Interpreter
         is_wonder: true,
         path: "med",
         cost: [
-            { type: "compute", value: 9 },
+            { type: "compute", value: 8 },
             { type: "money", value: 3500 },
             { type: "data", value: 700 }
         ]
@@ -1819,7 +1819,7 @@ Climate Data Interpreter
         category: "tool",
         path: "med",
         cost: [
-            { type: "compute", value: 8 },
+            { type: "compute", value: 7 },
             { type: "data", value: 200 }
         ]
     },
@@ -1841,7 +1841,7 @@ Climate Data Interpreter
         is_wonder: true,
         path: "med",
         cost: [
-            { type: "compute", value: 10 },
+            { type: "compute", value: 9 },
             { type: "money", value: 4500 },
             { type: "data", value: 900 }
         ]

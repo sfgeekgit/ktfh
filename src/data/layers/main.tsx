@@ -532,6 +532,18 @@ const layer = createLayer(id, function (this: any) {
     // Timer for job scooping (rolls once per second)
     const timeSinceLastScoopRoll = persistent<number>(0);
 
+    const clearJobsVisible = computed(() => {
+        if (jobQueue.value.length === 0) return false;
+        if (jobQueue.value.length < autoJobLimit.value) return false;
+        return jobQueue.value.every(job => {
+            const jobType = getJobType(job.jobTypeId);
+            const isOnetime = jobType?.category === "onetime";
+            const isScooped = !!scoopedJobs.value[job.id];
+            const inRejectionChain = (jobRejectionState.value[job.id] || 0) > 0;
+            return isOnetime || isScooped || inRejectionChain;
+        });
+    });
+
     // Chapter 5 timer
     const chapter5CompletionTime = persistent<number | null>(null); // Timestamp when chapter 5 was begun
     const timeSinceChapter5 = persistent<number>(0); // Counter updated by game loop
@@ -1061,8 +1073,8 @@ const layer = createLayer(id, function (this: any) {
             timeSinceLastScoopRoll.value += diff;
 
             // Roll every 6s in chapter 3, every 3s in chapter 4
-            const scoopInterval = currentChapter.value === 3 ? 6 : 3;
-
+	    const scoopInterval = currentChapter.value === 3 ? 6 : 3;
+	    
             if (timeSinceLastScoopRoll.value >= scoopInterval) {
                 timeSinceLastScoopRoll.value = 0;
 
@@ -1138,6 +1150,14 @@ const layer = createLayer(id, function (this: any) {
         jobQueue.value = jobQueue.value.filter((j: DeliveryJob) => j.id !== jobId);
         // Clean up scooped state
         delete scoopedJobs.value[jobId];
+    }
+
+    function clearAvailableJobs() {
+        const preserved = jobQueue.value.filter(j => getJobType(j.jobTypeId)?.category === "onetime");
+        const preservedIds = new Set(preserved.map(j => j.id));
+        jobQueue.value = preserved;
+        scoopedJobs.value = Object.fromEntries(Object.entries(scoopedJobs.value).filter(([id]) => preservedIds.has(Number(id))));
+        save();
     }
 
     // Can accept job
@@ -1450,6 +1470,24 @@ const layer = createLayer(id, function (this: any) {
 
                 <div style="margin: 15px 0; padding: 12px; border: 2px solid #4CAF50; border-radius: 10px; background: #e8f5e9;">
                     <h3>Available Jobs</h3>
+                    {clearJobsVisible.value && (
+                        <div style="margin-bottom: 10px;">
+                            <button
+                                onClick={clearAvailableJobs}
+                                style={{
+                                    background: "#4CAF50",
+                                    color: "white",
+                                    padding: "8px 12px",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    cursor: "pointer",
+                                    fontSize: "13px"
+                                }}
+                            >
+                                Clear Jobs
+                            </button>
+                        </div>
+                    )}
                     {jobQueue.value.length === 0 ? (
                         hasAvailableJobs.value ? (
                             <p style="font-style: italic;">No new jobs available yet.</p>
