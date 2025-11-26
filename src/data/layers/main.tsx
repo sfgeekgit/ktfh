@@ -700,7 +700,26 @@ const layer = createLayer(id, function (this: any) {
             return buildSeededJob(defaultJobType, 4);
         }
 
-        const jobType = unlockedJobs[Math.floor(Math.random() * unlockedJobs.length)];
+        let jobType;
+
+        if (unlockedJobTypes.value.length >= 3) {
+            const secondId = unlockedJobTypes.value[unlockedJobTypes.value.length - 2];
+            const second = unlockedJobs.find(j => j.id === secondId && j.category !== "onetime");
+            if (!jobType && second && Math.random() < 0.10) jobType = second;
+
+            const latestId = unlockedJobTypes.value[unlockedJobTypes.value.length - 1];
+            const latest = unlockedJobs.find(j => j.id === latestId && j.category !== "onetime");
+            if (!jobType && latest && Math.random() < 0.20) jobType = latest;
+        }
+
+        const preferWebScrape = currentChapter.value >= 2 && currentChapter.value <= 3 && unlockedJobTypes.value.includes("webscrape");
+        if (!jobType && preferWebScrape && Math.random() < 0.15 && unlockedJobs.some(j => j.id === "webscrape")) {
+            jobType = unlockedJobs.find(j => j.id === "webscrape")!;
+        }
+
+        if (!jobType) {
+            jobType = unlockedJobs[Math.floor(Math.random() * unlockedJobs.length)];
+        }
 
         // Calculate duration from job type config
         let duration = jobType.duration
@@ -882,6 +901,7 @@ const layer = createLayer(id, function (this: any) {
                     if (dataCost > 0) {
                         data.value = Decimal.sub(data.value, dataCost);
                     }
+                    // Order matters: list is used to infer most recent unlock, so preserve push order.
                     unlockedJobTypes.value.push(jobType.id);
                     save(); // Force save after job unlock to prevent data loss on refresh
                 },
