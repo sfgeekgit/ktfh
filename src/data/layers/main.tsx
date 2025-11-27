@@ -268,6 +268,16 @@ const layer = createLayer(id, function (this: any) {
         player.tabs = ["achievements"];
     }
 
+    function seedInitialJobIfNeeded() {
+        if (initialJobSeeded.value) return;
+        if (jobQueue.value.length > 0 || activeDeliveries.value.length > 0) return;
+        const newJob = generateJob();
+        if (newJob !== null) {
+            jobQueue.value.push(newJob);
+            initialJobSeeded.value = true;
+        }
+    }
+
     // Chapter 1 - completion and bonuses (chapter1 story shows at game start via initialTabs)
     const chapter1Choice = computed(() => {
         return (layers.chapter1 as any)?.playerChoice?.value || "";
@@ -377,6 +387,8 @@ const layer = createLayer(id, function (this: any) {
         () => isStoryTabOpen(),
         isOpen => {
             if (isOpen) {
+                // Do not auto-pause very early game; guard small job counts
+                if (jobCompletions.value <= 5) return;
                 if (!storyPauseActive.value && player.devSpeed !== 0) {
                     storyPriorDevSpeed.value = player.devSpeed;
                     player.devSpeed = 0;
@@ -1109,16 +1121,18 @@ const layer = createLayer(id, function (this: any) {
         }
 
         // Initial jobs (seed once on a fresh game)
-        if (!initialJobSeeded.value && jobQueue.value.length === 0 && activeDeliveries.value.length === 0) {
-            for (let i = 0; i < Math.min(1, G_CONF.INITIAL_JOBS_COUNT); i++) {
-                const newJob = generateJob();
-                if (newJob !== null) {
-                    jobQueue.value.push(newJob);
-                }
-            }
-            initialJobSeeded.value = true;
-        }
+        seedInitialJobIfNeeded();
     });
+
+    watch(
+        () => isStoryTabOpen(),
+        isOpen => {
+            if (!isOpen) {
+                seedInitialJobIfNeeded();
+            }
+        },
+        { immediate: true }
+    );
 
     // Accept job
     function acceptJob(job: DeliveryJob) {
