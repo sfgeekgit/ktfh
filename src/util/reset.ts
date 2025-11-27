@@ -1,4 +1,6 @@
 import { STORAGE_KEY } from "util/achievementStorage";
+import player from "game/player";
+import { resettingSave } from "util/save";
 
 /**
  * Fully reset the game: delete all localStorage EXCEPT the achievement sidecar.
@@ -13,6 +15,9 @@ import { STORAGE_KEY } from "util/achievementStorage";
  * Always invoke this after user confirmation.
  */
 export async function resetGame() {
+    resettingSave.value = true;
+    player.autosave = false;
+
     // Get all localStorage keys
     const allKeys = Object.keys(localStorage);
 

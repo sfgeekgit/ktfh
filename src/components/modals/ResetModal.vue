@@ -1,3 +1,4 @@
+<!-- GEAR MODAL: Reset/Dev Tools modal opened from the bottom gear icon -->
 <template>
     <Modal v-model="isOpen">
         <template v-slot:header>

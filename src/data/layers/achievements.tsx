@@ -32,6 +32,13 @@ const layer = createLayer(id, function () {
     const baseAchievementDefs = [
 
         {
+            id: "computeCluster2",
+            title: "Dev Test Compute",
+            description: "Own 2 GPUs",
+            requirement: () => totalCompute.value >= 2,
+            requirementText: "Own at least requirementText"
+        },
+        {
             id: "computeCluster4",
             title: "Quad Compute",
             description: "Own 4 GPUs",

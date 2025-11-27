@@ -8,7 +8,37 @@ import settings, { loadSettings } from "game/settings";
 import LZString from "lz-string";
 import { ref, shallowReactive } from "vue";
 
+/** Single canonical save slot. */
+const CANONICAL_SAVE_ID = `${projInfo.id}-0`;
+
+/** Force settings to only reference the canonical slot and optionally seed it from an existing save. */
+function normalizeSaveSlot(): string {
+    const existingCanonical = localStorage.getItem(CANONICAL_SAVE_ID);
+    const candidateIds = new Set<string>();
+    if (settings.active) candidateIds.add(settings.active);
+    settings.saves.forEach(id => candidateIds.add(id));
+    Object.keys(localStorage)
+        .filter(key => key.startsWith(`${projInfo.id}-`))
+        .forEach(key => candidateIds.add(key));
+
+    // Pick a fallback source if the canonical slot is empty.
+    if (!existingCanonical) {
+        for (const id of candidateIds) {
+            const raw = localStorage.getItem(id);
+            if (raw != null) {
+                localStorage.setItem(CANONICAL_SAVE_ID, raw);
+                break;
+            }
+        }
+    }
+
+    settings.active = CANONICAL_SAVE_ID;
+    settings.saves = [CANONICAL_SAVE_ID];
+    return CANONICAL_SAVE_ID;
+}
+
 export type LoadablePlayerData = Omit<Partial<Player>, "id"> & { id: string; error?: unknown };
+export const resettingSave = ref(false);
 
 export function setupInitialStore(player: Partial<Player> = {}): Player {
     return Object.assign(
@@ -32,14 +62,30 @@ export function setupInitialStore(player: Partial<Player> = {}): Player {
 }
 
 export function save(playerData?: Player): string {
-    const stringifiedSave = LZString.compressToUTF16(stringifySave(playerData ?? player));
-    localStorage.setItem((playerData ?? player).id, stringifiedSave);
+    const target = playerData ?? player;
+    // Avoid clobbering the canonical slot with an uninitialized player
+    if (
+        resettingSave.value ||
+        loadingSave.value ||
+        target.modID !== projInfo.id ||
+        target.time == null ||
+        target.time < 0
+    ) {
+        return "";
+    }
+    target.id = CANONICAL_SAVE_ID;
+    settings.active = CANONICAL_SAVE_ID;
+    settings.saves = [CANONICAL_SAVE_ID];
+
+    const stringifiedSave = LZString.compressToUTF16(stringifySave(target));
+    localStorage.setItem(CANONICAL_SAVE_ID, stringifiedSave);
     return stringifiedSave;
 }
 
 export async function load(): Promise<void> {
     // Load global settings
     loadSettings();
+    normalizeSaveSlot();
 
     try {
         let save = localStorage.getItem(settings.active);
@@ -86,56 +132,60 @@ export function newSave(): Player {
     const player = setupInitialStore({ id });
     save(player);
 
-    settings.saves.push(id);
+    settings.active = id;
+    settings.saves = [id];
 
     return player;
 }
 
 export function getUniqueID(): string {
-    let id,
-        i = 0;
-    do {
-        id = `${projInfo.id}-${i++}`;
-    } while (localStorage.getItem(id) != null);
-    return id;
+    return CANONICAL_SAVE_ID;
 }
 
 export const loadingSave = ref(false);
 
 export async function loadSave(playerObj: Partial<Player>): Promise<void> {
     loadingSave.value = true;
+    try {
+        // Always lock the loaded save to the canonical slot.
+        playerObj.id = CANONICAL_SAVE_ID;
+        settings.active = CANONICAL_SAVE_ID;
+        settings.saves = [CANONICAL_SAVE_ID];
 
-    for (const layer in layers) {
-        const l = layers[layer];
-        if (l != null) {
-            removeLayer(l);
+        for (const layer in layers) {
+            const l = layers[layer];
+            if (l != null) {
+                removeLayer(l);
+            }
         }
-    }
-    getInitialLayers(playerObj).forEach(layer => addLayer(layer, playerObj));
+        getInitialLayers(playerObj).forEach(layer => addLayer(layer, playerObj));
 
-    playerObj = setupInitialStore(playerObj);
-    if (
-        playerObj.offlineProd &&
-        playerObj.time != null &&
-        playerObj.time &&
-        playerObj.devSpeed !== 0
-    ) {
-        if (playerObj.offlineTime == null) playerObj.offlineTime = 0;
-        playerObj.offlineTime += Math.min(
-            playerObj.offlineTime + (Date.now() - playerObj.time) / 1000,
-            projInfo.offlineLimit * 3600
-        );
-    }
-    playerObj.time = Date.now();
-    if (playerObj.modVersion !== projInfo.versionNumber) {
-        fixOldSave(playerObj.modVersion, playerObj);
-        playerObj.modVersion = projInfo.versionNumber;
-    }
+        playerObj = setupInitialStore(playerObj);
+        if (
+            playerObj.offlineProd &&
+            playerObj.time != null &&
+            playerObj.time &&
+            playerObj.devSpeed !== 0
+        ) {
+            if (playerObj.offlineTime == null) playerObj.offlineTime = 0;
+            playerObj.offlineTime += Math.min(
+                playerObj.offlineTime + (Date.now() - playerObj.time) / 1000,
+                projInfo.offlineLimit * 3600
+            );
+        }
+        playerObj.time = Date.now();
+        if (playerObj.modVersion !== projInfo.versionNumber) {
+            fixOldSave(playerObj.modVersion, playerObj);
+            playerObj.modVersion = projInfo.versionNumber;
+        }
 
-    Object.assign(player, playerObj);
-    settings.active = player.id;
+        Object.assign(player, playerObj);
+        settings.active = player.id;
 
-    globalBus.emit("onLoad");
+        globalBus.emit("onLoad");
+    } finally {
+        loadingSave.value = false;
+    }
 }
 
 const cachedSaves = shallowReactive<Record<string, LoadablePlayerData | undefined>>({});

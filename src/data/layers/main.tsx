@@ -1136,6 +1136,10 @@ const layer = createLayer(id, function (this: any) {
 
     // Accept job
     function acceptJob(job: DeliveryJob) {
+        // Safety guard: ensure game is not paused when taking an action
+        if (player.devSpeed === 0) {
+            player.devSpeed = null;
+        }
         // Deduct money cost if job has one
         const jobType = getJobType(job.jobTypeId);
         const moneyRequired = jobType?.cost?.find(c => c.type === "money")?.value || 0;
