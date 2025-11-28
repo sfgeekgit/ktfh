@@ -73,9 +73,6 @@ export const JOB_TYPES: JobType[] = [
             { type: "money", min: 20}
         ],
         duration: { min: 2, max: 4 },
-        cost: [
-            { type: "compute", value: 1 }
-        ],
         category: "tool",
         cost: [
             { type: "compute", value: 1 }
@@ -95,9 +92,6 @@ export const JOB_TYPES: JobType[] = [
             { type: "money", min: 25}
         ],
         duration: { min: 3, max: 6 },
-        cost: [
-            { type: "compute", value: 1 }
-        ],
         category: "tool",
         cost: [
             { type: "compute", value: 1 }
@@ -116,9 +110,6 @@ export const JOB_TYPES: JobType[] = [
             { type: "money", min: 20}
         ],
         duration: { min: 5, max: 5 },
-        cost: [
-            { type: "compute", value: 1 }
-        ],
         category: "tool",
         cost: [
             { type: "compute", value: 1 }
@@ -140,9 +131,6 @@ export const JOB_TYPES: JobType[] = [
             { type: "money", min: 40}
         ],
         duration: { min: 6, max: 8 },
-        cost: [
-            { type: "compute", value: 2 }
-        ],
         category: "tool",
         cost: [
             { type: "compute", value: 2 }
@@ -162,9 +150,6 @@ export const JOB_TYPES: JobType[] = [
             { type: "money", min: 40}
         ],
         duration: { min: 5, max: 8 },
-        cost: [
-            { type: "compute", value: 2 }
-        ],
         category: "tool",
         cost: [
             { type: "compute", value: 2 }
@@ -246,7 +231,6 @@ export const JOB_TYPES: JobType[] = [
 	    ,   { type: "data", min: 15}
 	    ],
         duration: { min: 7, max: 9 },
-        cost: [{ type: "compute", value: 3 }],
         category: "tool",
         cost: [{ type: "compute", value: 3 }]
     },
@@ -263,7 +247,7 @@ export const JOB_TYPES: JobType[] = [
         prereq: [ { type: "iq", value: 4 } ],
         unlockCost: [            { type: "money", value: 1000 }],
         payout: [
-            { type: "data", min: 500, max: 550 }
+            { type: "data", min: 500},
         ],
         duration: { min: 8, max: 11 },
         category: "gameplay",
