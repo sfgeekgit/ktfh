@@ -27,8 +27,7 @@ interface CostSpec {
 
 interface PayoutSpec {
     type: string;  // "money", "data", "iq", "generality", "autonomy"
-    min: number;
-    max: number;
+    min: number;   // Single value; runtime max is derived (<=5 -> min, else floor(min * 1.3))
 }
 
 interface DurationSpec {
@@ -61,7 +60,7 @@ export const CHAPTER_1_JOBS: JobType[] = [
         chapter: 1,
         prereq: [],
         unlockCost: [],
-        payout: [{ type: "money", min: 40, max: 50 }],
+        payout: [{ type: "money", min: 40}],
         duration: { min: 8, max: 10 },
         cost: [{ type: "compute", value: 1 }],
         category: "tool"
@@ -73,7 +72,7 @@ export const CHAPTER_1_JOBS: JobType[] = [
         chapter: 1,
         prereq: [{ type: "job", value: "imgclassifier" }],
         unlockCost: [],
-        payout: [{ type: "money", min: 35, max: 45 }],
+        payout: [{ type: "money", min: 35}],
         duration: { min: 6, max: 8 },
         cost: [{ type: "compute", value: 1 }],
         category: "tool"
@@ -85,7 +84,7 @@ export const CHAPTER_1_JOBS: JobType[] = [
         chapter: 1,
         prereq: [{ type: "job", value: "spellchecker" }],
         unlockCost: [],
-        payout: [{ type: "money", min: 70, max: 90 }],
+        payout: [{ type: "money", min: 70}],
         duration: { min: 12, max: 15 },
         cost: [{ type: "compute", value: 2 }],
         category: "tool"
@@ -99,7 +98,7 @@ export const CHAPTER_1_JOBS: JobType[] = [
         chapter: 1,
         prereq: [{ type: "money", value: 200 }],
         unlockCost: [{ type: "money", value: 500 }],
-        payout: [{ type: "money", min: 120, max: 160 }],
+        payout: [{ type: "money", min: 120}],
         duration: { min: 18, max: 22 },
         cost: [{ type: "compute", value: 2 }],
         category: "tool"
@@ -111,7 +110,7 @@ export const CHAPTER_1_JOBS: JobType[] = [
         chapter: 1,
         prereq: [{ type: "money", value: 250 }],
         unlockCost: [{ type: "money", value: 600 }],
-        payout: [{ type: "money", min: 100, max: 130 }],
+        payout: [{ type: "money", min: 100}],
         duration: { min: 14, max: 16 },
         cost: [{ type: "compute", value: 1 }],
         category: "tool"
@@ -123,7 +122,7 @@ export const CHAPTER_1_JOBS: JobType[] = [
         chapter: 1,
         prereq: [{ type: "money", value: 350 }],
         unlockCost: [{ type: "money", value: 800 }],
-        payout: [{ type: "money", min: 160, max: 210 }],
+        payout: [{ type: "money", min: 160}],
         duration: { min: 22, max: 28 },
         cost: [{ type: "compute", value: 2 }],
         category: "tool"
@@ -135,7 +134,7 @@ export const CHAPTER_1_JOBS: JobType[] = [
         chapter: 1,
         prereq: [{ type: "money", value: 500 }],
         unlockCost: [{ type: "money", value: 1000 }],
-        payout: [{ type: "money", min: 200, max: 270 }],
+        payout: [{ type: "money", min: 200}],
         duration: { min: 28, max: 32 },
         cost: [{ type: "compute", value: 3 }],
         category: "tool"
@@ -147,7 +146,7 @@ export const CHAPTER_1_JOBS: JobType[] = [
         chapter: 1,
         prereq: [{ type: "money", value: 600 }],
         unlockCost: [{ type: "money", value: 1200 }],
-        payout: [{ type: "money", min: 220, max: 290 }],
+        payout: [{ type: "money", min: 220}],
         duration: { min: 20, max: 24 },
         cost: [{ type: "compute", value: 2 }],
         category: "tool"
@@ -159,7 +158,7 @@ export const CHAPTER_1_JOBS: JobType[] = [
         chapter: 1,
         prereq: [{ type: "money", value: 700 }],
         unlockCost: [{ type: "money", value: 1400 }],
-        payout: [{ type: "money", min: 250, max: 320 }],
+        payout: [{ type: "money", min: 250}],
         duration: { min: 24, max: 28 },
         cost: [{ type: "compute", value: 2 }],
         category: "tool"
@@ -171,7 +170,7 @@ export const CHAPTER_1_JOBS: JobType[] = [
         chapter: 1,
         prereq: [{ type: "money", value: 850 }],
         unlockCost: [{ type: "money", value: 1600 }],
-        payout: [{ type: "money", min: 280, max: 350 }],
+        payout: [{ type: "money", min: 280}],
         duration: { min: 26, max: 30 },
         cost: [{ type: "compute", value: 3 }],
         category: "tool"
@@ -188,7 +187,7 @@ export const CHAPTER_2_JOBS: JobType[] = [
         chapter: 2,
         prereq: [],  // Available immediately in Chapter 2
         unlockCost: [{ type: "money", value: 2000 }],
-        payout: [{ type: "data", min: 80, max: 120 }],
+        payout: [{ type: "data", min: 80}],
         duration: { min: 18, max: 22 },
         cost: [
             { type: "compute", value: 3 },
@@ -203,7 +202,7 @@ export const CHAPTER_2_JOBS: JobType[] = [
         chapter: 2,
         prereq: [{ type: "job", value: "webscrape" }],
         unlockCost: [{ type: "money", value: 2500 }],
-        payout: [{ type: "data", min: 60, max: 100 }],
+        payout: [{ type: "data", min: 60}],
         duration: { min: 14, max: 18 },
         cost: [
             { type: "compute", value: 2 },
@@ -218,7 +217,7 @@ export const CHAPTER_2_JOBS: JobType[] = [
         chapter: 2,
         prereq: [{ type: "money", value: 1500 }],
         unlockCost: [{ type: "money", value: 3000 }],
-        payout: [{ type: "data", min: 100, max: 150 }],
+        payout: [{ type: "data", min: 100}],
         duration: { min: 22, max: 28 },
         cost: [
             { type: "compute", value: 4 },
@@ -235,7 +234,7 @@ export const CHAPTER_2_JOBS: JobType[] = [
         chapter: [2, 3, 4],
         prereq: [{ type: "data", value: 100 }],
         unlockCost: [{ type: "data", value: 200 }],
-        payout: [{ type: "iq", min: 1, max: 1 }],
+        payout: [{ type: "iq", min: 1}],
         duration: { min: 35, max: 35 },
         cost: [
             { type: "compute", value: 4 },
@@ -250,7 +249,7 @@ export const CHAPTER_2_JOBS: JobType[] = [
         chapter: [2, 3, 4],
         prereq: [{ type: "completedJob", value: "trun1" }],
         unlockCost: [{ type: "data", value: 400 }],
-        payout: [{ type: "iq", min: 1, max: 1 }],
+        payout: [{ type: "iq", min: 1}],
         duration: { min: 40, max: 40 },
         cost: [
             { type: "compute", value: 5 },
@@ -266,7 +265,7 @@ export const CHAPTER_2_JOBS: JobType[] = [
         chapter: [2, 3, 4],
         prereq: [{ type: "completedJob", value: "trun2" }],
         unlockCost: [{ type: "data", value: 600 }],
-        payout: [{ type: "iq", min: 1, max: 1 }],
+        payout: [{ type: "iq", min: 1}],
         duration: { min: 45, max: 45 },
         cost: [
             { type: "compute", value: 5 },
@@ -282,7 +281,7 @@ export const CHAPTER_2_JOBS: JobType[] = [
         chapter: [2, 3, 4],
         prereq: [{ type: "completedJob", value: "trun3" }],
         unlockCost: [{ type: "data", value: 800 }],
-        payout: [{ type: "iq", min: 1, max: 1 }],
+        payout: [{ type: "iq", min: 1}],
         duration: { min: 50, max: 50 },
         cost: [
             { type: "compute", value: 6 },
@@ -298,7 +297,7 @@ export const CHAPTER_2_JOBS: JobType[] = [
         chapter: [2, 3, 4],
         prereq: [{ type: "completedJob", value: "trun4" }],
         unlockCost: [{ type: "data", value: 1000 }],
-        payout: [{ type: "iq", min: 1, max: 1 }],
+        payout: [{ type: "iq", min: 1}],
         duration: { min: 55, max: 55 },
         cost: [
             { type: "compute", value: 6 },
@@ -317,7 +316,7 @@ export const CHAPTER_2_JOBS: JobType[] = [
         displayTrigger: [{ type: "iq", value: 1 }],
         prereq: [{ type: "iq", value: 2 }],
         unlockCost: [{ type: "money", value: 5000 }],
-        payout: [{ type: "money", min: 700, max: 900 }],
+        payout: [{ type: "money", min: 700}],
         duration: { min: 38, max: 42 },
         cost: [{ type: "compute", value: 5 }],
         category: "tool"
@@ -330,7 +329,7 @@ export const CHAPTER_2_JOBS: JobType[] = [
         displayTrigger: [{ type: "iq", value: 1 }],
         prereq: [{ type: "iq", value: 2 }],
         unlockCost: [{ type: "money", value: 5000 }],
-        payout: [{ type: "money", min: 650, max: 800 }],
+        payout: [{ type: "money", min: 650}],
         duration: { min: 34, max: 38 },
         cost: [{ type: "compute", value: 4 }],
         category: "tool"
@@ -343,7 +342,7 @@ export const CHAPTER_2_JOBS: JobType[] = [
         displayTrigger: [{ type: "iq", value: 1 }],
         prereq: [{ type: "iq", value: 2 }],
         unlockCost: [{ type: "money", value: 4000 }],
-        payout: [{ type: "money", min: 550, max: 700 }],
+        payout: [{ type: "money", min: 550}],
         duration: { min: 28, max: 34 },
         cost: [{ type: "compute", value: 3 }],
         category: "tool"
@@ -356,7 +355,7 @@ export const CHAPTER_2_JOBS: JobType[] = [
         displayTrigger: [{ type: "iq", value: 1 }],
         prereq: [{ type: "iq", value: 2 }],
         unlockCost: [{ type: "money", value: 4500 }],
-        payout: [{ type: "money", min: 600, max: 750 }],
+        payout: [{ type: "money", min: 600}],
         duration: { min: 32, max: 36 },
         cost: [{ type: "compute", value: 4 }],
         category: "tool"
@@ -371,7 +370,7 @@ export const CHAPTER_2_JOBS: JobType[] = [
         displayTrigger: [{ type: "iq", value: 2 }],
         prereq: [{ type: "iq", value: 3 }],
         unlockCost: [{ type: "money", value: 6000 }],
-        payout: [{ type: "money", min: 800, max: 1000 }],
+        payout: [{ type: "money", min: 800}],
         duration: { min: 40, max: 45 },
         cost: [{ type: "compute", value: 5 }],
         category: "tool"
@@ -384,7 +383,7 @@ export const CHAPTER_2_JOBS: JobType[] = [
         displayTrigger: [{ type: "job", value: "chess" }],
         prereq: [{ type: "iq", value: 4 }],
         unlockCost: [{ type: "money", value: 8000 }],
-        payout: [{ type: "money", min: 1000, max: 1300 }],
+        payout: [{ type: "money", min: 1000}],
         duration: { min: 45, max: 50 },
         cost: [{ type: "compute", value: 6 }],
         category: "tool"
@@ -399,7 +398,7 @@ export const CHAPTER_2_JOBS: JobType[] = [
         displayTrigger: [{ type: "iq", value: 2 }],
         prereq: [{ type: "iq", value: 3 }],
         unlockCost: [{ type: "money", value: 8000 }],
-        payout: [{ type: "data", min: 400, max: 600 }],
+        payout: [{ type: "data", min: 400}],
         duration: { min: 40, max: 50 },
         cost: [
             { type: "compute", value: 6 },
@@ -415,7 +414,7 @@ export const CHAPTER_2_JOBS: JobType[] = [
         displayTrigger: [{ type: "iq", value: 2 }],
         prereq: [{ type: "iq", value: 3 }],
         unlockCost: [{ type: "money", value: 7000 }],
-        payout: [{ type: "data", min: 300, max: 500 }],
+        payout: [{ type: "data", min: 300}],
         duration: { min: 35, max: 45 },
         cost: [
             { type: "compute", value: 5 },
@@ -435,7 +434,7 @@ export const CHAPTER_3_JOBS: JobType[] = [
         chapter: [3, 4, 5],
         prereq: [{ type: "completedJob", value: "trun5" }],
         unlockCost: [{ type: "data", value: 1200 }],
-        payout: [{ type: "iq", min: 1, max: 1 }],
+        payout: [{ type: "iq", min: 1}],
         duration: { min: 60, max: 60 },
         cost: [
             { type: "compute", value: 7 },
@@ -451,7 +450,7 @@ export const CHAPTER_3_JOBS: JobType[] = [
         chapter: [3, 4, 5],
         prereq: [{ type: "completedJob", value: "trun6" }],
         unlockCost: [{ type: "data", value: 1400 }],
-        payout: [{ type: "iq", min: 1, max: 1 }],
+        payout: [{ type: "iq", min: 1}],
         duration: { min: 65, max: 65 },
         cost: [
             { type: "compute", value: 7 },
@@ -467,7 +466,7 @@ export const CHAPTER_3_JOBS: JobType[] = [
         chapter: [3, 4, 5],
         prereq: [{ type: "completedJob", value: "trun7" }],
         unlockCost: [{ type: "data", value: 1600 }],
-        payout: [{ type: "iq", min: 1, max: 1 }],
+        payout: [{ type: "iq", min: 1}],
         duration: { min: 70, max: 70 },
         cost: [
             { type: "compute", value: 8 },
@@ -483,7 +482,7 @@ export const CHAPTER_3_JOBS: JobType[] = [
         chapter: [3, 4, 5],
         prereq: [{ type: "completedJob", value: "trun8" }],
         unlockCost: [{ type: "data", value: 1800 }],
-        payout: [{ type: "iq", min: 1, max: 1 }],
+        payout: [{ type: "iq", min: 1}],
         duration: { min: 75, max: 75 },
         cost: [
             { type: "compute", value: 8 },
@@ -501,7 +500,7 @@ export const CHAPTER_3_JOBS: JobType[] = [
         chapter: [3, 4, 5],
         prereq: [],  // Available at Chapter 3 start
         unlockCost: [{ type: "data", value: 500 }],
-        payout: [{ type: "generality", min: 1, max: 1 }],
+        payout: [{ type: "generality", min: 1}],
         duration: { min: 40, max: 40 },
         cost: [
             { type: "compute", value: 5 },
@@ -517,7 +516,7 @@ export const CHAPTER_3_JOBS: JobType[] = [
         chapter: [3, 4, 5],
         prereq: [{ type: "completedJob", value: "trun_gen1" }],
         unlockCost: [{ type: "data", value: 800 }],
-        payout: [{ type: "generality", min: 1, max: 1 }],
+        payout: [{ type: "generality", min: 1}],
         duration: { min: 50, max: 50 },
         cost: [
             { type: "compute", value: 7 },
@@ -533,7 +532,7 @@ export const CHAPTER_3_JOBS: JobType[] = [
         chapter: [3, 4, 5],
         prereq: [{ type: "completedJob", value: "trun_gen2" }],
         unlockCost: [{ type: "data", value: 1200 }],
-        payout: [{ type: "generality", min: 1, max: 1 }],
+        payout: [{ type: "generality", min: 1}],
         duration: { min: 60, max: 60 },
         cost: [
             { type: "compute", value: 8 },
@@ -549,7 +548,7 @@ export const CHAPTER_3_JOBS: JobType[] = [
         chapter: [3, 4, 5],
         prereq: [{ type: "completedJob", value: "trun_gen3" }],
         unlockCost: [{ type: "data", value: 1600 }],
-        payout: [{ type: "generality", min: 1, max: 1 }],
+        payout: [{ type: "generality", min: 1}],
         duration: { min: 70, max: 70 },
         cost: [
             { type: "compute", value: 10 },
@@ -574,7 +573,7 @@ export const CHAPTER_3_JOBS: JobType[] = [
             { type: "generality", value: 1 }
         ],
         unlockCost: [{ type: "money", value: 15000 }],
-        payout: [{ type: "money", min: 1800, max: 2300 }],
+        payout: [{ type: "money", min: 1800}],
         duration: { min: 55, max: 65 },
         cost: [{ type: "compute", value: 8 }],
         category: "tool"
@@ -593,7 +592,7 @@ export const CHAPTER_3_JOBS: JobType[] = [
             { type: "generality", value: 2 }
         ],
         unlockCost: [{ type: "money", value: 18000 }],
-        payout: [{ type: "money", min: 2200, max: 2800 }],
+        payout: [{ type: "money", min: 2200}],
         duration: { min: 70, max: 85 },
         cost: [{ type: "compute", value: 10 }],
         category: "tool"
@@ -608,7 +607,7 @@ export const CHAPTER_3_JOBS: JobType[] = [
             { type: "generality", value: 2 }
         ],
         unlockCost: [{ type: "money", value: 20000 }],
-        payout: [{ type: "money", min: 2600, max: 3400 }],
+        payout: [{ type: "money", min: 2600}],
         duration: { min: 80, max: 100 },
         cost: [{ type: "compute", value: 12 }],
         category: "tool"
@@ -623,7 +622,7 @@ export const CHAPTER_3_JOBS: JobType[] = [
             { type: "generality", value: 2 }
         ],
         unlockCost: [{ type: "money", value: 16000 }],
-        payout: [{ type: "money", min: 2000, max: 2600 }],
+        payout: [{ type: "money", min: 2000}],
         duration: { min: 65, max: 75 },
         cost: [{ type: "compute", value: 9 }],
         category: "tool"
@@ -640,7 +639,7 @@ export const CHAPTER_3_JOBS: JobType[] = [
             { type: "generality", value: 2 }
         ],
         unlockCost: [{ type: "money", value: 10000 }],
-        payout: [{ type: "money", min: 1200, max: 1600 }],
+        payout: [{ type: "money", min: 1200}],
         duration: { min: 45, max: 55 },
         cost: [{ type: "compute", value: 6 }],
         category: "tool"
@@ -655,7 +654,7 @@ export const CHAPTER_3_JOBS: JobType[] = [
             { type: "generality", value: 2 }
         ],
         unlockCost: [{ type: "money", value: 9000 }],
-        payout: [{ type: "money", min: 1100, max: 1500 }],
+        payout: [{ type: "money", min: 1100}],
         duration: { min: 40, max: 50 },
         cost: [{ type: "compute", value: 5 }],
         category: "tool"
@@ -670,7 +669,7 @@ export const CHAPTER_3_JOBS: JobType[] = [
             { type: "generality", value: 3 }
         ],
         unlockCost: [{ type: "money", value: 12000 }],
-        payout: [{ type: "money", min: 1400, max: 1900 }],
+        payout: [{ type: "money", min: 1400}],
         duration: { min: 50, max: 60 },
         cost: [{ type: "compute", value: 7 }],
         category: "tool"
@@ -685,7 +684,7 @@ export const CHAPTER_3_JOBS: JobType[] = [
             { type: "generality", value: 3 }
         ],
         unlockCost: [{ type: "money", value: 14000 }],
-        payout: [{ type: "money", min: 1600, max: 2100 }],
+        payout: [{ type: "money", min: 1600}],
         duration: { min: 55, max: 65 },
         cost: [{ type: "compute", value: 8 }],
         category: "tool"
@@ -702,7 +701,7 @@ export const CHAPTER_3_JOBS: JobType[] = [
             { type: "generality", value: 4 }
         ],
         unlockCost: [{ type: "money", value: 25000 }],
-        payout: [{ type: "money", min: 3500, max: 4500 }],
+        payout: [{ type: "money", min: 3500}],
         duration: { min: 90, max: 110 },
         cost: [{ type: "compute", value: 15 }],
         category: "tool"
@@ -717,7 +716,7 @@ export const CHAPTER_3_JOBS: JobType[] = [
             { type: "generality", value: 4 }
         ],
         unlockCost: [{ type: "money", value: 22000 }],
-        payout: [{ type: "money", min: 3200, max: 4100 }],
+        payout: [{ type: "money", min: 3200}],
         duration: { min: 85, max: 105 },
         cost: [{ type: "compute", value: 14 }],
         category: "tool"
@@ -734,7 +733,7 @@ export const CHAPTER_4_JOBS: JobType[] = [
         chapter: [4, 5],
         prereq: [{ type: "completedJob", value: "trun9" }],
         unlockCost: [{ type: "data", value: 2000 }],
-        payout: [{ type: "iq", min: 1, max: 1 }],
+        payout: [{ type: "iq", min: 1}],
         duration: { min: 80, max: 80 },
         cost: [
             { type: "compute", value: 10 },
@@ -752,7 +751,7 @@ export const CHAPTER_4_JOBS: JobType[] = [
         chapter: [4, 5],
         prereq: [{ type: "completedJob", value: "trun_gen4" }],
         unlockCost: [{ type: "data", value: 2000 }],
-        payout: [{ type: "generality", min: 1, max: 1 }],
+        payout: [{ type: "generality", min: 1}],
         duration: { min: 80, max: 80 },
         cost: [
             { type: "compute", value: 12 },
@@ -770,7 +769,7 @@ export const CHAPTER_4_JOBS: JobType[] = [
         chapter: [4, 5],
         prereq: [],  // Available at Chapter 4 start
         unlockCost: [{ type: "money", value: 40000 }],
-        payout: [{ type: "autonomy", min: 1, max: 1 }],
+        payout: [{ type: "autonomy", min: 1}],
         duration: { min: 120, max: 120 },
         cost: [
             { type: "compute", value: 50 },
@@ -786,7 +785,7 @@ export const CHAPTER_4_JOBS: JobType[] = [
         chapter: [4, 5],
         prereq: [{ type: "completedJob", value: "trun_auto1" }],
         unlockCost: [{ type: "money", value: 50000 }],
-        payout: [{ type: "autonomy", min: 1, max: 1 }],
+        payout: [{ type: "autonomy", min: 1}],
         duration: { min: 150, max: 150 },
         cost: [
             { type: "compute", value: 60 },
@@ -802,7 +801,7 @@ export const CHAPTER_4_JOBS: JobType[] = [
         chapter: [4, 5],
         prereq: [{ type: "completedJob", value: "trun_auto2" }],
         unlockCost: [{ type: "money", value: 80000 }],
-        payout: [{ type: "autonomy", min: 1, max: 1 }],
+        payout: [{ type: "autonomy", min: 1}],
         duration: { min: 180, max: 180 },
         cost: [
             { type: "compute", value: 80 },
@@ -820,7 +819,7 @@ export const CHAPTER_4_JOBS: JobType[] = [
         chapter: [4, 5, 6],
         prereq: [{ type: "autonomy", value: 1 }],
         unlockCost: [{ type: "money", value: 25000 }],
-        payout: [{ type: "money", min: 0, max: 0 }],  // No payout, unlocks feature
+        payout: [{ type: "money", min: 0}],  // No payout, unlocks feature
         duration: { min: 1, max: 1 },
         cost: [],
         category: "onetime"
@@ -835,7 +834,7 @@ export const CHAPTER_4_JOBS: JobType[] = [
             { type: "autonomy", value: 1 }
         ],
         unlockCost: [{ type: "money", value: 30000 }],
-        payout: [{ type: "money", min: 4000, max: 5500 }],
+        payout: [{ type: "money", min: 4000}],
         duration: { min: 70, max: 90 },
         cost: [{ type: "compute", value: 15 }],
         category: "tool"
@@ -851,7 +850,7 @@ export const CHAPTER_4_JOBS: JobType[] = [
             { type: "autonomy", value: 1 }
         ],
         unlockCost: [{ type: "money", value: 35000 }],
-        payout: [{ type: "money", min: 4500, max: 6000 }],
+        payout: [{ type: "money", min: 4500}],
         duration: { min: 80, max: 100 },
         cost: [{ type: "compute", value: 18 }],
         category: "tool"
@@ -866,7 +865,7 @@ export const CHAPTER_4_JOBS: JobType[] = [
             { type: "autonomy", value: 1 }
         ],
         unlockCost: [{ type: "money", value: 45000 }],
-        payout: [{ type: "money", min: 7000, max: 9000 }],
+        payout: [{ type: "money", min: 7000}],
         duration: { min: 85, max: 100 },
         cost: [{ type: "compute", value: 20 }],
         category: "tool"
@@ -881,7 +880,7 @@ export const CHAPTER_4_JOBS: JobType[] = [
             { type: "autonomy", value: 1 }
         ],
         unlockCost: [{ type: "money", value: 50000 }],
-        payout: [{ type: "money", min: 8000, max: 10000 }],
+        payout: [{ type: "money", min: 8000}],
         duration: { min: 75, max: 90 },
         cost: [{ type: "compute", value: 18 }],
         category: "tool"
@@ -898,7 +897,7 @@ export const CHAPTER_4_JOBS: JobType[] = [
             { type: "autonomy", value: 2 }
         ],
         unlockCost: [{ type: "money", value: 60000 }],
-        payout: [{ type: "money", min: 11000, max: 14000 }],
+        payout: [{ type: "money", min: 11000}],
         duration: { min: 110, max: 130 },
         cost: [{ type: "compute", value: 25 }],
         category: "tool"
@@ -914,7 +913,7 @@ export const CHAPTER_4_JOBS: JobType[] = [
             { type: "autonomy", value: 2 }
         ],
         unlockCost: [{ type: "money", value: 65000 }],
-        payout: [{ type: "money", min: 13000, max: 16000 }],
+        payout: [{ type: "money", min: 13000}],
         duration: { min: 130, max: 150 },
         cost: [{ type: "compute", value: 28 }],
         category: "tool"
@@ -930,7 +929,7 @@ export const CHAPTER_4_JOBS: JobType[] = [
             { type: "autonomy", value: 2 }
         ],
         unlockCost: [{ type: "money", value: 70000 }],
-        payout: [{ type: "money", min: 14000, max: 17000 }],
+        payout: [{ type: "money", min: 14000}],
         duration: { min: 140, max: 160 },
         cost: [{ type: "compute", value: 30 }],
         category: "tool"
@@ -952,7 +951,7 @@ export const CHAPTER_5A_JOBS: JobType[] = [
             { type: "generality", value: 5 }
         ],
         unlockCost: [{ type: "money", value: 100000 }],
-        payout: [{ type: "money", min: 20000, max: 25000 }],
+        payout: [{ type: "money", min: 20000}],
         duration: { min: 200, max: 240 },
         cost: [{ type: "compute", value: 50 }],
         category: "tool"
@@ -967,7 +966,7 @@ export const CHAPTER_5A_JOBS: JobType[] = [
             { type: "generality", value: 5 }
         ],
         unlockCost: [{ type: "money", value: 80000 }],
-        payout: [{ type: "money", min: 15000, max: 20000 }],
+        payout: [{ type: "money", min: 15000}],
         duration: { min: 180, max: 220 },
         cost: [{ type: "compute", value: 40 }],
         category: "tool"
@@ -981,7 +980,7 @@ export const CHAPTER_5A_JOBS: JobType[] = [
         chapter: [5, 6],
         prereq: [{ type: "iq", value: 8 }],
         unlockCost: [{ type: "money", value: 90000 }],
-        payout: [{ type: "money", min: 18000, max: 23000 }],
+        payout: [{ type: "money", min: 18000}],
         duration: { min: 170, max: 200 },
         cost: [{ type: "compute", value: 35 }],
         category: "tool"
@@ -993,7 +992,7 @@ export const CHAPTER_5A_JOBS: JobType[] = [
         chapter: [5, 6],
         prereq: [{ type: "iq", value: 8 }],
         unlockCost: [{ type: "money", value: 95000 }],
-        payout: [{ type: "money", min: 20000, max: 25000 }],
+        payout: [{ type: "money", min: 20000}],
         duration: { min: 190, max: 220 },
         cost: [{ type: "compute", value: 38 }],
         category: "tool"
@@ -1008,7 +1007,7 @@ export const CHAPTER_5A_JOBS: JobType[] = [
             { type: "generality", value: 6 }
         ],
         unlockCost: [{ type: "money", value: 85000 }],
-        payout: [{ type: "money", min: 16000, max: 21000 }],
+        payout: [{ type: "money", min: 16000}],
         duration: { min: 160, max: 190 },
         cost: [{ type: "compute", value: 32 }],
         category: "tool"
@@ -1025,7 +1024,7 @@ export const CHAPTER_5A_JOBS: JobType[] = [
             { type: "generality", value: 6 }
         ],
         unlockCost: [{ type: "money", value: 110000 }],
-        payout: [{ type: "money", min: 22000, max: 28000 }],
+        payout: [{ type: "money", min: 22000}],
         duration: { min: 200, max: 240 },
         cost: [{ type: "compute", value: 40 }],
         category: "tool"
@@ -1040,7 +1039,7 @@ export const CHAPTER_5A_JOBS: JobType[] = [
             { type: "generality", value: 7 }
         ],
         unlockCost: [{ type: "money", value: 120000 }],
-        payout: [{ type: "money", min: 25000, max: 32000 }],
+        payout: [{ type: "money", min: 25000}],
         duration: { min: 220, max: 260 },
         cost: [{ type: "compute", value: 45 }],
         category: "tool"
@@ -1055,7 +1054,7 @@ export const CHAPTER_5A_JOBS: JobType[] = [
             { type: "generality", value: 7 }
         ],
         unlockCost: [{ type: "money", value: 115000 }],
-        payout: [{ type: "money", min: 23000, max: 30000 }],
+        payout: [{ type: "money", min: 23000}],
         duration: { min: 210, max: 250 },
         cost: [{ type: "compute", value: 42 }],
         category: "tool"
@@ -1079,7 +1078,7 @@ export const CHAPTER_5B_JOBS: JobType[] = [
             { type: "autonomy", value: 3 }
         ],
         unlockCost: [{ type: "money", value: 85000 }],
-        payout: [{ type: "money", min: 20000, max: 25000 }],
+        payout: [{ type: "money", min: 20000}],
         duration: { min: 120, max: 150 },
         cost: [{ type: "compute", value: 32 }],
         category: "dangerous",
@@ -1096,7 +1095,7 @@ export const CHAPTER_5B_JOBS: JobType[] = [
             { type: "autonomy", value: 3 }
         ],
         unlockCost: [{ type: "money", value: 90000 }],
-        payout: [{ type: "money", min: 23000, max: 28000 }],
+        payout: [{ type: "money", min: 23000}],
         duration: { min: 130, max: 160 },
         cost: [{ type: "compute", value: 35 }],
         category: "dangerous",
@@ -1112,7 +1111,7 @@ export const CHAPTER_5B_JOBS: JobType[] = [
             { type: "autonomy", value: 3 }
         ],
         unlockCost: [{ type: "money", value: 100000 }],
-        payout: [{ type: "money", min: 28000, max: 35000 }],
+        payout: [{ type: "money", min: 28000}],
         duration: { min: 140, max: 170 },
         cost: [{ type: "compute", value: 40 }],
         category: "dangerous",
@@ -1131,7 +1130,7 @@ export const CHAPTER_5B_JOBS: JobType[] = [
             { type: "autonomy", value: 4 }
         ],
         unlockCost: [{ type: "money", value: 110000 }],
-        payout: [{ type: "money", min: 26000, max: 32000 }],
+        payout: [{ type: "money", min: 26000}],
         duration: { min: 150, max: 180 },
         cost: [{ type: "compute", value: 45 }],
         category: "dangerous",
@@ -1148,7 +1147,7 @@ export const CHAPTER_5B_JOBS: JobType[] = [
             { type: "autonomy", value: 4 }
         ],
         unlockCost: [{ type: "money", value: 120000 }],
-        payout: [{ type: "money", min: 30000, max: 37000 }],
+        payout: [{ type: "money", min: 30000}],
         duration: { min: 160, max: 190 },
         cost: [{ type: "compute", value: 48 }],
         category: "dangerous",
@@ -1165,7 +1164,7 @@ export const CHAPTER_5B_JOBS: JobType[] = [
             { type: "autonomy", value: 4 }
         ],
         unlockCost: [{ type: "money", value: 130000 }],
-        payout: [{ type: "money", min: 33000, max: 40000 }],
+        payout: [{ type: "money", min: 33000}],
         duration: { min: 170, max: 200 },
         cost: [{ type: "compute", value: 50 }],
         category: "dangerous",
@@ -1184,7 +1183,7 @@ export const CHAPTER_5B_JOBS: JobType[] = [
             { type: "autonomy", value: 5 }
         ],
         unlockCost: [{ type: "money", value: 140000 }],
-        payout: [{ type: "money", min: 36000, max: 43000 }],
+        payout: [{ type: "money", min: 36000}],
         duration: { min: 200, max: 230 },
         cost: [{ type: "compute", value: 65 }],
         category: "dangerous",
@@ -1201,7 +1200,7 @@ export const CHAPTER_5B_JOBS: JobType[] = [
             { type: "autonomy", value: 5 }
         ],
         unlockCost: [{ type: "money", value: 150000 }],
-        payout: [{ type: "money", min: 38000, max: 45000 }],
+        payout: [{ type: "money", min: 38000}],
         duration: { min: 210, max: 240 },
         cost: [{ type: "compute", value: 70 }],
         category: "dangerous",
@@ -1220,7 +1219,7 @@ export const CHAPTER_5B_JOBS: JobType[] = [
             { type: "autonomy", value: 5 }
         ],
         unlockCost: [{ type: "money", value: 200000 }],
-        payout: [{ type: "money", min: 48000, max: 58000 }],
+        payout: [{ type: "money", min: 48000}],
         duration: { min: 230, max: 270 },
         cost: [{ type: "compute", value: 80 }],
         category: "dangerous",
@@ -1238,9 +1237,9 @@ export const CHAPTER_5B_JOBS: JobType[] = [
         ],
         unlockCost: [{ type: "money", value: 250000 }],
         payout: [
-            { type: "iq", min: 2, max: 2 },
-            { type: "generality", min: 2, max: 2 },
-            { type: "autonomy", min: 2, max: 2 }
+            { type: "iq", min: 2},
+            { type: "generality", min: 2},
+            { type: "autonomy", min: 2}
         ],
         duration: { min: 280, max: 320 },
         cost: [{ type: "compute", value: 100 }],
@@ -1259,9 +1258,9 @@ export const CHAPTER_5B_JOBS: JobType[] = [
         ],
         unlockCost: [{ type: "money", value: 300000 }],
         payout: [
-            { type: "iq", min: 3, max: 3 },
-            { type: "generality", min: 3, max: 3 },
-            { type: "autonomy", min: 3, max: 3 }
+            { type: "iq", min: 3},
+            { type: "generality", min: 3},
+            { type: "autonomy", min: 3}
         ],
         duration: { min: 340, max: 380 },
         cost: [{ type: "compute", value: 120 }],
@@ -1279,7 +1278,7 @@ export const CHAPTER_6A_JOBS: JobType[] = [
         chapter: 6,
         prereq: [{ type: "iq", value: 11 }],
         unlockCost: [{ type: "money", value: 200000 }],
-        payout: [{ type: "money", min: 80000, max: 120000 }],
+        payout: [{ type: "money", min: 80000}],
         duration: { min: 380, max: 420 },
         cost: [{ type: "compute", value: 100 }],
         category: "tool"
@@ -1291,7 +1290,7 @@ export const CHAPTER_6A_JOBS: JobType[] = [
         chapter: 6,
         prereq: [{ type: "iq", value: 12 }],
         unlockCost: [{ type: "money", value: 250000 }],
-        payout: [{ type: "money", min: 90000, max: 130000 }],
+        payout: [{ type: "money", min: 90000}],
         duration: { min: 380, max: 440 },
         cost: [{ type: "compute", value: 100 }],
         category: "tool"
@@ -1306,7 +1305,7 @@ export const CHAPTER_6A_JOBS: JobType[] = [
             { type: "generality", value: 7 }
         ],
         unlockCost: [{ type: "money", value: 280000 }],
-        payout: [{ type: "money", min: 100000, max: 140000 }],
+        payout: [{ type: "money", min: 100000}],
         duration: { min: 400, max: 460 },
         cost: [{ type: "compute", value: 110 }],
         category: "tool"
@@ -1322,7 +1321,7 @@ export const CHAPTER_6A_JOBS: JobType[] = [
             { type: "generality", value: 8 }
         ],
         unlockCost: [{ type: "money", value: 300000 }],
-        payout: [{ type: "money", min: 140000, max: 180000 }],
+        payout: [{ type: "money", min: 140000}],
         duration: { min: 480, max: 540 },
         cost: [{ type: "compute", value: 120 }],
         category: "tool"
@@ -1334,7 +1333,7 @@ export const CHAPTER_6A_JOBS: JobType[] = [
         chapter: 6,
         prereq: [{ type: "iq", value: 14 }],
         unlockCost: [{ type: "money", value: 350000 }],
-        payout: [{ type: "money", min: 180000, max: 230000 }],
+        payout: [{ type: "money", min: 180000}],
         duration: { min: 580, max: 640 },
         cost: [{ type: "compute", value: 150 }],
         category: "tool"

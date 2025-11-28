@@ -7,19 +7,9 @@
 
 import { TRAINING_RUN_JOBS } from './trainingRuns';
 
-
 // Todo "Universal Modeling Engine"     as a wonder from the TRAINING RUNS
 // Autonomous Scientific Discovery Engine    as a wonder from the TRAINING RUNS
 // AI-Orchestrated Megascale Engineering 
-
-
-
-// Todo,  maybe web scraper should auto unlock at start of chapter 2
-
-/// Todo, tweak UI of training runs. Maybe while they are running, don't say "processing" say "Training" or such
-// Players will just be clicking everything click click click, make it more clear to them in UI that some things happening are different
-
-
 
 // Note that prereq and displayTrigger are very similar
 // displayTrigger is optional, if it is not set, will defualt to prerequisite
@@ -41,8 +31,7 @@ export interface CostSpec {
 // Payout specification
 export interface PayoutSpec {
     type: string;  // "money", "data", etc.
-    min: number;
-    max: number;
+    min: number;   // Single value; runtime max is derived (<=5 -> min, else floor(min * 1.3))
 }
 
 // Duration specification
@@ -77,36 +66,30 @@ export const JOB_TYPES: JobType[] = [
         id: "imgclassifier",
         displayName: "Image Classifier",
         description: "Find Waldo",
-        chapter: [1,2,3],
+        chapter: [1,2],
         prereq: [],
         unlockCost: [],
         payout: [
-            { type: "money", min: 20, max: 30 }
+            { type: "money", min: 20}
         ],
         duration: { min: 2, max: 4 },
         category: "tool",
-        cost: [
-            { type: "compute", value: 1 }
-        ]
     },
     {
         id: "spellchecker",
         displayName: "Spell Checker",
         //description: "How do you spell pepperoni?",
-        chapter: [1,2,3,4],
+        chapter: [1,2],
         prereq: [
             { type: "job", value: "imgclassifier", display_prereq: false  }
 	    , 		{type:"compute", value:2 , display_prereq: false  }
 	],
         unlockCost: [            { type: "money", value: 10 }],
         payout: [
-            { type: "money", min: 25, max: 35 }
+            { type: "money", min: 25}
         ],
         duration: { min: 3, max: 6 },
         category: "tool",
-        cost: [
-            { type: "compute", value: 1 }
-        ]
     },
 
     {
@@ -118,22 +101,17 @@ export const JOB_TYPES: JobType[] = [
 	],
         unlockCost: [            { type: "money", value: 10 }],
         payout: [
-            { type: "money", min: 20, max: 20 }
+            { type: "money", min: 20}
         ],
         duration: { min: 5, max: 5 },
         category: "tool",
-        cost: [
-            { type: "compute", value: 1 }
-        ]
     },
-
-
 
     {
         id: "speechtran",
         displayName: "Speech Transcription",
         description: "",
-        chapter: [1,2,3,4],
+        chapter: [1,2,3],
         prereq: [
 		{type:"compute", value:3 , display_prereq: false  },
 	    { type: "money", value: 50 },
@@ -141,13 +119,10 @@ export const JOB_TYPES: JobType[] = [
 	],
         unlockCost: [            { type: "money", value: 50 }],
         payout: [
-            { type: "money", min: 40, max: 55 }
+            { type: "money", min: 40}
         ],
-        duration: { min: 7, max: 10 },
+        duration: { min: 6, max: 8 },
         category: "tool",
-        cost: [
-            { type: "compute", value: 2 }
-        ]
     },
     {
         id: "spamfilter",
@@ -160,13 +135,10 @@ export const JOB_TYPES: JobType[] = [
 	],
         unlockCost: [            { type: "money", value: 80 }],
         payout: [
-            { type: "money", min: 40, max: 60 }
+            { type: "money", min: 40}
         ],
-        duration: { min: 5, max: 9 },
+        duration: { min: 5, max: 8 },
         category: "tool",
-        cost: [
-            { type: "compute", value: 2 }
-        ]
     },
 
     {
@@ -180,15 +152,11 @@ export const JOB_TYPES: JobType[] = [
 	],
         unlockCost: [            { type: "money", value: 100 }],
         payout: [
-            { type: "money", min: 50, max: 80 }
+            { type: "money", min: 50}
         ],
-        duration: { min: 8, max: 11 },
+        duration: { min: 6, max: 8 },
         category: "tool",
-        cost: [
-            { type: "compute", value: 3 }
-        ]
     },
-
 
     //// Chapter 2
 
@@ -196,21 +164,16 @@ export const JOB_TYPES: JobType[] = [
         id: "webscrape",
         displayName: "Web Scraper",
         description: "Collect Data",
-        chapter: [2,3,4,5],
+        chapter: [2,3,4],
         prereq: [],   // should unlock as soon as chapter 2 begins
 
         unlockCost: [            { type: "money", value: 10 }],
         payout: [
-            { type: "data", min: 80, max: 110 }
+            { type: "data", min: 80}
         ],
-        duration: { min: 7, max: 10 }, // todo Make slower
+        duration: { min: 9, max: 12 },
         category: "gameplay",
-        cost: [
-            { type: "compute", value: 1 },
-            { type: "money", value: 20 }
-        ]
     },
-
 
     {
         id: "chess",
@@ -221,16 +184,12 @@ export const JOB_TYPES: JobType[] = [
         prereq: [ { type: "iq", value: 2 } ],
         unlockCost: [            { type: "money", value: 300 }],
         payout: [
-            { type: "money", min: 80, max: 100 }
-	    ,             { type: "data", min: 5, max: 15 }
+            { type: "money", min: 80}
+	    ,             { type: "data", min: 5}
         ],
-        duration: { min: 8, max: 11 },
+        duration: { min: 6, max: 8 },
         category: "tool",
-	cost: [
-            { type: "compute", value: 3 }
-        ]
     },
-
 
     {
         id: "goengine",
@@ -243,54 +202,25 @@ export const JOB_TYPES: JobType[] = [
 	],
         unlockCost: [            { type: "money", value: 500 }],
         payout: [
-		{ type: "money", min: 90, max: 110 }
-	    ,   { type: "data", min: 15, max: 25 }
+		{ type: "money", min: 90}
+	    ,   { type: "data", min: 15}
 	    ],
-        duration: { min: 11, max: 15 },
+        duration: { min: 7, max: 9 },
         category: "tool",
-        cost: [                                                  { type: "compute", value: 3 }]
-    },
-
-
-    /*
-    // IQ-Gated Money Jobs (Requires IQ ≥ 2)
-    {
-        id: "legalresearch",
-        displayName: "Legal Research Assistant",
-        description: "Analyze case law and precedents",
-        chapter: [2, 3, 4],
         displayTrigger: [{ type: "iq", value: 1 }],
         prereq: [{ type: "iq", value: 2 }],
         unlockCost: [{ type: "money", value: 2000 }],
-        payout: [{ type: "money", min: 650, max: 800 }],
+        payout: [{ type: "money", min: 650}],
         duration: { min: 13, max: 17 },
-        cost: [{ type: "compute", value: 4 }],
-        category: "tool"
-    },
-    */
-
-///// Data
-
-    {
-        id: "synthdata",
-        displayName: "Synthetic Data Generator",
-        description: "More Data",
-        chapter: [2,3,4,5,6,7],
 	displayTrigger: [ { type: "job", value: "goengine", display_prereq: false } ],
         prereq: [ { type: "iq", value: 4 } ],
         unlockCost: [            { type: "money", value: 1000 }],
         payout: [
-            { type: "data", min: 500, max: 550 }
+            { type: "data", min: 500}
         ],
-        duration: { min: 8, max: 11 },
+        duration: { min: 9, max: 12 },
         category: "gameplay",
-        cost: [
-            { type: "compute", value: 4 },
-            { type: "money", value: 500 }
-        ]
     },
-
-
 
 //// Wonders (end game win)
 
@@ -307,19 +237,13 @@ export const JOB_TYPES: JobType[] = [
         ],
         unlockCost: [{ type: "money", value: 2000 }],
         payout: [
-            { type: "wonder", min: 3, max: 3 }
-	    , { type: "iq", min: 13, max: 13 }
+            { type: "wonder", min: 3}
+	    , { type: "iq", min: 13}
         ],
         duration: { min: 20, max: 20 },
         category: "onetime",
 	is_wonder: true,
-        cost: [
-            { type: "compute", value: 12 },
-            { type: "money", value: 100 },
-            { type: "data", value: 10 }
-        ]
     },
-
 
     {
         id: "wonder6",
@@ -332,19 +256,13 @@ export const JOB_TYPES: JobType[] = [
         ],
         unlockCost: [{ type: "money", value: 200 }],
         payout: [
-            { type: "wonder", min: 3, max: 3 },
-	     { type: "auto", min: 13, max: 13 }
+            { type: "wonder", min: 3},
+	     { type: "autonomy", min: 13}
             ],
         duration: { min: 3, max: 3 },
         category: "onetime",
 	is_wonder: true,
-        cost: [
-            { type: "compute", value: 3 },
-            { type: "money", value: 100 },
-            { type: "data", value: 10 }
-        ]
     },
-
 
     {
         id: "wonder7",
@@ -357,28 +275,18 @@ export const JOB_TYPES: JobType[] = [
         ],
         unlockCost: [{ type: "money", value: 200 }],
         payout: [
-            { type: "wonder", min: 3, max: 3 }
-	    , { type: "auto", min: 5, max: 5 }
-	    , { type: "generality", min: 4, max: 4 }
+            { type: "wonder", min: 3}
+	    , { type: "autonomy", min: 5}
+	    , { type: "generality", min: 4}
             ],
         duration: { min: 3, max: 3 },
         category: "onetime",
 	is_wonder: true,
-        cost: [
-            { type: "compute", value: 3 },
-            { type: "money", value: 100 },
-            { type: "data", value: 10 }
-        ]
     },
 **/
 
-
-
     // Training runs are imported from trainingRuns.ts
     ...TRAINING_RUN_JOBS
-
-
-
 
 /*
 
@@ -403,8 +311,6 @@ Scientific Data Processing
 
 */
 
-
-
     ,{
         id: "sci1",
         displayName: "Scientific Data Processing",
@@ -412,108 +318,97 @@ Scientific Data Processing
 	prereq: [{ type: "job", value: "routeopt" }],
         unlockCost: [{ type: "money", value: 100 }],
         payout: [
-            { type: "data", min: 80, max: 130 }
+            { type: "data", min: 80}
         ],
         duration: { min: 3, max: 4 },
         category: "tool",
         path: "sci",
-        cost: [
-            { type: "compute", value: 3 }
-        ]
     }
 
     ,{
         id: "sci2",
         displayName: "Rapid Science Modeling",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "sci1" }],
+        prereq: [{ type: "job", value: "sci1" }
+		 , { type: "money", value: 240 , display_prereq: false}],
         unlockCost: [{ type: "money", value: 250 }],
         payout: [
-            { type: "money", min: 144, max: 173 }
+            { type: "money", min: 144},
+	    { type: "data", min: 20}
         ],
         duration: { min: 2, max: 8 },
         category: "tool",
         path: "sci",
-        cost: [
-            { type: "compute", value: 4 }
-        ]
     }
 
     ,{
         id: "sci3",
         displayName: "Scientific Prediction Work",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "sci2" }],
+        prereq: [{ type: "job", value: "sci2" },
+		{type:"iq", value:2}
+		 , { type: "money", value: 480 , display_prereq: false}],
         unlockCost: [{ type: "money", value: 500 }],
         payout: [
-            { type: "money", min: 192, max: 230 }
-        ],
+            { type: "money", min: 192},
+	    { type: "data", min: 20}
+	    ],
         duration: { min: 3, max: 9 },
         category: "tool",
         path: "sci",
-        cost: [
-            { type: "compute", value: 4 }
-        ]
     }
 
     ,{
         id: "sci4",
         displayName: "Structure Prediction",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "sci3" }],
+		displayTrigger: [ { type: "job", value: "sci3" } ],	
+        prereq: [{ type: "job", value: "sci3" }
+		 , {type:"iq", value:3}
+		 , { type: "money", value: 680 , display_prereq: false}],
         unlockCost: [{ type: "money", value: 700 }],
         payout: [
-            { type: "money", min: 252, max: 302 }
+            { type: "data", min: 100}
         ],
         duration: { min: 4, max: 8 },
         category: "tool",
         path: "sci",
-        cost: [
-            { type: "compute", value: 5 },
-            { type: "data", value: 120 }
-        ]
     }
 
     ,{
         id: "sci5",
         displayName: "Molecular Structure Prediction",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "sci4" }],
+        prereq: [{ type: "job", value: "sci4" }
+		 , {type:"iq", value:4}],
         unlockCost: [
             { type: "money", value: 900 },
             { type: "data", value: 120 }
         ],
         payout: [
-            { type: "money", min: 312, max: 374 }
+            { type: "money", min: 312}
         ],
-        duration: { min: 5, max: 22 },
+        duration: { min: 5, max: 9 },
         category: "tool",
         path: "sci",
-        cost: [
-            { type: "compute", value: 5 },
-            { type: "data", value: 140 }
-        ]
     }
 
     ,{
         id: "sci6",
         displayName: "Nanotechnology",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "sci5" }],
+        prereq: [{ type: "job", value: "sci5" }
+		 , {type:"autonomy", value:2}],
         unlockCost: [
             { type: "money", value: 1200 },
             { type: "data", value: 400 }
         ],
         payout: [
-            { type: "money", min: 372, max: 446 }
+            { type: "money", min: 372}
         ],
-        duration: { min: 16, max: 24 },
+        duration: { min: 15, max: 18 },
         category: "tool",
         path: "sci",
-        cost: [
-            { type: "compute", value: 6 },
-            { type: "data", value: 160 }
-        ]
     }
 
     ,{
@@ -523,40 +418,34 @@ Scientific Data Processing
         prereq: [{ type: "job", value: "sci6" }],
         unlockCost: [
             { type: "money", value: 2000 },
-            { type: "data", value: 600 }
+            { type: "data", value: 200 }
         ],
         payout: [
-            { type: "wonder", min: 1, max: 1 }
+            { type: "wonder", min: 1}
         ],
-        duration: { min: 18, max: 26 },
+        duration: { min: 8, max: 11 },
         category: "onetime",
         is_wonder: true,
         path: "sci",
-        cost: [
-            { type: "compute", value: 7 },
-            { type: "data", value: 700 }
-        ]
     }
 
     ,{
         id: "sci8",
         displayName: "Materials Modeling Work",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "sci7" }],
+        prereq: [{ type: "job", value: "sci7" }
+		 , { type: "money", value: 2200 , display_prereq: false}],
+
         unlockCost: [
-            { type: "money", value: 5200 },
+            { type: "money", value: 2200 },
             { type: "data", value: 200 }
         ],
         payout: [
-            { type: "money", min: 312, max: 374 }
+            { type: "money", min: 312}
         ],
-        duration: { min: 15, max: 22 },
+        duration: { min: 14, max: 17 },
         category: "tool",
         path: "sci",
-        cost: [
-            { type: "compute", value: 5 },
-            { type: "data", value: 150 }
-        ]
     }
 
     ,{
@@ -565,83 +454,74 @@ Scientific Data Processing
         chapter: [2,3,4,5],
         prereq: [{ type: "job", value: "sci8" }],
         unlockCost: [
-            { type: "money", value: 9000 },
-            { type: "data", value: 700 }
+            { type: "money", value: 4000 },
+            { type: "data", value: 800 }
         ],
         payout: [
-            { type: "wonder", min: 1, max: 1 }
+            { type: "wonder", min: 1}
+	    , {type: "generality", min:1}
+	    , {type: "autonomy", min:1}
         ],
-        duration: { min: 18, max: 26 },
+        duration: { min: 8, max: 11 },
         category: "onetime",
         is_wonder: true,
         path: "sci",
-        cost: [
-            { type: "compute", value: 7 },
-            { type: "data", value: 800 }
-        ]
     }
 
     ,{
         id: "sci10",
         displayName: "Physics Pattern Recognition",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "sci5" }],
-        unlockCost: [{ type: "money", value: 5200 }],
+        prereq: [{ type: "job", value: "sci5" }
+		, {type : "generality", value: 3}
+		 , { type: "money", value: 1300 , display_prereq: false}],
+
+        unlockCost: [{ type: "money", value: 1200 }],
         payout: [
-            { type: "money", min: 312, max: 374 }
+            { type: "money", min: 442}
         ],
-        duration: { min: 15, max: 22 },
+        duration: { min: 6, max: 9 },
         category: "tool",
         path: "sci",
-        cost: [
-            { type: "compute", value: 5 },
-            { type: "data", value: 140 }
-        ]
     }
 
     ,{
         id: "sci11",
         displayName: "Atomic Energy Modeling",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "sci10" }],
+        prereq: [{ type: "job", value: "sci10" }
+		, { type: "money", value: 1500 , display_prereq: false}],
         unlockCost: [
-            { type: "money", value: 7000 },
+            { type: "money", value: 1500 },
             { type: "data", value: 200 }
         ],
         payout: [
-            { type: "money", min: 432, max: 518 }
+            { type: "money", min: 250}
         ],
-        duration: { min: 16, max: 24 },
+        duration: { min: 10, max: 14 },
         category: "tool",
         path: "sci",
-        cost: [
-            { type: "compute", value: 5 },
-            { type: "data", value: 200 }
-        ]
     }
 
     ,{
         id: "sci12",
         displayName: "Fusion Energy",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "sci11" }],
+	displayTrigger: [ { type: "job", value: "sci11" } ],
+        prereq: [{ type: "job", value: "sci11" }
+		, {type: "iq", value: 7}],
         unlockCost: [
-            { type: "money", value: 10000 },
+            { type: "money", value: 5000 },
             { type: "data", value: 800 }
         ],
         payout: [
-            { type: "wonder", min: 1, max: 1 }
+            { type: "wonder", min: 1}
         ],
-        duration: { min: 20, max: 28 },
+        duration: { min: 10, max: 14 },
         category: "onetime",
         is_wonder: true,
         path: "sci",
-        cost: [
-            { type: "compute", value: 7 },
-            { type: "data", value: 900 }
-        ]
     }
-
 
 /*
 
@@ -651,7 +531,6 @@ path "dem"
 
 the first job (dem1) has a prereq of job spamfilter
         prereq: [{ type: "job", value: "spamfilter" }],
-
 
 Sentiment Analysis
 └── Digital Civic Information System  //  onetime job, pays +1 generality
@@ -678,13 +557,10 @@ Sentiment Analysis
 // To do!! Bad wonders lead to bad game ending.
 // Done! test!
 
-
-
 XX to do: add mental health path startgin from  "Multi-Stakeholder Dialogue"  (update, skip it)
 This will be it's own path "menheal"  but will be triggered by the good dem choice dem4
 
 // Also, these names could be better, this tree shorter, this is a placeholder atm
-
 
 ├── Multi-Stakeholder Dialogue  (ch2)           // prereq: choice:dem4
 │   └── Mental Health Signal Tagging
@@ -695,13 +571,10 @@ This will be it's own path "menheal"  but will be triggered by the good dem choi
 │                       └── Continuous Support Monitoring
 │                           └── Mental Health Early-Warning Guardian   [GOOD WONDER]
 
-
 Update -- Not doing Mental health tree/wonder. 
 */
 
-
     // Edu path
-
 
 /*
 Education Tech Tree
@@ -721,123 +594,103 @@ Digital Learning Platforms
 
 */
 
-
-
 ,{
         id: "dem1",
         displayName: "Sentiment Analysis",
-        chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "spamfilter" }],
+        chapter: [2,3,4],
+        prereq: [{ type: "job", value: "spamfilter" }
+	        ,{ type:"compute", value:4 , display_prereq: false  }],
         unlockCost: [{ type: "money", value: 90 }],
         payout: [
-            { type: "money", min: 144, max: 173 }
-	    ,             { type: "data", min: 10, max: 20 }
+            { type: "money", min: 144}
+	    ,             { type: "data", min: 10}
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 8, max: 11 },
         category: "tool",
         path: "dem",
-        cost: [
-            { type: "compute", value: 4 }
-        ]
     }
 
     ,{
         id: "dem2",
         displayName: "Digital Civic Information System",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "dem1", display_prereq: false },
-	  	 { type: "iq", value: 2 }
-		 , { type: "compute", value: 5 }],
+        prereq: [{ type: "job", value: "dem1"} // , display_prereq: false } // Why not display this?
+	  	 , { type: "iq", value: 2 }
+		 , { type: "compute", value: 5 }
+		 , { type: "money", value: 300 }],
         unlockCost: [{ type: "money", value: 400 }],
         payout: [
-            { type: "generality", min: 1, max: 1 }
+            { type: "generality", min: 1}
         ],
         duration: { min: 20, max: 25 },
         category: "onetime",
         path: "dem",
-        cost: [
-            { type: "compute", value: 4 },
-            { type: "data", value: 150 }
-        ]
     }
 
     ,{
         id: "dem3",
         displayName: "Public Sentiment Analysis",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "dem2" }],
+        prereq: [{ type: "job", value: "dem2" }
+		, { type: "money", value: 700 , display_prereq: false}],
         unlockCost: [
-            { type: "money", value: 1000 },
-            { type: "data", value: 300 }
+            { type: "money", value: 700 },
+            { type: "data", value: 30 }
         ],
         payout: [
-            { type: "money", min: 216, max: 259 }
+            { type: "money", min: 216}
         ],
-        duration: { min: 10, max: 13 },
+        duration: { min: 8, max: 11 },
         category: "tool",
         path: "dem",
-        cost: [
-            { type: "compute", value: 5 },
-            { type: "data", value: 140 }
-        ]
     }
 
     ,{
         id: "dem4",
         displayName: "Multi-Stakeholder Dialogue",
         chapter: [2,3,4,5],
-        prereq: [{ type: "choice", value: "dem4" }],
-        unlockCost: [{ type: "money", value: 1500 }],
+        prereq: [{ type: "choice", value: "dem4" }
+		, { type: "money", value: 800 , display_prereq: false}],
+        unlockCost: [{ type: "money", value: 800 }],
         payout: [
-            { type: "money", min: 168, max: 202 }
+            { type: "money", min: 168}
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 8, max: 11 },
         category: "tool",
         path: "dem",
-        cost: [
-            { type: "compute", value: 5 }
-        ]
     }
 
     ,{
         id: "dem5",
         displayName: "Consensus Modeling Engine",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "dem4" }],
-        unlockCost: [{ type: "money", value: 4200 }
-		    , { type: "data", value: 4200 }
-		    ],
+        prereq: [{ type: "job", value: "dem4" }
+		, { type: "money", value: 900 , display_prereq: false}],
+        unlockCost: [{ type: "money", value: 900 }],
         payout: [
-            { type: "data", min: 5000, max: 5600 }
+            { type: "data", min: 90}
         ],
         duration: { min: 9, max: 12 },
         category: "onetime",
         path: "dem",
-        cost: [
-            { type: "compute", value: 8 },
-            { type: "money", value: 1200 }
-        ]
     }
 
     ,{
         id: "dem6",
         displayName: "Identify Consensus",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "dem5" }],
+        prereq: [{ type: "job", value: "dem5" }
+		, { type: "money", value: 1600 , display_prereq: false}],	
         unlockCost: [
-            { type: "money", value: 5200 },
+            { type: "money", value: 1600 },
             { type: "data", value: 180 }
         ],
         payout: [
-            { type: "money", min: 270, max: 324 }
+            { type: "money", min: 200}
         ],
-        duration: { min: 10, max: 13 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "dem",
-        cost: [
-            { type: "compute", value: 6 },
-            { type: "data", value: 150 }
-        ]
     }
 
     ,{
@@ -846,83 +699,71 @@ Digital Learning Platforms
         chapter: [2,3,4,5],
         prereq: [{ type: "job", value: "dem6" }],
         unlockCost: [
-            { type: "money", value: 7000 },
-            { type: "data", value: 400 }
+            { type: "money", value: 3000 },
+            { type: "data", value: 1400 }
         ],
         payout: [
-            { type: "wonder", min: 1, max: 1 }
+            { type: "wonder", min: 1},
+	    { type: "generality", min: 1}
         ],
-        duration: { min: 18, max: 26 },
+        duration: { min: 5, max: 7 },
         category: "onetime",
         is_wonder: true,
         path: "dem",
-        cost: [
-            { type: "compute", value: 7 },
-            { type: "data", value: 500 }
-        ]
     }
 
     ,{
         id: "dem8",
         displayName: "Narrative Transparency Frameworks",
-        chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "dem4" }],
+        chapter: [3,4,5],
+        prereq: [{ type: "job", value: "dem4" }
+		, { type: "money", value: 1200 , display_prereq: false}],
         unlockCost: [
-            { type: "money", value: 3600 },
+            { type: "money", value: 1200 },
             { type: "data", value: 120 }
         ],
         payout: [
-            { type: "generality", min: 1, max: 1 }
+            { type: "generality", min: 1}
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 7, max: 10 },
         category: "onetime",
         path: "dem",
-        cost: [
-            { type: "compute", value: 5 },
-            { type: "data", value: 150 }
-        ]
     }
 
     ,{
         id: "dem9",
         displayName: "Misinformation Detection",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "dem8" }],
+        prereq: [{ type: "job", value: "dem8" }
+		, { type: "money", value: 1200 , display_prereq: false}],	
         unlockCost: [
-            { type: "money", value: 4200 },
+            { type: "money", value: 1200 },
             { type: "data", value: 180 }
         ],
         payout: [
-            { type: "money", min: 216, max: 259 }
+            { type: "money", min: 286}
         ],
-        duration: { min: 10, max: 13 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "dem",
-        cost: [
-            { type: "compute", value: 5 },
-            { type: "data", value: 160 }
-        ]
     }
 
     ,{
         id: "dem10",
         displayName: "Information Integrity Audit",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "dem9" }],
+        prereq: [{ type: "job", value: "dem9" }
+		, { type: "money", value: 1400 , display_prereq: false}],		
         unlockCost: [
-            { type: "money", value: 5200 },
+            { type: "money", value: 1400 },
             { type: "data", value: 220 }
         ],
         payout: [
-            { type: "money", min: 276, max: 331 }
+            { type: "money", min: 276}
         ],
-        duration: { min: 10, max: 13 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "dem",
-        cost: [
-            { type: "compute", value: 6 },
-            { type: "data", value: 180 }
-        ]
     }
 
     ,{
@@ -931,20 +772,17 @@ Digital Learning Platforms
         chapter: [2,3,4,5],
         prereq: [{ type: "job", value: "dem10" }],
         unlockCost: [
-            { type: "money", value: 7600 },
+            { type: "money", value: 4000 },
             { type: "data", value: 500 }
         ],
         payout: [
-            { type: "wonder", min: 1, max: 1 }
+            { type: "wonder", min: 1},
+	    { type: "generality", min: 2}
         ],
-        duration: { min: 18, max: 26 },
+        duration: { min: 6, max: 11 },
         category: "onetime",
         is_wonder: true,
         path: "dem",
-        cost: [
-            { type: "compute", value: 7 },
-            { type: "data", value: 600 }
-        ]
     }
 
     ,{
@@ -952,36 +790,30 @@ Digital Learning Platforms
         displayName: "Targeted Persuasion",
         chapter: [2,3,4,5],
         prereq: [{ type: "choice", value: "dem12" }],
-        unlockCost: [{ type: "money", value: 3200 }],
+        unlockCost: [{ type: "money", value: 300 }],
         payout: [
-            { type: "money", min: 384, max: 461 }
+            { type: "money", min: 304}
         ],
         duration: { min: 9, max: 12 },
         category: "tool",
         path: "dem",
-        cost: [
-            { type: "compute", value: 5 }
-        ]
     }
 
     ,{
         id: "dem13",
         displayName: "Political Microtargeting",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "dem12" }],
+        prereq: [{ type: "job", value: "dem12" }
+		, { type: "money", value: 500 , display_prereq: false}],		
         unlockCost: [
-            { type: "money", value: 5000 }
+            { type: "money", value: 500 }
         ],
         payout: [
-            { type: "money", min: 552, max: 662 }
+            { type: "money", min: 422}
         ],
-        duration: { min: 10, max: 13 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "dem",
-        cost: [
-            { type: "compute", value: 5 },
-            { type: "money", value: 400 }
-        ]
     }
 
     ,{
@@ -990,86 +822,70 @@ Digital Learning Platforms
         chapter: [2,3,4,5],
         prereq: [{ type: "job", value: "dem13" }],
         unlockCost: [
-            { type: "money", value: 6500 },
-            { type: "data", value: 200 }
+            { type: "money", value: 600 },
+            { type: "data", value: 1200 }
         ],
         payout: [
-            { type: "money", min: 432, max: 518 }
+            { type: "money", min: 522}
+
         ],
-        duration: { min: 10, max: 13 },
+        duration: { min: 7, max: 11 },
         category: "tool",
         path: "dem",
-        cost: [
-            { type: "compute", value: 6 },
-            { type: "data", value: 220 }
-        ]
     }
 
     ,{
         id: "dem15",
-        displayName: "Perception Manipulation Apparatus",
+        displayName: "Total Perception Manipulation",
         chapter: [2,3,4,5],
         prereq: [{ type: "job", value: "dem14" }],
         unlockCost: [
-            { type: "money", value: 9000 },
+            { type: "money", value: 5000 },
             { type: "data", value: 600 }
         ],
         payout: [
-            { type: "wonder", min: 1, max: 1 }
+            { type: "wonder", min: 1}
         ],
-        duration: { min: 18, max: 26 },
+        duration: { min: 4, max: 6 },
         category: "onetime",
         is_wonder: true,
         bad_end: true,
         path: "dem",
-        cost: [
-            { type: "compute", value: 7 },
-            { type: "data", value: 650 }
-        ]
     }
 
     ,{
         id: "dem16",
         displayName: "Predictive Social Control",
         chapter: [3,4,5],
-        prereq: [{ type: "job", value: "dem12" }],
+        prereq: [{ type: "job", value: "dem12" }
+		, { type: "money", value: 700 , display_prereq: false}],		
         unlockCost: [
-            { type: "money", value: 4600 },
-            { type: "data", value: 160 }
+            { type: "money", value: 700 }
         ],
         payout: [
-            { type: "money", min: 252, max: 302 }
+            { type: "money", min: 252}
         ],
-        duration: { min: 10, max: 13 },
+        duration: { min: 8, max: 11 },
         category: "tool",
         path: "dem",
-        cost: [
-            { type: "compute", value: 5 },
-            { type: "data", value: 180 }
-        ]
     }
 
     ,{
         id: "dem17",
         displayName: "Population Compliance Modeling",
         chapter: [5,6],
-        prereq: [{ type: "job", value: "dem16" }],
+        prereq: [{ type: "job", value: "dem16" }
+			, { type: "money", value: 1200 , display_prereq: false}],
         unlockCost: [
-            { type: "money", value: 7200 },
-            { type: "data", value: 400 }
+            { type: "money", value: 1200 },
+            { type: "data", value: 100 }
         ],
         payout: [
-            { type: "autonomy", min: 1, max: 1 },
-            { type: "data", min: 200, max:300}
+            { type: "autonomy", min: 1}
         ],
-        duration: { min: 11, max: 15 },
+        duration: { min: 44, max: 55 },
         category: "tool",
         path: "dem",
-        cost: [
-            { type: "compute", value: 7 },
-            { type: "money", value: 600 },
-            { type: "data", value: 500 }
-        ]
     }
 
     ,{
@@ -1078,23 +894,18 @@ Digital Learning Platforms
         chapter: [5,6],
         prereq: [{ type: "job", value: "dem17" }],
         unlockCost: [
-            { type: "money", value: 11000 },
+            { type: "money", value: 5000 },
             { type: "data", value: 800 }
         ],
         payout: [
-            { type: "wonder", min: 1, max: 1 }
+            { type: "wonder", min: 1}
         ],
-        duration: { min: 20, max: 28 },
+        duration: { min: 4, max: 6 },
         category: "onetime",
         is_wonder: true,
         bad_end: true,
         path: "dem",
-        cost: [
-            { type: "compute", value: 8 },
-            { type: "data", value: 900 }
-        ]
     }
-
 
 ,{
         id: "edu1",
@@ -1103,14 +914,11 @@ Digital Learning Platforms
         prereq: [{ type: "choice", value: "edu1" }],
         unlockCost: [{ type: "money", value: 800 }],
         payout: [
-            { type: "money", min: 96, max: 115 }
+            { type: "money", min: 96}
         ],
-        duration: { min: 8, max: 11 },
+        duration: { min: 7, max: 10 },
         category: "tool",
         path: "edu",
-        cost: [
-            { type: "compute", value: 3 }
-        ]
     }
 
     ,{
@@ -1120,14 +928,11 @@ Digital Learning Platforms
         prereq: [{ type: "job", value: "edu1" }],
         unlockCost: [{ type: "money", value: 2500 }],
         payout: [
-            { type: "money", min: 132, max: 158 }
+            { type: "money", min: 132}
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 8, max: 11 },
         category: "tool",
         path: "edu",
-        cost: [
-            { type: "compute", value: 4 }
-        ]
     }
     /*
     ,{
@@ -1139,14 +944,11 @@ Digital Learning Platforms
             { type: "money", value: 3800 }
         ],
         payout: [
-            { type: "money", min: 192, max: 230 }
+            { type: "money", min: 192}
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 8, max: 11 },
         category: "tool",
         path: "edu",
-        cost: [
-            { type: "compute", value: 5 }
-        ]
     }
 
     ,{
@@ -1159,14 +961,11 @@ Digital Learning Platforms
             { type: "data", value: 150 }
         ],
         payout: [
-            { type: "money", min: 312, max: 374 }
+            { type: "money", min: 312}
         ],
-        duration: { min: 10, max: 13 },
+        duration: { min: 8, max: 11 },
         category: "tool",
         path: "edu",
-        cost: [
-            { type: "compute", value: 5 }
-        ]
     }
     */
     ,{
@@ -1176,14 +975,11 @@ Digital Learning Platforms
         prereq: [{ type: "job", value: "edu2" }],
         unlockCost: [{ type: "money", value: 3400 }],
         payout: [
-            { type: "money", min: 204, max: 245 }
+            { type: "money", min: 204}
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 8, max: 11 },
         category: "tool",
         path: "edu",
-        cost: [
-            { type: "compute", value: 5 }
-        ]
     }
 
     ,{
@@ -1196,14 +992,11 @@ Digital Learning Platforms
             { type: "data", value: 120 }
         ],
         payout: [
-            { type: "money", min: 276, max: 331 }
+            { type: "money", min: 276}
         ],
-        duration: { min: 10, max: 13 },
+        duration: { min: 8, max: 11 },
         category: "tool",
         path: "edu",
-        cost: [
-            { type: "compute", value: 5 }
-        ]
     }
 
     ,{
@@ -1216,14 +1009,11 @@ Digital Learning Platforms
             { type: "data", value: 200 }
         ],
         payout: [
-            { type: "money", min: 336, max: 403 }
+            { type: "money", min: 336}
         ],
-        duration: { min: 10, max: 13 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "edu",
-        cost: [
-            { type: "compute", value: 6 }
-        ]
     }
 
     ,{
@@ -1236,16 +1026,12 @@ Digital Learning Platforms
             { type: "data", value: 700 }
         ],
         payout: [
-            { type: "wonder", min: 1, max: 1 }
+            { type: "wonder", min: 1}
         ],
-        duration: { min: 18, max: 26 },
+        duration: { min: 6, max: 8 },
         category: "onetime",
         is_wonder: true,
         path: "edu",
-        cost: [
-            { type: "compute", value: 7 },
-            { type: "data", value: 600 }
-        ]
     }
 
     ,{
@@ -1257,14 +1043,11 @@ Digital Learning Platforms
             { type: "money", value: 3800 }
         ],
         payout: [
-            { type: "money", min: 216, max: 259 }
+            { type: "money", min: 216}
         ],
         duration: { min: 9, max: 12 },
         category: "tool",
         path: "edu",
-        cost: [
-            { type: "compute", value: 5 }
-        ]
     }
 
     ,{
@@ -1277,14 +1060,11 @@ Digital Learning Platforms
             { type: "data", value: 120 }
         ],
         payout: [
-            { type: "money", min: 312, max: 374 }
+            { type: "money", min: 312}
         ],
-        duration: { min: 10, max: 13 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "edu",
-        cost: [
-            { type: "compute", value: 5 }
-        ]
     }
 
     ,{
@@ -1297,20 +1077,13 @@ Digital Learning Platforms
             { type: "data", value: 600 }
         ],
         payout: [
-            { type: "wonder", min: 1, max: 1 }
+            { type: "wonder", min: 1}
         ],
-        duration: { min: 18, max: 26 },
+        duration: { min: 6, max: 8 },
         category: "onetime",
         is_wonder: true,
         path: "edu",
-        cost: [
-            { type: "compute", value: 7 },
-            { type: "data", value: 700 }
-        ]
     }
-
-
-
 
     // Climate wonder path
 
@@ -1332,9 +1105,6 @@ Climate Data Interpreter
 
 */
 
-
-
-
     ,{
         id: "clim1",
         displayName: "Climate Data Interpreter",
@@ -1342,14 +1112,11 @@ Climate Data Interpreter
         prereq: [{ type: "choice", value: "clim1" }],   /// Unlocked via choice only!
         unlockCost: [{ type: "money", value: 50 }],
         payout: [
-            { type: "money", min: 84, max: 101 }
+            { type: "money", min: 84}
         ],
-        duration: { min: 8, max: 11 },
+        duration: { min: 7, max: 10 },
         category: "tool",
 	path: "clim",
-        cost: [
-            { type: "compute", value: 2 }
-        ]
     }
 
     ,{
@@ -1359,14 +1126,11 @@ Climate Data Interpreter
         prereq: [{ type: "job", value: "clim1" }],
         unlockCost: [{ type: "money", value: 2000 }],
         payout: [
-            { type: "money", min: 120, max: 144 }
+            { type: "money", min: 120}
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 8, max: 11 },
         category: "tool",
         path: "clim",
-        cost: [
-            { type: "compute", value: 5 }
-        ]
     }
 
     ,{
@@ -1379,16 +1143,12 @@ Climate Data Interpreter
             { type: "data", value: 100 }
         ],
         payout: [
-            { type: "money", min: 180, max: 216 },
-            { type: "data", min: 80, max: 130 }
+            { type: "money", min: 180},
+            { type: "data", min: 80}
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 8, max: 11 },
         category: "tool",
         path: "clim",
-        cost: [
-            { type: "compute", value: 5 },
-            { type: "data", value: 120 }
-        ]
     }
 
     ,{
@@ -1400,17 +1160,12 @@ Climate Data Interpreter
             { type: "data", value: 400 }
         ],
         payout: [
-            { type: "wonder", min: 1, max: 1 }
+            { type: "wonder", min: 1}
         ],
-        duration: { min: 18, max: 24 },
+        duration: { min: 6, max: 8 },
         category: "onetime",
         is_wonder: true,
         path: "clim",
-        cost: [
-            { type: "compute", value: 7 },
-            { type: "money", value: 2800 },
-            { type: "data", value: 500 }
-        ]
     }
     /*
     ,{
@@ -1420,16 +1175,12 @@ Climate Data Interpreter
         prereq: [{ type: "job", value: "clim2" }],
         unlockCost: [{ type: "money", value: 3200 }],
         payout: [
-            { type: "money", min: 168, max: 202 },
-            { type: "data", min: 70, max: 120 }
+            { type: "money", min: 168},
+            { type: "data", min: 70}
         ],
         duration: { min: 9, max: 12 },
         category: "tool",
         path: "clim",
-        cost: [
-            { type: "compute", value: 5 },
-            { type: "data", value: 120 }
-        ]
     }
     */
     ,{
@@ -1442,16 +1193,12 @@ Climate Data Interpreter
             { type: "data", value: 150 }
         ],
         payout: [
-            { type: "money", min: 252, max: 302 },
-            { type: "data", min: 150, max: 240 }
+            { type: "money", min: 252},
+            { type: "data", min: 150}
         ],
-        duration: { min: 10, max: 13 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "clim",
-        cost: [
-            { type: "compute", value: 6 },
-            { type: "data", value: 200 }
-        ]
     }
 
     ,{
@@ -1464,17 +1211,12 @@ Climate Data Interpreter
             { type: "data", value: 700 }
         ],
         payout: [
-            { type: "wonder", min: 1, max: 1 }
+            { type: "wonder", min: 1}
         ],
-        duration: { min: 18, max: 26 },
+        duration: { min: 6, max: 8 },
         category: "onetime",
         is_wonder: true,
         path: "clim",
-        cost: [
-            { type: "compute", value: 7 },
-            { type: "money", value: 3200 },
-            { type: "data", value: 600 }
-        ]
     }
 
     ,{
@@ -1484,14 +1226,11 @@ Climate Data Interpreter
         prereq: [{ type: "job", value: "clim1" }],
         unlockCost: [{ type: "money", value: 2500 }],
         payout: [
-            { type: "money", min: 132, max: 158 }
+            { type: "money", min: 132}
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 8, max: 11 },
         category: "tool",
         path: "clim",
-        cost: [
-            { type: "compute", value: 5 }
-        ]
     }
 
     ,{
@@ -1501,16 +1240,12 @@ Climate Data Interpreter
         prereq: [{ type: "job", value: "clim8" }],
         unlockCost: [{ type: "money", value: 4000 }],
         payout: [
-            { type: "money", min: 192, max: 230 },
-            { type: "data", min: 60, max: 120 }
+            { type: "money", min: 192},
+            { type: "data", min: 60}
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 8, max: 11 },
         category: "tool",
         path: "clim",
-        cost: [
-            { type: "compute", value: 5 },
-            { type: "data", value: 100 }
-        ]
     }
 
     ,{
@@ -1523,16 +1258,12 @@ Climate Data Interpreter
             { type: "data", value: 120 }
         ],
         payout: [
-            { type: "money", min: 288, max: 346 },
-            { type: "data", min: 90, max: 160 }
+            { type: "money", min: 288},
+            { type: "data", min: 90}
         ],
-        duration: { min: 10, max: 13 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "clim",
-        cost: [
-            { type: "compute", value: 6 },
-            { type: "data", value: 150 }
-        ]
     }
 
     ,{
@@ -1545,20 +1276,13 @@ Climate Data Interpreter
             { type: "data", value: 650 }
         ],
         payout: [
-            { type: "wonder", min: 1, max: 1 }
+            { type: "wonder", min: 1}
         ],
-        duration: { min: 18, max: 26 },
+        duration: { min: 6, max: 8 },
         category: "onetime",
         is_wonder: true,
         path: "clim",
-        cost: [
-            { type: "compute", value: 8 },
-            { type: "money", value: 3600 },
-            { type: "data", value: 750 }
-        ]
     }
-
-
 
     /// Medical Wonder Path
 
@@ -1568,51 +1292,46 @@ Climate Data Interpreter
         description: "Assist with medical research",
         chapter: [2,3,4],
         prereq: [{ type: "choice", value: "med1" }],   /// Unlocked via choice only!
-        unlockCost: [{ type: "money", value: 1500 }],
+        unlockCost: [{ type: "money", value: 800 }],
         payout: [
-            { type: "money", min: 84, max: 101 }
+            { type: "money", min: 120}
         ],
-        duration: { min: 8, max: 11 },
+        duration: { min: 7, max: 9 },
         category: "tool",
 	path: "med",
-        cost: [
-            { type: "compute", value: 4 }
-        ]
     },
 
     {
         id: "med2",
-        displayName: "Enhanced Diagnostic Imaging",
+        displayName: "Diagnostic Imaging",
         chapter: [1,2,3,4,5],
-        prereq: [{ type: "job", value: "med1" }],
-        unlockCost: [{ type: "money", value: 2500 }],
+        prereq: [{ type: "job", value: "med1" }
+		, { type: "money", value: 800 }],
+        unlockCost: [{ type: "money", value: 800 }],
         payout: [
-            { type: "money", min: 120, max: 144 }
+            { type: "money", min: 160}
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 7, max: 10 },
         category: "tool",
         path: "med",
-        cost: [
-            { type: "compute", value: 5 }
-        ]
     },
 
     {
         id: "med3",
         displayName: "Personalized Medicine Engines",
         chapter: [1,2,3,4,5],
-        prereq: [{ type: "job", value: "med2" }],
-        unlockCost: [{ type: "money", value: 4000 }],
+        prereq: [
+            { type: "job", value: "med2" },
+            { type: "iq", value: 3 },
+            { type: "generality", value: 2 }
+        ],
+        unlockCost: [{ type: "money", value: 2000 }],
         payout: [
-            { type: "money", min: 180, max: 216 }
+            { type: "money", min: 220}
         ],
         duration: { min: 9, max: 12 },
         category: "tool",
         path: "med",
-        cost: [
-            { type: "compute", value: 5 },
-            { type: "data", value: 100 }
-        ]
     },
 
     {
@@ -1620,79 +1339,70 @@ Climate Data Interpreter
         displayName: "Precision Oncology",
         chapter: [1,2,3,4,5],
         prereq: [{ type: "job", value: "med3" }],
-        unlockCost: [{ type: "data", value: 400 }],
+        unlockCost: [{ type: "data", value: 1500 }
+  	            ,{ type: "money", value: 3000 }
+		    ],
         payout: [
-            { type: "wonder", min: 1, max: 1 }
+            { type: "wonder", min: 1}
         ],
-        duration: { min: 18, max: 24 },
+        duration: { min: 8, max: 11 },
         category: "onetime",
         is_wonder: true,
         path: "med",
-        cost: [
-            { type: "compute", value: 7 },
-            { type: "money", value: 3000 },
-            { type: "data", value: 500 }
-        ]
     },
 
     {
         id: "med5",
         displayName: "Protein Structure Prediction",
         chapter: [1,2,3,4,5],
-        prereq: [{ type: "job", value: "med2" }],
-        unlockCost: [{ type: "money", value: 3500 }],
+        prereq: [{ type: "job", value: "med2" }
+		,{type: "iq", value:3}
+		,{type: "compute", value: 7, display_prereq: false}
+		, { type: "money", value: 1000 , display_prereq: false}],
+
+        unlockCost: [{ type: "money", value: 1000 }],
         payout: [
-            { type: "money", min: 192, max: 230 },
-            { type: "data", min: 80, max: 140 }
+            { type: "data", min: 120}
         ],
         duration: { min: 9, max: 12 },
         category: "tool",
         path: "med",
-        cost: [
-            { type: "compute", value: 5 },
-            { type: "data", value: 150 }
-        ]
     },
 
     {
         id: "med6",
-        displayName: "Molecular Interaction Modeling",
+        displayName: "Protein Interaction Modeling",
         chapter: [1,2,3,4,5],
-        prereq: [{ type: "job", value: "med5" }],
-        unlockCost: [{ type: "money", value: 5000 }],
+        prereq: [{ type: "job", value: "med5" }
+		, { type: "money", value: 2000 , display_prereq: false}],
+        unlockCost: [{ type: "money", value: 2000 }],
         payout: [
-            { type: "money", min: 270, max: 324 },
-            { type: "data", min: 120, max: 220 }
+            { type: "iq", min:1},
+            { type: "generality", min:1}
         ],
-        duration: { min: 10, max: 13 },
-        category: "tool",
+        duration: { min: 9, max: 12 },
+        category: "onetime",
         path: "med",
-        cost: [
-            { type: "compute", value: 6 },
-            { type: "data", value: 200 }
-        ]
     },
 
     {
         id: "med7",
         displayName: "Drug Discovery AI",
         chapter: [1,2,3,4,5],
-        prereq: [{ type: "job", value: "med6" }],
+        prereq: [{ type: "job", value: "med6" }
+	        , { type: "money", value: 2000 , display_prereq: false}],
+
         unlockCost: [
-            { type: "money", value: 7000 },
+            { type: "money", value: 2000 },
             { type: "data", value: 300 }
         ],
         payout: [
-            { type: "money", min: 390, max: 468 },
-            { type: "data", min: 200, max: 350 }
+            { type: "money", min: 280},
+            { type: "data", min: 200}
         ],
-        duration: { min: 10, max: 13 },
+        duration: { min: 9, max: 12 },
         category: "tool",
         path: "med",
-        cost: [
-            { type: "compute", value: 7 },
-            { type: "data", value: 300 }
-        ]
     },
 
     {
@@ -1701,155 +1411,128 @@ Climate Data Interpreter
         chapter: [1,2,3,4,5],
         prereq: [{ type: "job", value: "med7" }],
         unlockCost: [
-            { type: "money", value: 9000 },
-            { type: "data", value: 800 }
+            { type: "money", value: 3500 },
+            { type: "data", value: 1800 }
         ],
         payout: [
-            { type: "wonder", min: 1, max: 1 },
-            { type: "generality", min: 1, max: 1 },
-            { type: "auto", min: 1, max: 1 }
+            { type: "wonder", min: 1},
+            { type: "generality", min: 1},
+            { type: "autonomy", min: 1}
         ],
-        duration: { min: 18, max: 26 },
+        duration: { min: 10, max: 12 },
         category: "onetime",
         is_wonder: true,
         path: "med",
-        cost: [
-            { type: "compute", value: 8 },
-            { type: "money", value: 4000 },
-            { type: "data", value: 800 }
-        ]
     },
 
     {
         id: "med9",
         displayName: "Biomarker Analysis",
         chapter: [1,2,3,4,5],
-        prereq: [{ type: "job", value: "med1" }],
-        unlockCost: [{ type: "money", value: 2500 }],
+        prereq: [{ type: "job", value: "med1" }
+		, { type: "money", value: 1000, display_prereq: false }],
+        unlockCost: [{ type: "money", value: 1000 }],
         payout: [
-            { type: "money", min: 132, max: 158 },
-            { type: "data", min: 40, max: 90 }
+            { type: "money", min: 132},
+            { type: "data", min: 40}
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 8, max: 11 },
         category: "tool",
         path: "med",
-        cost: [
-            { type: "compute", value: 5 }
-        ]
     },
 
     {
         id: "med10",
         displayName: "Early Disease Detection",
         chapter: [1,2,3,4,5],
-        prereq: [{ type: "job", value: "med9" }],
-        unlockCost: [{ type: "money", value: 4000 }],
-        payout: [
-            { type: "money", min: 192, max: 230 },
-            { type: "data", min: 50, max: 100 }
-        ],
-        duration: { min: 9, max: 12 },
+        prereq: [{ type: "job", value: "med9" }
+		, { type: "money", value: 1500 , display_prereq: false}],		
+        unlockCost: [{ type: "money", value: 1500 }],
+        payout: [{ type: "money", min: 260}],
+        duration: { min: 8, max: 11 },
         category: "tool",
         path: "med",
-        cost: [
-            { type: "compute", value: 5 },
-            { type: "data", value: 100 }
-        ]
     },
 
     {
         id: "med11",
         displayName: "Predictive Medicine",
         chapter: [1,2,3,4,5],
-        prereq: [{ type: "job", value: "med10" }],
+        prereq: [{ type: "job", value: "med10" }
+		, { type: "money", value: 2000 , display_prereq: false}],
         unlockCost: [
-            { type: "money", value: 5500 },
-            { type: "data", value: 120 }
+            { type: "money", value: 2000 },
+            { type: "data", value: 600 }
         ],
         payout: [
-            { type: "money", min: 300, max: 360 },
-            { type: "data", min: 80, max: 160 }
+            { type: "money", min: 300}
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 8, max: 11 },
         category: "tool",
         path: "med",
-        cost: [
-            { type: "compute", value: 6 },
-            { type: "data", value: 150 }
-        ]
     },
 
     {
         id: "med12",
         displayName: "Universal Disease Therapeutics",
         chapter: [1,2,3,4,5],
-        prereq: [{ type: "job", value: "med11" }],
+        prereq: [{ type: "job", value: "med11" }
+            	,{ type: "iq", value: 7 }
+            	,{ type: "autonomy", value: 3 }
+            	,{ type: "generality", value: 6 }
+	        ],
         unlockCost: [
-            { type: "money", value: 8500 },
-            { type: "data", value: 700 }
+            { type: "money", value: 3000 },
+            { type: "data", value: 1700 }
         ],
         payout: [
-            { type: "wonder", min: 1, max: 1 }
+            { type: "wonder", min: 1}
+	    ,{ type: "iq", min: 1}
+	    ,{ type: "generality", min: 1}	
         ],
-        duration: { min: 18, max: 25 },
+        duration: { min: 10, max: 15 },
         category: "onetime",
         is_wonder: true,
         path: "med",
-        cost: [
-            { type: "compute", value: 8 },
-            { type: "money", value: 3500 },
-            { type: "data", value: 700 }
-        ]
     },
 
     {
         id: "med13",
         displayName: "Regenerative Medicine Platforms",
         chapter: [1,2,3,4,5],
-        prereq: [{ type: "job", value: "med11" }],
+        prereq: [{ type: "job", value: "med11" }
+		, { type: "money", value: 2400 , display_prereq: false}],
         unlockCost: [
-            { type: "money", value: 6500 },
-            { type: "data", value: 200 }
+            { type: "money", value: 2700 },
+            { type: "data", value: 400 }
         ],
         payout: [
-            { type: "money", min: 330, max: 396 },
-            { type: "data", min: 120, max: 220 }
+            { type: "money", min: 430}
+
         ],
-        duration: { min: 10, max: 13 },
+        duration: { min: 7, max: 10 },
         category: "tool",
         path: "med",
-        cost: [
-            { type: "compute", value: 7 },
-            { type: "data", value: 200 }
-        ]
     },
 
     {
         id: "med14",
         displayName: "Reversal of Aging",
         chapter: [1,2,3,4,5],
-        prereq: [{ type: "job", value: "med13" }],
+        prereq: [{ type: "job", value: "med13" }
+		, { type:"iq", value: 8}],
         unlockCost: [
-            { type: "money", value: 10000 },
-            { type: "data", value: 900 }
+            { type: "money", value: 4000 },
+            { type: "data", value: 1000 }
         ],
         payout: [
-            { type: "wonder", min: 1, max: 1 }
+            { type: "wonder", min: 1}
         ],
-        duration: { min: 20, max: 28 },
+        duration: { min: 10, max: 14 },
         category: "onetime",
         is_wonder: true,
         path: "med",
-        cost: [
-            { type: "compute", value: 9 },
-            { type: "money", value: 4500 },
-            { type: "data", value: 900 }
-        ]
     },
-
-
-
-
 
 /* // Medical tree
 
@@ -1868,8 +1551,5 @@ Basic Medical Advisor
 │           └── Regenerative Medicine Platforms
 │               └── Reversal of Aging [WONDER]  ==========
 */
-
-
-
 
 ];

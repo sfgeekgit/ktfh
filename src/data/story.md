@@ -1,3 +1,37 @@
+<!--
+
+This file contains all the story text for a game
+
+The game is for this contest: https://keepthefuturehuman.ai/contest/
+
+INPORTANT: The purpose of the game is to spread the idea in the essay https://keepthefuturehuman.ai/essay/docs
+
+
+
+The game includes
+-- An intro
+-- 5 chapters
+-- Several different endings
+-- Several interludes
+
+
+
+
+All players will read the intro and the text for Chapter 1, Chapter 2, Chapter 3, Chapter 4, Chapter 5, in order.
+
+Most players will have the chance to read MOST of the interludes, but not all of them. The interludes may happen out of order. Each wonder will come immediately after the corresponding "pre-wonder" but other than that, the interludes may happen in any order.
+
+Chapter 1 - start of game
+Chapter 2 - Beginning of "intelligence" stat
+Chapter 3 - Beginning of "generality" stat and introduce "rival corp" (can be named MegaCorp or can be named something different) Rival corp is racing toward AGI
+Chapter 4 - Beginning of "automation" stat.  During chapter 4, the AI begins to go a bit out of control, the UI gets wonkey, the player starts to loose a bit of control.
+Chapter 5 - Player choice, support or oppose "the framework" to restrict AGI. If the player chooses "oppose" they will lose the game almost immediately as rival corp creates AGI and ends the game. If the player chooses to support the framework Rival Corp goes out of business and is no longer in the game (but the player might still create AGI themself and lose)
+
+Most of the wonders and prewonders will happen during chapters 4 and 5 (mostly 5)
+
+-->
+
+
 # Chapter 1: The Spark
 **id:** chapter1
 
@@ -9,12 +43,8 @@
 
 Close the Gates
 
-<h2>Beta version, under development</h2>
-
-<h2>NOT PUBLIC<BR> please do not share (yet)</h2>
-
-
 TODO: write intro for the game here.
+This is a game based on the essay Keep The Future Human
 
 The point of the game is to explore the potential boons and dangers of AGI
 
@@ -62,7 +92,7 @@ It won't be easy, but you feel ready for the task ahead.
 
 Today, your first system goes live.
 
-## Page 2
+## Page 
 **title:**  Chapter 1
 
 The initial deployments exceed expectations.
@@ -73,7 +103,7 @@ These systems are predictable. Controllable. They do exactly what you trained th
 
 The feedback is immediate: "This saved me so much time." "I can finally focus on the important work."
 
-## Page 3
+## Page 
 **title:**  Chapter 1
 
 The technology is straightforward. Narrow AI, the researchers call it. Neural networks trained on specific tasks. When given an image, they classify it. When given audio, they transcribe it.
@@ -98,14 +128,16 @@ Your company is small, but it's real. And it's growing.
 
 ## Page 1
 **title:**  Which story will we follow?
-With IQ 2 unlocked, the team debates the next big push.
+Early in the game, the player has a choice.
 
 Two domains are vying for attention: saving the planet, or saving lives.
+Researcher A can work on climate
+Researcher B can work on medicine
 
 ## Page 2 [CHOICE]
 **title:** Pick the Next Flagship
 
-Choose which domain to focus on first.
+Which character will the game follow?
 
 
 [OPTION: climate]
@@ -314,8 +346,8 @@ You're catching up.
 
 # Chapter 4: Systems That Act
 **id:** chapter4
-**title:** Chapter 4: Systems That Act
 ## Page 1
+**title:** Chapter 4: Systems That Act
 
 MegaCorp announces "The Year of the Agent."
 
@@ -331,21 +363,16 @@ Automation isn't coming, it's here.
 
 The benefits are undeniable.
 
-Autonomous systems work faster. No waiting for approval, no human bottlenecks, jobs complete themselves.
+Autonomous systems work faster. No human bottlenecks, jobs complete themselves.
 
-Your financial AI picks trades at machine speed. Your logistics system optimizes routes in realtime.
 
 It's like having a data center full of employees who never sleep.
-
-Format Autonomy Unlocked
-**AUTONOMY Unlocked**
 
 ## Page 3
 **title:** The Shift
 
-Your systems are no longer just intelligent and general, they're becoming independent.
+The world's systems are no longer just intelligent and general, they're becoming independent.
 
-News fills with stories: "AI Systems Operating Independently" "The Rise of Autonomous Agents" "Machines Making Decisions"
 
 Your investors love the numbers.
 Your engineers seem... uneasy.
@@ -361,7 +388,6 @@ Your AI now combines three properties: Autonomy, Generality, and Intelligence.
 
 Individually, each is manageable. Together, they form something different.
 
-Something powerful. Something that approaches what makes humans uniquely capable.
 
 The triple-intersection, researchers call it.
 
@@ -654,6 +680,22 @@ And tonight, looking at the five Wonders changing the world safely and predictab
 *The gate stayed closed. Humanity stayed in control. And the future stayed bright.*
 
 **CONGRATULATIONS - YOU WIN!**
+
+
+---
+
+# Ending: Game Over Screen
+**id:** after_the_game
+
+This is text that happens AFTER the player has completed the game. (the player might have won or lost)
+
+This text can break the 4th wall, and urge the player to read the original essay or take action.
+
+This page should include a link to https://campaign.controlai.com/take-action?source=ktfhgame and urge the player to take action, tell them they can click the "contact your lawmakers"  button and it will only take 1-3 MINUTES!! using this tool to tell their lawmakers that this issue is important.
+
+After this text will be a button to start the game over if the player chooses.
+
+
 
 ---
 

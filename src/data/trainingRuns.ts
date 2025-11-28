@@ -21,7 +21,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
             { type: "compute", value: 3 }
         ],
         unlockCost: [{ type: "data", value: 100 }],
-        payout: [{ type: "iq", min: 1, max: 1 }],
+        payout: [{ type: "iq", min: 1}],
         duration: { min: BASE_TRAIN_DUR * 3.5, max: BASE_TRAIN_DUR * 3.5 },
         category: "onetime",
         cost: [
@@ -40,12 +40,12 @@ export const TRAINING_RUN_JOBS: JobType[] = [
             { type: "compute", value: 4 }
         ],
         unlockCost: [{ type: "data", value: 400 }],
-        payout: [{ type: "iq", min: 1, max: 1 }],
+        payout: [{ type: "iq", min: 1}],
         duration: { min: BASE_TRAIN_DUR * 4, max: BASE_TRAIN_DUR * 4 },
         category: "onetime",
         cost: [
             { type: "compute", value: 3 },
-            { type: "money", value: 500 },
+            { type: "money", value: 300 },
             { type: "data", value: 200 }
         ]
     },
@@ -60,12 +60,12 @@ export const TRAINING_RUN_JOBS: JobType[] = [
             { type: "compute", value: 10 }
         ],
         unlockCost: [{ type: "data", value: 600 }],
-        payout: [{ type: "iq", min: 1, max: 1 }],
+        payout: [{ type: "iq", min: 1}],
         duration: { min: BASE_TRAIN_DUR * 4.5, max: BASE_TRAIN_DUR * 4.5 },
         category: "onetime",
         cost: [
             { type: "compute", value: 7 },
-            { type: "money", value: 1000 },
+            { type: "money", value: 400 },
             { type: "data", value: 200 }
         ]
     },
@@ -81,12 +81,12 @@ export const TRAINING_RUN_JOBS: JobType[] = [
             { type: "compute", value: 11 }
         ],
         unlockCost: [{ type: "data", value: 800 }],
-        payout: [{ type: "iq", min: 1, max: 1 }],
+        payout: [{ type: "iq", min: 1}],
         duration: { min: BASE_TRAIN_DUR * 5, max: BASE_TRAIN_DUR * 5 },
         category: "onetime",
         cost: [
             { type: "compute", value: 8 },
-            { type: "money", value: 1250 },
+            { type: "money", value: 500 },
             { type: "data", value: 200 }
         ]
     },
@@ -101,12 +101,12 @@ export const TRAINING_RUN_JOBS: JobType[] = [
             { type: "compute", value: 14 }
         ],
         unlockCost: [{ type: "data", value: 1000 }],
-        payout: [{ type: "iq", min: 1, max: 1 }],
+        payout: [{ type: "iq", min: 1}],
         duration: { min: BASE_TRAIN_DUR * 5.5, max: BASE_TRAIN_DUR * 5.5 },
         category: "onetime",
         cost: [
             { type: "compute", value: 10 },
-            { type: "money", value: 1500 },
+            { type: "money", value: 700 },
             { type: "data", value: 200 }
         ]
     },
@@ -121,12 +121,12 @@ export const TRAINING_RUN_JOBS: JobType[] = [
             { type: "compute", value: 14 }
         ],
         unlockCost: [{ type: "data", value: 1200 }],
-        payout: [{ type: "iq", min: 1, max: 1 }],
+        payout: [{ type: "iq", min: 1}],
         duration: { min: BASE_TRAIN_DUR * 6, max: BASE_TRAIN_DUR * 6 },
         category: "onetime",
         cost: [
             { type: "compute", value: 10 },
-            { type: "money", value: 1750 },
+            { type: "money", value: 950 },
             { type: "data", value: 200 }
         ]
     },
@@ -141,12 +141,12 @@ export const TRAINING_RUN_JOBS: JobType[] = [
             { type: "compute", value: 15 }
         ],
         unlockCost: [{ type: "data", value: 1400 }],
-        payout: [{ type: "iq", min: 1, max: 1 }],
+        payout: [{ type: "iq", min: 1}],
         duration: { min: BASE_TRAIN_DUR * 6.5, max: BASE_TRAIN_DUR * 6.5 },
         category: "onetime",
         cost: [
             { type: "compute", value: 10 },
-            { type: "money", value: 2000 },
+            { type: "money", value: 1200 },
             { type: "data", value: 200 }
         ]
     },
@@ -161,12 +161,12 @@ export const TRAINING_RUN_JOBS: JobType[] = [
             { type: "compute", value: 16 }
         ],
         unlockCost: [{ type: "data", value: 1600 }],
-        payout: [{ type: "iq", min: 1, max: 1 }],
+        payout: [{ type: "iq", min: 1}],
         duration: { min: BASE_TRAIN_DUR * 7, max: BASE_TRAIN_DUR * 7 },
         category: "onetime",
         cost: [
-            { type: "compute", value: 10 },
-            { type: "money", value: 2500 },
+            { type: "compute", value: 11 },
+            { type: "money", value: 1400 },
             { type: "data", value: 200 }
         ]
     },
@@ -180,12 +180,12 @@ export const TRAINING_RUN_JOBS: JobType[] = [
             { type: "compute", value: 17 }
         ],
         unlockCost: [{ type: "data", value: 1800 }],
-        payout: [{ type: "iq", min: 1, max: 1 }],
+        payout: [{ type: "iq", min: 1}],
         duration: { min: BASE_TRAIN_DUR * 7.5, max: BASE_TRAIN_DUR * 7.5 },
         category: "onetime",
         cost: [
             { type: "compute", value: 11 },
-            { type: "money", value: 3000 },
+            { type: "money", value: 1500 },
             { type: "data", value: 200 }
         ]
     },
@@ -202,7 +202,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         ],
         unlockCost: [{ type: "data", value: 200 }],
         payout: [
-            { type: "generality", min: 1, max: 1 }
+            { type: "generality", min: 1}
         ],
         duration: { min: BASE_TRAIN_DUR * 1, max: BASE_TRAIN_DUR * 1 },
         category: "onetime",
@@ -224,7 +224,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         ],
         unlockCost: [{ type: "data", value: 400 }],
         payout: [
-            { type: "generality", min: 1, max: 1 }
+            { type: "generality", min: 1}
         ],
         duration: { min: BASE_TRAIN_DUR * 3.5, max: BASE_TRAIN_DUR * 3.5 },
         category: "onetime",
@@ -246,7 +246,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         ],
         unlockCost: [{ type: "data", value: 800 }],
         payout: [
-            { type: "generality", min: 1, max: 1 }
+            { type: "generality", min: 1}
         ],
         duration: { min: BASE_TRAIN_DUR * 4, max: BASE_TRAIN_DUR * 4 },
         category: "onetime",
@@ -268,7 +268,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         ],
         unlockCost: [{ type: "data", value: 800 }],
         payout: [
-            { type: "generality", min: 1, max: 1 }
+            { type: "generality", min: 1}
         ],
         duration: { min: BASE_TRAIN_DUR * 4, max: BASE_TRAIN_DUR * 4 },
         category: "onetime",
@@ -290,7 +290,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         ],
         unlockCost: [{ type: "data", value: 1200 }],
         payout: [
-            { type: "generality", min: 1, max: 1 }
+            { type: "generality", min: 1}
         ],
         duration: { min: BASE_TRAIN_DUR * 4.5, max: BASE_TRAIN_DUR * 4.5 },
         category: "onetime",
@@ -312,7 +312,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         ],
         unlockCost: [{ type: "data", value: 200 }],
         payout: [
-            { type: "autonomy", min: 1, max: 1 }
+            { type: "autonomy", min: 1}
         ],
         duration: { min: BASE_TRAIN_DUR * 3, max: BASE_TRAIN_DUR * 3 },
         category: "onetime",
@@ -332,9 +332,9 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         prereq: [
             { type: "compute", value: 7 }
         ],
-        unlockCost: [{ type: "data", value: 400 }],
+        unlockCost: [{ type: "data", value: 600 }],
         payout: [
-            { type: "autonomy", min: 1, max: 1 }
+            { type: "autonomy", min: 1}
         ],
         duration: { min: BASE_TRAIN_DUR * 3.5, max: BASE_TRAIN_DUR * 3.5 },
         category: "onetime",
@@ -354,9 +354,9 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         prereq: [
             { type: "compute", value: 11 }
         ],
-        unlockCost: [{ type: "data", value: 600 }],
+        unlockCost: [{ type: "data", value: 900 }],
         payout: [
-            { type: "autonomy", min: 1, max: 1 }
+            { type: "autonomy", min: 1}
         ],
         duration: { min: BASE_TRAIN_DUR * 4, max: BASE_TRAIN_DUR * 4 },
         category: "onetime",
@@ -376,9 +376,9 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         prereq: [
             { type: "compute", value: 15 }
         ],
-        unlockCost: [{ type: "data", value: 800 }],
+        unlockCost: [{ type: "data", value: 1500 }],
         payout: [
-            { type: "autonomy", min: 1, max: 1 }
+            { type: "autonomy", min: 1}
         ],
         duration: { min: BASE_TRAIN_DUR * 4.5, max: BASE_TRAIN_DUR * 4.5 },
         category: "onetime",
@@ -386,28 +386,6 @@ export const TRAINING_RUN_JOBS: JobType[] = [
             { type: "compute", value: 11 },
             { type: "money", value: 400 },
             { type: "data", value: 600 }
-        ]
-    },
-
-    {
-        id: "trun_auto5",
-        displayName: "Big Auto Dev",
-        description: "Thats alotta Autonomy",
-        chapter: [4,5,6],
-        displayTrigger: [{ type: "completedJob", value: "trun_auto4"}],
-        prereq: [
-            { type: "compute", value: 5 }
-        ],
-        unlockCost: [{ type: "data", value: 80 }],
-        payout: [
-            { type: "autonomy", min: 3, max: 3 }
-        ],
-        duration: { min: BASE_TRAIN_DUR * 1.5, max: BASE_TRAIN_DUR * 1.5 },
-        category: "onetime",
-        cost: [
-            { type: "compute", value: 11 },
-            { type: "money", value: 40 },
-            { type: "data", value: 60 }
         ]
     },
 

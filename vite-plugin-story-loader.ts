@@ -41,6 +41,15 @@ function parseMarkdown(content: string): StoryContent {
     let blockquoteText: string[] = [];
     let inHtmlComment = false;
 
+    function ensurePage() {
+        if (currentChapter && !currentPage) {
+            currentPage = {
+                paragraphs: [],
+                isChoice: false
+            };
+        }
+    }
+
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
         const trimmed = line.trim();
@@ -81,6 +90,15 @@ function parseMarkdown(content: string): StoryContent {
         // Handle metadata
         if (trimmed.startsWith('**id:**') && currentChapter) {
             currentChapter.id = trimmed.substring(7).trim();
+            continue;
+        }
+
+        // Skip interlude metadata lines that aren't page content
+        if (
+            trimmed.startsWith('**story_trigger:**') ||
+            trimmed.startsWith('**next_wonder:**') ||
+            trimmed.startsWith('**wonder_trigger:**')
+        ) {
             continue;
         }
 
@@ -169,6 +187,7 @@ function parseMarkdown(content: string): StoryContent {
 
         // Handle blockquotes (for the open letter)
         if (trimmed.startsWith('>')) {
+            ensurePage();
             if (!inBlockquote) {
                 inBlockquote = true;
                 blockquoteText = [];
@@ -193,12 +212,17 @@ function parseMarkdown(content: string): StoryContent {
         // Handle content paragraphs
         if (trimmed && currentPage) {
             // Skip lines that are metadata (but allow bold text like **headline**)
-            const isMetadata = trimmed.startsWith('**') &&
-                              (trimmed.includes(':**') || trimmed === '**');
+            const isMetadata =
+                trimmed.startsWith('**') &&
+                (trimmed.includes(':**') || trimmed === '**');
 
             if (!isMetadata) {
                 currentPage.paragraphs.push(trimmed);
             }
+        } else if (trimmed && currentChapter) {
+            // No page header encountered yet in this chapter; create a default page to hold text.
+            ensurePage();
+            currentPage!.paragraphs.push(trimmed);
         }
     }
 

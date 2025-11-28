@@ -16,6 +16,7 @@ import { save } from "util/save";
 import player from "game/player";
 import { NEWS_TEXT } from "../newsText";
 import { resetGame } from "util/reset";
+import storyContent from "@/data/story.md";
 
 const IS_DEV = true;
 //const IS_DEV = false;
@@ -229,6 +230,28 @@ const layer = createLayer(id, function (this: any) {
     const jobCompletions = persistent<number>(0); // Total jobs completed
     const initialJobSeeded = persistent<boolean>(false); // Track initial job spawn
     const unlockAnimationShown = persistent<boolean>(false); // Gate unlock button animation to first reveal
+
+    const isStatPayoutType = (type: string) => ["iq", "autonomy", "generality", "wonder"].includes(type);
+
+    function getPayoutMin(payoutSpec: any): number {
+        return payoutSpec.min ?? payoutSpec.value ?? 0;
+    }
+
+    function getPayoutMaxFromMin(min: number): number {
+        if (min <= 5) return min;
+        return Math.floor(min * 1.3);
+    }
+
+    function rollPayoutAmount(payoutSpec: any, applyQualityBonus: boolean): number {
+        const min = getPayoutMin(payoutSpec);
+        const max = getPayoutMaxFromMin(min);
+        const range = Math.max(0, max - min);
+        let amount = min + Math.floor(Math.random() * (range + 1));
+        if (applyQualityBonus) {
+            amount = Math.floor(amount * (qualityBonus.value / 100));
+        }
+        return amount;
+    }
 
     // Computed: Available GPUs (total - in use)
     const availableGPUs = computed(() => {
@@ -652,13 +675,9 @@ const layer = createLayer(id, function (this: any) {
 
             // Calculate payouts (support multiple payouts)
             const payouts = jobType.payout.map((payoutSpec: any) => {
-                let amount = payoutSpec.min + Math.floor(Math.random() * (payoutSpec.max - payoutSpec.min + 1));
-
                 // Apply quality bonus - but not for stat payouts (IQ, autonomy, generality, wonder)
-                const isStatPayout = ["iq", "autonomy", "generality", "wonder"].includes(payoutSpec.type);
-                if (!isStatPayout) {
-                    amount = Math.floor(amount * (qualityBonus.value / 100));
-                }
+                const isStatPayout = isStatPayoutType(payoutSpec.type);
+                const amount = rollPayoutAmount(payoutSpec, !isStatPayout);
 
                 return { type: payoutSpec.type, amount };
             });
@@ -688,10 +707,10 @@ const layer = createLayer(id, function (this: any) {
     const timeSinceLastJob = persistent<number>(0);
 
     function buildSeededJob(jobType: any, duration: number): DeliveryJob {
-        const payouts = jobType.payout.map((payoutSpec: any) => ({
-            type: payoutSpec.type,
-            amount: payoutSpec.min ?? payoutSpec.max ?? 0
-        }));
+        const payouts = jobType.payout.map((payoutSpec: any) => {
+            const amount = getPayoutMin(payoutSpec);
+            return { type: payoutSpec.type, amount };
+        });
 
         return {
             id: nextJobId.value++,
@@ -736,9 +755,27 @@ const layer = createLayer(id, function (this: any) {
             if (!jobType && latest && Math.random() < 0.20) jobType = latest;
         }
 
-        const preferWebScrape = currentChapter.value >= 2 && currentChapter.value <= 3 && unlockedJobTypes.value.includes("webscrape");
-        if (!jobType && preferWebScrape && Math.random() < 0.15 && unlockedJobs.some(j => j.id === "webscrape")) {
-            jobType = unlockedJobs.find(j => j.id === "webscrape")!;
+        const preferWebScrape = currentChapter.value >= 2 && unlockedJobTypes.value.includes("webscrape");
+        if (!jobType && preferWebScrape && unlockedJobs.some(j => j.id === "webscrape")) {
+            if (Math.random() < 0.10) {
+                jobType = unlockedJobs.find(j => j.id === "webscrape")!;
+            }
+        }
+
+        if (!jobType) {
+            // Final bias: favor highest money payout
+            if (Math.random() < 0.15) {
+                const moneyCandidates = unlockedJobs
+                    .map(j => {
+                        const moneyPayout = j.payout.find((p: any) => p.type === "money");
+                        return moneyPayout ? { job: j, amount: getPayoutMin(moneyPayout) } : null;
+                    })
+                    .filter(Boolean) as { job: any; amount: number }[];
+                if (moneyCandidates.length) {
+                    const top = moneyCandidates.reduce((best, curr) => (curr.amount > best.amount ? curr : best), moneyCandidates[0]);
+                    jobType = top.job;
+                }
+            }
         }
 
         if (!jobType) {
@@ -755,13 +792,9 @@ const layer = createLayer(id, function (this: any) {
 
         // Calculate payouts from job type config (support multiple payouts)
         const payouts = jobType.payout.map((payoutSpec: any) => {
-            let amount = payoutSpec.min + Math.floor(Math.random() * (payoutSpec.max - payoutSpec.min + 1));
-
             // Apply quality bonus (multiplicative) - but not for stat payouts (IQ, autonomy, generality, wonder)
-            const isStatPayout = ["iq", "autonomy", "generality", "wonder"].includes(payoutSpec.type);
-            if (!isStatPayout) {
-                amount = Math.floor(amount * (qualityBonus.value / 100));
-            }
+            const isStatPayout = isStatPayoutType(payoutSpec.type);
+            const amount = rollPayoutAmount(payoutSpec, !isStatPayout);
 
             return { type: payoutSpec.type, amount };
         });
@@ -875,9 +908,7 @@ const layer = createLayer(id, function (this: any) {
                                         {statPayouts.map((statPayout: any, idx: number) => (
                                             <span key={idx} style="font-size:18px;">
                                                 {"+"}
-                                                {statPayout.min === statPayout.max
-                                                    ? statPayout.min
-                                                    : `${statPayout.min}-${statPayout.max}`}{"\u00A0"}
+                                                {statPayout.min}{"\u00A0"}
                                                 {statPayout.type === "iq" && "IQ "}
                                                 {statPayout.type === "wonder" && "Wonder "}
                                                 <span style="font-size:28px;">
@@ -1291,34 +1322,116 @@ const layer = createLayer(id, function (this: any) {
     // Display
     //const display: JSXFunction = () => {
     const display = () => {
+        const afterGameText =
+            (storyContent as any)?.after_the_game?.pages?.flatMap((p: any) => p.paragraphs).filter(Boolean) ??
+            [];
+
         // When game is over, only show dev tools
         if (player.gameOver) {
             return (
-                <div style="padding: 0 5px;">
-                    <h2 style="text-align: center; color: #d32f2f; margin: 20px 0;">GAME OVER</h2>
-                    <p style="text-align: center; margin: 20px 0;">Put the game over text here</p>
-
-                    <div style="text-align: center; margin: 20px 0;">
-                        <button
-                            onClick={() => {
-                                if (confirm("Are you sure you want to reset the game? This will delete ALL progress and cannot be undone!")) {
-                                    resetGame();
-                                }
-                            }}
+                <div
+                    style={{
+                        padding: "20px",
+                        maxWidth: "720px",
+                        margin: "0 auto",
+                        color: "var(--foreground)",
+                        background: "var(--background)"
+                    }}
+                >
+                    <div
+                        style={{
+                            background: "#1e1e24",
+                            borderRadius: "12px",
+                            padding: "24px",
+                            boxShadow: "0 6px 20px rgba(0,0,0,0.25)"
+                        }}
+                    >
+                        <h1
                             style={{
-                                background: "#4CAF50",
-                                border: "none",
-                                borderRadius: "4px",
-                                cursor: "pointer",
-                                fontSize: "18px",
-                                color: "white",
-                                padding: "10px 20px",
-                                fontWeight: "bold"
+                                margin: "0 0 16px",
+                                textAlign: "center",
+                                color: "#e53935",
+                                letterSpacing: "1px"
                             }}
                         >
-                            PLAY AGAIN
+                            GAME OVER
+                        </h1>
+                        <div
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "12px",
+                                fontSize: "16px",
+                                lineHeight: 1.6,
+                                color: "#e0e0e0",
+                                textAlign: "left"
+                            }}
+                        >
+                            {afterGameText.length > 0 ? (
+                                afterGameText.map((para: string, i: number) => (
+                                    <p key={i} style={{ margin: "0" }}>
+                                        {para}
+                                    </p>
+                                ))
+                            ) : (
+                                <p style={{ margin: 0 }}>Put the game over text here</p>
+                            )}
+                        </div>
+
+                        <div
+                            style={{
+                                marginTop: "24px",
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "12px",
+                                alignItems: "center"
+                            }}
+                        >
+                            <button
+                                onClick={openAchievementsTab}
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "8px",
+                                    background: "#4CAF50",
+                                    color: "#EEEEEE",
+                                    border: "none",
+                                    borderRadius: "6px",
+                                    cursor: "pointer",
+                                    fontSize: "16px",
+                                    padding: "8px 14px"
+                                }}
+                            >
+                                <img
+                                    src="/ach/ach_gen.png"
+                                    alt="Achievements"
+                                    style="width: 28px; height: 28px; opacity:1"
+                                />
+                                Achievements
+                            </button>
+
+                            <button
+                                onClick={() => {
+                                    if (confirm("Are you sure you want to reset the game? This will delete ALL progress and cannot be undone!")) {
+                                        resetGame();
+                                    }
+                                }}
+                                style={{
+                                    background: "#4CAF50",
+                                    border: "none",
+                                    borderRadius: "6px",
+                                    cursor: "pointer",
+                                    fontSize: "18px",
+                                    color: "white",
+                                    padding: "12px 20px",
+                                    fontWeight: "bold",
+                                    width: "180px"
+                                }}
+                            >
+                                PLAY AGAIN
                             </button>
                         </div>
+                    </div>
 
                     <ResetModal ref={resetModal} is-dev={IS_DEV} />
                 </div>

@@ -13,6 +13,7 @@ import ts from 'typescript';
 // --- CONFIG ---
 // Set to a path string (e.g., "med" or "clim") to show only that path.
 // Set to false to show every job.
+//const filterPath = 'clim';
 //const filterPath = 'med';
 const filterPath = false;
 
@@ -24,7 +25,8 @@ const sortBy = ['path', 'order', 'id'];
 const showTree = true;
 
 // Training run filter: "ignore" to drop them, "only" to keep only them, "all" for everything.
-const trainingRuns = 'ignore'; // one of: 'ignore' | 'only' | 'all'
+//const trainingRuns = 'ignore'; // one of: 'ignore' | 'only' | 'all'
+const trainingRuns = 'all'; // one of: 'ignore' | 'only' | 'all'
 
 // EDIT/REAPPLY WORKFLOW (for future assistants):
 // 1) Run: node scripts/job-table.js > jobs-table.txt
@@ -151,12 +153,22 @@ const cols = [
   { key: 'pay$', title: 'pay_$', fmt: (j) => getPayout(j, 'money') },
   { key: 'cost$', title: 'run_$', fmt: (j) => getCost(j.cost, 'money') },
   { key: 'dcost', title: 'run_d', fmt: (j) => getCost(j.cost, 'data') },
-
-
+  { key: 'mI', title: 'mI', fmt: (j) => getStatRequirement(j, ['iq']), width: 2 },
+  { key: 'mG', title: 'mG', fmt: (j) => getStatRequirement(j, ['generality']), width: 2 },
+  { key: 'mA', title: 'mA', fmt: (j) => getStatRequirement(j, ['auto', 'autonomy']), width: 2 },
+  { key: '+I', title: '+I', fmt: (j) => getStatPlusOne(j, ['iq']), width: 2 },
+  { key: '+G', title: '+G', fmt: (j) => getStatPlusOne(j, ['generality']), width: 2 },
+  { key: '+A', title: '+A', fmt: (j) => getStatPlusOne(j, ['auto', 'autonomy']), width: 2 },
   {
     key: 'W',
     title: 'W',
     fmt: (j) => (j.is_wonder ? 'Y' : ''),
+    width: 1,
+  },
+  {
+    key: 'O',
+    title: 'O',
+    fmt: (j) => (j.category === 'onetime' ? 'X' : ''),
     width: 1,
   },
 ];
@@ -211,6 +223,22 @@ function getPayout(job, type) {
   if (!Array.isArray(job.payout)) return '';
   const item = job.payout.find((p) => p.type === type);
   return item?.min ?? '';
+}
+
+function getStatRequirement(job, types) {
+  const prereqs = combinePrereqs(job);
+  const item = prereqs.find((p) => types.includes(p.type));
+  if (!item) return '';
+  const val = item.value ?? item.min;
+  return val ?? '';
+}
+
+function getStatPlusOne(job, types) {
+  if (!Array.isArray(job.payout)) return '';
+  const item = job.payout.find((p) => types.includes(p.type));
+  if (!item) return '';
+  const val = item.min ?? item.value;
+  return val === 1 ? '+1' : '';
 }
 
 function printTree(jobsForPath) {
@@ -327,8 +355,12 @@ function printDocs() {
     '  pay$   -> payout money (min)',
     '  payd   -> payout data (min)',
     '  dur    -> duration.min (normally set max to floor(min * 1.25))',
+    '  mI/mG/mA -> prereq min iq/generality/autonomy (blank if none)',
+    '  +I/+G/+A -> +1 iq/generality/autonomy payout flags',
     '  W      -> is_wonder flag',
-      '  Note: max values should default to floor(min * 1.25) for dur, cost$, dcost, pay$, payd when syncing back.',
+    '  O      -> category: onetime (X if onetime)',
+    '  Note: max values should default to floor(min * 1.25) for dur, cost$, dcost when syncing back.',
+    '  Payout max is derived in-game: if min<=5, max=min; otherwise max=floor(min*1.3).',
     '',
     'Workflow reminder for future assistants:',
     '  - ALWAYS confirm each change with the user before modifying jobTypes.ts.',
