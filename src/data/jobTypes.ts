@@ -73,7 +73,13 @@ export const JOB_TYPES: JobType[] = [
             { type: "money", min: 20}
         ],
         duration: { min: 2, max: 4 },
+        cost: [
+            { type: "compute", value: 1 }
+        ],
         category: "tool",
+        cost: [
+            { type: "compute", value: 1 }
+        ]
     },
     {
         id: "spellchecker",
@@ -89,7 +95,13 @@ export const JOB_TYPES: JobType[] = [
             { type: "money", min: 25}
         ],
         duration: { min: 3, max: 6 },
+        cost: [
+            { type: "compute", value: 1 }
+        ],
         category: "tool",
+        cost: [
+            { type: "compute", value: 1 }
+        ]
     },
 
     {
@@ -104,7 +116,13 @@ export const JOB_TYPES: JobType[] = [
             { type: "money", min: 20}
         ],
         duration: { min: 5, max: 5 },
+        cost: [
+            { type: "compute", value: 1 }
+        ],
         category: "tool",
+        cost: [
+            { type: "compute", value: 1 }
+        ]
     },
 
     {
@@ -122,7 +140,13 @@ export const JOB_TYPES: JobType[] = [
             { type: "money", min: 40}
         ],
         duration: { min: 6, max: 8 },
+        cost: [
+            { type: "compute", value: 2 }
+        ],
         category: "tool",
+        cost: [
+            { type: "compute", value: 2 }
+        ]
     },
     {
         id: "spamfilter",
@@ -138,7 +162,13 @@ export const JOB_TYPES: JobType[] = [
             { type: "money", min: 40}
         ],
         duration: { min: 5, max: 8 },
+        cost: [
+            { type: "compute", value: 2 }
+        ],
         category: "tool",
+        cost: [
+            { type: "compute", value: 2 }
+        ]
     },
 
     {
@@ -155,6 +185,9 @@ export const JOB_TYPES: JobType[] = [
             { type: "money", min: 50}
         ],
         duration: { min: 6, max: 8 },
+        cost: [
+            { type: "compute", value: 3 }
+        ],
         category: "tool",
     },
 
@@ -172,6 +205,10 @@ export const JOB_TYPES: JobType[] = [
             { type: "data", min: 80}
         ],
         duration: { min: 9, max: 12 },
+        cost: [
+            { type: "compute", value: 1 },
+            { type: "money", value: 20 }
+        ],
         category: "gameplay",
     },
 
@@ -188,6 +225,9 @@ export const JOB_TYPES: JobType[] = [
 	    ,             { type: "data", min: 5}
         ],
         duration: { min: 6, max: 8 },
+        cost: [
+            { type: "compute", value: 3 }
+        ],
         category: "tool",
     },
 
@@ -206,21 +246,33 @@ export const JOB_TYPES: JobType[] = [
 	    ,   { type: "data", min: 15}
 	    ],
         duration: { min: 7, max: 9 },
+        cost: [{ type: "compute", value: 3 }],
         category: "tool",
-        displayTrigger: [{ type: "iq", value: 1 }],
-        prereq: [{ type: "iq", value: 2 }],
-        unlockCost: [{ type: "money", value: 2000 }],
-        payout: [{ type: "money", min: 650}],
-        duration: { min: 13, max: 17 },
+        cost: [{ type: "compute", value: 3 }]
+    },
+
+
+
+
+    {
+        id: "synthdata",
+        displayName: "Synthetic Data Generator",
+        description: "More Data",
+        chapter: [2,3,4,5,6,7],
 	displayTrigger: [ { type: "job", value: "goengine", display_prereq: false } ],
         prereq: [ { type: "iq", value: 4 } ],
         unlockCost: [            { type: "money", value: 1000 }],
         payout: [
-            { type: "data", min: 500}
+            { type: "data", min: 500, max: 550 }
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 8, max: 11 },
         category: "gameplay",
+        cost: [
+            { type: "compute", value: 4 },
+            { type: "money", value: 500 }
+        ]
     },
+
 
 //// Wonders (end game win)
 
@@ -241,6 +293,11 @@ export const JOB_TYPES: JobType[] = [
 	    , { type: "iq", min: 13}
         ],
         duration: { min: 20, max: 20 },
+        cost: [
+            { type: "compute", value: 12 },
+            { type: "money", value: 100 },
+            { type: "data", value: 10 }
+        ],
         category: "onetime",
 	is_wonder: true,
     },
@@ -260,6 +317,11 @@ export const JOB_TYPES: JobType[] = [
 	     { type: "autonomy", min: 13}
             ],
         duration: { min: 3, max: 3 },
+        cost: [
+            { type: "compute", value: 3 },
+            { type: "money", value: 100 },
+            { type: "data", value: 10 }
+        ],
         category: "onetime",
 	is_wonder: true,
     },
@@ -280,6 +342,11 @@ export const JOB_TYPES: JobType[] = [
 	    , { type: "generality", min: 4}
             ],
         duration: { min: 3, max: 3 },
+        cost: [
+            { type: "compute", value: 3 },
+            { type: "money", value: 100 },
+            { type: "data", value: 10 }
+        ],
         category: "onetime",
 	is_wonder: true,
     },
@@ -321,6 +388,9 @@ Scientific Data Processing
             { type: "data", min: 80}
         ],
         duration: { min: 3, max: 4 },
+        cost: [
+            { type: "compute", value: 3 }
+        ],
         category: "tool",
         path: "sci",
     }
@@ -337,6 +407,9 @@ Scientific Data Processing
 	    { type: "data", min: 20}
         ],
         duration: { min: 2, max: 8 },
+        cost: [
+            { type: "compute", value: 4 }
+        ],
         category: "tool",
         path: "sci",
     }
@@ -354,6 +427,9 @@ Scientific Data Processing
 	    { type: "data", min: 20}
 	    ],
         duration: { min: 3, max: 9 },
+        cost: [
+            { type: "compute", value: 4 }
+        ],
         category: "tool",
         path: "sci",
     }
@@ -371,6 +447,10 @@ Scientific Data Processing
             { type: "data", min: 100}
         ],
         duration: { min: 4, max: 8 },
+        cost: [
+            { type: "compute", value: 5 },
+            { type: "data", value: 120 }
+        ],
         category: "tool",
         path: "sci",
     }
@@ -389,6 +469,10 @@ Scientific Data Processing
             { type: "money", min: 312}
         ],
         duration: { min: 5, max: 9 },
+        cost: [
+            { type: "compute", value: 5 },
+            { type: "data", value: 140 }
+        ],
         category: "tool",
         path: "sci",
     }
@@ -407,6 +491,10 @@ Scientific Data Processing
             { type: "money", min: 372}
         ],
         duration: { min: 15, max: 18 },
+        cost: [
+            { type: "compute", value: 6 },
+            { type: "data", value: 160 }
+        ],
         category: "tool",
         path: "sci",
     }
@@ -424,6 +512,10 @@ Scientific Data Processing
             { type: "wonder", min: 1}
         ],
         duration: { min: 8, max: 11 },
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "data", value: 700 }
+        ],
         category: "onetime",
         is_wonder: true,
         path: "sci",
@@ -444,6 +536,10 @@ Scientific Data Processing
             { type: "money", min: 312}
         ],
         duration: { min: 14, max: 17 },
+        cost: [
+            { type: "compute", value: 5 },
+            { type: "data", value: 150 }
+        ],
         category: "tool",
         path: "sci",
     }
@@ -463,6 +559,10 @@ Scientific Data Processing
 	    , {type: "autonomy", min:1}
         ],
         duration: { min: 8, max: 11 },
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "data", value: 800 }
+        ],
         category: "onetime",
         is_wonder: true,
         path: "sci",
@@ -481,6 +581,10 @@ Scientific Data Processing
             { type: "money", min: 442}
         ],
         duration: { min: 6, max: 9 },
+        cost: [
+            { type: "compute", value: 5 },
+            { type: "data", value: 140 }
+        ],
         category: "tool",
         path: "sci",
     }
@@ -499,6 +603,10 @@ Scientific Data Processing
             { type: "money", min: 250}
         ],
         duration: { min: 10, max: 14 },
+        cost: [
+            { type: "compute", value: 5 },
+            { type: "data", value: 200 }
+        ],
         category: "tool",
         path: "sci",
     }
@@ -518,6 +626,10 @@ Scientific Data Processing
             { type: "wonder", min: 1}
         ],
         duration: { min: 10, max: 14 },
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "data", value: 900 }
+        ],
         category: "onetime",
         is_wonder: true,
         path: "sci",
@@ -606,6 +718,9 @@ Digital Learning Platforms
 	    ,             { type: "data", min: 10}
         ],
         duration: { min: 8, max: 11 },
+        cost: [
+            { type: "compute", value: 4 }
+        ],
         category: "tool",
         path: "dem",
     }
@@ -623,6 +738,10 @@ Digital Learning Platforms
             { type: "generality", min: 1}
         ],
         duration: { min: 20, max: 25 },
+        cost: [
+            { type: "compute", value: 4 },
+            { type: "data", value: 150 }
+        ],
         category: "onetime",
         path: "dem",
     }
@@ -641,6 +760,10 @@ Digital Learning Platforms
             { type: "money", min: 216}
         ],
         duration: { min: 8, max: 11 },
+        cost: [
+            { type: "compute", value: 5 },
+            { type: "data", value: 140 }
+        ],
         category: "tool",
         path: "dem",
     }
@@ -656,6 +779,9 @@ Digital Learning Platforms
             { type: "money", min: 168}
         ],
         duration: { min: 8, max: 11 },
+        cost: [
+            { type: "compute", value: 5 }
+        ],
         category: "tool",
         path: "dem",
     }
@@ -671,6 +797,10 @@ Digital Learning Platforms
             { type: "data", min: 90}
         ],
         duration: { min: 9, max: 12 },
+        cost: [
+            { type: "compute", value: 8 },
+            { type: "money", value: 1200 }
+        ],
         category: "onetime",
         path: "dem",
     }
@@ -689,6 +819,10 @@ Digital Learning Platforms
             { type: "money", min: 200}
         ],
         duration: { min: 9, max: 12 },
+        cost: [
+            { type: "compute", value: 6 },
+            { type: "data", value: 150 }
+        ],
         category: "tool",
         path: "dem",
     }
@@ -707,6 +841,10 @@ Digital Learning Platforms
 	    { type: "generality", min: 1}
         ],
         duration: { min: 5, max: 7 },
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "data", value: 500 }
+        ],
         category: "onetime",
         is_wonder: true,
         path: "dem",
@@ -726,6 +864,10 @@ Digital Learning Platforms
             { type: "generality", min: 1}
         ],
         duration: { min: 7, max: 10 },
+        cost: [
+            { type: "compute", value: 5 },
+            { type: "data", value: 150 }
+        ],
         category: "onetime",
         path: "dem",
     }
@@ -744,6 +886,10 @@ Digital Learning Platforms
             { type: "money", min: 286}
         ],
         duration: { min: 9, max: 12 },
+        cost: [
+            { type: "compute", value: 5 },
+            { type: "data", value: 160 }
+        ],
         category: "tool",
         path: "dem",
     }
@@ -762,6 +908,10 @@ Digital Learning Platforms
             { type: "money", min: 276}
         ],
         duration: { min: 9, max: 12 },
+        cost: [
+            { type: "compute", value: 6 },
+            { type: "data", value: 180 }
+        ],
         category: "tool",
         path: "dem",
     }
@@ -780,6 +930,10 @@ Digital Learning Platforms
 	    { type: "generality", min: 2}
         ],
         duration: { min: 6, max: 11 },
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "data", value: 600 }
+        ],
         category: "onetime",
         is_wonder: true,
         path: "dem",
@@ -795,6 +949,9 @@ Digital Learning Platforms
             { type: "money", min: 304}
         ],
         duration: { min: 9, max: 12 },
+        cost: [
+            { type: "compute", value: 5 }
+        ],
         category: "tool",
         path: "dem",
     }
@@ -812,6 +969,10 @@ Digital Learning Platforms
             { type: "money", min: 422}
         ],
         duration: { min: 9, max: 12 },
+        cost: [
+            { type: "compute", value: 5 },
+            { type: "money", value: 400 }
+        ],
         category: "tool",
         path: "dem",
     }
@@ -830,6 +991,10 @@ Digital Learning Platforms
 
         ],
         duration: { min: 7, max: 11 },
+        cost: [
+            { type: "compute", value: 6 },
+            { type: "data", value: 220 }
+        ],
         category: "tool",
         path: "dem",
     }
@@ -847,6 +1012,10 @@ Digital Learning Platforms
             { type: "wonder", min: 1}
         ],
         duration: { min: 4, max: 6 },
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "data", value: 650 }
+        ],
         category: "onetime",
         is_wonder: true,
         bad_end: true,
@@ -866,6 +1035,10 @@ Digital Learning Platforms
             { type: "money", min: 252}
         ],
         duration: { min: 8, max: 11 },
+        cost: [
+            { type: "compute", value: 5 },
+            { type: "data", value: 180 }
+        ],
         category: "tool",
         path: "dem",
     }
@@ -884,6 +1057,11 @@ Digital Learning Platforms
             { type: "autonomy", min: 1}
         ],
         duration: { min: 44, max: 55 },
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "money", value: 600 },
+            { type: "data", value: 500 }
+        ],
         category: "tool",
         path: "dem",
     }
@@ -901,6 +1079,10 @@ Digital Learning Platforms
             { type: "wonder", min: 1}
         ],
         duration: { min: 4, max: 6 },
+        cost: [
+            { type: "compute", value: 8 },
+            { type: "data", value: 900 }
+        ],
         category: "onetime",
         is_wonder: true,
         bad_end: true,
@@ -917,6 +1099,9 @@ Digital Learning Platforms
             { type: "money", min: 96}
         ],
         duration: { min: 7, max: 10 },
+        cost: [
+            { type: "compute", value: 3 }
+        ],
         category: "tool",
         path: "edu",
     }
@@ -931,6 +1116,9 @@ Digital Learning Platforms
             { type: "money", min: 132}
         ],
         duration: { min: 8, max: 11 },
+        cost: [
+            { type: "compute", value: 4 }
+        ],
         category: "tool",
         path: "edu",
     }
@@ -947,6 +1135,9 @@ Digital Learning Platforms
             { type: "money", min: 192}
         ],
         duration: { min: 8, max: 11 },
+        cost: [
+            { type: "compute", value: 5 }
+        ],
         category: "tool",
         path: "edu",
     }
@@ -964,6 +1155,9 @@ Digital Learning Platforms
             { type: "money", min: 312}
         ],
         duration: { min: 8, max: 11 },
+        cost: [
+            { type: "compute", value: 5 }
+        ],
         category: "tool",
         path: "edu",
     }
@@ -978,6 +1172,9 @@ Digital Learning Platforms
             { type: "money", min: 204}
         ],
         duration: { min: 8, max: 11 },
+        cost: [
+            { type: "compute", value: 5 }
+        ],
         category: "tool",
         path: "edu",
     }
@@ -995,6 +1192,9 @@ Digital Learning Platforms
             { type: "money", min: 276}
         ],
         duration: { min: 8, max: 11 },
+        cost: [
+            { type: "compute", value: 5 }
+        ],
         category: "tool",
         path: "edu",
     }
@@ -1012,6 +1212,9 @@ Digital Learning Platforms
             { type: "money", min: 336}
         ],
         duration: { min: 9, max: 12 },
+        cost: [
+            { type: "compute", value: 6 }
+        ],
         category: "tool",
         path: "edu",
     }
@@ -1029,6 +1232,10 @@ Digital Learning Platforms
             { type: "wonder", min: 1}
         ],
         duration: { min: 6, max: 8 },
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "data", value: 600 }
+        ],
         category: "onetime",
         is_wonder: true,
         path: "edu",
@@ -1046,6 +1253,9 @@ Digital Learning Platforms
             { type: "money", min: 216}
         ],
         duration: { min: 9, max: 12 },
+        cost: [
+            { type: "compute", value: 5 }
+        ],
         category: "tool",
         path: "edu",
     }
@@ -1063,6 +1273,9 @@ Digital Learning Platforms
             { type: "money", min: 312}
         ],
         duration: { min: 9, max: 12 },
+        cost: [
+            { type: "compute", value: 5 }
+        ],
         category: "tool",
         path: "edu",
     }
@@ -1080,6 +1293,10 @@ Digital Learning Platforms
             { type: "wonder", min: 1}
         ],
         duration: { min: 6, max: 8 },
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "data", value: 700 }
+        ],
         category: "onetime",
         is_wonder: true,
         path: "edu",
@@ -1115,6 +1332,9 @@ Climate Data Interpreter
             { type: "money", min: 84}
         ],
         duration: { min: 7, max: 10 },
+        cost: [
+            { type: "compute", value: 2 }
+        ],
         category: "tool",
 	path: "clim",
     }
@@ -1129,6 +1349,9 @@ Climate Data Interpreter
             { type: "money", min: 120}
         ],
         duration: { min: 8, max: 11 },
+        cost: [
+            { type: "compute", value: 5 }
+        ],
         category: "tool",
         path: "clim",
     }
@@ -1147,6 +1370,10 @@ Climate Data Interpreter
             { type: "data", min: 80}
         ],
         duration: { min: 8, max: 11 },
+        cost: [
+            { type: "compute", value: 5 },
+            { type: "data", value: 120 }
+        ],
         category: "tool",
         path: "clim",
     }
@@ -1163,6 +1390,11 @@ Climate Data Interpreter
             { type: "wonder", min: 1}
         ],
         duration: { min: 6, max: 8 },
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "money", value: 2800 },
+            { type: "data", value: 500 }
+        ],
         category: "onetime",
         is_wonder: true,
         path: "clim",
@@ -1179,6 +1411,10 @@ Climate Data Interpreter
             { type: "data", min: 70}
         ],
         duration: { min: 9, max: 12 },
+        cost: [
+            { type: "compute", value: 5 },
+            { type: "data", value: 120 }
+        ],
         category: "tool",
         path: "clim",
     }
@@ -1197,6 +1433,10 @@ Climate Data Interpreter
             { type: "data", min: 150}
         ],
         duration: { min: 9, max: 12 },
+        cost: [
+            { type: "compute", value: 6 },
+            { type: "data", value: 200 }
+        ],
         category: "tool",
         path: "clim",
     }
@@ -1214,6 +1454,11 @@ Climate Data Interpreter
             { type: "wonder", min: 1}
         ],
         duration: { min: 6, max: 8 },
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "money", value: 3200 },
+            { type: "data", value: 600 }
+        ],
         category: "onetime",
         is_wonder: true,
         path: "clim",
@@ -1229,6 +1474,9 @@ Climate Data Interpreter
             { type: "money", min: 132}
         ],
         duration: { min: 8, max: 11 },
+        cost: [
+            { type: "compute", value: 5 }
+        ],
         category: "tool",
         path: "clim",
     }
@@ -1244,6 +1492,10 @@ Climate Data Interpreter
             { type: "data", min: 60}
         ],
         duration: { min: 8, max: 11 },
+        cost: [
+            { type: "compute", value: 5 },
+            { type: "data", value: 100 }
+        ],
         category: "tool",
         path: "clim",
     }
@@ -1262,6 +1514,10 @@ Climate Data Interpreter
             { type: "data", min: 90}
         ],
         duration: { min: 9, max: 12 },
+        cost: [
+            { type: "compute", value: 6 },
+            { type: "data", value: 150 }
+        ],
         category: "tool",
         path: "clim",
     }
@@ -1279,6 +1535,11 @@ Climate Data Interpreter
             { type: "wonder", min: 1}
         ],
         duration: { min: 6, max: 8 },
+        cost: [
+            { type: "compute", value: 8 },
+            { type: "money", value: 3600 },
+            { type: "data", value: 750 }
+        ],
         category: "onetime",
         is_wonder: true,
         path: "clim",
@@ -1297,6 +1558,9 @@ Climate Data Interpreter
             { type: "money", min: 120}
         ],
         duration: { min: 7, max: 9 },
+        cost: [
+            { type: "compute", value: 4 }
+        ],
         category: "tool",
 	path: "med",
     },
@@ -1312,6 +1576,9 @@ Climate Data Interpreter
             { type: "money", min: 160}
         ],
         duration: { min: 7, max: 10 },
+        cost: [
+            { type: "compute", value: 5 }
+        ],
         category: "tool",
         path: "med",
     },
@@ -1330,6 +1597,10 @@ Climate Data Interpreter
             { type: "money", min: 220}
         ],
         duration: { min: 9, max: 12 },
+        cost: [
+            { type: "compute", value: 5 },
+            { type: "data", value: 100 }
+        ],
         category: "tool",
         path: "med",
     },
@@ -1346,6 +1617,11 @@ Climate Data Interpreter
             { type: "wonder", min: 1}
         ],
         duration: { min: 8, max: 11 },
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "money", value: 3000 },
+            { type: "data", value: 500 }
+        ],
         category: "onetime",
         is_wonder: true,
         path: "med",
@@ -1365,6 +1641,10 @@ Climate Data Interpreter
             { type: "data", min: 120}
         ],
         duration: { min: 9, max: 12 },
+        cost: [
+            { type: "compute", value: 5 },
+            { type: "data", value: 150 }
+        ],
         category: "tool",
         path: "med",
     },
@@ -1381,6 +1661,10 @@ Climate Data Interpreter
             { type: "generality", min:1}
         ],
         duration: { min: 9, max: 12 },
+        cost: [
+            { type: "compute", value: 6 },
+            { type: "data", value: 200 }
+        ],
         category: "onetime",
         path: "med",
     },
@@ -1401,6 +1685,10 @@ Climate Data Interpreter
             { type: "data", min: 200}
         ],
         duration: { min: 9, max: 12 },
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "data", value: 300 }
+        ],
         category: "tool",
         path: "med",
     },
@@ -1420,6 +1708,11 @@ Climate Data Interpreter
             { type: "autonomy", min: 1}
         ],
         duration: { min: 10, max: 12 },
+        cost: [
+            { type: "compute", value: 8 },
+            { type: "money", value: 4000 },
+            { type: "data", value: 800 }
+        ],
         category: "onetime",
         is_wonder: true,
         path: "med",
@@ -1437,6 +1730,9 @@ Climate Data Interpreter
             { type: "data", min: 40}
         ],
         duration: { min: 8, max: 11 },
+        cost: [
+            { type: "compute", value: 5 }
+        ],
         category: "tool",
         path: "med",
     },
@@ -1450,6 +1746,10 @@ Climate Data Interpreter
         unlockCost: [{ type: "money", value: 1500 }],
         payout: [{ type: "money", min: 260}],
         duration: { min: 8, max: 11 },
+        cost: [
+            { type: "compute", value: 5 },
+            { type: "data", value: 100 }
+        ],
         category: "tool",
         path: "med",
     },
@@ -1468,6 +1768,10 @@ Climate Data Interpreter
             { type: "money", min: 300}
         ],
         duration: { min: 8, max: 11 },
+        cost: [
+            { type: "compute", value: 6 },
+            { type: "data", value: 150 }
+        ],
         category: "tool",
         path: "med",
     },
@@ -1491,6 +1795,11 @@ Climate Data Interpreter
 	    ,{ type: "generality", min: 1}	
         ],
         duration: { min: 10, max: 15 },
+        cost: [
+            { type: "compute", value: 8 },
+            { type: "money", value: 3500 },
+            { type: "data", value: 700 }
+        ],
         category: "onetime",
         is_wonder: true,
         path: "med",
@@ -1511,6 +1820,10 @@ Climate Data Interpreter
 
         ],
         duration: { min: 7, max: 10 },
+        cost: [
+            { type: "compute", value: 7 },
+            { type: "data", value: 200 }
+        ],
         category: "tool",
         path: "med",
     },
@@ -1529,6 +1842,11 @@ Climate Data Interpreter
             { type: "wonder", min: 1}
         ],
         duration: { min: 10, max: 14 },
+        cost: [
+            { type: "compute", value: 9 },
+            { type: "money", value: 4500 },
+            { type: "data", value: 900 }
+        ],
         category: "onetime",
         is_wonder: true,
         path: "med",
