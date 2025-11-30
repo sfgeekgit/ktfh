@@ -247,6 +247,12 @@ const layer = createLayer(id, function (this: any) {
         const max = getPayoutMaxFromMin(min);
         const range = Math.max(0, max - min);
         let amount = min + Math.floor(Math.random() * (range + 1));
+        if (min > 5 && amount >= 100 && Math.random() < 0.2) {
+            amount *= 2; // rare big-number bonus
+                if (min > 5 && amount >= 100 && Math.random() < 0.2) { // Might even happen again!
+                    amount *= 2; // rarer double big-number bonus
+		 }
+        }
         if (applyQualityBonus) {
             amount = Math.floor(amount * (qualityBonus.value / 100));
         }

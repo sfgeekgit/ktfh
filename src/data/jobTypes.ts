@@ -428,7 +428,8 @@ Scientific Data Processing
 		 , { type: "money", value: 680 , display_prereq: false}],
         unlockCost: [{ type: "money", value: 700 }],
         payout: [
-            { type: "data", min: 100}
+            { type: "money", min: 200},
+            { type: "data", min: 70}
         ],
         duration: { min: 4, max: 6 },
         cost: [
@@ -450,7 +451,7 @@ Scientific Data Processing
             { type: "data", value: 120 }
         ],
         payout: [
-            { type: "money", min: 312}
+            { type: "money", min: 352}
         ],
         duration: { min: 5, max: 7 },
         cost: [
@@ -473,7 +474,7 @@ Scientific Data Processing
             { type: "data", value: 400 }
         ],
         payout: [
-            { type: "money", min: 372}
+            { type: "money", min: 412}
         ],
         duration: { min: 5, max: 8 },
         cost: [
@@ -509,7 +510,7 @@ Scientific Data Processing
 
     ,{
         id: "sci8",
-        displayName: "Materials Modeling Work",
+        displayName: "Materials Modeling",
         chapter: [2,3,4,5],
         prereq: [{ type: "job", value: "sci7" }
 		 , { type: "money", value: 2200 , display_prereq: false}],
@@ -519,7 +520,7 @@ Scientific Data Processing
             { type: "data", value: 200 }
         ],
         payout: [
-            { type: "money", min: 312}
+            { type: "money", min: 412}
         ],
         duration: { min: 5, max: 8 },
         cost: [
@@ -534,7 +535,7 @@ Scientific Data Processing
         id: "sci9",
         displayName: "Materials Discovery",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "sci8" }],
+        prereq: [{ type: "job", value: "sci8", display_prereq: false }],
         unlockCost: [
             { type: "money", value: 4000 },
             { type: "data", value: 800 }
@@ -556,7 +557,7 @@ Scientific Data Processing
 
     ,{
         id: "sci10",
-        displayName: "Physics Pattern Recognition",
+        displayName: "Chemical Prediction",
         chapter: [2,3,4,5],
 	displayTrigger: [ { type: "job", value: "sci5" } ],	
 	prereq: [{ type: "job", value: "sci5" }
@@ -565,7 +566,7 @@ Scientific Data Processing
 
         unlockCost: [{ type: "money", value: 1200 }],
         payout: [
-            { type: "money", min: 442}
+            { type: "money", min: 542}
         ],
         duration: { min: 3, max: 9 },
         cost: [
@@ -602,7 +603,7 @@ Scientific Data Processing
         id: "sci12",
         displayName: "Fusion Energy",
         chapter: [2,3,4,5],
-	displayTrigger: [ { type: "job", value: "sci11" } ],
+	displayTrigger: [ { type: "job", value: "sci11", display_prereq: false } ],
         prereq: [{ type: "job", value: "sci11" }
 		, {type: "iq", value: 7}],
         unlockCost: [
@@ -744,7 +745,7 @@ Digital Learning Platforms
             { type: "data", value: 30 }
         ],
         payout: [
-            { type: "money", min: 216}
+            { type: "money", min: 276}
         ],
         duration: { min: 8, max: 11 },
         cost: [
@@ -763,7 +764,7 @@ Digital Learning Platforms
 		, { type: "money", value: 800 , display_prereq: false}],
         unlockCost: [{ type: "money", value: 800 }],
         payout: [
-            { type: "money", min: 168}
+            { type: "money", min: 228}
         ],
         duration: { min: 8, max: 11 },
         cost: [
@@ -772,38 +773,38 @@ Digital Learning Platforms
         category: "tool",
         path: "dem",
     }
-
+    /*
     ,{
         id: "dem5",
-        displayName: "Consensus Modeling Engine",
+        displayName: "Consensus Modeling",
         chapter: [2,3,4,5],
         prereq: [{ type: "job", value: "dem4" }
 		, { type: "money", value: 900 , display_prereq: false}],
         unlockCost: [{ type: "money", value: 900 }],
         payout: [
+		    { type: "money", min:200},
             { type: "data", min: 90}
         ],
         duration: { min: 9, max: 12 },
         cost: [
-            { type: "compute", value: 8 },
-            { type: "money", value: 1200 }
+            { type: "compute", value: 8 }
         ],
-        category: "onetime",
+        category: "tool",
         path: "dem",
     }
-
+    */
     ,{
         id: "dem6",
         displayName: "Identify Consensus",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "dem5" }
+        prereq: [{ type: "job", value: "dem4" }
 		, { type: "money", value: 1600 , display_prereq: false}],	
         unlockCost: [
             { type: "money", value: 1600 },
             { type: "data", value: 180 }
         ],
         payout: [
-            { type: "money", min: 200}
+            { type: "money", min: 300}
         ],
         duration: { min: 9, max: 12 },
         cost: [
@@ -818,7 +819,7 @@ Digital Learning Platforms
         id: "dem7",
         displayName: "Democratic Consensus Synthesizer",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "dem6" }],
+        prereq: [{ type: "job", value: "dem6", display_prereq: false }],
         unlockCost: [
             { type: "money", value: 3000 },
             { type: "data", value: 1400 }
@@ -907,14 +908,14 @@ Digital Learning Platforms
         id: "dem11",
         displayName: "Civic Trust Infrastructure",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "dem10" }],
+        prereq: [{ type: "job", value: "dem10", display_prereq: false }],
         unlockCost: [
             { type: "money", value: 4000 },
             { type: "data", value: 500 }
         ],
         payout: [
             { type: "wonder", min: 1},
-	    { type: "generality", min: 2}
+	    { type: "generality", min: 1}
         ],
         duration: { min: 6, max: 11 },
         cost: [
@@ -1371,7 +1372,7 @@ Climate Data Interpreter
         displayName: "Highly Localized Weather Forecasting",
         chapter: [1,2,3,4,5],
 	displayTrigger: [ { type: "job", value: "clim3"} ],			
-        prereq: [{ type: "job", value: "clim3" },
+        prereq: [{ type: "job", value: "clim3", display_prereq: false },
 		 { type: "generality", value: 4}
 		 ],
         unlockCost: [
@@ -1419,7 +1420,7 @@ Climate Data Interpreter
         displayName: "Global Emissions Tracking",
         chapter: [1,2,3,4,5],
 	displayTrigger: [ { type: "job", value: "clim6"} ],		
-        prereq: [{ type: "job", value: "clim6" },
+        prereq: [{ type: "job", value: "clim6", display_prereq: false },
 		{type:"autonomy", value: 3}
 		],
         unlockCost: [
@@ -1506,7 +1507,7 @@ Climate Data Interpreter
         displayName: "Climate-Aware Grid Balancing",
         chapter: [4,5],
 	displayTrigger: [ { type: "job", value: "clim10"} ],
-        prereq: [{ type: "job", value: "clim10" },
+        prereq: [{ type: "job", value: "clim10", display_prereq: false },
 		 {type:"autonomy", value: 3}],
         unlockCost: [
             { type: "money", value: 4000 },
@@ -1680,7 +1681,7 @@ Climate Data Interpreter
         id: "med8",
         displayName: "Accelerated Drug Discovery",
         chapter: [1,2,3,4,5],
-        prereq: [{ type: "job", value: "med7" }],
+        prereq: [{ type: "job", value: "med7", display_prereq: false }],
         unlockCost: [
             { type: "money", value: 3500 },
             { type: "data", value: 1800 }
@@ -1763,7 +1764,7 @@ Climate Data Interpreter
         id: "med12",
         displayName: "Universal Disease Therapeutics",
         chapter: [1,2,3,4,5],
-        prereq: [{ type: "job", value: "med11" }
+        prereq: [{ type: "job", value: "med11",  display_prereq: false }
             	,{ type: "iq", value: 7 }
             	,{ type: "autonomy", value: 3 }
             	,{ type: "generality", value: 6 }
