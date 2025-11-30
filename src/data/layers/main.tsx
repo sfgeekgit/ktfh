@@ -18,8 +18,8 @@ import { NEWS_TEXT } from "../newsText";
 import { resetGame } from "util/reset";
 import storyContent from "@/data/story.md";
 
-const IS_DEV = true;
-//const IS_DEV = false;
+//const IS_DEV = true;
+const IS_DEV = false;
 
 /**
  * IMPORTANT: PERSISTENT STATE REGISTRATION
@@ -248,9 +248,9 @@ const layer = createLayer(id, function (this: any) {
         const max = getPayoutMaxFromMin(min);
         const range = Math.max(0, max - min);
         let amount = min + Math.floor(Math.random() * (range + 1));
-        if (min > 5 && amount >= 100 && Math.random() < 0.2) {
+        if (min > 5 && amount >= 100 && Math.random() < 0.3) {
             amount *= 2; // rare big-number bonus
-                if (min > 5 && amount >= 100 && Math.random() < 0.2) { // Might even happen again!
+                if (min > 5 && amount >= 100 && Math.random() < 0.3) { // Might even happen again!
                     amount *= 2; // rarer double big-number bonus
 		 }
         }
@@ -418,15 +418,22 @@ const layer = createLayer(id, function (this: any) {
         "interlude_agi_warning_final"
     ] as const;
 
-    function addPendingInterlude(id: string) {
+    const getAgiOrderIndex = (val: string) =>
+        AGI_INTERLUDE_ORDER.indexOf(val as (typeof AGI_INTERLUDE_ORDER)[number]);
+
+    function addPendingInterlude(id: string, delay = 2) {
         if (pendingInterludes.value.some(p => p.id === id)) return;
         const existing = [...pendingInterludes.value];
-        const insertIdx = AGI_INTERLUDE_ORDER.indexOf(id);
+        const insertIdx = getAgiOrderIndex(id);
         if (insertIdx === -1) {
-            pendingInterludes.value = [...existing, { id, jobsRemaining: 2 }];
+            pendingInterludes.value = [...existing, { id, jobsRemaining: delay }];
         } else {
-            const sorted = [...existing, { id, jobsRemaining: 2 }].sort((a, b) => {
-                return AGI_INTERLUDE_ORDER.indexOf(a.id) - AGI_INTERLUDE_ORDER.indexOf(b.id);
+            const sorted = [...existing, { id, jobsRemaining: delay }].sort((a, b) => {
+                const aIdx = getAgiOrderIndex(a.id);
+                const bIdx = getAgiOrderIndex(b.id);
+                const aOrder = aIdx === -1 ? AGI_INTERLUDE_ORDER.length : aIdx;
+                const bOrder = bIdx === -1 ? AGI_INTERLUDE_ORDER.length : bIdx;
+                return aOrder - bOrder;
             });
             pendingInterludes.value = sorted;
         }
@@ -455,6 +462,18 @@ const layer = createLayer(id, function (this: any) {
                 player.devSpeed = storyPriorDevSpeed.value ?? null;
                 storyPriorDevSpeed.value = null;
                 storyPauseActive.value = false;
+            }
+        },
+        { immediate: true }
+    );
+
+    // Safety: ensure returning to main view resumes the loop (e.g., after visiting achievements)
+    watch(
+        () => (Array.isArray(player.tabs) ? player.tabs[0] : null),
+        tab => {
+            if (tab === "main" && player.devSpeed === 0) {
+                player.devSpeed = storyPriorDevSpeed.value ?? null;
+                storyPriorDevSpeed.value = null;
             }
         },
         { immediate: true }
@@ -498,6 +517,9 @@ const layer = createLayer(id, function (this: any) {
                 if (isInterludeTriggerMet(interlude.trigger)) {
                     if (AGI_INTERLUDE_ORDER.includes(interlude.id as any)) {
                         addPendingInterlude(interlude.id);
+                        continue;
+                    } else if ((interlude as any).delayJobs) {
+                        addPendingInterlude(interlude.id, (interlude as any).delayJobs);
                         continue;
                     } else {
                         // @ts-ignore

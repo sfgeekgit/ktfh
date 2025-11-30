@@ -32,7 +32,7 @@ export const G_CONF = {
 
     // ===== GPU COSTS =====
     GPU_BASE_COST: 40, // Cost of first GPU purchase
-    GPU_COST_MULTIPLIER: 1.3, // Each GPU costs this times the previous
+    GPU_COST_MULTIPLIER: 1.27, // Each GPU costs this times the previous
 
 
 
@@ -58,6 +58,16 @@ export const G_CONF = {
         {
             id: "interlude_agi_warning_final",
             trigger: { type: "agiSum", value: 21 - 1 }
+        },
+        {
+            id: "interlude_job_refusals",
+            trigger: { type: "autonomy", value: 1 },
+            delayJobs: 8
+        },
+        {
+            id: "interlude_job_refusals_high",
+            trigger: { type: "autonomy", value: 2 },
+            delayJobs: 8
         },
         {
             id: "interlude_prewonder_Nanotechnology_before_MolecularManufacturing",

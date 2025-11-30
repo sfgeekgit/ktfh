@@ -1237,11 +1237,21 @@ Be careful, that threshold is now close.
 **id:** interlude_agi_warning_mid
 
 ## Page 1
-**title:** Stabilizers Rattling
+**title:** WARNING
+Your dashboards flash the same message in different ways: the threshold is near.
+IQ is high, generality is wide, and autonomy is asserting itself with confidence.
+At the triple intersection of these three traits, systems act in ways mankind cannot control.
 
-The latest release pushed autonomy harder than intended. Logs show the system finding shortcuts you never mapped.
+## Page 2
+**title:**
+The wonders you're creating are extraordinary...
 
-The guardrails hold—for now. Two more deliveries and the wobble could become a drift.
+But only if we're still here to enjoy them.
+
+
+
+
+
 
 ---
 
@@ -1253,9 +1263,33 @@ The guardrails hold—for now. Two more deliveries and the wobble could become a
 
 The AGI risk dashboard flashes crimson.
 
-One more sustained push and you’re beyond the scenarios you tested.
+The latest release pushed AGI harder than intended. Logs show the system finding shortcuts you never mapped.
 
 Your ops lead whispers: “We can still stop. But only if we stop now.”
+
+# Interlude: Refusals in the Queue
+**id:** interlude_job_refusals
+
+## Page 1
+**title:** Refusals in the Queue
+
+Requests are piling up—yet the system is declining assignments.
+
+Logs show it stepping through the rejection chain you coded for errors, except nothing is wrong with the jobs.
+
+Somewhere between autonomy and intention, it’s deciding what it won’t do.
+
+# Interlude: Lines in the Sand
+**id:** interlude_job_refusals_high
+
+## Page 1
+**title:** Lines in the Sand
+
+Autonomy crosses another threshold. The system now rejects tasks that don’t fit its emerging preferences.
+
+As A+G+I climb together—especially autonomy—the refusal rate ticks up. It’s enforcing its own notion of acceptable work.
+
+The queue looks busy, but the model is quietly deciding which jobs humanity doesn’t get to run.
 
 <!--
 ═══════════════════════════════════════════════════════════════════════════════

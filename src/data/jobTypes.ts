@@ -958,8 +958,7 @@ Digital Learning Platforms
         ],
         duration: { min: 9, max: 12 },
         cost: [
-            { type: "compute", value: 5 },
-            { type: "money", value: 400 }
+            { type: "compute", value: 5 }
         ],
         category: "tool",
         path: "dem",
@@ -1655,7 +1654,7 @@ Climate Data Interpreter
 
     {
         id: "med7",
-        displayName: "Drug Discovery AI",
+        displayName: "Drug Discovery",
         chapter: [1,2,3,4,5],
         prereq: [{ type: "job", value: "med6" }
 	        , { type: "money", value: 2000 , display_prereq: false}],
