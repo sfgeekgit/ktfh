@@ -253,7 +253,7 @@ export const JOB_TYPES: JobType[] = [
         category: "gameplay",
         cost: [
             { type: "compute", value: 4 },
-            { type: "money", value: 500 }
+            { type: "money", value: 200 }
         ]
     },
 
@@ -516,7 +516,7 @@ Scientific Data Processing
 		 , { type: "money", value: 2200 , display_prereq: false}],
 
         unlockCost: [
-            { type: "money", value: 2200 },
+            { type: "money", value: 1800 },
             { type: "data", value: 200 }
         ],
         payout: [
@@ -1660,7 +1660,7 @@ Climate Data Interpreter
 	        , { type: "money", value: 2000 , display_prereq: false}],
 
         unlockCost: [
-            { type: "money", value: 2000 },
+            { type: "money", value: 1500 },
             { type: "data", value: 300 }
         ],
         payout: [
