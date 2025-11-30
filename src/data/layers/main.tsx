@@ -1434,14 +1434,15 @@ const layer = createLayer(id, function (this: any) {
                         padding: "20px",
                         maxWidth: "720px",
                         margin: "0 auto",
-                        color: "var(--foreground)",
-                        background: "var(--background)"
+                        color: "#000000",
+                        background: "#fff3e0"
                     }}
                 >
                     <div
                         style={{
-                            background: "#1e1e24",
-                            borderRadius: "12px",
+                            background: "#fff3e0",
+                            border: "2px solid #FFA500",
+                            borderRadius: "10px",
                             padding: "24px",
                             boxShadow: "0 6px 20px rgba(0,0,0,0.25)"
                         }}
@@ -1458,20 +1459,72 @@ const layer = createLayer(id, function (this: any) {
                         </h1>
                         <div
                             style={{
+                                marginBottom: "16px",
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: "12px",
+                                alignItems: "center",
+                                justifyContent: "center"
+                            }}
+                        >
+                            <button
+                                onClick={openAchievementsTab}
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "8px",
+                                    background: "#4CAF50",
+                                    color: "#EEEEEE",
+                                    border: "none",
+                                    borderRadius: "6px",
+                                    cursor: "pointer",
+                                    fontSize: "16px",
+                                    padding: "8px 14px"
+                                }}
+                            >
+                                <img
+                                    src="/ach/ach_gen.png"
+                                    alt="Achievements"
+                                    style="width: 28px; height: 28px; opacity:1"
+                                />
+                                Achievements
+                            </button>
+
+                            <button
+                                onClick={() => {
+                                    if (confirm("Are you sure you want to reset the game? This will delete ALL progress and cannot be undone!")) {
+                                        resetGame();
+                                    }
+                                }}
+                                style={{
+                                    background: "#4CAF50",
+                                    border: "none",
+                                    borderRadius: "6px",
+                                    cursor: "pointer",
+                                    fontSize: "18px",
+                                    color: "white",
+                                    padding: "12px 20px",
+                                    fontWeight: "bold",
+                                    width: "180px"
+                                }}
+                            >
+                                PLAY AGAIN
+                            </button>
+                        </div>
+                        <div
+                            style={{
                                 display: "flex",
                                 flexDirection: "column",
                                 gap: "12px",
-                                fontSize: "16px",
+                                fontSize: "18px",
                                 lineHeight: 1.6,
-                                color: "#e0e0e0",
+                                color: "#000000",
                                 textAlign: "left"
                             }}
                         >
                             {afterGameText.length > 0 ? (
                                 afterGameText.map((para: string, i: number) => (
-                                    <p key={i} style={{ margin: "0" }}>
-                                        {para}
-                                    </p>
+                                    <p key={i} style={{ margin: "0" }} innerHTML={para.replace(/\n+/g, " ")} />
                                 ))
                             ) : (
                                 <p style={{ margin: 0 }}>Put the game over text here</p>

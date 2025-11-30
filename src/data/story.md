@@ -675,39 +675,31 @@ And tonight, looking at these technological gifts changing the world safely and 
 # Ending: Game Over Screen
 **id:** after_the_game
 
-This is text that happens AFTER the player has completed the game. (the player might have won or lost)
-
-This text can break the 4th wall, and urge the player to read the original essay or take action.
-
-This page should include a link to https://campaign.controlai.com/take-action?source=ktfhgame and urge the player to take action, tell them they can click the "contact your lawmakers"  button and it will only take 1-3 MINUTES!! using this tool to tell their lawmakers that this issue is important.
-
-https://superintelligence-statement.org/
+Thank you for playing The Choice Before Us, I hope you enjoyed it.
 
 
-https://futureoflife.org/take-action/
-
-
-Contact your Legislator (USA)
-Only our lawmakers have the power to force AI companies to implement safety practices.
-https://futureoflife.org/take-action/contact-your-legislator/
-
-Receive action alerts
-Join the fight and stay informed.
-https://futureoflife.org/take-action/#action-alerts
-
-
-See more at https://futureoflife.org/take-action/
-
-Tell your friends about this cause and this game!
+The future is still ours to choose, but only if we act. Real AI companies respond to pressure. Real governments write laws. Real people, meaning you, YES YOU! You make the difference.
 
 
 
-Let others know
-Speak up, be heard. Tell your family and friends about the urgent need for action.
+If this game moved you, please contact your lawmakers. You can do it in <b>just 2 minutes</b> with these links:
+<a target="_new" href="https://futureoflife.org/take-action/contact-your-legislator/">futureoflife.org</a>
+<a href="https://campaign.controlai.com/take-action?source=ktfhgame" target="_new">controlai.com</a>
+
+
+<a href="https://superintelligence-statement.org" target="_new">Sign the Superintelligence Statement</a>
+
+Stay in touch with The Future of Life Institute for future action at futureoflife.org
+
+
+And finally, tell your friends, your family, your coworkers.
+Help others understand the stakes, share this game, and make the conversation impossible to ignore. 
+
+Thank you
+<a href="https://thechoicebeforeus.com/">TheChoiceBeforeUs.com</a>
 
 
 
-After this text will be a button to start the game over if the player chooses.
 
 
 
