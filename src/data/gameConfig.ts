@@ -211,12 +211,12 @@ export type GameConfig = typeof G_CONF;
 
 export const CHAP_5_MC_AGI_LOSE_TIMELINE = {
     // News flash timing (oppose framework path only)
-    NEWS_MC_AGI_START: 3,           // When "Mega Corp begins AGI" news appears
-    NEWS_MC_AGI_AUTO_DISMISS: 20,   // How long until it auto-dismisses (After first being shown, not absolute timeline)
+    NEWS_MC_AGI_START: 30,           // When "Mega Corp begins AGI" news appears
+    NEWS_MC_AGI_AUTO_DISMISS: 60,   // How long until it auto-dismisses (After first being shown, not absolute timeline)
 
     // Countdown timer (oppose framework path only)
-    COUNTDOWN_START_TIME: 10,       // When countdown timer appears
-    COUNTDOWN_DURATION: 10,         // How long the countdown lasts
+    COUNTDOWN_START_TIME: 100,       // When countdown timer appears
+    COUNTDOWN_DURATION: 150,         // How long the countdown lasts
 
     // Calculated: when game ends (lose condition)
     get GAME_OVER_TIME() {

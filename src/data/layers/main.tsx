@@ -18,8 +18,8 @@ import { NEWS_TEXT } from "../newsText";
 import { resetGame } from "util/reset";
 import storyContent from "@/data/story.md";
 
-//const IS_DEV = true;
-const IS_DEV = false;
+const IS_DEV = true;
+//const IS_DEV = false;
 
 /**
  * IMPORTANT: PERSISTENT STATE REGISTRATION
