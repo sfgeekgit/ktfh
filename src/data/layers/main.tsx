@@ -829,9 +829,9 @@ const layer = createLayer(id, function (this: any) {
             if (!jobType && latest && Math.random() < 0.20) jobType = latest;
         }
 
-        const preferWebScrape = currentChapter.value >= 2 && unlockedJobTypes.value.includes("webscrape");
+        const preferWebScrape = currentChapter.value >= 3 && unlockedJobTypes.value.includes("webscrape");
         if (!jobType && preferWebScrape && unlockedJobs.some(j => j.id === "webscrape")) {
-            if (Math.random() < 0.10) {
+            if (Math.random() < 0.08) {
                 jobType = unlockedJobs.find(j => j.id === "webscrape")!;
             }
         }

@@ -705,7 +705,7 @@ Digital Learning Platforms
             { type: "money", min: 144}
 	    ,             { type: "data", min: 10}
         ],
-        duration: { min: 8, max: 11 },
+        duration: { min: 5, max: 9 },
         cost: [
             { type: "compute", value: 4 }
         ],
@@ -747,7 +747,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 276}
         ],
-        duration: { min: 8, max: 11 },
+        duration: { min: 5, max: 7 },
         cost: [
             { type: "compute", value: 5 },
             { type: "data", value: 140 }

@@ -8,7 +8,7 @@
 
 import type { JobType } from './jobTypes';
 
-const BASE_TRAIN_DUR = 5;
+const BASE_TRAIN_DUR = 4;
 
 export const TRAINING_RUN_JOBS: JobType[] = [
     {
@@ -41,7 +41,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         ],
         unlockCost: [{ type: "data", value: 400 }],
         payout: [{ type: "iq", min: 1}],
-        duration: { min: BASE_TRAIN_DUR * 4, max: BASE_TRAIN_DUR * 4 },
+        duration: { min: BASE_TRAIN_DUR * 2, max: BASE_TRAIN_DUR * 2 },
         category: "onetime",
         cost: [
             { type: "compute", value: 3 },
@@ -60,7 +60,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         ],
         unlockCost: [{ type: "data", value: 600 }],
         payout: [{ type: "iq", min: 1}],
-        duration: { min: BASE_TRAIN_DUR * 4.5, max: BASE_TRAIN_DUR * 4.5 },
+        duration: { min: BASE_TRAIN_DUR * 3.5, max: BASE_TRAIN_DUR * 3.5 },
         category: "onetime",
         cost: [
             { type: "compute", value: 7 },
@@ -217,7 +217,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         payout: [
             { type: "generality", min: 1}
         ],
-        duration: { min: BASE_TRAIN_DUR * 3.5, max: BASE_TRAIN_DUR * 3.5 },
+        duration: { min: BASE_TRAIN_DUR * 2.5, max: BASE_TRAIN_DUR * 2.5 },
         category: "onetime",
         cost: [
             { type: "compute", value: 4 },
@@ -238,7 +238,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         payout: [
             { type: "generality", min: 1}
         ],
-        duration: { min: BASE_TRAIN_DUR * 4, max: BASE_TRAIN_DUR * 4 },
+        duration: { min: BASE_TRAIN_DUR * 3, max: BASE_TRAIN_DUR * 3 },
         category: "onetime",
         cost: [
             { type: "compute", value: 5 },
@@ -301,7 +301,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         payout: [
             { type: "autonomy", min: 1}
         ],
-        duration: { min: BASE_TRAIN_DUR * 3, max: BASE_TRAIN_DUR * 3 },
+        duration: { min: BASE_TRAIN_DUR * 2, max: BASE_TRAIN_DUR * 2 },
         category: "onetime",
         cost: [
             { type: "compute", value: 3 },
@@ -322,7 +322,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         payout: [
             { type: "autonomy", min: 1}
         ],
-        duration: { min: BASE_TRAIN_DUR * 3.5, max: BASE_TRAIN_DUR * 3.5 },
+        duration: { min: BASE_TRAIN_DUR * 2.5, max: BASE_TRAIN_DUR * 2.5 },
         category: "onetime",
         cost: [
             { type: "compute", value: 5 },
