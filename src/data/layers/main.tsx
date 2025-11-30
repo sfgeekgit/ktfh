@@ -985,6 +985,12 @@ const layer = createLayer(id, function (this: any) {
         if (chapter1Layer && !chapter1Layer.complete?.value) {
             return;
         }
+        // Halt timed progression while an ending story is open (or after the game is over)
+        const currentTab = Array.isArray(player.tabs) ? player.tabs[0] : null;
+        const endingOpen = typeof currentTab === "string" && currentTab.startsWith("ending_");
+        if (player.gameOver || endingOpen) {
+            return;
+        }
 
         // Update chapter 5 timer and trigger chapter 5 events
         // NOTE: This entire block only runs AFTER chapter 5 is begun (chapter5CompletionTime !== null)

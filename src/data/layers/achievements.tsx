@@ -31,16 +31,12 @@ const layer = createLayer(id, function () {
 
     const baseAchievementDefs = [
 
-        {
-            id: "computeCluster2",
-            title: "Dev Test Compute",
-            description: "Own 2 GPUs",
-            requirement: () => totalCompute.value >= 2,
-            requirementText: "Own at least requirementText"
-        },
+
+
         {
             id: "computeCluster4",
             title: "Quad Compute",
+	    image: "/ach/ach3.png",
             description: "Own 4 GPUs",
             requirement: () => totalCompute.value >= 4,
             requirementText: "Own at least requirementText"
@@ -52,29 +48,94 @@ const layer = createLayer(id, function () {
             title: "Compute Cluster",
             description: "Reach 8 total compute units.",
             reward: "Permanent badge for future runs.",
-            image: "/ach/ach2.png",
+            image: "/ach/ach_sat_signal.png",
             requirement: () => totalCompute.value >= 8,
             //requirementText: "Own at least 8 compute units"
         },
         {
-            id: "computeElder",
-            title: "Compute Elder",
-            description: "Reach 18 total compute units.",
-            reward: "Elder compute status.",
-            image: "/ach/ach2.png",
-            requirement: () => totalCompute.value >= 18,
-            requirementText: "Own at least 18 compute units"
+            id: "compute16",
+            title: "Sillicon",
+            description: "Reach 16 total compute units.",	    
+            image: "/ach/ach_beehat.png",
+            requirement: () => totalCompute.value >= 16,
         },
         {
-            id: "computeCosmic",
-            title: "Compute Cosmic",
-            description: "Reach 19 total compute units.",
-            reward: "Cosmic compute power.",
-            image: "/ach/ach2.png",
-            requirement: () => totalCompute.value >= 19,
-            requirementText: "Own at least 19 compute units"
+            id: "gateStayedClosed",
+            title: "The Narrow Path",
+            image: "/ach/ach_good1.png",
+            description: "YOU WON! AI is a boon to humanity",
+            requirement: () =>
+                player.gameOver === true &&
+                Array.isArray(player.tabs) &&
+                player.tabs.includes("ending_win") &&
+                !player.tabs.includes("ending_lose_agi_threshold") &&
+                !player.tabs.includes("ending_lose_agi") &&
+                !player.tabs.includes("ending_bad_perception_manipulation_apparatus") &&
+                !player.tabs.includes("ending_bad_algorithmic_authoritarianism"),
+            requirementText: "Win by completing 5 Wonders without triggering AGI"
+        },
+
+        {
+            id: "wonderPerceptionManipulationApparatus",
+            title: "Perception Manipulation Apparatus",
+	    image: "/ach/ach_badai2.png",
+            requirement: () => completedOnetimeJobs.value.includes("dem15"),
+            requirementText: "Complete Perception Manipulation Apparatus"
         },
         {
+            id: "wonderAlgorithmicAuthoritarianism",
+            title: "Algorithmic Authoritarianism",
+            image: "/ach/ach_badai1.png",	    
+            requirement: () => completedOnetimeJobs.value.includes("dem18"),
+            requirementText: "Complete Algorithmic Authoritarianism"
+        },
+
+        {
+            id: "agiOverload",
+            title: "AGI Overload",
+	    image: "/ach/ach_badai3.png",			
+            description: "Exceed A+G+I safety threshold.",
+            requirement: () =>
+                player.gameOver === true &&
+                Array.isArray(player.tabs) &&
+                player.tabs.includes("ending_lose_agi_threshold"),
+            requirementText: "Lose by exceeding the A+G+I threshold"
+        },
+        {
+            id: "mcAgiRace",
+            title: "Lose The Race",
+            image: "/ach/ach_bad1.png",
+            description: "Lose to MegaCorp AGI",
+            requirement: () =>
+                player.gameOver === true &&
+                Array.isArray(player.tabs) &&
+                player.tabs.includes("ending_lose_agi"),
+            requirementText: "Lose to MegaCorp's AGI timer in Chapter 5"
+        },
+
+        {
+            id: "wonderFusionEnergy",
+            title: "Fusion Energy",
+	    image: "/ach/ach_suneng.png",
+            requirement: () => completedOnetimeJobs.value.includes("sci12"),
+            requirementText: "Complete Fusion Energy"
+        },
+        {
+            id: "wonderDemocraticConsensusSynthesizer",
+            title: "Democratic Consensus Synthesizer",
+	    image: "/ach/ach_dem2.png",
+            requirement: () => completedOnetimeJobs.value.includes("dem7"),
+            requirementText: "Complete Democratic Consensus Synthesizer"
+        },
+        {
+            id: "wonderCivicTrustInfrastructure",
+            title: "Civic Trust Infrastructure",
+	    image: "/ach/ach_civ4.png",
+            requirement: () => completedOnetimeJobs.value.includes("dem11"),
+            requirementText: "Complete Civic Trust Infrastructure"
+        },
+
+	{
             id: "wonderMolecularManufacturing",
             title: "Molecular Manufacturing",
 	    image: "/ach/ach_molen2.png",
@@ -88,66 +149,39 @@ const layer = createLayer(id, function () {
             requirement: () => completedOnetimeJobs.value.includes("sci9"),
             requirementText: "Complete Materials Discovery"
         },
-        {
-            id: "wonderFusionEnergy",
-            title: "Fusion Energy",
-	    image: "/ach/ach_suneng.png",
-            requirement: () => completedOnetimeJobs.value.includes("sci12"),
-            requirementText: "Complete Fusion Energy"
-        },
-        {
-            id: "wonderDemocraticConsensusSynthesizer",
-            title: "Democratic Consensus Synthesizer",
-	    image: "/ach/ach_fiss.png",
-            requirement: () => completedOnetimeJobs.value.includes("dem7"),
-            requirementText: "Complete Democratic Consensus Synthesizer"
-        },
-        {
-            id: "wonderCivicTrustInfrastructure",
-            title: "Civic Trust Infrastructure",
-            requirement: () => completedOnetimeJobs.value.includes("dem11"),
-            requirementText: "Complete Civic Trust Infrastructure"
-        },
-        {
-            id: "wonderPerceptionManipulationApparatus",
-            title: "Perception Manipulation Apparatus",
-            requirement: () => completedOnetimeJobs.value.includes("dem15"),
-            requirementText: "Complete Perception Manipulation Apparatus"
-        },
-        {
-            id: "wonderAlgorithmicAuthoritarianism",
-            title: "Algorithmic Authoritarianism",
-            image: "/ach/ach_badai1.png",	    
-            requirement: () => completedOnetimeJobs.value.includes("dem18"),
-            requirementText: "Complete Algorithmic Authoritarianism"
-        },
-        {
+
+	{
             id: "wonderUniversalEducationTutor",
             title: "Universal Education Tutor",
+	    image: "/ach/ach_edu1.png",
             requirement: () => completedOnetimeJobs.value.includes("edu8"),
             requirementText: "Complete Universal Education Tutor"
         },
         {
             id: "wonderGlobalLearningNetwork",
             title: "Global Learning Network",
+	    image: "/ach/ach_edu4.png",
             requirement: () => completedOnetimeJobs.value.includes("edu11"),
             requirementText: "Complete Global Learning Network"
         },
         {
             id: "wonderHighlyLocalizedWeatherForecasting",
             title: "Highly Localized Weather Forecasting",
+	    image: "/ach/ach_cli2.png",
             requirement: () => completedOnetimeJobs.value.includes("clim4"),
             requirementText: "Complete Highly Localized Weather Forecasting"
         },
         {
             id: "wonderGlobalEmissionsTracking",
             title: "Global Emissions Tracking",
+	    image: "/ach/ach_glob_emis.png",
             requirement: () => completedOnetimeJobs.value.includes("clim7"),
             requirementText: "Complete Global Emissions Tracking"
         },
         {
             id: "wonderClimateAwareGridBalancing",
             title: "Climate-Aware Grid Balancing",
+	    image: "/ach/ach_climdata.png",
             requirement: () => completedOnetimeJobs.value.includes("clim11"),
             requirementText: "Complete Climate-Aware Grid Balancing"
         },
@@ -161,12 +195,14 @@ const layer = createLayer(id, function () {
         {
             id: "wonderAcceleratedDrugDiscovery",
             title: "Accelerated Drug Discovery",
+	    image: "/ach/ach_protien1.png",		    
             requirement: () => completedOnetimeJobs.value.includes("med8"),
             requirementText: "Complete Accelerated Drug Discovery"
         },
         {
             id: "wonderUniversalDiseaseTherapeutics",
             title: "Universal Disease Therapeutics",
+	    image: "/ach/ach_med.png",	
             requirement: () => completedOnetimeJobs.value.includes("med12"),
             requirementText: "Complete Universal Disease Therapeutics"
         },
@@ -177,17 +213,24 @@ const layer = createLayer(id, function () {
             requirement: () => completedOnetimeJobs.value.includes("med14"),
             requirementText: "Complete Reversal of Aging"
         },
+
+
         {
-            id: "agiOverload",
-            title: "AGI Overload",
-	    image: "/ach/ach_badai3.png",			
-            description: "Exceed A+G+I safety threshold.",
-            requirement: () =>
-                player.gameOver === true &&
-                Array.isArray(player.tabs) &&
-                player.tabs.includes("ending_lose_agi_threshold"),
-            requirementText: "Lose by exceeding the A+G+I threshold"
+            id: "wonderDis",
+            title: "Disability Support Systems",
+            image: "/ach/ach_disab.png",
+            requirement: () => completedOnetimeJobs.value.includes("dissu"),
+
         },
+        {
+            id: "wonderscsc",
+            title: "Room Temperature Superconductors",
+            image: "/ach/ach_nuc.png",
+            requirement: () => completedOnetimeJobs.value.includes("rtsusc"),
+
+        },
+
+
         {
             id: "worker",
             title: "Worker",
@@ -238,10 +281,10 @@ const layer = createLayer(id, function () {
             }
         ];
     });
+
+    const achievementDefs = [...baseAchievementDefs, ...autoGeneratedAchievements];
     */
-    
-    // const achievementDefs = [...baseAchievementDefs, ...autoGeneratedAchievements];
-    const achievementDefs = [...baseAchievementDefs];
+    const achievementDefs = [...baseAchievementDefs]
 
     achievements = Object.fromEntries(
         achievementDefs.map(def => [
