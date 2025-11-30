@@ -94,7 +94,7 @@ These systems are predictable. Controllable. They do exactly what you trained th
 
 The feedback is immediate: "This saved me so much time." "I can finally focus on the important work."
 
--->
+
 
 ## Page 
 **title:**  Chapter 1
@@ -103,6 +103,7 @@ The technology is straightforward. Narrow AI, the researchers call it. Neural ne
 
 Simple inputs, reliable outputs. Nothing fancy. Just useful.
 
+-->
 ## Page 4
 **title:**  Chapter 1
 
