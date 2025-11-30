@@ -11,10 +11,10 @@ import { createRequire } from 'module';
 import ts from 'typescript';
 
 // --- CONFIG ---
-// Set to a path string (e.g., "med" or "clim") to show only that path.
+// Set to a path string (e.g., "med" or "clim") or an array of paths to filter to those.
 // Set to false to show every job.
+//const filterPath = ['med', 'clim'];
 //const filterPath = 'clim';
-//const filterPath = 'med';
 const filterPath = false;
 
 // Sort by one or more keys (first wins, then next on ties).
@@ -105,9 +105,15 @@ function tsRequire(id, parentPath) {
   return resolver(resolved);
 }
 
+const filterPaths = !filterPath
+  ? null
+  : Array.isArray(filterPath)
+    ? filterPath.filter(Boolean)
+    : [filterPath];
+
 const jobs = loadJobTypes()
   .map((job, idx) => ({ ...job, __order: idx })) // keep file order for sorting
-  .filter((job) => (filterPath ? job.path === filterPath : true))
+  .filter((job) => (filterPaths ? filterPaths.includes(job.path) : true))
   .filter((job) => {
     const isTr = job.id?.startsWith('trun');
     if (trainingRuns === 'ignore') return !isTr;
@@ -288,11 +294,13 @@ function combinePrereqs(job) {
 function formatLabel(job) {
   const name = job.displayName || job.id;
   const chapter = formatChapter(job.chapter);
+  const unlockMoney = getUnlockMoney(job);
   const prereqs = formatPrereqs(combinePrereqs(job), job);
   const wonder = job.is_wonder ? ' [WONDER]' : '';
+  const unlockPart = unlockMoney ? ` - unlock$: ${unlockMoney}` : '';
   const prereqPart = prereqs ? ` -        prereq: ${prereqs}` : '';
   const chapterPart = chapter ? ` (ch${chapter})` : '';
-  return `${name}${chapterPart}${prereqPart}${wonder}`;
+  return `${name}${chapterPart}${unlockPart}${prereqPart}${wonder}`;
 }
 
 function formatChapter(chapter) {
@@ -338,6 +346,10 @@ function formatPrereq(p, job) {
     default:
       return `${t}:${valStr}`;
   }
+}
+
+function getUnlockMoney(job) {
+  return getCost(job.unlockCost, 'money') || '';
 }
 
 function printDocs() {

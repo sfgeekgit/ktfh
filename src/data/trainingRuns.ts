@@ -8,7 +8,7 @@
 
 import type { JobType } from './jobTypes';
 
-const BASE_TRAIN_DUR = 1;
+const BASE_TRAIN_DUR = 5;
 
 export const TRAINING_RUN_JOBS: JobType[] = [
     {
@@ -45,8 +45,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         category: "onetime",
         cost: [
             { type: "compute", value: 3 },
-            { type: "money", value: 300 },
-            { type: "data", value: 200 }
+            { type: "money", value: 200 }
         ]
     },
 
@@ -65,8 +64,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         category: "onetime",
         cost: [
             { type: "compute", value: 7 },
-            { type: "money", value: 400 },
-            { type: "data", value: 200 }
+            { type: "money", value: 300 }
         ]
     },
 
@@ -86,8 +84,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         category: "onetime",
         cost: [
             { type: "compute", value: 8 },
-            { type: "money", value: 500 },
-            { type: "data", value: 200 }
+            { type: "money", value: 400 }
         ]
     },
 
@@ -106,8 +103,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         category: "onetime",
         cost: [
             { type: "compute", value: 10 },
-            { type: "money", value: 700 },
-            { type: "data", value: 200 }
+            { type: "money", value: 500 }
         ]
     },
 
@@ -126,8 +122,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         category: "onetime",
         cost: [
             { type: "compute", value: 10 },
-            { type: "money", value: 950 },
-            { type: "data", value: 200 }
+            { type: "money", value: 600 }
         ]
     },
 
@@ -146,8 +141,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         category: "onetime",
         cost: [
             { type: "compute", value: 10 },
-            { type: "money", value: 1200 },
-            { type: "data", value: 200 }
+            { type: "money", value: 600 }
         ]
     },
 
@@ -166,8 +160,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         category: "onetime",
         cost: [
             { type: "compute", value: 11 },
-            { type: "money", value: 1400 },
-            { type: "data", value: 200 }
+            { type: "money", value: 700 }
         ]
     },
     {
@@ -185,8 +178,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         category: "onetime",
         cost: [
             { type: "compute", value: 11 },
-            { type: "money", value: 1500 },
-            { type: "data", value: 200 }
+            { type: "money", value: 700 }
         ]
     },
 
@@ -208,8 +200,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         category: "onetime",
         cost: [
             { type: "compute", value: 3 },
-            { type: "money", value: 50 },
-            { type: "data", value: 100 }
+            { type: "money", value: 50 }
         ]
     },
 
@@ -230,8 +221,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         category: "onetime",
         cost: [
             { type: "compute", value: 4 },
-            { type: "money", value: 100 },
-            { type: "data", value: 200 }
+            { type: "money", value: 100 }
         ]
     },
 
@@ -252,8 +242,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         category: "onetime",
         cost: [
             { type: "compute", value: 5 },
-            { type: "money", value: 200 },
-            { type: "data", value: 400 }
+            { type: "money", value: 200 }
         ]
     },
 
@@ -274,8 +263,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         category: "onetime",
         cost: [
             { type: "compute", value: 5 },
-            { type: "money", value: 200 },
-            { type: "data", value: 400 }
+            { type: "money", value: 200 }
         ]
     },
 
@@ -296,8 +284,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         category: "onetime",
         cost: [
             { type: "compute", value: 7 },
-            { type: "money", value: 300 },
-            { type: "data", value: 600 }
+            { type: "money", value: 300 }
         ]
     },
 
@@ -318,8 +305,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         category: "onetime",
         cost: [
             { type: "compute", value: 3 },
-            { type: "money", value: 100 },
-            { type: "data", value: 100 }
+            { type: "money", value: 100 }
         ]
     },
 
@@ -340,8 +326,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         category: "onetime",
         cost: [
             { type: "compute", value: 5 },
-            { type: "money", value: 150 },
-            { type: "data", value: 200 }
+            { type: "money", value: 150 }
         ]
     },
 
@@ -362,8 +347,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         category: "onetime",
         cost: [
             { type: "compute", value: 8 },
-            { type: "money", value: 250 },
-            { type: "data", value: 400 }
+            { type: "money", value: 250 }
         ]
     },
 
@@ -384,8 +368,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         category: "onetime",
         cost: [
             { type: "compute", value: 11 },
-            { type: "money", value: 400 },
-            { type: "data", value: 600 }
+            { type: "money", value: 400 }
         ]
     },
 

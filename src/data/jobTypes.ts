@@ -162,7 +162,7 @@ export const JOB_TYPES: JobType[] = [
         description: "Popular with salesmen",
         chapter: [1,2,3],
         prereq: [
-	    { type: "money", value: 280 },
+	    { type: "money", value: 100 },
             { type: "job", value: "speechtran", display_prereq: false }
 	],
         unlockCost: [            { type: "money", value: 100 }],
@@ -390,7 +390,7 @@ Scientific Data Processing
             { type: "money", min: 144},
 	    { type: "data", min: 20}
         ],
-        duration: { min: 2, max: 8 },
+        duration: { min: 2, max: 6 },
         cost: [
             { type: "compute", value: 4 }
         ],
@@ -410,7 +410,7 @@ Scientific Data Processing
             { type: "money", min: 192},
 	    { type: "data", min: 20}
 	    ],
-        duration: { min: 3, max: 9 },
+        duration: { min: 3, max: 6 },
         cost: [
             { type: "compute", value: 4 }
         ],
@@ -424,13 +424,13 @@ Scientific Data Processing
         chapter: [2,3,4,5],
 		displayTrigger: [ { type: "job", value: "sci3" } ],	
         prereq: [{ type: "job", value: "sci3" }
-		 , {type:"iq", value:3}
+		 , {type:"generality", value:2}
 		 , { type: "money", value: 680 , display_prereq: false}],
         unlockCost: [{ type: "money", value: 700 }],
         payout: [
             { type: "data", min: 100}
         ],
-        duration: { min: 4, max: 8 },
+        duration: { min: 4, max: 6 },
         cost: [
             { type: "compute", value: 5 },
             { type: "data", value: 120 }
@@ -444,7 +444,7 @@ Scientific Data Processing
         displayName: "Molecular Structure Prediction",
         chapter: [2,3,4,5],
         prereq: [{ type: "job", value: "sci4" }
-		 , {type:"iq", value:4}],
+		 , {type:"iq", value:5}],
         unlockCost: [
             { type: "money", value: 900 },
             { type: "data", value: 120 }
@@ -452,7 +452,7 @@ Scientific Data Processing
         payout: [
             { type: "money", min: 312}
         ],
-        duration: { min: 5, max: 9 },
+        duration: { min: 5, max: 7 },
         cost: [
             { type: "compute", value: 5 },
             { type: "data", value: 140 }
@@ -465,8 +465,9 @@ Scientific Data Processing
         id: "sci6",
         displayName: "Nanotechnology",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "sci5" }
-		 , {type:"autonomy", value:2}],
+	displayTrigger: [ { type: "job", value: "sci5" } ],
+	prereq: [{ type: "job", value: "sci5" }
+		 , {type:"autonomy", value:3}],
         unlockCost: [
             { type: "money", value: 1200 },
             { type: "data", value: 400 }
@@ -474,7 +475,7 @@ Scientific Data Processing
         payout: [
             { type: "money", min: 372}
         ],
-        duration: { min: 15, max: 18 },
+        duration: { min: 5, max: 8 },
         cost: [
             { type: "compute", value: 6 },
             { type: "data", value: 160 }
@@ -493,9 +494,10 @@ Scientific Data Processing
             { type: "data", value: 200 }
         ],
         payout: [
-            { type: "wonder", min: 1}
+            { type: "wonder", min: 1},
+	    { type: "generality", min:1}
         ],
-        duration: { min: 8, max: 11 },
+        duration: { min: 5, max: 8 },
         cost: [
             { type: "compute", value: 7 },
             { type: "data", value: 700 }
@@ -519,7 +521,7 @@ Scientific Data Processing
         payout: [
             { type: "money", min: 312}
         ],
-        duration: { min: 14, max: 17 },
+        duration: { min: 5, max: 8 },
         cost: [
             { type: "compute", value: 5 },
             { type: "data", value: 150 }
@@ -556,15 +558,16 @@ Scientific Data Processing
         id: "sci10",
         displayName: "Physics Pattern Recognition",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "sci5" }
-		, {type : "generality", value: 3}
-		 , { type: "money", value: 1300 , display_prereq: false}],
+	displayTrigger: [ { type: "job", value: "sci5" } ],	
+	prereq: [{ type: "job", value: "sci5" }
+		, {type : "generality", value: 4}
+		],
 
         unlockCost: [{ type: "money", value: 1200 }],
         payout: [
             { type: "money", min: 442}
         ],
-        duration: { min: 6, max: 9 },
+        duration: { min: 3, max: 9 },
         cost: [
             { type: "compute", value: 5 },
             { type: "data", value: 140 }
@@ -586,7 +589,7 @@ Scientific Data Processing
         payout: [
             { type: "money", min: 250}
         ],
-        duration: { min: 10, max: 14 },
+        duration: { min: 5, max: 9 },
         cost: [
             { type: "compute", value: 5 },
             { type: "data", value: 200 }
@@ -1311,7 +1314,7 @@ Climate Data Interpreter
         displayName: "Climate Data Interpreter",
         chapter: [1,2,3,4],
         prereq: [{ type: "choice", value: "clim1" }],   /// Unlocked via choice only!
-        unlockCost: [{ type: "money", value: 50 }],
+        unlockCost: [{ type: "money", value: 150 }],
         payout: [
             { type: "money", min: 84}
         ],
@@ -1327,10 +1330,11 @@ Climate Data Interpreter
         id: "clim2",
         displayName: "Atmospheric Pattern Recognition",
         chapter: [1,2,3,4,5],
-        prereq: [{ type: "job", value: "clim1" }],
-        unlockCost: [{ type: "money", value: 2000 }],
+        prereq: [{ type: "job", value: "clim1" }
+			, { type: "money", value: 800 , display_prereq: false}],
+        unlockCost: [{ type: "money", value: 800 }],
         payout: [
-            { type: "money", min: 120}
+            { type: "money", min: 160}
         ],
         duration: { min: 8, max: 11 },
         cost: [
@@ -1344,20 +1348,20 @@ Climate Data Interpreter
         id: "clim3",
         displayName: "Micro-Climate Simulation",
         chapter: [1,2,3,4,5],
-        prereq: [{ type: "job", value: "clim2" }],
+	displayTrigger: [ { type: "job", value: "clim2"} ],		
+        prereq: [{ type: "job", value: "clim2" },
+		 { type: "iq", value: 4}
+		],
         unlockCost: [
-            { type: "money", value: 3500 },
+            { type: "money", value: 1500 },
             { type: "data", value: 100 }
         ],
         payout: [
             { type: "money", min: 180},
-            { type: "data", min: 80}
+            { type: "data", min: 10}
         ],
         duration: { min: 8, max: 11 },
-        cost: [
-            { type: "compute", value: 5 },
-            { type: "data", value: 120 }
-        ],
+        cost: [{ type: "compute", value: 5 }],
         category: "tool",
         path: "clim",
     }
@@ -1366,61 +1370,46 @@ Climate Data Interpreter
         id: "clim4",
         displayName: "Highly Localized Weather Forecasting",
         chapter: [1,2,3,4,5],
-        prereq: [{ type: "job", value: "clim3" }],
+	displayTrigger: [ { type: "job", value: "clim3"} ],			
+        prereq: [{ type: "job", value: "clim3" },
+		 { type: "generality", value: 4}
+		 ],
         unlockCost: [
-            { type: "data", value: 400 }
+            { type: "money", value: 1900 },	
+            { type: "data", value: 1000 }
         ],
         payout: [
-            { type: "wonder", min: 1}
+            { type: "wonder", min: 1},
+            { type: "iq", min:1},
+            { type: "generality", min:1}
+	    
         ],
         duration: { min: 6, max: 8 },
         cost: [
             { type: "compute", value: 7 },
-            { type: "money", value: 2800 },
-            { type: "data", value: 500 }
+            { type: "money", value: 200 }
         ],
         category: "onetime",
         is_wonder: true,
         path: "clim",
     }
-    /*
-    ,{
-        id: "clim5",
-        displayName: "Satellite Signal Decomposition",
-        chapter: [1,2,3,4,5],
-        prereq: [{ type: "job", value: "clim2" }],
-        unlockCost: [{ type: "money", value: 3200 }],
-        payout: [
-            { type: "money", min: 168},
-            { type: "data", min: 70}
-        ],
-        duration: { min: 9, max: 12 },
-        cost: [
-            { type: "compute", value: 5 },
-            { type: "data", value: 120 }
-        ],
-        category: "tool",
-        path: "clim",
-    }
-    */
     ,{
         id: "clim6",
         displayName: "Emissions Source Detection",
-        chapter: [1,2,3,4,5],
-        prereq: [{ type: "job", value: "clim4" }],
+        chapter: [4,5],
+        prereq: [{ type: "job", value: "clim4" },
+		{type:"autonomy", value: 1}
+		, { type: "money", value: 1500 , display_prereq: false}],
         unlockCost: [
-            { type: "money", value: 4800 },
+            { type: "money", value: 2000 },
             { type: "data", value: 150 }
         ],
         payout: [
             { type: "money", min: 252},
-            { type: "data", min: 150}
+            { type: "data", min: 100}
         ],
         duration: { min: 9, max: 12 },
-        cost: [
-            { type: "compute", value: 6 },
-            { type: "data", value: 200 }
-        ],
+        cost: [ { type: "compute", value: 6 }  ],
         category: "tool",
         path: "clim",
     }
@@ -1429,19 +1418,24 @@ Climate Data Interpreter
         id: "clim7",
         displayName: "Global Emissions Tracking",
         chapter: [1,2,3,4,5],
-        prereq: [{ type: "job", value: "clim6" }],
+	displayTrigger: [ { type: "job", value: "clim6"} ],		
+        prereq: [{ type: "job", value: "clim6" },
+		{type:"autonomy", value: 3}
+		],
         unlockCost: [
-            { type: "money", value: 7000 },
-            { type: "data", value: 700 }
+            { type: "money", value: 3000 },
+            { type: "data", value: 2500 }
         ],
         payout: [
-            { type: "wonder", min: 1}
+            { type: "wonder", min: 1},
+	                { type: "iq", min:1},
+            { type: "generality", min:1}
+
         ],
         duration: { min: 6, max: 8 },
         cost: [
             { type: "compute", value: 7 },
-            { type: "money", value: 3200 },
-            { type: "data", value: 600 }
+            { type: "money", value: 300 }
         ],
         category: "onetime",
         is_wonder: true,
@@ -1452,8 +1446,9 @@ Climate Data Interpreter
         id: "clim8",
         displayName: "Energy Grid Intelligence",
         chapter: [3,4,5],
-        prereq: [{ type: "job", value: "clim1" }],
-        unlockCost: [{ type: "money", value: 2500 }],
+        prereq: [{ type: "job", value: "clim1" }
+		, { type: "money", value: 1400 , display_prereq: false}],
+        unlockCost: [{ type: "money", value: 1200 }],
         payout: [
             { type: "money", min: 132}
         ],
@@ -1469,17 +1464,17 @@ Climate Data Interpreter
         id: "clim9",
         displayName: "Smart Grid Forecasting",
         chapter: [3,4,5],
-        prereq: [{ type: "job", value: "clim8" }],
-        unlockCost: [{ type: "money", value: 4000 }],
+	displayTrigger: [ { type: "job", value: "clim8"} ],
+        prereq: [{ type: "job", value: "clim8" },
+		{type: "autonomy", value: 2},
+		{type: "generality", value: 4}],
+        unlockCost: [{ type: "money", value: 1800 }],
         payout: [
-            { type: "money", min: 192},
-            { type: "data", min: 60}
+            { type: "money", min: 232},
+            { type: "data", min: 120}
         ],
         duration: { min: 8, max: 11 },
-        cost: [
-            { type: "compute", value: 5 },
-            { type: "data", value: 100 }
-        ],
+        cost: [ { type: "compute", value: 5 } ],
         category: "tool",
         path: "clim",
     }
@@ -1488,20 +1483,20 @@ Climate Data Interpreter
         id: "clim10",
         displayName: "Anticipatory Wind and Solar",
         chapter: [4,5],
-        prereq: [{ type: "job", value: "clim9" }],
+	displayTrigger: [ { type: "job", value: "clim9"} ],	
+        prereq: [{ type: "job", value: "clim9" }
+		, {type:"iq", value: 7}
+		],
         unlockCost: [
-            { type: "money", value: 5500 },
-            { type: "data", value: 120 }
+            { type: "money", value: 2200 },
+            { type: "data", value: 500 }
         ],
         payout: [
             { type: "money", min: 288},
-            { type: "data", min: 90}
+            { type: "data", min: 140}
         ],
         duration: { min: 9, max: 12 },
-        cost: [
-            { type: "compute", value: 6 },
-            { type: "data", value: 150 }
-        ],
+        cost: [{ type: "compute", value: 6 }],
         category: "tool",
         path: "clim",
     }
@@ -1510,19 +1505,23 @@ Climate Data Interpreter
         id: "clim11",
         displayName: "Climate-Aware Grid Balancing",
         chapter: [4,5],
-        prereq: [{ type: "job", value: "clim10" }],
+	displayTrigger: [ { type: "job", value: "clim10"} ],
+        prereq: [{ type: "job", value: "clim10" },
+		 {type:"autonomy", value: 3}],
         unlockCost: [
-            { type: "money", value: 8000 },
-            { type: "data", value: 650 }
+            { type: "money", value: 4000 },
+            { type: "data", value: 2000 }
         ],
         payout: [
-            { type: "wonder", min: 1}
+            { type: "wonder", min: 1},
+            { type: "autonomy", min: 1},	    
+            { type: "generality", min:1}
         ],
         duration: { min: 6, max: 8 },
         cost: [
             { type: "compute", value: 8 },
-            { type: "money", value: 3600 },
-            { type: "data", value: 750 }
+            { type: "money", value: 600 },
+            { type: "data", value: 250 }
         ],
         category: "onetime",
         is_wonder: true,
