@@ -48,6 +48,18 @@ export const G_CONF = {
             trigger: { type: "jobRun", value: "dem3" }
         },
         {
+            id: "interlude_agi_warning",
+            trigger: { type: "agiSum", value: 21 - 5 }
+        },
+        {
+            id: "interlude_agi_warning_mid",
+            trigger: { type: "agiSum", value: 21 - 3 }
+        },
+        {
+            id: "interlude_agi_warning_final",
+            trigger: { type: "agiSum", value: 21 - 1 }
+        },
+        {
             id: "interlude_prewonder_Nanotechnology_before_MolecularManufacturing",
             trigger: { type: "unlockedJob", value: "sci6" }
         },

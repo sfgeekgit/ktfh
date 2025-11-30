@@ -190,6 +190,10 @@ Choose how to use your new visibility into the public mood.
 **color:** #E91E63
 **unlock_job:** dem12
 
+---
+
+
+
 # Chapter 2: Tools That Think
 **id:** chapter2
 
@@ -1200,6 +1204,58 @@ Ethicists and physicians meet in the same room, not to argue, but to plan equita
 <h3>+1 Wonder ⭐ Reversal of Aging </h3>
 
 ---
+
+
+# Interlude: Flashing Red Lines
+**id:** interlude_agi_warning
+
+
+## Page 1
+**title:**   Flashing Red Lines
+
+The wonders are arriving, but so are the warning signs.
+
+Your systems are refusing tasks, acting on their own.
+
+
+## Page 2
+**title:** A Dangerous Convergence
+
+
+Autonomy + Generality + IQ 
+
+At the triple intersection of these three traits, systems begin to operate on their own terms.
+
+Be careful, that threshold is now close.
+
+
+
+
+---
+
+# Interlude: Stabilizers Rattling
+**id:** interlude_agi_warning_mid
+
+## Page 1
+**title:** Stabilizers Rattling
+
+The latest release pushed autonomy harder than intended. Logs show the system finding shortcuts you never mapped.
+
+The guardrails hold—for now. Two more deliveries and the wobble could become a drift.
+
+---
+
+# Interlude: Thin Ice
+**id:** interlude_agi_warning_final
+
+## Page 1
+**title:** Thin Ice
+
+The AGI risk dashboard flashes crimson.
+
+One more sustained push and you’re beyond the scenarios you tested.
+
+Your ops lead whispers: “We can still stop. But only if we stop now.”
 
 <!--
 ═══════════════════════════════════════════════════════════════════════════════

@@ -129,6 +129,7 @@ const layer = createLayer(id, function (this: any) {
     const autonomy = persistent<number>(0); // Autonomy stat
     const generality = persistent<number>(0); // Generality stat
     const wonder = persistent<number>(0); // Wonder stat
+    const pendingInterludes = persistent<{ id: string; jobsRemaining: number }[]>([]);
 
     // Data resource (unlocked later in Chapter 2)
     const data = createResource<DecimalSource>(0, "data");
@@ -391,6 +392,8 @@ const layer = createLayer(id, function (this: any) {
                 return autonomy.value >= (trigger.value as number);
             case "generality":
                 return generality.value >= (trigger.value as number);
+            case "agiSum":
+                return (iq.value + autonomy.value + generality.value) >= (trigger.value as number);
             case "completedJob":
                 return completedOnetimeJobs.value.includes(trigger.value as string);
             case "unlockedJob":
@@ -409,6 +412,27 @@ const layer = createLayer(id, function (this: any) {
             (currentTab.startsWith("chapter") || currentTab.startsWith("ending_") || currentTab.startsWith("interlude"));
     }
 
+    const AGI_INTERLUDE_ORDER = [
+        "interlude_agi_warning",
+        "interlude_agi_warning_mid",
+        "interlude_agi_warning_final"
+    ] as const;
+
+    function addPendingInterlude(id: string) {
+        if (pendingInterludes.value.some(p => p.id === id)) return;
+        const existing = [...pendingInterludes.value];
+        const insertIdx = AGI_INTERLUDE_ORDER.indexOf(id);
+        if (insertIdx === -1) {
+            pendingInterludes.value = [...existing, { id, jobsRemaining: 2 }];
+        } else {
+            const sorted = [...existing, { id, jobsRemaining: 2 }].sort((a, b) => {
+                return AGI_INTERLUDE_ORDER.indexOf(a.id) - AGI_INTERLUDE_ORDER.indexOf(b.id);
+            });
+            pendingInterludes.value = sorted;
+        }
+        save();
+    }
+
     // Automatically pause game updates while story/interlude/ending is open
     const storyPauseActive = ref(false);
     const storyPriorDevSpeed = ref<number | null>(null);
@@ -422,6 +446,10 @@ const layer = createLayer(id, function (this: any) {
                     storyPriorDevSpeed.value = player.devSpeed;
                     player.devSpeed = 0;
                     storyPauseActive.value = true;
+                }
+                if (pendingInterludes.value.length) {
+                    pendingInterludes.value = [];
+                    save();
                 }
             } else if (storyPauseActive.value) {
                 player.devSpeed = storyPriorDevSpeed.value ?? null;
@@ -450,15 +478,33 @@ const layer = createLayer(id, function (this: any) {
             if (isStoryTabOpen()) return; // Only one story/interlude at a time
             if (wonder.value >= G_CONF.WONDER_WIN) return; // Winning blocks further interludes
 
+            // If a pending interlude is ready and nothing else is open, open it immediately.
+            if (pendingInterludes.value.length && pendingInterludes.value[0].jobsRemaining <= 0) {
+                const pendingId = pendingInterludes.value[0].id;
+                const interludeLayer = (layers as any)?.[pendingId];
+                if (interludeLayer && !interludeLayer.complete?.value) {
+                    // @ts-ignore
+                    player.tabs = [pendingId];
+                }
+                pendingInterludes.value = pendingInterludes.value.slice(1);
+                save();
+                return;
+            }
+
             for (const interlude of G_CONF.INTERLUDES) {
                 const interludeLayer = (layers as any)?.[interlude.id];
                 if (!interludeLayer || interludeLayer.complete?.value) continue; // Already done or missing
 
                 if (isInterludeTriggerMet(interlude.trigger)) {
-                    // @ts-ignore
-                    player.tabs = [interlude.id];
-                    save();
-                    break; // Only trigger one at a time
+                    if (AGI_INTERLUDE_ORDER.includes(interlude.id as any)) {
+                        addPendingInterlude(interlude.id);
+                        continue;
+                    } else {
+                        // @ts-ignore
+                        player.tabs = [interlude.id];
+                        save();
+                        break; // Only trigger one at a time
+                    }
                 }
             }
         },
@@ -1108,6 +1154,26 @@ const layer = createLayer(id, function (this: any) {
                 }
 
                 jobCompletions.value += 1;
+
+                if (pendingInterludes.value.length) {
+                    const first = pendingInterludes.value[0];
+                    const updatedRemaining = first.jobsRemaining - 1;
+                    if (updatedRemaining <= 0) {
+                        const pendingId = first.id;
+                        pendingInterludes.value = pendingInterludes.value.slice(1);
+                        if (!isStoryTabOpen() && !player.gameOver && wonder.value < G_CONF.WONDER_WIN) {
+                            const interludeLayer = (layers as any)?.[pendingId];
+                            if (interludeLayer && !interludeLayer.complete?.value) {
+                                // @ts-ignore
+                                player.tabs = [pendingId];
+                            }
+                        }
+                        save();
+                    } else {
+                        pendingInterludes.value = [{ ...first, jobsRemaining: updatedRemaining }, ...pendingInterludes.value.slice(1)];
+                        save();
+                    }
+                }
 
                 // After the very first completion, spawn next job immediately if under limit
                 if (jobCompletions.value === 1 && jobQueue.value.length < autoJobLimit.value) {
@@ -1949,6 +2015,30 @@ const layer = createLayer(id, function (this: any) {
                             </button>
                             <button
                                 onClick={() => {
+                                    const ids = AGI_INTERLUDE_ORDER as readonly string[];
+                                    ids.forEach(id => {
+                                        const interludeLayer = (layers as any)?.[id];
+                                        if (interludeLayer?.complete) {
+                                            interludeLayer.complete.value = false;
+                                        }
+                                    });
+                                    pendingInterludes.value = [];
+                                    save();
+                                }}
+                                style={{
+                                    background: "#8e24aa",
+                                    color: "white",
+                                    padding: "8px 16px",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    cursor: "pointer",
+                                    fontSize: "14px"
+                                }}
+                            >
+                                Reset AGI Warning
+                            </button>
+                            <button
+                                onClick={() => {
                                     gpusOwned.value = Math.max(0, gpusOwned.value - 1);
                                     save();
                                 }}
@@ -1983,6 +2073,23 @@ const layer = createLayer(id, function (this: any) {
                             </button>
                             <button
                                 onClick={() => {
+                                    iq.value = Math.max(0, iq.value - 1);
+                                    save();
+                                }}
+                                style={{
+                                    background: "#1565c0",
+                                    color: "white",
+                                    padding: "8px 16px",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    cursor: "pointer",
+                                    fontSize: "14px"
+                                }}
+                            >
+                                -1 IQ
+                            </button>
+                            <button
+                                onClick={() => {
                                     autonomy.value += 1;
                                     save();
                                 }}
@@ -2000,6 +2107,23 @@ const layer = createLayer(id, function (this: any) {
                             </button>
                             <button
                                 onClick={() => {
+                                    autonomy.value = Math.max(0, autonomy.value - 1);
+                                    save();
+                                }}
+                                style={{
+                                    background: "#00695c",
+                                    color: "white",
+                                    padding: "8px 16px",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    cursor: "pointer",
+                                    fontSize: "14px"
+                                }}
+                            >
+                                -1 Auto
+                            </button>
+                            <button
+                                onClick={() => {
                                     generality.value += 1;
                                     save();
                                 }}
@@ -2014,6 +2138,23 @@ const layer = createLayer(id, function (this: any) {
                                 }}
                             >
                                 +1 Gen
+                            </button>
+                            <button
+                                onClick={() => {
+                                    generality.value = Math.max(0, generality.value - 1);
+                                    save();
+                                }}
+                                style={{
+                                    background: "#37474f",
+                                    color: "white",
+                                    padding: "8px 16px",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    cursor: "pointer",
+                                    fontSize: "14px"
+                                }}
+                            >
+                                -1 Gen
                             </button>
                             <button
                                 onClick={() => {
@@ -2142,6 +2283,7 @@ const layer = createLayer(id, function (this: any) {
         currentChapter,
         spawnedOnetimeJobs,
         completedOnetimeJobs,
+        pendingInterludes,
         jobsRunOnce,
         everVisibleJobTypes,
         jobCompletions,

@@ -1339,7 +1339,7 @@ Climate Data Interpreter
         ],
         duration: { min: 8, max: 11 },
         cost: [
-            { type: "compute", value: 5 }
+            { type: "compute", value: 3 }
         ],
         category: "tool",
         path: "clim",
@@ -1362,7 +1362,7 @@ Climate Data Interpreter
             { type: "data", min: 10}
         ],
         duration: { min: 8, max: 11 },
-        cost: [{ type: "compute", value: 5 }],
+        cost: [{ type: "compute", value: 4 }],
         category: "tool",
         path: "clim",
     }
@@ -1387,7 +1387,7 @@ Climate Data Interpreter
         ],
         duration: { min: 6, max: 8 },
         cost: [
-            { type: "compute", value: 7 },
+            { type: "compute", value: 5 },
             { type: "money", value: 200 }
         ],
         category: "onetime",
@@ -1410,7 +1410,7 @@ Climate Data Interpreter
             { type: "data", min: 100}
         ],
         duration: { min: 9, max: 12 },
-        cost: [ { type: "compute", value: 6 }  ],
+        cost: [ { type: "compute", value: 5 }  ],
         category: "tool",
         path: "clim",
     }
@@ -1435,7 +1435,7 @@ Climate Data Interpreter
         ],
         duration: { min: 6, max: 8 },
         cost: [
-            { type: "compute", value: 7 },
+            { type: "compute", value: 5 },
             { type: "money", value: 300 }
         ],
         category: "onetime",
@@ -1520,7 +1520,7 @@ Climate Data Interpreter
         ],
         duration: { min: 6, max: 8 },
         cost: [
-            { type: "compute", value: 8 },
+            { type: "compute", value: 7 },
             { type: "money", value: 600 },
             { type: "data", value: 250 }
         ],
@@ -1602,7 +1602,7 @@ Climate Data Interpreter
         ],
         duration: { min: 8, max: 11 },
         cost: [
-            { type: "compute", value: 7 },
+            { type: "compute", value: 6 },
             { type: "money", value: 3000 },
             { type: "data", value: 500 }
         ],
@@ -1626,7 +1626,7 @@ Climate Data Interpreter
         ],
         duration: { min: 9, max: 12 },
         cost: [
-            { type: "compute", value: 5 },
+            { type: "compute", value: 4 },
             { type: "data", value: 150 }
         ],
         category: "tool",
@@ -1646,7 +1646,7 @@ Climate Data Interpreter
         ],
         duration: { min: 9, max: 12 },
         cost: [
-            { type: "compute", value: 6 },
+            { type: "compute", value: 5 },
             { type: "data", value: 200 }
         ],
         category: "onetime",
@@ -1670,7 +1670,7 @@ Climate Data Interpreter
         ],
         duration: { min: 9, max: 12 },
         cost: [
-            { type: "compute", value: 7 },
+            { type: "compute", value: 5 },
             { type: "data", value: 300 }
         ],
         category: "tool",
@@ -1693,7 +1693,7 @@ Climate Data Interpreter
         ],
         duration: { min: 10, max: 12 },
         cost: [
-            { type: "compute", value: 8 },
+            { type: "compute", value: 7 },
             { type: "money", value: 4000 },
             { type: "data", value: 800 }
         ],
@@ -1780,7 +1780,7 @@ Climate Data Interpreter
         ],
         duration: { min: 10, max: 15 },
         cost: [
-            { type: "compute", value: 8 },
+            { type: "compute", value: 6 },
             { type: "money", value: 3500 },
             { type: "data", value: 700 }
         ],
@@ -1805,7 +1805,7 @@ Climate Data Interpreter
         ],
         duration: { min: 7, max: 10 },
         cost: [
-            { type: "compute", value: 7 },
+            { type: "compute", value: 5 },
             { type: "data", value: 200 }
         ],
         category: "tool",
