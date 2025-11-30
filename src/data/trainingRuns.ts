@@ -77,6 +77,7 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         displayTrigger: [{ type: "completedJob", value: "trun3"}],
         prereq: [
             { type: "compute", value: 11 }
+	    ,{type:"autonomy", value: 1}
         ],
         unlockCost: [{ type: "data", value: 800 }],
         payout: [{ type: "iq", min: 1}],
@@ -134,7 +135,8 @@ export const TRAINING_RUN_JOBS: JobType[] = [
         displayTrigger: [{ type: "completedJob", value: "trun6"}],
         prereq: [
             { type: "compute", value: 15 }
-        ],
+	    ,{type:"autonomy", value: 3}
+            ],
         unlockCost: [{ type: "data", value: 1400 }],
         payout: [{ type: "iq", min: 1}],
         duration: { min: BASE_TRAIN_DUR * 6.5, max: BASE_TRAIN_DUR * 6.5 },

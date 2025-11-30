@@ -256,10 +256,12 @@ function renderContent(page: StoryPage, textAlign: string = "left", textColor: s
         <div style={`text-align: ${textAlign}; max-width: 600px; margin: 40px auto; line-height: 1.6;`}>
             {page.paragraphs.map((paragraph, index) => {
                 const contentWithVars = paragraph.replace(/{{lastWonderName}}/g, lastWonderName);
+                const forceLeft = contentWithVars.startsWith('[left]');
+                const normalizedContent = forceLeft ? contentWithVars.substring(6) : contentWithVars;
 
                 // Handle special formatting
-                if (contentWithVars.startsWith('<blockquote>')) {
-                    const content = contentWithVars.substring(12, contentWithVars.length - 13);
+                if (normalizedContent.startsWith('<blockquote>')) {
+                    const content = normalizedContent.substring(12, normalizedContent.length - 13);
                     return (
                         <p
                             key={index}
@@ -270,8 +272,8 @@ function renderContent(page: StoryPage, textAlign: string = "left", textColor: s
                 }
 
                 // Handle bold headlines (like "MegaCorp AI Raises $8 Billion")
-                if (contentWithVars.startsWith('**') && contentWithVars.endsWith('**')) {
-                    const content = contentWithVars.substring(2, contentWithVars.length - 2);
+                if (normalizedContent.startsWith('**') && normalizedContent.endsWith('**')) {
+                    const content = normalizedContent.substring(2, normalizedContent.length - 2);
                     return (
                         <p
                             key={index}
@@ -283,8 +285,8 @@ function renderContent(page: StoryPage, textAlign: string = "left", textColor: s
                 }
 
                 // Handle italic paragraphs
-                if (contentWithVars.startsWith('*') && contentWithVars.endsWith('*')) {
-                    const content = contentWithVars.substring(1, contentWithVars.length - 1);
+                if (normalizedContent.startsWith('*') && normalizedContent.endsWith('*')) {
+                    const content = normalizedContent.substring(1, normalizedContent.length - 1);
                     return (
                         <p key={index} style="font-size: 18px; margin-bottom: 20px; font-style: italic;">
                             {content}
@@ -296,8 +298,8 @@ function renderContent(page: StoryPage, textAlign: string = "left", textColor: s
                 return (
                     <p
                         key={index}
-                        style="font-size: 18px; margin-bottom: 20px;"
-                        innerHTML={contentWithVars.replace(/<br\/>/g, '<br/>')}
+                        style={`font-size: 18px; margin-bottom: 20px; text-align: ${forceLeft ? 'left' : textAlign};`}
+                        innerHTML={normalizedContent.replace(/<br\/>/g, '<br/>')}
                     />
                 );
             })}

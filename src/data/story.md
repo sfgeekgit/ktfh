@@ -41,42 +41,32 @@ Most of the wonders and prewonders will happen during chapters 4 and 5 (mostly 5
 **pageType:** intro
 **button_text:** LET'S GO
 
-Close the Gates
+This is a game based on the essay <a href="https://keepthefuturehuman.ai/" target="_new">Keep The Future Human</a>
 
-TODO: write intro for the game here.
-This is a game based on the essay Keep The Future Human
-
-The point of the game is to explore the potential boons and dangers of AGI
-
-The essay is relevant because...
-
-In this game, you make choices that control an AI startup.
-
-Choices that affect the growth and success of your company.
-
-Choices that affect the growth and success of humanity itself.
+[left] Right now, AI labs are racing to build AGI without proven safety methods. The choices being made today will determine whether we control advanced AI or lose control of our future.
+[left]In this game, you run an AI startup and make choices that affect both your company's success and humanity's survival.
+Will you keep the future human?
 
 
 ## Page Intro2
-**title:** Don't Die
+**title:** How To Play
 **pageType:** intro
 
-You can win the game by unlocking 5 "Wonders"
 
-Create 5 Boons for humanity.
+Win the game by unlocking 5 "Wonders"
 
-You can lose by unleashing uncontrolled AI
+Lose by unleashing uncontrolled AI
 
-**button_text:** OK...
+**button_text:** Got It
 
 ## Page Intro3
-**title:** Make Choices
+**title:** The Future Is In Your Hands
 **pageType:** intro
 Choose the future of humanity
 
 The game has several different endings.
 
-You can play however you want (this is only a game) but only one narrow path leads to an ending that is good for humanity.
+You can play however you want (this is only a game) but only one narrow path keeps the future human.
 
 **button_text:** BEGIN GAME
 
@@ -92,6 +82,7 @@ It won't be easy, but you feel ready for the task ahead.
 
 Today, your first system goes live.
 
+<!--
 ## Page 
 **title:**  Chapter 1
 
@@ -102,6 +93,8 @@ Your image classifier helps a medical researcher sort thousands of scans. Your t
 These systems are predictable. Controllable. They do exactly what you trained them to do, and nothing more.
 
 The feedback is immediate: "This saved me so much time." "I can finally focus on the important work."
+
+-->
 
 ## Page 
 **title:**  Chapter 1
@@ -127,17 +120,20 @@ Your company is small, but it's real. And it's growing.
 **id:** interlude_fork1
 
 ## Page 1
-**title:**  Which story will we follow?
-Early in the game, the player has a choice.
+**title:**  A Fork in the Lab
 
-Two domains are vying for attention: saving the planet, or saving lives.
-Researcher A can work on climate
-Researcher B can work on medicine
+As your lab expands, you must choose your focus.
+Will you pursue CLIMATE breakthroughs?
+Or advance modern MEDICINE?
+
 
 ## Page 2 [CHOICE]
 **title:** Pick the Next Flagship
 
-Which character will the game follow?
+Both hold promise for humanity, but your startup can commit to only one.
+
+Which path will you follow?
+
 
 
 [OPTION: climate]
