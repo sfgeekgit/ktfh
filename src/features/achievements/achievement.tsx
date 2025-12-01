@@ -24,6 +24,7 @@ import {
     vueFeatureMixin,
     VueFeatureOptions
 } from "util/vue";
+import { trackEvent } from "util/analytics";
 import { computed, MaybeRef, MaybeRefOrGetter, unref, watchEffect } from "vue";
 import { useToast } from "vue-toastification";
 import { saveAchievementMeta } from "util/achievementStorage";
@@ -109,6 +110,7 @@ export function createAchievement<T extends AchievementOptions>(optionsFunc?: ()
             onComplete,
             ...props
         } = options;
+        const analyticsId = (options as any).id;
 
         const vueFeature = vueFeatureMixin("achievement", options, () => (
             <Achievement
@@ -194,6 +196,7 @@ export function createAchievement<T extends AchievementOptions>(optionsFunc?: ()
                 }
                 earned.value = true;
                 achievement.onComplete?.();
+                trackEvent("achievement_earned", { id: analyticsId ?? (achievement as any).id ?? "unknown" });
                 saveAchievementMeta();
                 if (achievement.display != null && unref(achievement.showPopups) === true) {
                     let display = achievement.display;

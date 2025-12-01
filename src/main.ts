@@ -6,6 +6,7 @@ import state from "game/state";
 import "util/galaxy";
 import { load } from "util/save";
 import { useRegisterSW } from "virtual:pwa-register/vue";
+import { trackEvent } from "util/analytics";
 import type { App as VueApp } from "vue";
 import { createApp, nextTick } from "vue";
 import { useToast } from "vue-toastification";
@@ -19,6 +20,7 @@ declare global {
     interface Window {
         vue: VueApp;
         projInfo: typeof projInfo;
+        gtag?: (...args: any[]) => void;
     }
 }
 
@@ -83,4 +85,5 @@ requestAnimationFrame(async () => {
     });
 
     startGameLoop();
+    trackEvent("game_start");
 });

@@ -13,6 +13,7 @@ import ResetModal from "components/modals/ResetModal.vue";
 import { G_CONF, CHAP_5_MC_AGI_LOSE_TIMELINE, CHAP_5_ACCEPT_TIMELINE, COMPUTE_NAMES, STAT_ICONS } from "../gameConfig";
 import { JOB_TYPES } from "../jobTypes";
 import { save } from "util/save";
+import { trackEvent } from "util/analytics";
 import player from "game/player";
 import { NEWS_TEXT } from "../newsText";
 import { resetGame } from "util/reset";
@@ -152,6 +153,7 @@ const layer = createLayer(id, function (this: any) {
 
     function triggerEnding(tabId: string) {
         if (player.gameOver) return;
+        trackEvent("game_over", { reason: tabId });
         player.gameOver = true;
         // @ts-ignore
         player.tabs = [tabId];
@@ -572,6 +574,7 @@ const layer = createLayer(id, function (this: any) {
         },
         (nextChapter) => {
             if (nextChapter !== null) {
+                trackEvent("chapter_reached", { chapter: nextChapter });
                 currentChapter.value = nextChapter; // Advance to next chapter
                 // jobQueue.value = []; // Clear obsolete jobs from previous chapter
                 // @ts-ignore
@@ -1085,10 +1088,13 @@ const layer = createLayer(id, function (this: any) {
                 // Check for game over (countdown reaches zero)
                 if (timeSinceChapter5.value >= CHAP_5_MC_AGI_LOSE_TIMELINE.GAME_OVER_TIME) {
                     // Trigger lose ending
-                    player.gameOver = true;
-                    // @ts-ignore
-                    player.tabs = ["ending_lose_agi"];
-                    save();
+                    if (!player.gameOver) {
+                        trackEvent("game_over", { reason: "chapter5_mc_agi_timer" });
+                        player.gameOver = true;
+                        // @ts-ignore
+                        player.tabs = ["ending_lose_agi"];
+                        save();
+                    }
                 }
             }
 
@@ -1143,6 +1149,7 @@ const layer = createLayer(id, function (this: any) {
                 // Check if AGI sum has reached or exceeded the lose threshold
                 const agiSum = autonomy.value + generality.value + iq.value;
                 if (agiSum >= G_CONF.AGI_SUM_LOSE && !player.gameOver) {
+                    trackEvent("game_over", { reason: "agi_sum_threshold" });
                     player.gameOver = true;
                     // @ts-ignore
                     player.tabs = ["ending_lose_agi_threshold"];
@@ -1155,6 +1162,7 @@ const layer = createLayer(id, function (this: any) {
                     if (agiSum >= G_CONF.AGI_SUM_LOSE) {
 		        // Player both won and lost at same time -> they lose! AGI is a lose even if cancer is cured. 
                     } else {
+                        trackEvent("game_over", { reason: "wonder_win" });
                         player.gameOver = true;
                         // @ts-ignore
                         player.tabs = ["ending_win"];
@@ -1968,6 +1976,7 @@ const layer = createLayer(id, function (this: any) {
 
                     <div style="font-size: 14px;"><strong>Researched:</strong> {unlockedJobTypes.value.map(id => getJobType(id)?.displayName || id).join(", ")}</div>
 		    <div style="font-size: 20px; color: rgb(230, 218, 199); display: flex; gap: 10px; align-items: center;">
+                        {/*
                         <button
                             onClick={() => window.open("https://forms.gle/vRxuZMLrkBwgkqY49", "_blank")}
                             style={{
@@ -1985,6 +1994,7 @@ const layer = createLayer(id, function (this: any) {
                         >
                             Feedback
                         </button>
+                        */}
                         <button
                             onClick={openAchievementsTab}
                             style={{
