@@ -56,7 +56,7 @@ const layer = createLayer(id, function () {
             id: "compute16",
             title: "Sillicon",
             description: "Reach 16 total compute units.",	    
-            image: "/ach/ach_beehat.png",
+            image: "/ach/ach_beehatt.png",
             requirement: () => totalCompute.value >= 16,
         },
         {
