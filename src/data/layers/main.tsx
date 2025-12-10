@@ -124,6 +124,10 @@ const layer = createLayer(id, function (this: any) {
     const money = createResource<DecimalSource>(G_CONF.STARTING_MONEY, "dollars");
     const best = trackBest(money);
     const total = trackTotal(money);
+    registerWalletFloater(money, diff => `+$${format(diff)}`, { color: "#2e7d32", durationMs: 2000 });
+    type WalletFloater = { id: number; text: string; color?: string };
+    const walletFloaters = ref<WalletFloater[]>([]);
+    let walletFloaterId = 0;
 
     // Core stats (not tracked like resources)
     const iq = persistent<number>(0); // Intelligence stat
@@ -149,6 +153,32 @@ const layer = createLayer(id, function (this: any) {
     // Get job type config by ID
     function getJobType(id: string) {
         return JOB_TYPES.find(job => job.id === id);
+    }
+
+    function registerWalletFloater(
+        resource: Ref<DecimalSource>,
+        formatText: (diff: DecimalSource) => string,
+        options?: { color?: string; durationMs?: number }
+    ) {
+        watch(resource, (amount, prevAmount) => {
+            if (prevAmount === undefined) {
+                return;
+            }
+            if (Decimal.lte(amount, prevAmount)) {
+                return;
+            }
+            const diff = Decimal.sub(amount, prevAmount);
+            const id = walletFloaterId++;
+            walletFloaters.value.push({
+                id,
+                text: formatText(diff),
+                color: options?.color
+            });
+            const durationMs = options?.durationMs ?? 1000;
+            setTimeout(() => {
+                walletFloaters.value = walletFloaters.value.filter(floater => floater.id !== id);
+            }, durationMs);
+        });
     }
 
     function triggerEnding(tabId: string) {
@@ -1614,13 +1644,49 @@ const layer = createLayer(id, function (this: any) {
                         from { transform: scale(0.8); opacity: 0; }
                         to { transform: scale(1); opacity: 1; }
                     }
+                    @keyframes walletFloatUp {
+                        from { opacity: 1; transform: translateY(0) scale(1); }
+                        to { opacity: 0; transform: translateY(-18px) scale(1.05); }
+                    }
+                    .wallet-floaters {
+                        position: absolute;
+                        top: 3px;
+                        right: -25px;
+                        pointer-events: none;
+                        overflow: visible;
+                    }
+                    .wallet-floater {
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        color: #2e7d32;
+                        font-weight: bold;
+                        text-shadow: 0 0 2px currentColor;
+                        animation: walletFloatUp 2s ease-out forwards;
+                        font-size: 16px;
+                    }
                 `}</style>
 
                 {/* Sticky Wallet */}
                 <div id="sticky-wallet" style="position: sticky; top: 0; z-index: 10;">
-                    <div style="padding: 8px 12px; border: 1px solid #FFA500; border-radius: 8px; background: #fff3e0; width: 90%;">
+                    <div style="padding: 8px 12px; border: 1px solid #FFA500; border-radius: 8px; background: #fff3e0; width: 90%; position: relative; overflow: visible;">
                         <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                            <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">{STAT_ICONS.money}{"\u00A0"}{format(money.value)}</span>
+                            <span style="position: relative;">
+                                <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">
+                                    {STAT_ICONS.money}{"\u00A0"}{format(money.value)}
+                                </span>
+                                <span class="wallet-floaters wallet-floaters--money">
+                                    {walletFloaters.value.map(floater => (
+                                        <span
+                                            key={floater.id}
+                                            class="wallet-floater"
+                                            style={{ color: floater.color ?? undefined }}
+                                        >
+                                            {floater.text}
+                                        </span>
+                                    ))}
+                                </span>
+                            </span>
                             {Decimal.gt(data.value, 0) && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">{STAT_ICONS.data}{"\u00A0"}{format(data.value)}</span>}
                             {iq.value > 0 && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">{STAT_ICONS.iq}{"\u00A0"}{iq.value}</span>}
                             {autonomy.value > 0 && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">{STAT_ICONS.autonomy}{"\u00A0"}{autonomy.value}</span>}
