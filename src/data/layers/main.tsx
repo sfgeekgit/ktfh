@@ -1648,7 +1648,13 @@ const layer = createLayer(id, function (this: any) {
                         const stickyWallet = document.getElementById('sticky-wallet');
                         const statsPanel = document.getElementById('stats-panel');
 
-                        if (!stickyWallet || !statsPanel) return;
+                        if (!stickyWallet) return;
+
+                        // If stats panel doesn't exist, make sticky wallet always visible
+                        if (!statsPanel) {
+                            stickyWallet.style.opacity = '1';
+                            return;
+                        }
 
                         const observer = new IntersectionObserver((entries) => {
                             entries.forEach(entry => {
