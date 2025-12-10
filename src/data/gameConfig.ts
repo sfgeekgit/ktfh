@@ -246,5 +246,5 @@ export const STAT_ICONS = {
     iq: "🧠",
     autonomy: "🤖",
     generality: "💠",
-    wonder: "⭐" // "🏆" // "⭐" // 🌈 
+    wonder: "⭐" // "🏆" // "⭐" // 🌈
 } as const;

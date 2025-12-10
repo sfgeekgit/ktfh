@@ -19,6 +19,16 @@ import { NEWS_TEXT } from "../newsText";
 import { resetGame } from "util/reset";
 import storyContent from "@/data/story.md";
 
+// Money icon component using Material Icons
+const MoneyIcon = () => <span class="material-icons" style={{ fontSize: '1.5em', verticalAlign: 'middle', color: '#2E7D32' }}>payments</span>;
+
+// GPU icon components using Material Icons
+const IdleGpuIcon = () => <span class="material-icons" style={{ fontSize: '1.5em', verticalAlign: 'middle', color: '#2E7D32' }}>memory</span>;
+const WorkingGpuIcon = () => <span class="material-icons" style={{ fontSize: '1.5em', verticalAlign: 'middle', color: '#F57C00' }}>memory</span>;
+
+// IQ/Brain icon component using Material Icons
+const IQIcon = () => <span class="material-icons" style={{ fontSize: '1.5em', verticalAlign: 'middle', color: '#E91E63' }}>psychology</span>;
+
 //const IS_DEV = true;
 const IS_DEV = false;
 
@@ -890,7 +900,7 @@ const layer = createLayer(id, function (this: any) {
             title: () => `Buy  ${COMPUTE_NAMES[currentChapter.value as keyof typeof COMPUTE_NAMES]}`,
             description: () => (
                 <>
-                     {STAT_ICONS.money} ${format(Decimal.pow(G_CONF.GPU_COST_MULTIPLIER, gpusOwned.value - G_CONF.STARTING_GPUS).times(G_CONF.GPU_BASE_COST))}
+                     <MoneyIcon /> ${format(Decimal.pow(G_CONF.GPU_COST_MULTIPLIER, gpusOwned.value - G_CONF.STARTING_GPUS).times(G_CONF.GPU_BASE_COST))}
                 </>
             )
         },
@@ -918,7 +928,7 @@ const layer = createLayer(id, function (this: any) {
         } else if (prereq.type === "compute") {
             return `Requires ${formatCompute(prereq.value as number, currentChapter.value, true)}`;
         } else if (prereq.type === "iq") {
-            return `Requires ${prereq.value}\u00A0IQ\u00A0${STAT_ICONS.iq}`;
+            return <span>Requires {prereq.value} IQ <IQIcon /></span>;
         } else if (prereq.type === "autonomy") {
             return `Requires ${prereq.value}\u00A0${STAT_ICONS.autonomy}`;
         } else if (prereq.type === "generality") {
@@ -961,7 +971,7 @@ const layer = createLayer(id, function (this: any) {
 
                         return (
                             <>
-                                {moneyCost > 0 && <span style={!hasEnoughMoney ? "color: #2E3440; font-size: 11px;" : undefined}>{STAT_ICONS.money} ${moneyCost}</span>}{moneyCost > 0 && dataCost > 0 && " + "}{dataCost > 0 && <span style={!hasEnoughData ? "color: #2E3440; font-size: 11px;" : undefined}>{STAT_ICONS.data} {dataCost} data</span>}<br/>
+                                {moneyCost > 0 && <span style={!hasEnoughMoney ? "color: #2E3440; font-size: 11px;" : undefined}><MoneyIcon /> ${moneyCost}</span>}{moneyCost > 0 && dataCost > 0 && " + "}{dataCost > 0 && <span style={!hasEnoughData ? "color: #2E3440; font-size: 11px;" : undefined}>{STAT_ICONS.data} {dataCost} data</span>}<br/>
                                 {nonMoneyPrereqs.length > 0 && (
                                     <>
                                         {nonMoneyPrereqs.map((prereq: any, idx: number) => {
@@ -989,7 +999,7 @@ const layer = createLayer(id, function (this: any) {
                                                 {statPayout.type === "iq" && "IQ "}
                                                 {statPayout.type === "wonder" && "Wonder "}
                                                 <span style="font-size:28px;">
-                                                    {statPayout.type === "iq" && STAT_ICONS.iq}
+                                                    {statPayout.type === "iq" && <IQIcon />}
                                                     {statPayout.type === "autonomy" && STAT_ICONS.autonomy}
                                                     {statPayout.type === "generality" && STAT_ICONS.generality}
                                                     {statPayout.type === "wonder" && STAT_ICONS.wonder}
@@ -1617,23 +1627,48 @@ const layer = createLayer(id, function (this: any) {
                 `}</style>
 
                 {/* Sticky Wallet */}
-                <div id="sticky-wallet" style="position: sticky; top: 0; z-index: 10;">
-                    <div style="padding: 8px 12px; border: 1px solid #FFA500; border-radius: 8px; background: #fff3e0; width: 90%;">
+                <div id="sticky-wallet" style="position: sticky; top: 8px; z-index: 10; opacity: 0; transition: opacity 0.3s ease;">
+                    <div style="padding: 8px 12px; border: 1px solid #FFA500; border-radius: 8px; background: #fff3e0; box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);">
                         <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                            <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">{STAT_ICONS.money}{"\u00A0"}{format(money.value)}</span>
+                            <span style="font-size: 18px; font-weight: bold; white-space: nowrap;"><MoneyIcon />{"\u00A0"}{format(money.value)}</span>
                             {Decimal.gt(data.value, 0) && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">{STAT_ICONS.data}{"\u00A0"}{format(data.value)}</span>}
-                            {iq.value > 0 && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">{STAT_ICONS.iq}{"\u00A0"}{iq.value}</span>}
+                            {iq.value > 0 && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;"><IQIcon />{"\u00A0"}{iq.value}</span>}
                             {autonomy.value > 0 && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">{STAT_ICONS.autonomy}{"\u00A0"}{autonomy.value}</span>}
                             {generality.value > 0 && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">{STAT_ICONS.generality}{"\u00A0"}{generality.value}</span>}
                             {wonder.value > 0 && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">{STAT_ICONS.wonder}{"\u00A0"}{wonder.value}</span>}
                         </div>
-                        <div style="font-size: 14px; margin-top: 4px; letter-spacing: 0.1em;">
-                            {"▪".repeat(Math.max(0, availableGPUs.value))}{"▫".repeat(Math.max(0, gpusOwned.value - availableGPUs.value))}
+                        <div style="font-size: 14px; margin-top: 4px;">
+                            {Array(Math.max(0, availableGPUs.value)).fill(0).map((_, i) => <IdleGpuIcon key={`idle-${i}`} />)}
+                            {Array(Math.max(0, gpusOwned.value - availableGPUs.value)).fill(0).map((_, i) => <WorkingGpuIcon key={`working-${i}`} />)}
                         </div>
                     </div>
                 </div>
+                <script>{`
+                    (function() {
+                        const stickyWallet = document.getElementById('sticky-wallet');
+                        const statsPanel = document.getElementById('stats-panel');
 
-		    <div style="font-size: 16px; color: rgb(230, 218, 199);">Chapter {currentChapter.value}</div>
+                        if (!stickyWallet || !statsPanel) return;
+
+                        const observer = new IntersectionObserver((entries) => {
+                            entries.forEach(entry => {
+                                // Start fading in when stats panel is 70% visible (30% scrolled out)
+                                if (entry.intersectionRatio > 0.7) {
+                                    stickyWallet.style.opacity = '0';
+                                } else {
+                                    stickyWallet.style.opacity = '1';
+                                }
+                            });
+                        }, {
+                            threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+                            rootMargin: '0px'
+                        });
+
+                        observer.observe(statsPanel);
+                    })();
+                `}</script>
+
+		    <div style="font-size: 40px; color: #FFA500; font-family: Orbitron, sans-serif; margin-top: 20px; margin-bottom: 15px;">Chapter {currentChapter.value}</div>
 		    {showUnlockButtons.value && (
                         <>
                 {/* Stats Panel */}
@@ -1649,12 +1684,12 @@ const layer = createLayer(id, function (this: any) {
                             <strong>Time since Chapter 5:</strong> {Math.floor(timeSinceChapter5.value / 60)}m {Math.floor(timeSinceChapter5.value % 60)}s
                         </div>
                     )} */}
-                    <div style="font-size: 16px;"><strong>{STAT_ICONS.money} Money:</strong> {format(money.value)}</div>
+                    <div style="font-size: 16px;"><strong><MoneyIcon /> Money:</strong> {format(money.value)}</div>
                     {IS_DEV && <div style="font-size: 14px;"><strong>✅ Jobs completed:</strong> {jobCompletions.value}</div>}
                     {dataUnlocked.value && <div style="font-size: 16px;"><strong>{STAT_ICONS.data} Data:</strong> {format(data.value)}</div>}
                     {autonomy.value > 0 && <div style="font-size: 16px;"><strong>{STAT_ICONS.autonomy} Autonomy:</strong> {autonomy.value}</div>}
                     {generality.value > 0 && <div style="font-size: 16px;"><strong>{STAT_ICONS.generality} Generality:</strong> {generality.value}</div>}
-                    {iq.value > 0 && <div style="font-size: 16px;"><strong>{STAT_ICONS.iq} IQ:</strong> {iq.value}</div>}
+                    {iq.value > 0 && <div style="font-size: 16px;"><strong><IQIcon /> IQ:</strong> {iq.value}</div>}
                     {autonomy.value >= 1 && generality.value >= 1 && iq.value >= 1 && (() => {
                         const agiSum = autonomy.value + generality.value + iq.value;
                         const difference = G_CONF.AGI_SUM_LOSE - agiSum;
@@ -1685,8 +1720,9 @@ const layer = createLayer(id, function (this: any) {
                         //return name === "Campus" ? "Campuses" : name + "s";
 			return name + "s";
                     })()}:</strong> {availableGPUs.value} / {gpusOwned.value} available</div>
-                    <div style="font-size: 14px; letter-spacing: 0.1em;">
-                        {"▪".repeat(Math.max(0, availableGPUs.value))}{"▫".repeat(Math.max(0, gpusOwned.value - availableGPUs.value))}
+                    <div style="font-size: 14px;">
+                        {Array(Math.max(0, availableGPUs.value)).fill(0).map((_, i) => <IdleGpuIcon key={`idle-${i}`} />)}
+                        {Array(Math.max(0, gpusOwned.value - availableGPUs.value)).fill(0).map((_, i) => <WorkingGpuIcon key={`working-${i}`} />)}
                     </div>
                     {qualityBonus.value !== 100 && (
                         <div style="font-size: 14px; color: #4CAF50;"><strong>Quality Bonus:</strong> {parseFloat((qualityBonus.value / 100).toFixed(2))}x earnings</div>
@@ -1820,66 +1856,50 @@ const layer = createLayer(id, function (this: any) {
 
                             return (
                             <div key={job.id} style={`margin: 10px 0; padding: 8px; background: ${backgroundColor}; border-radius: 5px; border: 1px solid #ddd;`}>
-                                <div style="font-size: 14px;">
-                                    +{job.payouts.map((payout: any, idx: number) => (
-                                        <span key={idx}>
-                                            {idx > 0 && " +"}
-                                            {payout.type === "money" ? `${STAT_ICONS.money} $` : ""}
-                                            {payout.type === "data" ? `${STAT_ICONS.data} ` : ""}
-                                            {payout.type === "iq" ? `${STAT_ICONS.iq} ` : ""}
-                                            {payout.type === "autonomy" ? `${STAT_ICONS.autonomy} ` : ""}
-                                            {payout.type === "generality" ? `${STAT_ICONS.generality} ` : ""}
-                                            {payout.type === "wonder" ? `${STAT_ICONS.wonder} ` : ""}
-                                            {format(payout.amount)}
-                                            {payout.type === "data" ? " data" : ""}
-                                            {payout.type === "iq" ? " IQ" : ""}
-                                            {payout.type === "autonomy" ? " Autonomy" : ""}
-                                            {payout.type === "generality" ? " Generality" : ""}
-                                            {payout.type === "wonder" ? " Wonder" : ""}
-                                        </span>
-                                    ))}
-                                </div>
+                                <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px;">{jobType?.displayName}</div>
 
-
-                                <div style="font-size: 14px;">
-                                    <div style="display: inline-flex; flex-wrap: wrap; max-width: 50px; line-height: 1; gap: 0px; vertical-align: middle;">
-                                        {Array.from({length: computeRequired}, (_, i) => (
-                                            <span key={i} style="margin:0px;">▪</span>
+                                <div style="display: flex; gap: 20px; margin-bottom: 8px; font-size: 14px;">
+                                    <div>
+                                        {job.payouts.map((payout: any, idx: number) => (
+                                            <span key={idx}>
+                                                {idx > 0 && " +"}
+                                                {payout.type === "money" ? <><MoneyIcon /> +$</> : ""}
+                                                {payout.type === "data" ? `${STAT_ICONS.data} +` : ""}
+                                                {payout.type === "iq" ? <><IQIcon /> +</> : ""}
+                                                {payout.type === "autonomy" ? `${STAT_ICONS.autonomy} +` : ""}
+                                                {payout.type === "generality" ? `${STAT_ICONS.generality} +` : ""}
+                                                {payout.type === "wonder" ? `${STAT_ICONS.wonder} +` : ""}
+                                                {format(payout.amount)}
+                                                {payout.type === "data" ? " data" : ""}
+                                                {payout.type === "iq" ? " IQ" : ""}
+                                                {payout.type === "autonomy" ? " Autonomy" : ""}
+                                                {payout.type === "generality" ? " Generality" : ""}
+                                                {payout.type === "wonder" ? " Wonder" : ""}
+                                            </span>
                                         ))}
-                                    </div> for {job.duration} seconds
+                                    </div>
+                                    <div>
+                                        <span style="display: inline-flex; flex-wrap: wrap; max-width: 50px; line-height: 1; gap: 0px; vertical-align: middle;">
+                                            {Array.from({length: computeRequired}, (_, i) => (
+                                                <WorkingGpuIcon key={i} />
+                                            ))}
+                                        </span> for {job.duration} seconds
+                                    </div>
                                 </div>
+
                                 {moneyRequired > 0 && (
                                     <div style={`${Decimal.lt(money.value, moneyRequired) ? 'font-size: 16px; color: #d32f2f;' : 'font-size: 14px;'}`}>
-                                        <strong>Cost:</strong> {STAT_ICONS.money} -${moneyRequired}
+                                        <strong>Cost:</strong> <MoneyIcon /> -${moneyRequired}
                                     </div>
                                 )}
-                                <div style="margin-top: 8px; display: flex; gap: 5px;">
 
-                                    {jobCompletions.value > 0 && jobType?.category !== "onetime" && (
-                                        <button
-                                            onClick={() => declineJob(job.id)}
-                                            style={{
-                                                background: "#f44336",
-                                                color: "white",
-                                                padding: "6px 12px",
-                                                border: "none",
-                                                borderRadius: "4px",
-                                                cursor: "pointer",
-                                                fontSize: "13px"
-                                            }}
-                                        >
-                                            Decline
-                                        </button>
-                                    )}
-
-				    <div style="font-size: 14px;">{jobType?.displayName}</div>
-
+                                <div style="text-align: right;">
                                     {isScooped ? (
-                                        <div style="font-size: 13px; color: #d32f2f; font-weight: bold; padding: 6px 12px;">
+                                        <div style="font-size: 13px; color: #d32f2f; font-weight: bold; padding: 6px 12px; display: inline-block;">
                                             Job Scooped by MegaCorp
                                         </div>
                                     ) : (
-                                        <div style="display: flex; align-items: center; gap: 6px;">
+                                        <div style="display: inline-flex; align-items: center; gap: 12px;">
                                             {agiWarningState && (
                                                 <span
                                                     style={{
@@ -1890,6 +1910,22 @@ const layer = createLayer(id, function (this: any) {
                                                 >
                                                     {agiWarningState === "danger" ? "DANGER!" : "Be Careful..."}
                                                 </span>
+                                            )}
+                                            {jobCompletions.value > 0 && jobType?.category !== "onetime" && (
+                                                <button
+                                                    onClick={() => declineJob(job.id)}
+                                                    style={{
+                                                        background: "#f44336",
+                                                        color: "white",
+                                                        padding: "6px 12px",
+                                                        border: "none",
+                                                        borderRadius: "4px",
+                                                        cursor: "pointer",
+                                                        fontSize: "13px"
+                                                    }}
+                                                >
+                                                    Decline
+                                                </button>
                                             )}
                                             <button
                                                 onClick={(e) => e.currentTarget && handleAcceptClick(job, e.currentTarget as HTMLButtonElement)}
@@ -1914,7 +1950,10 @@ const layer = createLayer(id, function (this: any) {
                                 )}
                                 {availableGPUs.value < computeRequired && unlockedJobTypes.value.includes(job.jobTypeId) && (
                                     <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">
-                                        ⚠ Need {formatCompute(computeRequired, currentChapter.value, true)}! <span style="color: black;">{"▪".repeat(Math.max(0, availableGPUs.value))}{"▫".repeat(Math.max(0, computeRequired - availableGPUs.value))}</span>
+                                        ⚠ Need {formatCompute(computeRequired, currentChapter.value, true)}! <span>
+                                            {Array(Math.max(0, availableGPUs.value)).fill(0).map((_, i) => <IdleGpuIcon key={`idle-${i}`} />)}
+                                            {Array(Math.max(0, computeRequired - availableGPUs.value)).fill(0).map((_, i) => <WorkingGpuIcon key={`working-${i}`} />)}
+                                        </span>
                                     </div>
                                 )}
                             </div>
@@ -1942,9 +1981,9 @@ const layer = createLayer(id, function (this: any) {
                                         {delivery.payouts.map((payout: any, idx: number) => (
                                             <span key={idx}>
                                                 {idx > 0 && " +"}
-                                                {payout.type === "money" ? `${STAT_ICONS.money} $` : ""}
+                                                {payout.type === "money" ? <><MoneyIcon /> $</> : ""}
                                                 {payout.type === "data" ? `${STAT_ICONS.data} ` : ""}
-                                                {payout.type === "iq" ? `${STAT_ICONS.iq} ` : ""}
+                                                {payout.type === "iq" ? <><IQIcon /> </> : ""}
                                                 {payout.type === "autonomy" ? `${STAT_ICONS.autonomy} ` : ""}
                                                 {payout.type === "generality" ? `${STAT_ICONS.generality} ` : ""}
                                                 {payout.type === "wonder" ? `${STAT_ICONS.wonder} ` : ""}
@@ -1957,7 +1996,7 @@ const layer = createLayer(id, function (this: any) {
                                             </span>
                                         ))}
 					&nbsp;&nbsp;&nbsp;
-                                        {"▪".repeat(Math.max(0, jobType?.cost?.find(c => c.type === "compute")?.value || 0))} {Math.ceil(delivery.timeRemaining)}s
+                                        {Array(Math.max(0, jobType?.cost?.find(c => c.type === "compute")?.value || 0)).fill(0).map((_, i) => <WorkingGpuIcon key={i} />)} {Math.ceil(delivery.timeRemaining)}s
                                     </div>
                                     <div style="margin-top: 6px; width: 60%; height: 4px; background: white; border-radius: 2px; overflow: hidden;">
                                         <div style={{
@@ -1974,8 +2013,8 @@ const layer = createLayer(id, function (this: any) {
                     )}
                 </div>
 
-                    <div style="font-size: 14px;"><strong>Researched:</strong> {unlockedJobTypes.value.map(id => getJobType(id)?.displayName || id).join(", ")}</div>
-		    <div style="font-size: 20px; color: rgb(230, 218, 199); display: flex; gap: 10px; align-items: center;">
+                    <div style="font-size: 14px; color: white; margin-bottom: 15px;"><strong>Researched:</strong> {unlockedJobTypes.value.map(id => getJobType(id)?.displayName || id).join(", ")}</div>
+		    <div style="font-size: 20px; color: rgb(230, 218, 199); display: flex; justify-content: space-between; align-items: center;">
                         {/*
                         <button
                             onClick={() => window.open("https://forms.gle/vRxuZMLrkBwgkqY49", "_blank")}
@@ -2007,7 +2046,8 @@ const layer = createLayer(id, function (this: any) {
                                 borderRadius: "4px",
                                 cursor: "pointer",
                                 fontSize: "16px",
-                                padding: "4px 10px"
+                                padding: "4px 10px",
+                                margin: "0"
                             }}
                         >
                             <img src="/ach/ach_gen.png" alt="Achievements" style="width: 35px; height: 35px; opacity:1" />
@@ -2022,7 +2062,8 @@ const layer = createLayer(id, function (this: any) {
                                 cursor: "pointer",
                                 fontSize: "20px",
                                 color: "var(--foreground)",
-                                padding: "4px 8px"
+                                padding: "4px 8px",
+                                margin: "0"
                             }}
                             title="Game Options"
                         >
