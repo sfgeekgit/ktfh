@@ -1,4 +1,5 @@
-import { ref } from "vue";
+import "@fontsource/orbitron";
+import { ref, computed } from "vue";
 import { persistent } from "game/persistence";
 import player from "game/player";
 import { save } from "util/save";
@@ -9,20 +10,25 @@ const PAGE_STYLES = {
     intro: {
         headerColor: "#88C0D0",
         headerSize: "40px",
+        headerFont: "Orbitron, sans-serif",
         borderColor: "#3B4252",
         background: "#2E3440",
-        buttonColor: "#8FBCBB",
+        pageBackground: "#1a1f27",
+        buttonColor: "#4A7C8C",
         textAlign: "center",
         textColor: "#E5E9F0"
     },
     default: {
         headerColor: "#FFA500",
         headerSize: "32px",
+        headerFont: "Orbitron, sans-serif",
         borderColor: "#FFA500",
         background: "#fff3e0",
-        buttonColor: "#2196F3",
+        pageBackground: "#6e6451",
+        buttonColor: "#FFA500",
+        buttonHoverColor: "#cc8400",
         textAlign: "left",
-        textColor: "#000000"
+        textColor: "#4a3d2f"
     }
 };
 
@@ -132,14 +138,15 @@ export function createChapterLayer(chapterId: string, chapterData: ChapterData) 
             // Handle choice pages differently
             if (page.isChoice) {
                 const titleText = page.title !== undefined ? page.title : chapterData.title;
+                const enableTyping = titleText === "The Choice Before Us";
                 return (
-                    <div>
-                        <h2 style={`color: ${styles.headerColor}; font-size: ${styles.headerSize}; margin-bottom: 30px;`}>
+                    <div style={`display: flex; flex-direction: column; justify-content: center; min-height: 100%; padding: 20px 0; background: ${styles.pageBackground};`}>
+                        <h2 style={`color: ${styles.headerColor}; font-size: ${styles.headerSize}; font-family: ${styles.headerFont}; margin-bottom: 30px;`}>
                             {titleText}
                         </h2>
 
                         <div style={`margin: 20px 0; padding: 30px; border: 2px solid ${styles.borderColor}; border-radius: 10px; background: ${styles.background}; color: ${styles.textColor};`}>
-                            {renderContent(page, styles.textAlign, styles.textColor)}
+                            {renderContent(page, styles.textAlign, styles.textColor, enableTyping)}
                         </div>
 
                         <div style="margin: 30px 0; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
@@ -163,6 +170,7 @@ export function createChapterLayer(chapterId: string, chapterData: ChapterData) 
                                             Effect: {choice.effect}
                                         </p>
                                         <button
+                                            className="story-button"
                                             onClick={() => makeChoice(choice.id)}
                                             style={{
                                                 background: choice.color,
@@ -208,18 +216,21 @@ export function createChapterLayer(chapterId: string, chapterData: ChapterData) 
             }
 
             const titleText = page.title !== undefined ? page.title : chapterData.title;
+            const enableTyping = titleText === "The Choice Before Us";
             return (
-                <div>
-                    <h2 style={`color: ${styles.headerColor}; font-size: ${styles.headerSize}; margin-bottom: 30px;`}>
-                        {titleText}
-                    </h2>
+                <div style={`display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100%; padding: 20px 0; background: ${styles.pageBackground};`}>
+                    <div style="width: 100%; max-width: 800px;">
+                        <h2 style={`color: ${styles.headerColor}; font-size: ${styles.headerSize}; font-family: ${styles.headerFont}; margin-bottom: 30px;`}>
+                            {titleText}
+                        </h2>
 
-                    <div style={`margin: 20px 0; padding: 30px; border: 2px solid ${styles.borderColor}; border-radius: 10px; background: ${styles.background}; color: ${styles.textColor};`}>
-                        {renderContent(page, styles.textAlign, styles.textColor)}
-                    </div>
+                        <div style={`margin: 20px 0; padding: 30px; border: 2px solid ${styles.borderColor}; border-radius: 10px; background: ${styles.background}; color: ${styles.textColor};`}>
+                            {renderContent(page, styles.textAlign, styles.textColor, enableTyping)}
+                        </div>
 
                     <div style="margin: 30px 0; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
                         <button
+                            className="story-button"
                             onClick={isOutcomePage ? completeChapter : nextPage}
                             style={{
                                 background: isOutcomePage ? "#4CAF50" : styles.buttonColor,
@@ -235,13 +246,30 @@ export function createChapterLayer(chapterId: string, chapterData: ChapterData) 
                             {buttonText}
                         </button>
                     </div>
+                    </div>
                 </div>
             );
         }) as any;
 
+        const currentPageBackground = computed(() =>
+            pages[currentPage.value]?.pageType === 'intro'
+                ? PAGE_STYLES.intro.pageBackground
+                : PAGE_STYLES.default.pageBackground
+        );
+
+        const pageTypeClass = computed(() =>
+            pages[currentPage.value]?.pageType === 'intro'
+                ? "story-page story-page-intro"
+                : "story-page story-page-default"
+        );
+
         return {
             name,
             display,
+            style: computed(() => ({
+                background: currentPageBackground.value
+            })),
+            classes: pageTypeClass,
             complete,
             playerChoice,
             currentPage
@@ -249,7 +277,7 @@ export function createChapterLayer(chapterId: string, chapterData: ChapterData) 
     };
 }
 
-function renderContent(page: StoryPage, textAlign: string = "left", textColor: string = "#000000") {
+function renderContent(page: StoryPage, textAlign: string = "left", textColor: string = "#000000", enableTypingEffect: boolean = false) {
     const lastWonderName = (player as any).lastWonderName ?? "";
 
     return (
@@ -295,10 +323,21 @@ function renderContent(page: StoryPage, textAlign: string = "left", textColor: s
                 }
 
                 // Regular paragraphs
+                // Check if this is the "Will you keep the future human?" phrase
+                const isCallToAction = normalizedContent.includes("Will you keep the future human");
+                // Only apply animation if typing effect is enabled
+                const shouldAnimate = enableTypingEffect && index > 0 && !isCallToAction;
+                const shouldFadeIn = enableTypingEffect && isCallToAction;
+                const fontSize = isCallToAction ? "21.6px" : "18px"; // 20% larger: 18 * 1.2 = 21.6
+
+                // Calculate delay for call-to-action: wait for all typing animations to finish + 0.5 second
+                const fadeDelay = shouldFadeIn ? `${(page.paragraphs.length - 2) * 3 + 0.5}s` : '';
+
                 return (
                     <p
                         key={index}
-                        style={`font-size: 18px; margin-bottom: 20px; text-align: ${forceLeft ? 'left' : textAlign};`}
+                        className={shouldAnimate ? "story-paragraph" : (shouldFadeIn ? "story-fade-in" : "")}
+                        style={`font-size: ${fontSize}; margin-bottom: 20px; text-align: ${forceLeft ? 'left' : textAlign}; ${shouldAnimate ? `animation-delay: ${(index - 1) * 3}s;` : ''} ${shouldFadeIn ? `animation-delay: ${fadeDelay}; font-weight: bold;` : ''} ${isCallToAction && !enableTypingEffect ? 'font-weight: bold;' : ''}`}
                         innerHTML={normalizedContent.replace(/<br\/>/g, '<br/>')}
                     />
                 );

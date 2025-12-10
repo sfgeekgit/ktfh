@@ -103,6 +103,97 @@ ul {
 	direction: ltr;
 }
 
+/* Story page backgrounds - use specific selectors to avoid conflicts */
+
+/* Default background (much darker tan/brown) - must come first */
+body:has(.story-page-default) {
+	background-color: #6e6451 !important;
+}
+
+.app:has(.story-page-default) {
+	background-color: transparent !important;
+}
+
+.story-page-default {
+	background-color: #6e6451 !important;
+}
+
+.story-page-default .inner-tab,
+.story-page-default .layer-container,
+.story-page-default .layer-tab {
+	background-color: #6e6451 !important;
+}
+
+/* Intro background (dark) - more specific */
+body:has(.story-page-intro) {
+	background-color: #1a1f27 !important;
+}
+
+.app:has(.story-page-intro) {
+	background-color: transparent !important;
+}
+
+.story-page-intro {
+	background-color: #1a1f27 !important;
+}
+
+.story-page-intro .inner-tab,
+.story-page-intro .layer-container,
+.story-page-intro .layer-tab {
+	background-color: #1a1f27 !important;
+}
+
+/* Story button hover effect */
+.story-button {
+	transition: all 0.3s ease;
+}
+
+/* Intro page button hover - blue */
+.story-page-intro .story-button:hover {
+	text-shadow: 5px 0 10px rgba(255, 255, 255, 0.3),
+		-3px 0 12px rgba(255, 255, 255, 0.3);
+	background: #3a5f6b !important;
+	transform: scale(1.02);
+}
+
+/* Default page button hover - darker orange */
+.story-page-default .story-button:hover {
+	text-shadow: 5px 0 10px rgba(255, 255, 255, 0.3),
+		-3px 0 12px rgba(255, 255, 255, 0.3);
+	background: #cc8400 !important;
+	transform: scale(1.02);
+}
+
+/* Typing animation for story paragraphs */
+.story-paragraph {
+	animation: typewriter 3s steps(150, end) forwards;
+	color: transparent !important;
+	background: linear-gradient(90deg, #E5E9F0 50%, transparent 50%);
+	background-size: 200% 100%;
+	background-position: 100% 0;
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+@keyframes typewriter {
+	to {
+		background-position: 0 0;
+	}
+}
+
+/* Fade-in animation for call-to-action */
+.story-fade-in {
+	opacity: 0;
+	animation: fadeIn 1.5s ease-in forwards;
+}
+
+@keyframes fadeIn {
+	to {
+		opacity: 1;
+	}
+}
+
 /* Mobile responsive overrides */
 @media (max-width: 767px) {
 	/* Reduce margins on story content */

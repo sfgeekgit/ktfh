@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@fontsource/material-icons": "^5.1.0",
+    "@fontsource/orbitron": "^5.2.8",
     "@fontsource/roboto-mono": "^5.1.0",
     "@pixi/app": "^6.5.10",
     "@pixi/constants": "~6.5.10",
