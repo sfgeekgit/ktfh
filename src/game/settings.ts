@@ -7,6 +7,11 @@ import { decodeSave, hardReset } from "util/save";
 import { Renderable } from "util/vue";
 import { reactive, watch } from "vue";
 
+const DEFAULT_THEME = Themes.Nordic;
+//const DEFAULT_THEME = Themes.Classic;
+// Theme options: Classic, Paper, Nordic, Aqua (see src/data/themes.ts).
+// Too many UI elements are hard coded for chaging this to be useful.
+
 /** The player's settings object. */
 export interface Settings {
     /** The ID of the active save. */
@@ -29,7 +34,7 @@ const state = reactive<Partial<Settings>>({
     active: "",
     saves: [],
     showTPS: false,
-    theme: Themes.Nordic,
+    theme: DEFAULT_THEME,
     unthrottled: false,
     alignUnits: false,
     showHealthWarning: true
@@ -65,7 +70,7 @@ export const hardResetSettings = (window.hardResetSettings = () => {
         active: "",
         saves: [],
         showTPS: false,
-        theme: Themes.Nordic,
+        theme: DEFAULT_THEME,
         unthrottled: false,
         alignUnits: false,
         showHealthWarning: true
