@@ -124,11 +124,45 @@ const layer = createLayer(id, function (this: any) {
     const money = createResource<DecimalSource>(G_CONF.STARTING_MONEY, "dollars");
     const best = trackBest(money);
     const total = trackTotal(money);
-    registerWalletFloater(money, diff => `+$${format(diff)}`, { color: "#2e7d32", durationMs: 2000 });
-    type WalletFloater = { id: number; text: string; color?: string };
+    type WalletFloater = { id: number; text: string; direction: "up" | "down"; target: string };
     const walletFloaters = ref<WalletFloater[]>([]);
     let walletFloaterId = 0;
+    function registerFloater(
+        resource: Ref<DecimalSource>,
+        formatText: (diff: Decimal) => string,
+        target: string = "wallet"
+    ) {
+        watch(resource, (amount, prevAmount) => {
+            if (prevAmount === undefined) {
+                return;
+            }
+            const diff = Decimal.sub(amount, prevAmount);
+            if (diff.eq(0)) {
+                return;
+            }
+            const isGain = Decimal.gt(diff, 0);
+            const id = walletFloaterId++;
+            walletFloaters.value.push({
+                id,
+                text: formatText(diff),
+                direction: isGain ? "up" : "down",
+                target
+            });
+            setTimeout(() => {
+                walletFloaters.value = walletFloaters.value.filter(floater => floater.id !== id);
+            }, 1000);
+        });
+    }
 
+    registerFloater(
+        money,
+        diff => {
+            const sign = Decimal.gt(diff, 0) ? "+" : "-";
+            const amount = format(Decimal.abs(diff));
+            return `${sign}$${amount}`;
+        },
+        "money"
+    );
     // Core stats (not tracked like resources)
     const iq = persistent<number>(0); // Intelligence stat
     const autonomy = persistent<number>(0); // Autonomy stat
@@ -136,10 +170,56 @@ const layer = createLayer(id, function (this: any) {
     const wonder = persistent<number>(0); // Wonder stat
     const pendingInterludes = persistent<{ id: string; jobsRemaining: number }[]>([]);
 
+    registerFloater(
+        iq,
+        diff => {
+            const sign = Decimal.gt(diff, 0) ? "+" : "-";
+            const amount = format(Decimal.abs(diff));
+            return `${sign}${amount}`;
+        },
+        "iq"
+    );
+    registerFloater(
+        autonomy,
+        diff => {
+            const sign = Decimal.gt(diff, 0) ? "+" : "-";
+            const amount = format(Decimal.abs(diff));
+            return `${sign}${amount}`;
+        },
+        "autonomy"
+    );
+    registerFloater(
+        generality,
+        diff => {
+            const sign = Decimal.gt(diff, 0) ? "+" : "-";
+            const amount = format(Decimal.abs(diff));
+            return `${sign}${amount}`;
+        },
+        "generality"
+    );
+    registerFloater(
+        wonder,
+        diff => {
+            const sign = Decimal.gt(diff, 0) ? "+" : "-";
+            const amount = format(Decimal.abs(diff));
+            return `${sign}${amount}`;
+        },
+        "wonder"
+    );
+
     // Data resource (unlocked later in Chapter 2)
     const data = createResource<DecimalSource>(0, "data");
     const dataUnlocked = persistent<boolean>(false); // Track if data has been gained
     const choiceUnlockedJobs = persistent<string[]>([]);
+    registerFloater(
+        data,
+        diff => {
+            const sign = Decimal.gt(diff, 0) ? "+" : "-";
+            const amount = format(Decimal.abs(diff));
+            return `${sign}${amount}`;
+        },
+        "data"
+    );
     const BAD_ENDING_TABS_BY_JOB: Record<string, string> = {
         dem15: "ending_bad_perception_manipulation_apparatus",
         dem18: "ending_bad_algorithmic_authoritarianism"
@@ -153,32 +233,6 @@ const layer = createLayer(id, function (this: any) {
     // Get job type config by ID
     function getJobType(id: string) {
         return JOB_TYPES.find(job => job.id === id);
-    }
-
-    function registerWalletFloater(
-        resource: Ref<DecimalSource>,
-        formatText: (diff: DecimalSource) => string,
-        options?: { color?: string; durationMs?: number }
-    ) {
-        watch(resource, (amount, prevAmount) => {
-            if (prevAmount === undefined) {
-                return;
-            }
-            if (Decimal.lte(amount, prevAmount)) {
-                return;
-            }
-            const diff = Decimal.sub(amount, prevAmount);
-            const id = walletFloaterId++;
-            walletFloaters.value.push({
-                id,
-                text: formatText(diff),
-                color: options?.color
-            });
-            const durationMs = options?.durationMs ?? 1000;
-            setTimeout(() => {
-                walletFloaters.value = walletFloaters.value.filter(floater => floater.id !== id);
-            }, durationMs);
-        });
     }
 
     function triggerEnding(tabId: string) {
@@ -1648,6 +1702,10 @@ const layer = createLayer(id, function (this: any) {
                         from { opacity: 1; transform: translateY(0) scale(1); }
                         to { opacity: 0; transform: translateY(-18px) scale(1.05); }
                     }
+                    @keyframes walletFloatDown {
+                        from { opacity: 1; transform: translateY(0) scale(1); }
+                        to { opacity: 0; transform: translateY(18px) scale(0.95); }
+                    }
                     .wallet-floaters {
                         position: absolute;
                         top: 3px;
@@ -1662,9 +1720,10 @@ const layer = createLayer(id, function (this: any) {
                         color: #2e7d32;
                         font-weight: bold;
                         text-shadow: 0 0 2px currentColor;
-                        animation: walletFloatUp 2s ease-out forwards;
                         font-size: 16px;
                     }
+                    .wallet-floater--up { animation: walletFloatUp 2s ease-out forwards; }
+                    .wallet-floater--down { animation: walletFloatDown 2s ease-out forwards; }
                 `}</style>
 
                 {/* Sticky Wallet */}
@@ -1676,22 +1735,107 @@ const layer = createLayer(id, function (this: any) {
                                     {STAT_ICONS.money}{"\u00A0"}{format(money.value)}
                                 </span>
                                 <span class="wallet-floaters wallet-floaters--money">
-                                    {walletFloaters.value.map(floater => (
+                                    {walletFloaters.value.filter(floater => floater.target === "money").map(floater => (
                                         <span
                                             key={floater.id}
-                                            class="wallet-floater"
-                                            style={{ color: floater.color ?? undefined }}
+                                            class={`wallet-floater wallet-floater--${floater.direction}`}
+                                            style={{ color: floater.direction === "up" ? "#2e7d32" : "#c62828" }}
                                         >
                                             {floater.text}
                                         </span>
                                     ))}
                                 </span>
                             </span>
-                            {Decimal.gt(data.value, 0) && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">{STAT_ICONS.data}{"\u00A0"}{format(data.value)}</span>}
-                            {iq.value > 0 && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">{STAT_ICONS.iq}{"\u00A0"}{iq.value}</span>}
-                            {autonomy.value > 0 && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">{STAT_ICONS.autonomy}{"\u00A0"}{autonomy.value}</span>}
-                            {generality.value > 0 && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">{STAT_ICONS.generality}{"\u00A0"}{generality.value}</span>}
-                            {wonder.value > 0 && <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">{STAT_ICONS.wonder}{"\u00A0"}{wonder.value}</span>}
+                            {Decimal.gt(data.value, 0) && (
+                                <span style="position: relative;">
+                                    <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">
+                                        {STAT_ICONS.data}{"\u00A0"}{format(data.value)}
+                                    </span>
+                                    <span class="wallet-floaters wallet-floaters--data">
+                                        {walletFloaters.value.filter(floater => floater.target === "data").map(floater => (
+                                            <span
+                                                key={floater.id}
+                                                class={`wallet-floater wallet-floater--${floater.direction}`}
+                                                style={{ color: floater.direction === "up" ? "#2e7d32" : "#c62828" }}
+                                            >
+                                                {floater.text}
+                                            </span>
+                                        ))}
+                                    </span>
+                                </span>
+                            )}
+                            {iq.value > 0 && (
+                                <span style="position: relative;">
+                                    <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">
+                                        {STAT_ICONS.iq}{"\u00A0"}{iq.value}
+                                    </span>
+                                    <span class="wallet-floaters wallet-floaters--iq">
+                                        {walletFloaters.value.filter(floater => floater.target === "iq").map(floater => (
+                                            <span
+                                                key={floater.id}
+                                                class={`wallet-floater wallet-floater--${floater.direction}`}
+                                                style={{ color: floater.direction === "up" ? "#2e7d32" : "#c62828" }}
+                                            >
+                                                {floater.text}
+                                            </span>
+                                        ))}
+                                    </span>
+                                </span>
+                            )}
+                            {autonomy.value > 0 && (
+                                <span style="position: relative;">
+                                    <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">
+                                        {STAT_ICONS.autonomy}{"\u00A0"}{autonomy.value}
+                                    </span>
+                                    <span class="wallet-floaters wallet-floaters--autonomy">
+                                        {walletFloaters.value.filter(floater => floater.target === "autonomy").map(floater => (
+                                            <span
+                                                key={floater.id}
+                                                class={`wallet-floater wallet-floater--${floater.direction}`}
+                                                style={{ color: floater.direction === "up" ? "#2e7d32" : "#c62828" }}
+                                            >
+                                                {floater.text}
+                                            </span>
+                                        ))}
+                                    </span>
+                                </span>
+                            )}
+                            {generality.value > 0 && (
+                                <span style="position: relative;">
+                                    <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">
+                                        {STAT_ICONS.generality}{"\u00A0"}{generality.value}
+                                    </span>
+                                    <span class="wallet-floaters wallet-floaters--generality">
+                                        {walletFloaters.value.filter(floater => floater.target === "generality").map(floater => (
+                                            <span
+                                                key={floater.id}
+                                                class={`wallet-floater wallet-floater--${floater.direction}`}
+                                                style={{ color: floater.direction === "up" ? "#2e7d32" : "#c62828" }}
+                                            >
+                                                {floater.text}
+                                            </span>
+                                        ))}
+                                    </span>
+                                </span>
+                            )}
+                            {wonder.value > 0 && (
+                                <span style="position: relative;">
+                                    <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">
+                                        {STAT_ICONS.wonder}{"\u00A0"}{wonder.value}
+                                    </span>
+                                    <span class="wallet-floaters wallet-floaters--wonder">
+                                        {walletFloaters.value.filter(floater => floater.target === "wonder").map(floater => (
+                                            <span
+                                                key={floater.id}
+                                                class={`wallet-floater wallet-floater--${floater.direction}`}
+                                                style={{ color: floater.direction === "up" ? "#2e7d32" : "#c62828" }}
+                                            >
+                                                {floater.text}
+                                            </span>
+                                        ))}
+                                    </span>
+                                </span>
+                            )}
                         </div>
                         <div style="font-size: 14px; margin-top: 4px; letter-spacing: 0.1em;">
                             {"▪".repeat(Math.max(0, availableGPUs.value))}{"▫".repeat(Math.max(0, gpusOwned.value - availableGPUs.value))}
@@ -1805,26 +1949,6 @@ const layer = createLayer(id, function (this: any) {
                         </div>
                     </div>
                 )}
-                    {(currentChapter.value >= 2) && (
-                        <button
-                            onClick={openAchievementsTab}
-                            style={{
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: "6px",
-                                background: currentChapter.value >= 2 ? "#4CAF50" : "var(--raised-background)",
-                                color: currentChapter.value >= 2 ? "#EEEEEE" : "#ccc",
-                                border: currentChapter.value >= 2 ? "none" : "2px solid var(--outline)",
-                                borderRadius: "4px",
-                                cursor: "pointer",
-                                fontSize: "16px",
-                                padding: "4px 10px"
-                            }}
-                        >
-                            <img src="/ach/ach_gen.png" alt="Achievements" style="width: 35px; height: 35px; opacity:1" />
-                            Achievements
-                        </button>
-)}
 
                 <div style="margin: 15px 0; padding: 12px; border: 2px solid #4CAF50; border-radius: 10px; background: #e8f5e9;">
                     <h3>Available Jobs</h3>
@@ -2067,8 +2191,8 @@ const layer = createLayer(id, function (this: any) {
                                 display: "inline-flex",
                                 alignItems: "center",
                                 gap: "6px",
-                                background: "var(--raised-background)",
-                                color: "#ccc",
+                                background: currentChapter.value >= 2 ? "#4CAF50" : "var(--raised-background)",
+                                color: currentChapter.value >= 2 ? "#EEEEEE" : "#ccc",
                                 border: currentChapter.value >= 2 ? "none" : "2px solid var(--outline)",
                                 borderRadius: "4px",
                                 cursor: "pointer",
