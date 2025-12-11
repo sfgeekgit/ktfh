@@ -68,6 +68,48 @@ ul {
 	margin: unset;
 }
 
+/* Typing animation for story paragraphs */
+.story-paragraph {
+	animation: typewriter 3s steps(150, end) forwards;
+	color: transparent !important;
+	background: linear-gradient(90deg, #E5E9F0 50%, transparent 50%);
+	background-size: 200% 100%;
+	background-position: 100% 0;
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+@keyframes typewriter {
+	to {
+		background-position: 0 0;
+	}
+}
+
+/* Fade-in animation for call-to-action */
+.story-fade-in {
+	opacity: 0;
+	animation: fadeIn 1.5s ease-in forwards;
+}
+
+@keyframes fadeIn {
+	to {
+		opacity: 1;
+	}
+}
+
+/* Story button hover fade */
+.story-button {
+	transition: all 0.3s ease;
+}
+
+.story-page-intro .story-button:hover {
+	text-shadow: 5px 0 10px rgba(255, 255, 255, 0.3),
+		-3px 0 12px rgba(255, 255, 255, 0.3);
+	background: #3a5f6b !important;
+	transform: scale(1.02);
+}
+
 /* Match toast color with in-game green buttons */
 .Vue-Toastification__toast--info {
 	background-color: #4caf50;
