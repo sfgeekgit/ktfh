@@ -1860,7 +1860,8 @@ const layer = createLayer(id, function (this: any) {
 
                 {/* Sticky Wallet */}
                 <div id="sticky-wallet" style="position: sticky; top: 0; z-index: 10;">
-                    <div style="padding: 8px 12px; border: 1px solid #FFA500; border-radius: 8px; background: #fff3e0; width: 90%; position: relative; overflow: visible;">
+                    <div style="position: relative; width: 90%;">
+                        <div style="padding: 8px 12px; border: 1px solid #FFA500; border-radius: 8px; background: #fff3e0; width: 100%; position: relative; overflow: visible;">
                         <div style="display: flex; flex-wrap: wrap; gap: 10px;">
                             <span style="position: relative;">
                                 <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">
@@ -1972,6 +1973,32 @@ const layer = createLayer(id, function (this: any) {
                         <div style="font-size: 14px; margin-top: 4px; letter-spacing: 0.1em;">
                             {"▪".repeat(Math.max(0, availableGPUs.value))}{"▫".repeat(Math.max(0, gpusOwned.value - availableGPUs.value))}
                         </div>
+                        </div>
+                        {activeNewsFlashes.value.length > 0 && (
+                            <div style="position: absolute; top: 100%; left: 0; right: 0; margin-top: 6px; display: flex; flex-direction: column; gap: 8px; align-items: stretch; z-index: 11;">
+                                {activeNewsFlashes.value.map(news => (
+                                    <div key={news.id} style="margin: 0 0px; padding: 8px; border: 2px solid #d32f2f; border-radius: 10px; background: #ffebee; display: flex; justify-content: space-between; align-items: center;">
+                                        <div style="font-size: 14px; font-weight: bold; color: #c62828; flex: 1;">{news.message}</div>
+                                        <button
+                                            onClick={() => dismissNewsFlash(news.id)}
+                                            style={{
+                                                background: "#d32f2f",
+                                                color: "white",
+                                                padding: "6px 12px",
+                                                border: "none",
+                                                borderRadius: "4px",
+                                                cursor: "pointer",
+                                                fontSize: "12px",
+                                                marginLeft: "10px",
+                                                flexShrink: 0
+                                            }}
+                                        >
+                                            Dismiss
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -2046,31 +2073,6 @@ const layer = createLayer(id, function (this: any) {
                 </div>
                         </>
 		    )}
-
-                {activeNewsFlashes.value.length > 0 && (
-                    <div style="margin: 15px 0;">
-                        {activeNewsFlashes.value.map(news => (
-                            <div key={news.id} style="margin: 8px 0; padding: 12px; border: 2px solid #d32f2f; border-radius: 10px; background: #ffebee; display: flex; justify-content: space-between; align-items: center;">
-                                <div style="font-size: 16px; font-weight: bold; color: #c62828;">{news.message}</div>
-                                <button
-                                    onClick={() => dismissNewsFlash(news.id)}
-                                    style={{
-                                        background: "#d32f2f",
-                                        color: "white",
-                                        padding: "6px 12px",
-                                        border: "none",
-                                        borderRadius: "4px",
-                                        cursor: "pointer",
-                                        fontSize: "14px",
-                                        marginLeft: "15px"
-                                    }}
-                                >
-                                    Dismiss
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                )}
 
                 {showCountdown.value && (
                     <div style="margin: 15px 0;">
