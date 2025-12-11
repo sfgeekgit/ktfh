@@ -164,7 +164,7 @@ export function createChapterLayer(chapterId: string, chapterData: ChapterData) 
                                             Effect: {choice.effect}
                                         </p>
                                         <button
-                                            className="story-button"
+                                            class="story-button"
                                             onClick={() => makeChoice(choice.id)}
                                             style={{
                                                 background: choice.color,
@@ -223,7 +223,7 @@ export function createChapterLayer(chapterId: string, chapterData: ChapterData) 
 
                     <div style="margin: 30px 0; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
                         <button
-                            className="story-button"
+                            class="story-button"
                             onClick={isOutcomePage ? completeChapter : nextPage}
                             style={{
                                 background: isOutcomePage ? "#4CAF50" : styles.buttonColor,
@@ -308,7 +308,7 @@ function renderContent(page: StoryPage, textAlign: string = "left", textColor: s
                 return (
                     <p
                         key={index}
-                        className={shouldAnimate ? "story-paragraph" : (shouldFadeIn ? "story-fade-in" : "")}
+                        class={shouldAnimate ? "story-paragraph" : (shouldFadeIn ? "story-fade-in" : "")}
                         style={`font-size: ${fontSize}; margin-bottom: 20px; text-align: ${forceLeft ? 'left' : textAlign}; ${shouldAnimate ? `animation-delay: ${(index - 1) * 3}s;` : ''} ${shouldFadeIn ? `animation-delay: ${fadeDelay}; font-weight: bold;` : ''} ${isCallToAction && !enableTypingEffect ? 'font-weight: bold;' : ''}`}
                         innerHTML={normalizedContent.replace(/<br\/>/g, '<br/>')}
                     />

@@ -48,8 +48,10 @@ a,
 a:hover,
 .button:hover,
 .link:hover {
-	text-shadow: 5px 0 10px var(--link),
-		-3px 0 12px var(--link);
+	text-decoration: underline;
+	background-color: rgba(255, 255, 255, 0.05);
+	border-radius: 4px;
+	padding: 0 2px;
 }
 
 .button:disabled {
