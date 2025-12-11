@@ -1721,6 +1721,7 @@ const layer = createLayer(id, function (this: any) {
                         font-weight: bold;
                         text-shadow: 0 0 2px currentColor;
                         font-size: 16px;
+                        white-space: nowrap;
                     }
                     .wallet-floater--up { animation: walletFloatUp 2s ease-out forwards; }
                     .wallet-floater--down { animation: walletFloatDown 2s ease-out forwards; }

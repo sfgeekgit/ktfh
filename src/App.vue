@@ -53,6 +53,7 @@ const GameComponent = () => gameComponents.map(c => render(c));
     flex-flow: column;
     min-height: 100%;
     height: 100%;
+    touch-action: manipulation;
 }
 
 #modal-root {

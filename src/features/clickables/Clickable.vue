@@ -49,6 +49,8 @@ const { start, stop } = setupHoldToClick(() => emits("hold"));
     min-height: 140px;
     width: 140px;
     font-size: 12px;
+    border-radius: 20px;
+    touch-action: manipulation;
 }
 
 .clickable > * {
