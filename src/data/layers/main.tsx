@@ -1539,7 +1539,7 @@ const layer = createLayer(id, function (this: any) {
         const isScooped = scoopedJobs.value[job.id] || false;
 
         return (
-            <div key={job.id} style={`margin: 10px 0; padding: 8px; background: ${backgroundColor}; border-radius: 5px; border: 1px solid #ddd;`}>
+            <div key={job.id} style={`position: relative; margin: 10px 0; padding: 8px; background: ${backgroundColor}; border-radius: 5px; border: 1px solid #ddd;`}>
                 <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px;">{jobType?.displayName}</div>
 
                 <div style="display: flex; gap: 16px; align-items: flex-start; margin-bottom: 8px; font-size: 14px; width: 100%;">
@@ -1577,6 +1577,11 @@ const layer = createLayer(id, function (this: any) {
                     </div>
                 </div>
 
+                {!isScooped && availableGPUs.value < computeRequired && unlockedJobTypes.value.includes(job.jobTypeId) && (
+                    <div style="position: absolute; bottom: 14px; left: 8px; color: #d32f2f; font-weight: bold; font-size: 15px; max-width: 50%;">
+                        ⚠ Need {formatCompute(computeRequired, currentChapter.value, true)}! <span style="color: black;">{"▪".repeat(Math.max(0, availableGPUs.value))}{"▫".repeat(Math.max(0, computeRequired - availableGPUs.value))}</span>
+                    </div>
+                )}
                 <div style="margin-top: 8px; text-align: right;">
                     {isScooped ? (
                         <div style="font-size: 13px; color: #d32f2f; font-weight: bold; padding: 6px 12px; display: inline-block;">
@@ -1631,11 +1636,6 @@ const layer = createLayer(id, function (this: any) {
                 </div>
                 {job.jobTypeId !== "game1" && !unlockedJobTypes.value.includes(job.jobTypeId) && (
                     <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">⚠ Need {jobType?.displayName}!</div>
-                )}
-                {availableGPUs.value < computeRequired && unlockedJobTypes.value.includes(job.jobTypeId) && (
-                    <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">
-                        ⚠ Need {formatCompute(computeRequired, currentChapter.value, true)}! <span style="color: black;">{"▪".repeat(Math.max(0, availableGPUs.value))}{"▫".repeat(Math.max(0, computeRequired - availableGPUs.value))}</span>
-                    </div>
                 )}
             </div>
         );
