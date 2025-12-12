@@ -1532,9 +1532,7 @@ const layer = createLayer(id, function (this: any) {
         const computeRequired = jobType?.cost?.find(c => c.type === "compute")?.value || 0;
         const moneyRequired = jobType?.cost?.find(c => c.type === "money")?.value || 0;
         const primaryPayoutType = job.payouts[0]?.type || "money";
-        const backgroundColor = primaryPayoutType === "money" ? "#ffffff" :
-                               primaryPayoutType === "data" ? "#f3f3ff" :
-                               "#f3f3f3";
+        const backgroundColor = primaryPayoutType === "data" ? "#f3f3ff" : "#ffffff";
         const rejectionState = jobRejectionState.value[job.id] || 0;
         const isInRejectionChain = rejectionState > 0;
         const buttonText = getAcceptButtonText(job, jobType);
@@ -1542,65 +1540,50 @@ const layer = createLayer(id, function (this: any) {
 
         return (
             <div key={job.id} style={`margin: 10px 0; padding: 8px; background: ${backgroundColor}; border-radius: 5px; border: 1px solid #ddd;`}>
-                <div style="font-size: 14px;">
-                    +{job.payouts.map((payout: any, idx: number) => (
-                        <span key={idx}>
-                            {idx > 0 && " +"}
-                            {payout.type === "money" ? `${STAT_ICONS.money} $` : ""}
-                            {payout.type === "data" ? `${STAT_ICONS.data} ` : ""}
-                            {payout.type === "iq" ? `${STAT_ICONS.iq} ` : ""}
-                            {payout.type === "autonomy" ? `${STAT_ICONS.autonomy} ` : ""}
-                            {payout.type === "generality" ? `${STAT_ICONS.generality} ` : ""}
-                            {payout.type === "wonder" ? `${STAT_ICONS.wonder} ` : ""}
-                            {format(payout.amount)}
-                            {payout.type === "data" ? " data" : ""}
-                            {payout.type === "iq" ? " IQ" : ""}
-                            {payout.type === "autonomy" ? " Autonomy" : ""}
-                            {payout.type === "generality" ? " Generality" : ""}
-                            {payout.type === "wonder" ? " Wonder" : ""}
-                        </span>
-                    ))}
-                </div>
+                <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px;">{jobType?.displayName}</div>
 
-                <div style="font-size: 14px;">
-                    <div style="display: inline-flex; flex-wrap: wrap; max-width: 50px; line-height: 1; gap: 0px; vertical-align: middle;">
-                        {Array.from({length: computeRequired}, (_, i) => (
-                            <span key={i} style="margin:0px;">▪</span>
+                <div style="display: flex; gap: 16px; align-items: flex-start; margin-bottom: 8px; font-size: 14px; width: 100%;">
+                    <div style="display: flex; flex-direction: column; gap: 4px; flex: 1 1 0; min-width: 0; align-items: flex-start; text-align: left;">
+                        {job.payouts.map((payout: any, idx: number) => (
+                            <span key={idx} style="margin-left: 10px;">
+                                {payout.type === "money" ? `${STAT_ICONS.money} +$` : ""}
+                                {payout.type === "data" ? `${STAT_ICONS.data} +` : ""}
+                                {payout.type === "iq" ? `${STAT_ICONS.iq} +` : ""}
+                                {payout.type === "autonomy" ? `${STAT_ICONS.autonomy} +` : ""}
+                                {payout.type === "generality" ? `${STAT_ICONS.generality} +` : ""}
+                                {payout.type === "wonder" ? `${STAT_ICONS.wonder} +` : ""}
+                                {format(payout.amount)}
+                                {payout.type === "data" ? " data" : ""}
+                                {payout.type === "iq" ? " IQ" : ""}
+                                {payout.type === "autonomy" ? " Autonomy" : ""}
+                                {payout.type === "generality" ? " Generality" : ""}
+                                {payout.type === "wonder" ? " Wonder" : ""}
+                            </span>
                         ))}
-                    </div> for {job.duration} seconds
-                </div>
-                {moneyRequired > 0 && (
-                    <div style={`${Decimal.lt(money.value, moneyRequired) ? 'font-size: 16px; color: #d32f2f;' : 'font-size: 14px;'}`}>
-                        <strong>Cost:</strong> {STAT_ICONS.money} -${moneyRequired}
                     </div>
-                )}
-                <div style="margin-top: 8px; display: flex; gap: 5px;">
+                    <div style="display: flex; flex-direction: column; gap: 4px; align-items: flex-end; text-align: right; justify-content: center; margin-left: auto; flex: 0 0 auto;">
+                        <span>
+                            <span style="display: inline-flex; flex-wrap: wrap; max-width: 50px; line-height: 1; gap: 0px; vertical-align: middle;">
+                                {Array.from({length: computeRequired}, (_, i) => (
+                                    <span key={i} style="margin:0px;">▪</span>
+                                ))}
+                            </span> for {job.duration} seconds
+                        </span>
+                        {moneyRequired > 0 && (
+                            <span style={`${Decimal.lt(money.value, moneyRequired) ? 'font-size: 16px; color: #d32f2f;' : 'font-size: 14px;'}`}>
+                                <strong>Cost:</strong> {STAT_ICONS.money} -${moneyRequired}
+                            </span>
+                        )}
+                    </div>
+                </div>
 
-                    {jobCompletions.value > 0 && jobType?.category !== "onetime" && (
-                        <button
-                            onClick={() => declineJob(job.id)}
-                            style={{
-                                background: "#f44336",
-                                color: "white",
-                                padding: "6px 12px",
-                                border: "none",
-                                borderRadius: "4px",
-                                cursor: "pointer",
-                                fontSize: "13px"
-                            }}
-                        >
-                            Decline
-                        </button>
-                    )}
-
-                    <div style="font-size: 14px;">{jobType?.displayName}</div>
-
+                <div style="margin-top: 8px; text-align: right;">
                     {isScooped ? (
-                        <div style="font-size: 13px; color: #d32f2f; font-weight: bold; padding: 6px 12px;">
+                        <div style="font-size: 13px; color: #d32f2f; font-weight: bold; padding: 6px 12px; display: inline-block;">
                             Job Scooped by MegaCorp
                         </div>
                     ) : (
-                        <div style="display: flex; align-items: center; gap: 6px;">
+                        <div style="display: inline-flex; align-items: center; gap: 12px;">
                             {agiWarningState && (
                                 <span
                                     style={{
@@ -1611,6 +1594,22 @@ const layer = createLayer(id, function (this: any) {
                                 >
                                     {agiWarningState === "danger" ? "DANGER!" : "Be Careful..."}
                                 </span>
+                            )}
+                            {jobCompletions.value > 0 && jobType?.category !== "onetime" && (
+                                <button
+                                    onClick={() => declineJob(job.id)}
+                                    style={{
+                                        background: "#f44336",
+                                        color: "white",
+                                        padding: "6px 12px",
+                                        border: "none",
+                                        borderRadius: "4px",
+                                        cursor: "pointer",
+                                        fontSize: "13px"
+                                    }}
+                                >
+                                    Decline
+                                </button>
                             )}
                             <button
                                 onClick={(e) => e.currentTarget && handleAcceptClick(job, e.currentTarget as HTMLButtonElement)}
