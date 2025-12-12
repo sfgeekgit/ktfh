@@ -2090,7 +2090,7 @@ const layer = createLayer(id, function (this: any) {
                     </div>
                 )}
 
-                <div style="margin: 15px 0; padding: 12px; border: 2px solid #4CAF50; border-radius: 10px; background: #e8f5e9;">
+                <div style={`margin: 15px 0; padding: 12px; border: 2px solid #4CAF50; border-radius: 10px; background: #e8f5e9; min-height: ${gpusOwned.value >= 2 ? '288px' : '177px'};`}>
                     <h3>Available Jobs</h3>
                     {clearJobsVisible.value && (
                         <div style="margin-bottom: 10px;">
