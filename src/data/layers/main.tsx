@@ -1583,24 +1583,12 @@ const layer = createLayer(id, function (this: any) {
                     </div>
                 )}
                 <div style="margin-top: 8px; text-align: right;">
-                    {isScooped ? (
-                        <div style="font-size: 13px; color: #d32f2f; font-weight: bold; padding: 6px 12px; display: inline-block;">
-                            Job Scooped by MegaCorp
-                        </div>
-                    ) : (
-                        <div style="display: inline-flex; align-items: center; gap: 12px;">
-                            {agiWarningState && (
-                                <span
-                                    style={{
-                                        fontSize: "15px",
-                                        color: "#d32f2f",
-                                        fontWeight: agiWarningState === "danger" ? "bold" : "normal"
-                                    }}
-                                >
-                                    {agiWarningState === "danger" ? "DANGER!" : "Be Careful..."}
-                                </span>
-                            )}
-                            {jobCompletions.value > 0 && jobType?.category !== "onetime" && (
+                    <div style="display: inline-flex; align-items: center; gap: 12px;">
+                        {isScooped ? (
+                            <>
+                                <div style="font-size: 13px; color: #d32f2f; font-weight: bold; padding: 6px 12px;">
+                                    Job Scooped by MegaCorp
+                                </div>
                                 <button
                                     onClick={() => declineJob(job.id)}
                                     style={{
@@ -1615,24 +1603,54 @@ const layer = createLayer(id, function (this: any) {
                                 >
                                     Decline
                                 </button>
-                            )}
-                            <button
-                                onClick={(e) => e.currentTarget && handleAcceptClick(job, e.currentTarget as HTMLButtonElement)}
-                                disabled={!canAcceptJob(job) && !isInRejectionChain}
-                                style={{
-                                    background: !canAcceptJob(job) && !isInRejectionChain ? "#ccc" : buttonText === "Decline" ? "#f44336" : "#4CAF50",
-                                    color: "white",
-                                    padding: "6px 12px",
-                                    border: "none",
-                                    borderRadius: "4px",
-                                    cursor: canAcceptJob(job) || isInRejectionChain ? "pointer" : "not-allowed",
-                                    fontSize: "13px"
-                                }}
-                            >
-                                {buttonText}
-                            </button>
-                        </div>
-                    )}
+                            </>
+                        ) : (
+                            <>
+                                {agiWarningState && (
+                                    <span
+                                        style={{
+                                            fontSize: "15px",
+                                            color: "#d32f2f",
+                                            fontWeight: agiWarningState === "danger" ? "bold" : "normal"
+                                        }}
+                                    >
+                                        {agiWarningState === "danger" ? "DANGER!" : "Be Careful..."}
+                                    </span>
+                                )}
+                                {jobCompletions.value > 0 && jobType?.category !== "onetime" && (
+                                    <button
+                                        onClick={() => declineJob(job.id)}
+                                        style={{
+                                            background: "#f44336",
+                                            color: "white",
+                                            padding: "6px 12px",
+                                            border: "none",
+                                            borderRadius: "4px",
+                                            cursor: "pointer",
+                                            fontSize: "13px"
+                                        }}
+                                    >
+                                        Decline
+                                    </button>
+                                )}
+                                <button
+                                    onClick={(e) => e.currentTarget && handleAcceptClick(job, e.currentTarget as HTMLButtonElement)}
+                                    disabled={!canAcceptJob(job) && !isInRejectionChain}
+                                    style={{
+                                        background: !canAcceptJob(job) && !isInRejectionChain ? "#ccc" : buttonText === "Decline" ? "#f44336" : "#4CAF50",
+                                        color: "white",
+                                        padding: "6px 12px",
+                                        border: "none",
+                                        borderRadius: "4px",
+                                        cursor: canAcceptJob(job) || isInRejectionChain ? "pointer" : "not-allowed",
+                                        fontSize: "13px"
+                                    }}
+                                >
+                                    {buttonText}
+                                </button>
+                            </>
+                        )}
+                    </div>
                 </div>
                 {job.jobTypeId !== "game1" && !unlockedJobTypes.value.includes(job.jobTypeId) && (
                     <div style="margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 12px;">⚠ Need {jobType?.displayName}!</div>
@@ -2090,7 +2108,7 @@ const layer = createLayer(id, function (this: any) {
                     </div>
                 )}
 
-                <div style={`margin: 15px 0; padding: 12px; border: 2px solid #4CAF50; border-radius: 10px; background: #e8f5e9; min-height: ${gpusOwned.value >= 2 ? '288px' : '177px'};`}>
+                <div style="margin: 15px 0; padding: 12px; border: 2px solid #4CAF50; border-radius: 10px; background: #e8f5e9; min-height: 180px;">
                     <h3>Available Jobs</h3>
                     {clearJobsVisible.value && (
                         <div style="margin-bottom: 10px;">
