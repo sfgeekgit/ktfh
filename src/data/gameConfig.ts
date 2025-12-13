@@ -239,6 +239,12 @@ export const COMPUTE_NAMES = {
     5: "Data Center"
 } as const;
 
+// Compute availability icons
+export const GPU_IC = {
+    free: "▪",
+    used: "▫"
+} as const;
+
 // Centralized stat icons
 export const STAT_ICONS = {
     money: "💰",
@@ -246,5 +252,6 @@ export const STAT_ICONS = {
     iq: "🧠",
     autonomy: "🤖",
     generality: "💠",
-    wonder: "⭐" // "🏆" // "⭐" // 🌈 
+    wonder: "⭐",  // "🏆" // "⭐" // 🌈 
+    defalut_job: "🌐"
 } as const;

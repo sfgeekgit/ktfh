@@ -53,6 +53,7 @@ export interface JobType {
     payout: PayoutSpec[];    // What the job pays out
     duration?: DurationSpec; // How long the job takes (optional)
     category?: string;       // Job category (optional)
+    icon?: string;           // Optional emoji icon for the job type
     acceptanceChance?: number;  // Probability of accepting on first click (0-1, default 1.0 = always accept)
     rejectionChain?: string[];  // Array of button texts to show when acceptance fails (e.g., ["No", "I don't want to"])
     is_wonder?: boolean;     // Whether this job creates a Wonder (default: false)
@@ -74,6 +75,7 @@ export const JOB_TYPES: JobType[] = [
         ],
         duration: { min: 2, max: 4 },
         category: "tool",
+        icon: "👁️",
         cost: [
             { type: "compute", value: 1 }
         ]
@@ -151,6 +153,7 @@ export const JOB_TYPES: JobType[] = [
         ],
         duration: { min: 5, max: 8 },
         category: "tool",
+        icon: "🗑️",
         cost: [
             { type: "compute", value: 2 }
         ]
@@ -174,6 +177,7 @@ export const JOB_TYPES: JobType[] = [
             { type: "compute", value: 3 }
         ],
         category: "tool",
+        icon: "🚚",
     },
 
     //// Chapter 2

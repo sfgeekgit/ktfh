@@ -158,3 +158,40 @@ ul {
 		padding-right: 10px !important;
 	}
 }
+
+/* Upgrade buttons: mimic mockup card feel */
+.upgrades-row .clickable {
+	background: linear-gradient(180deg, rgba(74, 222, 128, 0.45) 0%, rgba(74, 222, 128, 0.1) 100%);
+	border: 2px solid #4ade80;
+	border-bottom-width: 4px;
+	border-radius: 10px;
+	box-shadow: none;
+	transition: all 0.12s ease;
+}
+
+.upgrades-row .clickable.can:hover {
+	background: linear-gradient(180deg, rgba(74, 222, 128, 0.25) 0%, rgba(74, 222, 128, 0.1) 100%);
+	transform: translateY(-1px);
+	box-shadow: none;
+}
+
+.upgrades-row .clickable.can:active {
+	border-bottom-width: 2px;
+	transform: translateY(2px);
+}
+
+.upgrades-row .clickable.locked {
+	background: #2b2f36;
+	border-color: rgba(255, 255, 255, 0.2);
+	border-bottom-width: 4px;
+	opacity: 0.85;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f5f5f5'%3E%3Cpath fill-opacity='0.25' d='M6 10V8a6 6 0 1112 0v2h1a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2v-8a2 2 0 012-2h1zm2 0h8V8a4 4 0 10-8 0v2zm4 4.5a1.5 1.5 0 00-1.5 1.5v2a1.5 1.5 0 003 0v-2A1.5 1.5 0 0012 14.5z'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 84px;
+}
+
+.upgrades-row .clickable.locked:hover,
+.upgrades-row .clickable.locked:active {
+	transform: none;
+}

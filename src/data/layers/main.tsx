@@ -10,7 +10,7 @@ import { globalBus } from "game/events";
 import { noPersist } from "game/persistence";
 import { persistent } from "game/persistence";
 import ResetModal from "components/modals/ResetModal.vue";
-import { G_CONF, CHAP_5_MC_AGI_LOSE_TIMELINE, CHAP_5_ACCEPT_TIMELINE, COMPUTE_NAMES, STAT_ICONS } from "../gameConfig";
+import { G_CONF, CHAP_5_MC_AGI_LOSE_TIMELINE, CHAP_5_ACCEPT_TIMELINE, COMPUTE_NAMES, GPU_IC, STAT_ICONS } from "../gameConfig";
 import { JOB_TYPES } from "../jobTypes";
 import { save } from "util/save";
 import { trackEvent } from "util/analytics";
@@ -1046,7 +1046,7 @@ const layer = createLayer(id, function (this: any) {
 
                         return (
                             <>
-                                {moneyCost > 0 && <span style={!hasEnoughMoney ? "color: #2E3440; font-size: 11px;" : undefined}>{STAT_ICONS.money} ${moneyCost}</span>}{moneyCost > 0 && dataCost > 0 && " + "}{dataCost > 0 && <span style={!hasEnoughData ? "color: #2E3440; font-size: 11px;" : undefined}>{STAT_ICONS.data} {dataCost} data</span>}<br/>
+                                {moneyCost > 0 && <span style={!hasEnoughMoney ? "color: rgb(250, 193, 193); font-weight: 700; font-size: calc(1em + 2px);" : undefined}>{STAT_ICONS.money} ${moneyCost}</span>}{moneyCost > 0 && dataCost > 0 && " + "}{dataCost > 0 && <span style={!hasEnoughData ? "color: rgb(250, 193, 193); font-weight: 700; font-size: calc(1em + 2px);" : undefined}>{STAT_ICONS.data} {dataCost} data</span>}<br/>
                                 {nonMoneyPrereqs.length > 0 && (
                                     <>
                                         {nonMoneyPrereqs.map((prereq: any, idx: number) => {
@@ -1055,7 +1055,7 @@ const layer = createLayer(id, function (this: any) {
                                             return (
                                                 <span key={idx}>
                                                    {/* Requires: <span style={!isMet ? "color: #2E3440; font-size: 11px;" : undefined}>{formatted.replace("Requires: ", "")}</span>  */}
-                                                   <span style={!isMet ? "color: #2E3440; font-size: 13px;" : undefined}>{formatted}</span> 
+                                                   <span style={!isMet ? "color: rgb(250, 193, 193); font-weight: 700; font-size: calc(1em + 2px);" : undefined}>{formatted}</span> 
                                                     {idx < nonMoneyPrereqs.length - 1 && <br/>}
                                                 </span>
                                             );
@@ -1532,45 +1532,116 @@ const layer = createLayer(id, function (this: any) {
         const computeRequired = jobType?.cost?.find(c => c.type === "compute")?.value || 0;
         const moneyRequired = jobType?.cost?.find(c => c.type === "money")?.value || 0;
         const primaryPayoutType = job.payouts[0]?.type || "money";
-        const backgroundColor = primaryPayoutType === "data" ? "#f3f3ff" : "#ffffff";
+        const accentColors: Record<string, string> = {
+            money: "#4ade80",
+            data: "#22d3ee",
+            iq: "#a78bfa",
+            autonomy: "#a78bfa",
+            generality: "#a78bfa",
+            wonder: "#a78bfa",
+            default: "#a78bfa"
+        };
+        const accentBgColors: Record<string, string> = {
+            money: "rgba(74, 222, 128, 0.14)",
+            data: "rgba(34, 211, 238, 0.14)",
+            iq: "rgba(167, 139, 250, 0.14)",
+            autonomy: "rgba(167, 139, 250, 0.14)",
+            generality: "rgba(167, 139, 250, 0.14)",
+            wonder: "rgba(167, 139, 250, 0.14)",
+            default: "rgba(167, 139, 250, 0.14)"
+        };
+        const cardBorder = "#334155"; // neutral subtle border similar to 3.html
+        const badgeBg = "linear-gradient(135deg, rgba(148, 163, 184, 0.2), rgba(148, 163, 184, 0.07))";
+        const badgeBorder = "rgba(148, 163, 184, 0.35)";
+        const jobIcon = jobType?.icon || STAT_ICONS.defalut_job;
         const rejectionState = jobRejectionState.value[job.id] || 0;
         const isInRejectionChain = rejectionState > 0;
         const buttonText = getAcceptButtonText(job, jobType);
         const isScooped = scoopedJobs.value[job.id] || false;
+        const missingCompute = Math.max(0, computeRequired - availableGPUs.value);
+        const missingComputeText = (() => {
+            const label = formatCompute(missingCompute, currentChapter.value, true);
+            const prefix = `${missingCompute}\u00A0`;
+            return label.startsWith(prefix) ? label.replace(prefix, `${missingCompute} More `) : `Need ${missingCompute} More GPU`;
+        })();
 
         return (
-            <div key={job.id} style={`position: relative; margin: 10px 0; padding: 8px; background: ${backgroundColor}; border-radius: 5px; border: 1px solid #ddd;`}>
-                <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px;">{jobType?.displayName}</div>
-
+            <div
+                key={job.id}
+                style={`position: relative; margin: 10px 0; padding: 10px 12px; background: #232830; border-radius: 10px; border: 1px solid ${cardBorder}; color: #e2e8f0;`}
+            >
                 <div style="display: flex; gap: 16px; align-items: flex-start; margin-bottom: 8px; font-size: 14px; width: 100%;">
-                    <div style="display: flex; flex-direction: column; gap: 4px; flex: 1 1 0; min-width: 0; align-items: flex-start; text-align: left;">
-                        {job.payouts.map((payout: any, idx: number) => (
-                            <span key={idx} style="margin-left: 10px;">
-                                {payout.type === "money" ? `${STAT_ICONS.money} +$` : ""}
-                                {payout.type === "data" ? `${STAT_ICONS.data} +` : ""}
-                                {payout.type === "iq" ? `${STAT_ICONS.iq} +` : ""}
-                                {payout.type === "autonomy" ? `${STAT_ICONS.autonomy} +` : ""}
-                                {payout.type === "generality" ? `${STAT_ICONS.generality} +` : ""}
-                                {payout.type === "wonder" ? `${STAT_ICONS.wonder} +` : ""}
-                                {format(payout.amount)}
-                                {payout.type === "data" ? " data" : ""}
-                                {payout.type === "iq" ? " IQ" : ""}
-                                {payout.type === "autonomy" ? " Autonomy" : ""}
-                                {payout.type === "generality" ? " Generality" : ""}
-                                {payout.type === "wonder" ? " Wonder" : ""}
-                            </span>
-                        ))}
+                    <div style="display: flex; gap: 12px; flex: 1 1 0; min-width: 0; align-items: center;">
+                        <div
+                            style={{
+                                width: "44px",
+                                height: "44px",
+                                borderRadius: "10px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                fontSize: "20px",
+                                background: badgeBg,
+                                border: `1px solid ${badgeBorder}`
+                            }}
+                        >
+                            {jobIcon}
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 6px; flex: 1 1 0; min-width: 0; align-items: flex-start; text-align: left;">
+                            <div style="font-size: 16px; font-weight: bold; color: #f8fafc;">{jobType?.displayName}</div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                {job.payouts.map((payout: any, idx: number) => {
+                                    const payoutColor = accentColors[payout.type] || accentColors.default;
+                                    const payoutBg = accentBgColors[payout.type] || accentBgColors.default;
+                                    return (
+                                        <span
+                                            key={idx}
+                                            style={{
+                                                display: "inline-flex",
+                                                alignItems: "center",
+                                                gap: "6px",
+                                                padding: "4px 8px",
+                                                borderRadius: "8px",
+                                                background: payoutBg,
+                                                color: payoutColor,
+                                                fontSize: "14px",
+                                                fontWeight: 600
+                                            }}
+                                        >
+                                            <span>
+                                                {payout.type === "money" ? STAT_ICONS.money : ""}
+                                                {payout.type === "data" ? STAT_ICONS.data : ""}
+                                                {payout.type === "iq" ? STAT_ICONS.iq : ""}
+                                                {payout.type === "autonomy" ? STAT_ICONS.autonomy : ""}
+                                                {payout.type === "generality" ? STAT_ICONS.generality : ""}
+                                                {payout.type === "wonder" ? STAT_ICONS.wonder : ""}
+                                            </span>
+                                            <span style={{ color: "#e2e8f0" }}>
+                                                {payout.type === "money" ? "+" : "+"}
+                                                {payout.type === "money" ? `$${format(payout.amount)}` : format(payout.amount)}
+                                                {payout.type === "data" ? " data" : ""}
+                                                {payout.type === "iq" ? " IQ" : ""}
+                                                {payout.type === "autonomy" ? " Autonomy" : ""}
+                                                {payout.type === "generality" ? " Generality" : ""}
+                                                {payout.type === "wonder" ? " Wonder" : ""}
+                                            </span>
+                                        </span>
+                                    );
+                                })}
+                            </div>
+                        </div>
                     </div>
-                    <div style="display: flex; flex-direction: column; gap: 4px; align-items: flex-end; text-align: right; justify-content: center; margin-left: auto; flex: 0 0 auto;">
-                        <span>
-                            <span style="display: inline-flex; flex-wrap: wrap; max-width: 50px; line-height: 1; gap: 0px; vertical-align: middle;">
+                    <div style="display: flex; flex-direction: column; gap: 4px; align-items: flex-end; text-align: right; justify-content: center; margin-left: auto; flex: 0 0 auto; color: #cbd5e1;">
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: "8px", color: "#cbd5e1" }}>
+                            <span style="display: inline-flex; flex-wrap: wrap; max-width: 50px; line-height: 1; gap: 3px; vertical-align: middle;">
                                 {Array.from({length: computeRequired}, (_, i) => (
-                                    <span key={i} style="margin:0px;">▪</span>
+                                    <span key={i} style={{ margin: "0px" }}>{GPU_IC.free}</span>
                                 ))}
-                            </span> for {job.duration} seconds
+                            </span>
+                            <span style={{ color: "#94a3b8" }}>for {job.duration} seconds</span>
                         </span>
                         {moneyRequired > 0 && (
-                            <span style={`${Decimal.lt(money.value, moneyRequired) ? 'font-size: 16px; color: #d32f2f;' : 'font-size: 14px;'}`}>
+                            <span style={`${Decimal.lt(money.value, moneyRequired) ? 'font-size: 16px; color: #fbbf24;' : 'font-size: 14px; color: #e2e8f0;'}`}>
                                 <strong>Cost:</strong> {STAT_ICONS.money} -${moneyRequired}
                             </span>
                         )}
@@ -1579,7 +1650,7 @@ const layer = createLayer(id, function (this: any) {
 
                 {!isScooped && availableGPUs.value < computeRequired && unlockedJobTypes.value.includes(job.jobTypeId) && (
                     <div style="position: absolute; bottom: 14px; left: 8px; color: #d32f2f; font-weight: bold; font-size: 15px; max-width: 50%;">
-                        ⚠ Need {formatCompute(computeRequired, currentChapter.value, true)}! <span style="color: black;">{"▪".repeat(Math.max(0, availableGPUs.value))}{"▫".repeat(Math.max(0, computeRequired - availableGPUs.value))}</span>
+                        ⚠ Need {missingComputeText}! <span style="color: #d32f2f;">{GPU_IC.free.repeat(Math.max(0, availableGPUs.value))}{GPU_IC.used.repeat(Math.max(0, computeRequired - availableGPUs.value))}</span>
                     </div>
                 )}
                 <div style="margin-top: 8px; text-align: right;">
@@ -1592,13 +1663,22 @@ const layer = createLayer(id, function (this: any) {
                                 <button
                                     onClick={() => declineJob(job.id)}
                                     style={{
-                                        background: "#f44336",
-                                        color: "white",
+                                        background: "transparent",
+                                        color: "#cbd5e1",
                                         padding: "6px 12px",
-                                        border: "none",
-                                        borderRadius: "4px",
+                                        border: "1px solid #334155",
+                                        borderRadius: "8px",
                                         cursor: "pointer",
-                                        fontSize: "13px"
+                                        fontSize: "13px",
+                                        transition: "all 0.15s ease"
+                                    }}
+                                    onMouseenter={(e) => {
+                                        (e.currentTarget as HTMLButtonElement).style.borderColor = "#f87171";
+                                        (e.currentTarget as HTMLButtonElement).style.color = "#f87171";
+                                    }}
+                                    onMouseleave={(e) => {
+                                        (e.currentTarget as HTMLButtonElement).style.borderColor = "#334155";
+                                        (e.currentTarget as HTMLButtonElement).style.color = "#cbd5e1";
                                     }}
                                 >
                                     Decline
@@ -1621,13 +1701,22 @@ const layer = createLayer(id, function (this: any) {
                                     <button
                                         onClick={() => declineJob(job.id)}
                                         style={{
-                                            background: "#f44336",
-                                            color: "white",
+                                            background: "transparent",
+                                            color: "#cbd5e1",
                                             padding: "6px 12px",
-                                            border: "none",
-                                            borderRadius: "4px",
+                                            border: "1px solid #334155",
+                                            borderRadius: "8px",
                                             cursor: "pointer",
-                                            fontSize: "13px"
+                                            fontSize: "13px",
+                                            transition: "all 0.15s ease"
+                                        }}
+                                        onMouseenter={(e) => {
+                                            (e.currentTarget as HTMLButtonElement).style.borderColor = "#f87171";
+                                            (e.currentTarget as HTMLButtonElement).style.color = "#f87171";
+                                        }}
+                                        onMouseleave={(e) => {
+                                            (e.currentTarget as HTMLButtonElement).style.borderColor = "#334155";
+                                            (e.currentTarget as HTMLButtonElement).style.color = "#cbd5e1";
                                         }}
                                     >
                                         Decline
@@ -1637,13 +1726,32 @@ const layer = createLayer(id, function (this: any) {
                                     onClick={(e) => e.currentTarget && handleAcceptClick(job, e.currentTarget as HTMLButtonElement)}
                                     disabled={!canAcceptJob(job) && !isInRejectionChain}
                                     style={{
-                                        background: !canAcceptJob(job) && !isInRejectionChain ? "#ccc" : buttonText === "Decline" ? "#f44336" : "#4CAF50",
-                                        color: "white",
-                                        padding: "6px 12px",
+                                        background: !canAcceptJob(job) && !isInRejectionChain ? "#334155" : buttonText === "Decline" ? "#f44336" : "#4ade80",
+                                        color: !canAcceptJob(job) && !isInRejectionChain ? "#94a3b8" : buttonText === "Decline" ? "#ffffff" : "#0f172a",
+                                        padding: "8px 14px",
                                         border: "none",
-                                        borderRadius: "4px",
+                                        borderRadius: "8px",
                                         cursor: canAcceptJob(job) || isInRejectionChain ? "pointer" : "not-allowed",
-                                        fontSize: "13px"
+                                        fontSize: "13px",
+                                        transition: "all 0.15s ease",
+                                        transform: "scale(1)"
+                                    }}
+                                    onMouseenter={(e) => {
+                                        if (!canAcceptJob(job) && !isInRejectionChain) return;
+                                        if (buttonText === "Decline") {
+                                            (e.currentTarget as HTMLButtonElement).style.background = "#f87171";
+                                            (e.currentTarget as HTMLButtonElement).style.color = "#ffffff";
+                                        } else {
+                                            (e.currentTarget as HTMLButtonElement).style.background = "#22c55e";
+                                            (e.currentTarget as HTMLButtonElement).style.color = "#0f172a";
+                                        }
+                                        (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.02)";
+                                    }}
+                                    onMouseleave={(e) => {
+                                        if (!canAcceptJob(job) && !isInRejectionChain) return;
+                                        (e.currentTarget as HTMLButtonElement).style.background = buttonText === "Decline" ? "#f44336" : "#4ade80";
+                                        (e.currentTarget as HTMLButtonElement).style.color = buttonText === "Decline" ? "#ffffff" : "#0f172a";
+                                        (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
                                     }}
                                 >
                                     {buttonText}
@@ -1988,7 +2096,7 @@ const layer = createLayer(id, function (this: any) {
                             )}
                         </div>
                         <div style="font-size: 14px; margin-top: 4px; letter-spacing: 0.1em;">
-                            {"▪".repeat(Math.max(0, availableGPUs.value))}{"▫".repeat(Math.max(0, gpusOwned.value - availableGPUs.value))}
+                            {GPU_IC.free.repeat(Math.max(0, availableGPUs.value))}{GPU_IC.used.repeat(Math.max(0, gpusOwned.value - availableGPUs.value))}
                         </div>
                         </div>
                         {activeNewsFlashes.value.length > 0 && (
@@ -2022,68 +2130,12 @@ const layer = createLayer(id, function (this: any) {
 		    <div style="font-size: 16px; color: rgb(230, 218, 199);">Chapter {currentChapter.value}</div>
 		    {showUnlockButtons.value && (
                         <>
-                {/* Stats Panel */}
-                <div id="stats-panel" style="margin: 8px 0; padding: 12px; border: 2px solid #FFA500; border-radius: 10px; background: #fff3e0;">
-
-                    {player.frameworkChoice !== "not_yet" && (
-                        <div style={`font-size: 16px; font-weight: bold; color: ${player.frameworkChoice === "support" ? "#4CAF50" : "#FF9800"};`}>
-                            <strong>Framework:</strong> {player.frameworkChoice === "support" ? "Passed" : "Rejected"}
-                        </div>
-                    )}
-                   {/* {chapter5CompletionTime.value !== null && (
-                        <div style="font-size: 16px; font-weight: bold; color: #2196F3;">
-                            <strong>Time since Chapter 5:</strong> {Math.floor(timeSinceChapter5.value / 60)}m {Math.floor(timeSinceChapter5.value % 60)}s
-                        </div>
-                    )} */}
-                    <div style="font-size: 16px;"><strong>{STAT_ICONS.money} Money:</strong> {format(money.value)}</div>
-                    {IS_DEV && <div style="font-size: 14px;"><strong>✅ Jobs completed:</strong> {jobCompletions.value}</div>}
-                    {dataUnlocked.value && <div style="font-size: 16px;"><strong>{STAT_ICONS.data} Data:</strong> {format(data.value)}</div>}
-                    {autonomy.value > 0 && <div style="font-size: 16px;"><strong>{STAT_ICONS.autonomy} Autonomy:</strong> {autonomy.value}</div>}
-                    {generality.value > 0 && <div style="font-size: 16px;"><strong>{STAT_ICONS.generality} Generality:</strong> {generality.value}</div>}
-                    {iq.value > 0 && <div style="font-size: 16px;"><strong>{STAT_ICONS.iq} IQ:</strong> {iq.value}</div>}
-                    {autonomy.value >= 1 && generality.value >= 1 && iq.value >= 1 && (() => {
-                        const agiSum = autonomy.value + generality.value + iq.value;
-                        const difference = G_CONF.AGI_SUM_LOSE - agiSum;
-                        let warning = "";
-                        let warningStyle = "";
-
-                        if (difference === 1) {
-                            warning = " ⚠️ DANGER";
-                            warningStyle = "font-weight: bold; color: #d32f2f;";
-                        } else if (difference === 2) {
-                            warning = " ⚠ Warning";
-                            warningStyle = "font-weight: bold; color: #ff9800;";
-                        } else if (difference <= 4) {
-                            warning = " Caution";
-                            warningStyle = "color: #ffa726; opacity: 0.8;";
-                        }
-
-                        return (
-                            <div style="font-size: 14px; color: rgb(244, 67, 54);">
-                                A+G+I : {agiSum}
-                                {warning && <span style={warningStyle}>{warning}</span>}
-                            </div>
-                        );
-                    })()}
-                    {(currentChapter.value >= 3 || wonder.value > 0) && <div style="font-size: 16px;"><strong>{STAT_ICONS.wonder} Wonders:</strong> {wonder.value}/5</div>}
-		    <div style="font-size: 14px;"><strong>{(() => {
-                        const name = COMPUTE_NAMES[currentChapter.value as keyof typeof COMPUTE_NAMES];
-                        //return name === "Campus" ? "Campuses" : name + "s";
-			return name + "s";
-                    })()}:</strong> {availableGPUs.value} / {gpusOwned.value} available</div>
-                    <div style="font-size: 14px; letter-spacing: 0.1em;">
-                        {"▪".repeat(Math.max(0, availableGPUs.value))}{"▫".repeat(Math.max(0, gpusOwned.value - availableGPUs.value))}
+                <div style="margin: 15px 0; text-align: left;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin: 0 0 12px;">
+                        <h3 style="margin: 0; font-size: 12px; letter-spacing: 0.08em; color: rgb(230, 218, 199);">UPGRADES</h3>
+                        <div style="flex: 1; height: 1px; background: rgba(255, 255, 255, 0.15);"></div>
                     </div>
-                    {qualityBonus.value !== 100 && (
-                        <div style="font-size: 14px; color: #4CAF50;"><strong>Quality Bonus:</strong> {parseFloat((qualityBonus.value / 100).toFixed(2))}x earnings</div>
-                    )}
-                    {speedBonus.value !== 100 && (
-                        <div style="font-size: 14px; color: #2196F3;"><strong>Speed Bonus:</strong> {parseFloat((speedBonus.value / 100).toFixed(2))}x</div>
-                    )}
-
-                </div>
-                <div style="margin: 15px 0;">
-                    <div style={`display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;${!unlockAnimationShown.value ? " animation: unlockGrowIn 2s ease;" : ""}`}>
+                    <div class="upgrades-row" style={`display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;${!unlockAnimationShown.value ? " animation: unlockGrowIn 2s ease;" : ""}`}>
                         {render(buyGPUClickable)}
                         {pizzaUnlockClickables.map(clickable => render(clickable))}
                     </div>
@@ -2102,14 +2154,24 @@ const layer = createLayer(id, function (this: any) {
                 )}
 
                 {specialJobs.value.length > 0 && (
-                    <div style="margin: 15px 0; padding: 12px; border: 2px solid #4CAF50; border-radius: 10px; background: #e8f5e9;">
-                        <h3>Unique Jobs</h3>
+                    <div style="margin: 15px 0; padding: 0 0 12px; text-align: left;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin: 0 0 12px;">
+                            <h3 style="margin: 0; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(230, 218, 199);">Unique Jobs</h3>
+                            <div style="flex: 1; height: 1px; background: rgba(255, 255, 255, 0.15);"></div>
+                        </div>
                         {specialJobs.value.map(renderJobCard)}
                     </div>
                 )}
 
-                <div style="margin: 15px 0; padding: 12px; border: 2px solid #4CAF50; border-radius: 10px; background: #e8f5e9; min-height: 180px;">
-                    <h3>Available Jobs</h3>
+                <div
+                    style={`margin: 15px 0; padding: 0 0 12px; text-align: left;${
+                        jobCompletions.value >= 2 ? " min-height: 180px;" : ""
+                    }`}
+                >
+                    <div style="display: flex; align-items: center; gap: 10px; margin: 0 0 12px;">
+                        <h3 style="margin: 0; font-size: 12px; letter-spacing: 0.08em; color: rgb(230, 218, 199);">AVAILABLE JOBS</h3>
+                        <div style="flex: 1; height: 1px; background: rgba(255, 255, 255, 0.15);"></div>
+                    </div>
                     {clearJobsVisible.value && (
                         <div style="margin-bottom: 10px;">
                             <button
@@ -2121,16 +2183,20 @@ const layer = createLayer(id, function (this: any) {
                                     border: "none",
                                     borderRadius: "4px",
                                     cursor: "pointer",
-                                    fontSize: "13px"
+                                    fontSize: "13px",
+                                    display: "block",
+                                    margin: "0 auto"
                                 }}
                             >
-                                Clear Jobs
+                                CLEAR JOBS
                             </button>
                         </div>
                     )}
                     {regularJobs.value.length === 0 ? (
                         hasAvailableJobs.value ? (
-                            <p style="font-style: italic;">No new jobs available yet.</p>
+                            jobCompletions.value >= 2 ? (
+                                <p style="font-style: italic;">No new jobs available yet.</p>
+                            ) : null
                         ) : (
                             <div style="padding: 10px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 5px;">
                                 <p style="font-weight: bold; color: #856404; margin: 0 0 8px 0;">⚠️ No job types unlocked for this chapter!</p>
@@ -2142,9 +2208,12 @@ const layer = createLayer(id, function (this: any) {
                     )}
                 </div>
 
-                <div style="margin: 15px 0; padding: 12px; border: 2px solid #4CAF50; border-radius: 10px; background: #e8f5e9;">
+                <div style="margin: 15px 0; padding: 0 0 12px; text-align: left;">
            {/*  <div style="margin: 15px 0; padding: 12px; border: 2px solid #2196F3; border-radius: 10px; background: #e3f2fd;"> */}
-                    <h3>Active Jobs</h3>
+                    <div style="display: flex; align-items: center; gap: 10px; margin: 0 0 12px;">
+                        <h3 style="margin: 0; font-size: 12px; letter-spacing: 0.08em; color: rgb(230, 218, 199);">ACTIVE JOBS</h3>
+                        <div style="flex: 1; height: 1px; background: rgba(255, 255, 255, 0.15);"></div>
+                    </div>
                     {activeDeliveries.value.length === 0 ? (
                         <p style="font-style: italic;">No active jobs</p>
                     ) : (
@@ -2155,36 +2224,90 @@ const layer = createLayer(id, function (this: any) {
                                 ? (jobType?.is_wonder ? "RESEARCHING" : "TRAINING")
                                 : " ";
                             return (
-                                <div key={delivery.id} style="margin: 3px 0; padding: 2px; background: white; border-radius: 5px; border: 1px solid #ddd;">
-                                    <div style="font-size: 14px;">{prefix} {jobType?.displayName}</div>
-
-                                    <div style="color: #2e7d32; font-size: 14px;">
-                                        {delivery.payouts.map((payout: any, idx: number) => (
-                                            <span key={idx}>
-                                                {idx > 0 && " +"}
-                                                {payout.type === "money" ? `${STAT_ICONS.money} $` : ""}
-                                                {payout.type === "data" ? `${STAT_ICONS.data} ` : ""}
-                                                {payout.type === "iq" ? `${STAT_ICONS.iq} ` : ""}
-                                                {payout.type === "autonomy" ? `${STAT_ICONS.autonomy} ` : ""}
-                                                {payout.type === "generality" ? `${STAT_ICONS.generality} ` : ""}
-                                                {payout.type === "wonder" ? `${STAT_ICONS.wonder} ` : ""}
-                                                {format(payout.amount)}
-                                                {payout.type === "data" ? " data" : ""}
-                                                {payout.type === "iq" ? " IQ" : ""}
-                                                {payout.type === "autonomy" ? " Autonomy" : ""}
-                                                {payout.type === "generality" ? " Generality" : ""}
-                                                {payout.type === "wonder" ? " Wonder" : ""}
+                                <div
+                                    key={delivery.id}
+                                    style="margin: 6px 0; padding: 10px 12px; background: #232830; border-radius: 10px; border: 1px solid #334155; color: #e2e8f0;"
+                                >
+                                    <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 8px;">
+                                        <div
+                                            style={{
+                                                width: "44px",
+                                                height: "44px",
+                                                borderRadius: "10px",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                fontSize: "20px",
+                                                background: "linear-gradient(135deg, rgba(148, 163, 184, 0.2), rgba(148, 163, 184, 0.07))",
+                                                border: "1px solid rgba(148, 163, 184, 0.35)"
+                                            }}
+                                        >
+                                            {jobType?.icon || STAT_ICONS.defalut_job}
+                                        </div>
+                                        <div style="display: flex; flex-direction: column; gap: 6px; flex: 1 1 0; min-width: 0; align-items: flex-start; text-align: left;">
+                                            <div style="font-size: 15px; font-weight: bold; color: #f8fafc;">{prefix} {jobType?.displayName}</div>
+                                            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                                {delivery.payouts.map((payout: any, idx: number) => {
+                                                    const payoutColor = payout.type === "money" ? "#4ade80" : payout.type === "data" ? "#22d3ee" : "#a78bfa";
+                                                    const payoutBg =
+                                                        payout.type === "money"
+                                                            ? "rgba(74, 222, 128, 0.14)"
+                                                            : payout.type === "data"
+                                                            ? "rgba(34, 211, 238, 0.14)"
+                                                            : "rgba(167, 139, 250, 0.14)";
+                                                    return (
+                                                        <span
+                                                            key={idx}
+                                                            style={{
+                                                                display: "inline-flex",
+                                                                alignItems: "center",
+                                                                gap: "6px",
+                                                                padding: "4px 8px",
+                                                                borderRadius: "8px",
+                                                                background: payoutBg,
+                                                                color: payoutColor,
+                                                                fontSize: "14px",
+                                                                fontWeight: 600
+                                                            }}
+                                                        >
+                                                            <span>
+                                                                {payout.type === "money" ? STAT_ICONS.money : ""}
+                                                                {payout.type === "data" ? STAT_ICONS.data : ""}
+                                                                {payout.type === "iq" ? STAT_ICONS.iq : ""}
+                                                                {payout.type === "autonomy" ? STAT_ICONS.autonomy : ""}
+                                                                {payout.type === "generality" ? STAT_ICONS.generality : ""}
+                                                                {payout.type === "wonder" ? STAT_ICONS.wonder : ""}
+                                                            </span>
+                                                            <span style={{ color: "#e2e8f0" }}>
+                                                                {payout.type === "money" ? "+" : "+"}
+                                                                {payout.type === "money" ? `$${format(payout.amount)}` : format(payout.amount)}
+                                                                {payout.type === "data" ? " data" : ""}
+                                                                {payout.type === "iq" ? " IQ" : ""}
+                                                                {payout.type === "autonomy" ? " Autonomy" : ""}
+                                                                {payout.type === "generality" ? " Generality" : ""}
+                                                                {payout.type === "wonder" ? " Wonder" : ""}
+                                                            </span>
+                                                        </span>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; flex-direction: column; gap: 4px; align-items: flex-end; text-align: right; justify-content: center; margin-left: auto; flex: 0 0 auto; color: #cbd5e1; font-size: 14px;">
+                                            <span style={{ display: "inline-flex", alignItems: "center", gap: "8px", color: "#cbd5e1" }}>
+                                                <span style="display: inline-flex; flex-wrap: wrap; max-width: 50px; line-height: 1; gap: 3px; vertical-align: middle;">
+                                                    {Array.from({length: jobType?.cost?.find(c => c.type === "compute")?.value || 0}, (_, i) => (
+                                                        <span key={i} style={{ margin: "0px" }}>{GPU_IC.free}</span>
+                                                    ))}
+                                                </span>
+                                                <span style={{ color: "#94a3b8" }}>{Math.ceil(delivery.timeRemaining)}s</span>
                                             </span>
-                                        ))}
-					&nbsp;&nbsp;&nbsp;
-                                        {"▪".repeat(Math.max(0, jobType?.cost?.find(c => c.type === "compute")?.value || 0))} {Math.ceil(delivery.timeRemaining)}s
+                                        </div>
                                     </div>
-                                    <div style="margin-top: 6px; width: 60%; height: 4px; background: white; border-radius: 2px; overflow: hidden;">
+                                    <div style="margin-top: 4px; width: 100%; height: 6px; background: #1f2937; border-radius: 3px; overflow: hidden;">
                                         <div style={{
                                             width: `${progress * 100}%`,
                                             height: '100%',
-					    /* background: 'rgb(227, 242, 253)', */
-                                            background: '#61C6F3',
+                                            background: 'linear-gradient(90deg, #4ade80, #22c55e)',
                                             transition: 'width 0.1s linear'
                                         }} />
                                     </div>
@@ -2193,6 +2316,71 @@ const layer = createLayer(id, function (this: any) {
                         })
                     )}
                 </div>
+
+                {showUnlockButtons.value && (
+                    <>
+                    {/* Stats Panel */}
+                    <div id="stats-panel" style="margin: 8px 0; padding: 12px; border: 2px solid #FFA500; border-radius: 10px; background: #fff3e0;">
+
+                        {player.frameworkChoice !== "not_yet" && (
+                            <div style={`font-size: 16px; font-weight: bold; color: ${player.frameworkChoice === "support" ? "#4CAF50" : "#FF9800"};`}>
+                                <strong>Framework:</strong> {player.frameworkChoice === "support" ? "Passed" : "Rejected"}
+                            </div>
+                        )}
+                       {/* {chapter5CompletionTime.value !== null && (
+                            <div style="font-size: 16px; font-weight: bold; color: #2196F3;">
+                                <strong>Time since Chapter 5:</strong> {Math.floor(timeSinceChapter5.value / 60)}m {Math.floor(timeSinceChapter5.value % 60)}s
+                            </div>
+                        )} */}
+                        <div style="font-size: 16px;"><strong>{STAT_ICONS.money} Money:</strong> {format(money.value)}</div>
+                        {IS_DEV && <div style="font-size: 14px;"><strong>✅ Jobs completed:</strong> {jobCompletions.value}</div>}
+                        {dataUnlocked.value && <div style="font-size: 16px;"><strong>{STAT_ICONS.data} Data:</strong> {format(data.value)}</div>}
+                        {autonomy.value > 0 && <div style="font-size: 16px;"><strong>{STAT_ICONS.autonomy} Autonomy:</strong> {autonomy.value}</div>}
+                        {generality.value > 0 && <div style="font-size: 16px;"><strong>{STAT_ICONS.generality} Generality:</strong> {generality.value}</div>}
+                        {iq.value > 0 && <div style="font-size: 16px;"><strong>{STAT_ICONS.iq} IQ:</strong> {iq.value}</div>}
+                        {autonomy.value >= 1 && generality.value >= 1 && iq.value >= 1 && (() => {
+                            const agiSum = autonomy.value + generality.value + iq.value;
+                            const difference = G_CONF.AGI_SUM_LOSE - agiSum;
+                            let warning = "";
+                            let warningStyle = "";
+
+                            if (difference === 1) {
+                                warning = " ⚠️ DANGER";
+                                warningStyle = "font-weight: bold; color: #d32f2f;";
+                            } else if (difference === 2) {
+                                warning = " ⚠ Warning";
+                                warningStyle = "font-weight: bold; color: #ff9800;";
+                            } else if (difference <= 4) {
+                                warning = " Caution";
+                                warningStyle = "color: #ffa726; opacity: 0.8;";
+                            }
+
+                            return (
+                                <div style="font-size: 14px; color: rgb(244, 67, 54);">
+                                    A+G+I : {agiSum}
+                                    {warning && <span style={warningStyle}>{warning}</span>}
+                                </div>
+                            );
+                        })()}
+                        {(currentChapter.value >= 3 || wonder.value > 0) && <div style="font-size: 16px;"><strong>{STAT_ICONS.wonder} Wonders:</strong> {wonder.value}/5</div>}
+		    <div style="font-size: 14px;"><strong>{(() => {
+                            const name = COMPUTE_NAMES[currentChapter.value as keyof typeof COMPUTE_NAMES];
+                            //return name === "Campus" ? "Campuses" : name + "s";
+			    return name + "s";
+                        })()}:</strong> {availableGPUs.value} / {gpusOwned.value} available</div>
+                        <div style="font-size: 14px; letter-spacing: 0.1em;">
+                            {GPU_IC.free.repeat(Math.max(0, availableGPUs.value))}{GPU_IC.used.repeat(Math.max(0, gpusOwned.value - availableGPUs.value))}
+                        </div>
+                        {qualityBonus.value !== 100 && (
+                            <div style="font-size: 14px; color: #4CAF50;"><strong>Quality Bonus:</strong> {parseFloat((qualityBonus.value / 100).toFixed(2))}x earnings</div>
+                        )}
+                        {speedBonus.value !== 100 && (
+                            <div style="font-size: 14px; color: #2196F3;"><strong>Speed Bonus:</strong> {parseFloat((speedBonus.value / 100).toFixed(2))}x</div>
+                        )}
+
+                    </div>
+                    </>
+                )}
 
                     <div style="font-size: 14px; color: rgb(230, 218, 199);"><strong>Researched:</strong> {unlockedJobTypes.value.map(id => getJobType(id)?.displayName || id).join(", ")}</div>
 		    <div style="font-size: 20px; color: rgb(230, 218, 199); display: flex; gap: 10px; align-items: center;">
