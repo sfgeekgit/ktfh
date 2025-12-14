@@ -26,8 +26,8 @@ const showTree = true;
 
 // Training run filter: "ignore" to drop them, "only" to keep only them, "all" for everything.
 //const trainingRuns = 'ignore'; // one of: 'ignore' | 'only' | 'all'
-//const trainingRuns = 'all'; // one of: 'ignore' | 'only' | 'all'
-const trainingRuns = 'ignore'; // one of: 'ignore' | 'only' | 'all'
+const trainingRuns = 'all'; // one of: 'ignore' | 'only' | 'all'
+//const trainingRuns = 'ignore'; // one of: 'ignore' | 'only' | 'all'
 
 // EDIT/REAPPLY WORKFLOW (for future assistants):
 // 1) Run: node scripts/job-table.js > jobs-table.txt
@@ -146,6 +146,7 @@ const cols = [
   },
   { key: 'GPU', title: 'GPU', fmt: (j) => getCost(j.cost, 'compute') },
   { key: 'dur', title: 'dur', fmt: (j) => (j.duration?.min ?? '') },
+  { key: 'durma', title: 'durma', fmt: (j) => (j.duration?.max ?? '') },
   {
     key: 'unl$',
     title: 'unl_$',

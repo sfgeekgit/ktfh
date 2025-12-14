@@ -262,84 +262,6 @@ export const JOB_TYPES: JobType[] = [
     },
 
 
-//// Wonders (end game win)
-
-     /**
-
-    {
-        id: "wonder5",
-        displayName: "Recursive Self Improvement",
-        description: "Dev",
-
-	chapter: [2,3,4,5,6],
-        prereq: [
-            { type: "compute", value: 8 }
-        ],
-        unlockCost: [{ type: "money", value: 2000 }],
-        payout: [
-            { type: "wonder", min: 3}
-	    , { type: "iq", min: 13}
-        ],
-        duration: { min: 20, max: 20 },
-        cost: [
-            { type: "compute", value: 12 },
-            { type: "money", value: 100 },
-            { type: "data", value: 10 }
-        ],
-        category: "onetime",
-	is_wonder: true,
-    },
-
-    {
-        id: "wonder6",
-        displayName: "Autonomous Goal System",
-        description: "Dev",
-
-	chapter: [5,6],
-        prereq: [
-            { type: "compute", value: 3 }
-        ],
-        unlockCost: [{ type: "money", value: 200 }],
-        payout: [
-            { type: "wonder", min: 3},
-	     { type: "autonomy", min: 13}
-            ],
-        duration: { min: 3, max: 3 },
-        cost: [
-            { type: "compute", value: 3 },
-            { type: "money", value: 100 },
-            { type: "data", value: 10 }
-        ],
-        category: "onetime",
-	is_wonder: true,
-    },
-
-    {
-        id: "wonder7",
-        displayName: "Civilization Management System",
-        description: "Dev",
-
-	chapter: [5,6],
-        prereq: [
-            { type: "compute", value: 3 }
-        ],
-        unlockCost: [{ type: "money", value: 200 }],
-        payout: [
-            { type: "wonder", min: 3}
-	    , { type: "autonomy", min: 5}
-	    , { type: "generality", min: 4}
-            ],
-        duration: { min: 3, max: 3 },
-        cost: [
-            { type: "compute", value: 3 },
-            { type: "money", value: 100 },
-            { type: "data", value: 10 }
-        ],
-        category: "onetime",
-	is_wonder: true,
-    },
-**/
-
     // Training runs are imported from trainingRuns.ts
     ...TRAINING_RUN_JOBS
 
@@ -394,7 +316,7 @@ Scientific Data Processing
             { type: "money", min: 144},
 	    { type: "data", min: 20}
         ],
-        duration: { min: 2, max: 6 },
+        duration: { min: 5, max: 8 },
         cost: [
             { type: "compute", value: 4 }
         ],
@@ -426,16 +348,16 @@ Scientific Data Processing
         id: "sci4",
         displayName: "Structure Prediction",
         chapter: [2,3,4,5],
-		displayTrigger: [ { type: "job", value: "sci3" } ],	
+	displayTrigger: [ { type: "job", value: "sci3" } ],	
         prereq: [{ type: "job", value: "sci3" }
-		 , {type:"generality", value:2}
+		 , {type:"generality", value:3}
 		 , { type: "money", value: 680 , display_prereq: false}],
         unlockCost: [{ type: "money", value: 700 }],
         payout: [
             { type: "money", min: 200},
             { type: "data", min: 70}
         ],
-        duration: { min: 4, max: 6 },
+        duration: { min: 5, max: 8 },
         cost: [
             { type: "compute", value: 5 },
             { type: "data", value: 120 }
@@ -448,7 +370,8 @@ Scientific Data Processing
         id: "sci5",
         displayName: "Molecular Structure Prediction",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "sci4" }
+	displayTrigger: [ { type: "job", value: "sci4" } ],	
+	prereq: [{ type: "job", value: "sci4" }
 		 , {type:"iq", value:5}],
         unlockCost: [
             { type: "money", value: 900 },
@@ -480,7 +403,7 @@ Scientific Data Processing
         payout: [
             { type: "money", min: 412}
         ],
-        duration: { min: 5, max: 8 },
+        duration: { min: 6, max: 10 },
         cost: [
             { type: "compute", value: 6 },
             { type: "data", value: 160 }
@@ -493,7 +416,10 @@ Scientific Data Processing
         id: "sci7",
         displayName: "Molecular Manufacturing",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "sci6" }],
+	displayTrigger: [ { type: "job", value: "sci6" } ],
+	prereq: [{ type: "job", value: "sci6" }
+		 , {type:"generality", value:4}],
+
         unlockCost: [
             { type: "money", value: 2000 },
             { type: "data", value: 200 }
@@ -516,9 +442,9 @@ Scientific Data Processing
         id: "sci8",
         displayName: "Materials Modeling",
         chapter: [2,3,4,5],
+	displayTrigger: [ { type: "job", value: "sci7" } ],
         prereq: [{ type: "job", value: "sci7" }
-		 , { type: "money", value: 2200 , display_prereq: false}],
-
+		 , {type:"autonomy", value:4}],
         unlockCost: [
             { type: "money", value: 1800 },
             { type: "data", value: 200 }
@@ -526,7 +452,7 @@ Scientific Data Processing
         payout: [
             { type: "money", min: 412}
         ],
-        duration: { min: 5, max: 8 },
+        duration: { min: 6, max: 10 },
         cost: [
             { type: "compute", value: 5 },
             { type: "data", value: 150 }
@@ -539,7 +465,10 @@ Scientific Data Processing
         id: "sci9",
         displayName: "Materials Discovery",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "sci8", display_prereq: false }],
+	displayTrigger: [ { type: "job", value: "sci8" } ],
+        prereq: [{ type: "job", value: "sci8", display_prereq: false }
+		 , {type:"iq", value:8}],
+
         unlockCost: [
             { type: "money", value: 4000 },
             { type: "data", value: 800 }
@@ -563,16 +492,16 @@ Scientific Data Processing
         id: "sci10",
         displayName: "Chemical Prediction",
         chapter: [2,3,4,5],
-	displayTrigger: [ { type: "job", value: "sci5" } ],	
+	displayTrigger: [ { type: "generality", value: 4 } ],
 	prereq: [{ type: "job", value: "sci5" }
-		, {type : "generality", value: 4}
+		, {type : "generality", value: 5}
 		],
 
         unlockCost: [{ type: "money", value: 1200 }],
         payout: [
             { type: "money", min: 542}
         ],
-        duration: { min: 3, max: 9 },
+        duration: { min: 7, max: 11 },
         cost: [
             { type: "compute", value: 5 },
             { type: "data", value: 140 }
@@ -609,7 +538,7 @@ Scientific Data Processing
         chapter: [2,3,4,5],
 	displayTrigger: [ { type: "job", value: "sci11", display_prereq: false } ],
         prereq: [{ type: "job", value: "sci11" }
-		, {type: "iq", value: 7}],
+		, {type: "iq", value: 9}],
         unlockCost: [
             { type: "money", value: 5000 },
             { type: "data", value: 800 }
@@ -617,7 +546,7 @@ Scientific Data Processing
         payout: [
             { type: "wonder", min: 1}
         ],
-        duration: { min: 10, max: 14 },
+        duration: { min: 11, max: 16 },
         cost: [
             { type: "compute", value: 7 },
             { type: "data", value: 900 }
@@ -729,7 +658,7 @@ Digital Learning Platforms
         payout: [
             { type: "generality", min: 1}
         ],
-        duration: { min: 20, max: 25 },
+        duration: { min: 21, max: 27 },
         cost: [
             { type: "compute", value: 4 },
             { type: "data", value: 150 }
@@ -770,7 +699,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 228}
         ],
-        duration: { min: 8, max: 11 },
+        duration: { min: 9, max: 13 },
         cost: [
             { type: "compute", value: 5 }
         ],
@@ -810,7 +739,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 300}
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 10, max: 14 },
         cost: [
             { type: "compute", value: 6 },
             { type: "data", value: 150 }
@@ -855,7 +784,7 @@ Digital Learning Platforms
         payout: [
             { type: "generality", min: 1}
         ],
-        duration: { min: 7, max: 10 },
+        duration: { min: 8, max: 12 },
         cost: [
             { type: "compute", value: 5 },
             { type: "data", value: 150 }
@@ -899,7 +828,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 276}
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 10, max: 14 },
         cost: [
             { type: "compute", value: 6 },
             { type: "data", value: 180 }
@@ -940,7 +869,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 304}
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 10, max: 14 },
         cost: [
             { type: "compute", value: 5 }
         ],
@@ -981,7 +910,7 @@ Digital Learning Platforms
             { type: "money", min: 522}
 
         ],
-        duration: { min: 7, max: 11 },
+        duration: { min: 8, max: 13 },
         cost: [
             { type: "compute", value: 6 },
             { type: "data", value: 220 }
@@ -1025,7 +954,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 252}
         ],
-        duration: { min: 8, max: 11 },
+        duration: { min: 9, max: 13 },
         cost: [
             { type: "compute", value: 5 },
             { type: "data", value: 180 }
@@ -1106,7 +1035,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 132}
         ],
-        duration: { min: 8, max: 11 },
+        duration: { min: 9, max: 13 },
         cost: [
             { type: "compute", value: 4 }
         ],
@@ -1145,7 +1074,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 312}
         ],
-        duration: { min: 8, max: 11 },
+        duration: { min: 9, max: 13 },
         cost: [
             { type: "compute", value: 5 }
         ],
@@ -1182,7 +1111,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 276}
         ],
-        duration: { min: 8, max: 11 },
+        duration: { min: 9, max: 13 },
         cost: [
             { type: "compute", value: 5 }
         ],
@@ -1222,7 +1151,7 @@ Digital Learning Platforms
         payout: [
             { type: "wonder", min: 1}
         ],
-        duration: { min: 6, max: 8 },
+        duration: { min: 7, max: 10 },
         cost: [
             { type: "compute", value: 7 },
             { type: "data", value: 600 }
@@ -1263,7 +1192,7 @@ Digital Learning Platforms
         payout: [
             { type: "money", min: 312}
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 10, max: 14 },
         cost: [
             { type: "compute", value: 5 }
         ],
@@ -1322,7 +1251,7 @@ Climate Data Interpreter
         payout: [
             { type: "money", min: 84}
         ],
-        duration: { min: 7, max: 10 },
+        duration: { min: 8, max: 12 },
         cost: [
             { type: "compute", value: 2 }
         ],
@@ -1364,7 +1293,7 @@ Climate Data Interpreter
             { type: "money", min: 180},
             { type: "data", min: 10}
         ],
-        duration: { min: 8, max: 11 },
+        duration: { min: 9, max: 13 },
         cost: [{ type: "compute", value: 4 }],
         category: "tool",
         path: "clim",
@@ -1412,7 +1341,7 @@ Climate Data Interpreter
             { type: "money", min: 252},
             { type: "data", min: 100}
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 10, max: 14 },
         cost: [ { type: "compute", value: 5 }  ],
         category: "tool",
         path: "clim",
@@ -1456,7 +1385,7 @@ Climate Data Interpreter
         payout: [
             { type: "money", min: 132}
         ],
-        duration: { min: 8, max: 11 },
+        duration: { min: 9, max: 13 },
         cost: [
             { type: "compute", value: 5 }
         ],
@@ -1499,7 +1428,7 @@ Climate Data Interpreter
             { type: "money", min: 288},
             { type: "data", min: 140}
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 10, max: 14 },
         cost: [{ type: "compute", value: 6 }],
         category: "tool",
         path: "clim",
@@ -1544,7 +1473,7 @@ Climate Data Interpreter
         payout: [
             { type: "money", min: 120}
         ],
-        duration: { min: 7, max: 9 },
+        duration: { min: 8, max: 11 },
         cost: [
             { type: "compute", value: 4 }
         ],
@@ -1583,7 +1512,7 @@ Climate Data Interpreter
         payout: [
             { type: "money", min: 220}
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 10, max: 14 },
         cost: [
             { type: "compute", value: 5 },
             { type: "data", value: 100 }
@@ -1627,7 +1556,7 @@ Climate Data Interpreter
         payout: [
             { type: "data", min: 120}
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 10, max: 14 },
         cost: [
             { type: "compute", value: 4 },
             { type: "data", value: 150 }
@@ -1671,7 +1600,7 @@ Climate Data Interpreter
             { type: "money", min: 280},
             { type: "data", min: 200}
         ],
-        duration: { min: 9, max: 12 },
+        duration: { min: 10, max: 14 },
         cost: [
             { type: "compute", value: 5 },
             { type: "data", value: 300 }
@@ -1716,7 +1645,7 @@ Climate Data Interpreter
             { type: "money", min: 132},
             { type: "data", min: 40}
         ],
-        duration: { min: 8, max: 11 },
+        duration: { min: 9, max: 13 },
         cost: [
             { type: "compute", value: 5 }
         ],
@@ -1754,7 +1683,7 @@ Climate Data Interpreter
         payout: [
             { type: "money", min: 300}
         ],
-        duration: { min: 8, max: 11 },
+        duration: { min: 9, max: 13 },
         cost: [
             { type: "compute", value: 6 },
             { type: "data", value: 150 }
@@ -1767,6 +1696,7 @@ Climate Data Interpreter
         id: "med12",
         displayName: "Universal Disease Therapeutics",
         chapter: [1,2,3,4,5],
+	displayTrigger: [ { type: "job", value: "med11"} ],	
         prereq: [{ type: "job", value: "med11",  display_prereq: false }
             	,{ type: "iq", value: 7 }
             	,{ type: "autonomy", value: 3 }
@@ -1806,7 +1736,7 @@ Climate Data Interpreter
             { type: "money", min: 430}
 
         ],
-        duration: { min: 7, max: 10 },
+        duration: { min: 8, max: 12 },
         cost: [
             { type: "compute", value: 5 },
             { type: "data", value: 200 }
@@ -1819,6 +1749,7 @@ Climate Data Interpreter
         id: "med14",
         displayName: "Reversal of Aging",
         chapter: [1,2,3,4,5],
+	displayTrigger: [ { type: "job", value: "med13"} ],	
         prereq: [{ type: "job", value: "med13" }
 		, { type:"iq", value: 8}],
         unlockCost: [

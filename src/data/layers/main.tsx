@@ -336,9 +336,9 @@ const layer = createLayer(id, function (this: any) {
         const max = getPayoutMaxFromMin(min);
         const range = Math.max(0, max - min);
         let amount = min + Math.floor(Math.random() * (range + 1));
-        if (min > 5 && amount >= 100 && Math.random() < 0.35) {
+        if (min > 5 && amount >= 100 && Math.random() < 0.30) {
             amount *= 2; // rare big-number bonus
-                if (min > 5 && amount >= 100 && Math.random() < 0.3) { // Might even happen again!
+                if (min > 5 && amount >= 100 && Math.random() < 0.1) { // Might even happen again!
                     amount *= 2; // rarer double big-number bonus
 		 }
         }
@@ -1782,17 +1782,16 @@ const layer = createLayer(id, function (this: any) {
                         padding: "20px",
                         maxWidth: "720px",
                         margin: "0 auto",
-                        color: "#000000",
-                        background: "#fff3e0"
+                        color: "#e5e9f0"
                     }}
                 >
                     <div
                         style={{
-                            background: "#fff3e0",
-                            border: "2px solid #FFA500",
+                            background: "#2e3440",
+                            border: "2px solid #3b4252",
                             borderRadius: "10px",
                             padding: "24px",
-                            boxShadow: "0 6px 20px rgba(0,0,0,0.25)"
+                            boxShadow: "0 6px 20px rgba(0,0,0,0.35)"
                         }}
                     >
                         <h1
@@ -1821,13 +1820,13 @@ const layer = createLayer(id, function (this: any) {
                                     display: "inline-flex",
                                     alignItems: "center",
                                     gap: "8px",
-                                    background: "#4CAF50",
-                                    color: "#EEEEEE",
+                                    background: "#4ade80",
+                                    color: "#0f172a",
                                     border: "none",
-                                    borderRadius: "6px",
+                                    borderRadius: "8px",
                                     cursor: "pointer",
                                     fontSize: "16px",
-                                    padding: "8px 14px"
+                                    padding: "10px 14px"
                                 }}
                             >
                                 <img
@@ -1845,12 +1844,12 @@ const layer = createLayer(id, function (this: any) {
                                     }
                                 }}
                                 style={{
-                                    background: "#4CAF50",
+                                    background: "#4ade80",
                                     border: "none",
-                                    borderRadius: "6px",
+                                    borderRadius: "8px",
                                     cursor: "pointer",
                                     fontSize: "18px",
-                                    color: "white",
+                                    color: "#0f172a",
                                     padding: "12px 20px",
                                     fontWeight: "bold",
                                     width: "180px"
@@ -1866,7 +1865,7 @@ const layer = createLayer(id, function (this: any) {
                                 gap: "12px",
                                 fontSize: "18px",
                                 lineHeight: 1.6,
-                                color: "#000000",
+                                color: "#e5e9f0",
                                 textAlign: "left"
                             }}
                         >
@@ -1888,49 +1887,7 @@ const layer = createLayer(id, function (this: any) {
                                 alignItems: "center"
                             }}
                         >
-                            <button
-                                onClick={openAchievementsTab}
-                                style={{
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    gap: "8px",
-                                    background: "#4CAF50",
-                                    color: "#EEEEEE",
-                                    border: "none",
-                                    borderRadius: "6px",
-                                    cursor: "pointer",
-                                    fontSize: "16px",
-                                    padding: "8px 14px"
-                                }}
-                            >
-                                <img
-                                    src="/ach/ach_gen.png"
-                                    alt="Achievements"
-                                    style="width: 28px; height: 28px; opacity:1"
-                                />
-                                Achievements
-                            </button>
-
-                            <button
-                                onClick={() => {
-                                    if (confirm("Are you sure you want to reset the game? This will delete ALL progress and cannot be undone!")) {
-                                        resetGame();
-                                    }
-                                }}
-                                style={{
-                                    background: "#4CAF50",
-                                    border: "none",
-                                    borderRadius: "6px",
-                                    cursor: "pointer",
-                                    fontSize: "18px",
-                                    color: "white",
-                                    padding: "12px 20px",
-                                    fontWeight: "bold",
-                                    width: "180px"
-                                }}
-                            >
-                                PLAY AGAIN
-                            </button>
+                            {/* Bottom buttons removed */}
                         </div>
                     </div>
 
@@ -1986,7 +1943,7 @@ const layer = createLayer(id, function (this: any) {
                 {/* Sticky Wallet */}
                 <div id="sticky-wallet" style="position: sticky; top: 0; z-index: 10;">
                     <div style="position: relative; width: 90%;">
-                        <div style="padding: 8px 12px; border: 1px solid #FFA500; border-radius: 8px; background: #fff3e0; width: 100%; position: relative; overflow: visible;">
+                        <div style="padding: 8px 12px; border: 1px solid #334155; border-top: none; border-radius:  0 0 8px 8px; background: #232830; width: 100%; position: relative; overflow: visible; color: #e2e8f0;">
                         <div style="display: flex; flex-wrap: wrap; gap: 10px;">
                             <span style="position: relative;">
                                 <span style="font-size: 18px; font-weight: bold; white-space: nowrap;">
@@ -2095,7 +2052,7 @@ const layer = createLayer(id, function (this: any) {
                                 </span>
                             )}
                         </div>
-                        <div style="font-size: 14px; margin-top: 4px; letter-spacing: 0.1em;">
+                        <div style="font-size: 14px; margin-top: 4px; letter-spacing: 0.1em; color: #cbd5e1;">
                             {GPU_IC.free.repeat(Math.max(0, availableGPUs.value))}{GPU_IC.used.repeat(Math.max(0, gpusOwned.value - availableGPUs.value))}
                         </div>
                         </div>
@@ -2320,7 +2277,10 @@ const layer = createLayer(id, function (this: any) {
                 {showUnlockButtons.value && (
                     <>
                     {/* Stats Panel */}
-                    <div id="stats-panel" style="margin: 8px 0; padding: 12px; border: 2px solid #FFA500; border-radius: 10px; background: #fff3e0;">
+                    <div
+                        id="stats-panel"
+                        style="margin: 8px 0; padding: 12px; border: 1px solid #334155; border-radius: 10px; background: #232830; color: #e2e8f0;"
+                    >
 
                         {player.frameworkChoice !== "not_yet" && (
                             <div style={`font-size: 16px; font-weight: bold; color: ${player.frameworkChoice === "support" ? "#4CAF50" : "#FF9800"};`}>
