@@ -95,6 +95,7 @@ export const JOB_TYPES: JobType[] = [
         ],
         duration: { min: 3, max: 6 },
         category: "tool",
+        icon: "✓",
         cost: [
             { type: "compute", value: 1 }
         ]
@@ -103,16 +104,15 @@ export const JOB_TYPES: JobType[] = [
     {
         id: "game1",
         displayName: "Digit Recognition",
-        chapter: [99],
-        prereq: [
-	    {type:"compute", value:999 , display_prereq: false  },
-	],
-        unlockCost: [            { type: "money", value: 10 }],
+        chapter: [1],
+        prereq: [],
+        unlockCost: [],
         payout: [
             { type: "money", min: 20}
         ],
         duration: { min: 5, max: 5 },
         category: "tool",
+        icon: "🔢",
         cost: [
             { type: "compute", value: 1 }
         ]
@@ -134,6 +134,7 @@ export const JOB_TYPES: JobType[] = [
         ],
         duration: { min: 6, max: 8 },
         category: "tool",
+        icon: "🎤",
         cost: [
             { type: "compute", value: 2 }
         ]
@@ -199,6 +200,7 @@ export const JOB_TYPES: JobType[] = [
             { type: "money", value: 20 }
         ],
         category: "gameplay",
+        icon: "🌐",
     },
 
     {
@@ -218,6 +220,7 @@ export const JOB_TYPES: JobType[] = [
             { type: "compute", value: 3 }
         ],
         category: "tool",
+        icon: "♟️",
     },
 
     {
@@ -236,6 +239,7 @@ export const JOB_TYPES: JobType[] = [
 	    ],
         duration: { min: 7, max: 9 },
         category: "tool",
+        icon: "⚫",
         cost: [{ type: "compute", value: 3 }]
     },
 
@@ -255,6 +259,7 @@ export const JOB_TYPES: JobType[] = [
         ],
         duration: { min: 8, max: 11 },
         category: "gameplay",
+        icon: "✨",
         cost: [
             { type: "compute", value: 4 },
             { type: "money", value: 200 }
@@ -302,6 +307,7 @@ Scientific Data Processing
             { type: "compute", value: 3 }
         ],
         category: "tool",
+        icon: "🧪",
         path: "sci",
     }
 
@@ -321,6 +327,7 @@ Scientific Data Processing
             { type: "compute", value: 4 }
         ],
         category: "tool",
+        icon: "⚡",
         path: "sci",
     }
 
@@ -341,6 +348,7 @@ Scientific Data Processing
             { type: "compute", value: 4 }
         ],
         category: "tool",
+        icon: "📈",
         path: "sci",
     }
 
@@ -363,6 +371,7 @@ Scientific Data Processing
             { type: "data", value: 120 }
         ],
         category: "tool",
+        icon: "🧩",
         path: "sci",
     }
 
@@ -386,6 +395,7 @@ Scientific Data Processing
             { type: "data", value: 140 }
         ],
         category: "tool",
+        icon: "🧬",
         path: "sci",
     }
 
@@ -409,6 +419,7 @@ Scientific Data Processing
             { type: "data", value: 160 }
         ],
         category: "tool",
+        icon: "🔬",
         path: "sci",
     }
 
@@ -458,6 +469,7 @@ Scientific Data Processing
             { type: "data", value: 150 }
         ],
         category: "tool",
+        icon: "📐",
         path: "sci",
     }
 
@@ -507,6 +519,7 @@ Scientific Data Processing
             { type: "data", value: 140 }
         ],
         category: "tool",
+        icon: "⚗️",
         path: "sci",
     }
 
@@ -529,6 +542,7 @@ Scientific Data Processing
             { type: "data", value: 200 }
         ],
         category: "tool",
+        icon: "⚛️",
         path: "sci",
     }
 
@@ -643,6 +657,7 @@ Digital Learning Platforms
             { type: "compute", value: 4 }
         ],
         category: "tool",
+        icon: "😊",
         path: "dem",
     }
 
@@ -650,11 +665,11 @@ Digital Learning Platforms
         id: "dem2",
         displayName: "Digital Civic Information System",
         chapter: [2,3,4,5],
-        prereq: [{ type: "job", value: "dem1"} // , display_prereq: false } // Why not display this?
-	  	 , { type: "iq", value: 2 }
-		 , { type: "compute", value: 5 }
-		 , { type: "money", value: 300 }],
-        unlockCost: [{ type: "money", value: 400 }],
+        prereq: [{ type: "job", value: "dem1" , display_prereq: false } // Why not display this?
+	  	 , { type: "iq", value: 3 }
+		 , { type: "compute", value: 8 }
+		 , { type: "money", value: 800 }],
+        unlockCost: [{ type: "money", value: 600 }],
         payout: [
             { type: "generality", min: 1}
         ],
@@ -664,12 +679,13 @@ Digital Learning Platforms
             { type: "data", value: 150 }
         ],
         category: "onetime",
+        icon: "👂",
         path: "dem",
     }
 
     ,{
         id: "dem3",
-        displayName: "Public Sentiment Analysis",
+        displayName: "Public Opinion Insight",
         chapter: [2,3,4,5],
         prereq: [{ type: "job", value: "dem2" }
 		, { type: "money", value: 700 , display_prereq: false}],
@@ -686,6 +702,7 @@ Digital Learning Platforms
             { type: "data", value: 140 }
         ],
         category: "tool",
+        icon: "🎭",
         path: "dem",
     }
 
@@ -704,6 +721,7 @@ Digital Learning Platforms
             { type: "compute", value: 5 }
         ],
         category: "tool",
+        icon: "🤝",
         path: "dem",
     }
     /*
@@ -745,6 +763,7 @@ Digital Learning Platforms
             { type: "data", value: 150 }
         ],
         category: "tool",
+        icon: "🧩",
         path: "dem",
     }
 
@@ -812,6 +831,7 @@ Digital Learning Platforms
             { type: "data", value: 160 }
         ],
         category: "tool",
+        icon: "🕵️",
         path: "dem",
     }
 
@@ -834,6 +854,7 @@ Digital Learning Platforms
             { type: "data", value: 180 }
         ],
         category: "tool",
+        icon: "✔️",
         path: "dem",
     }
 
@@ -874,6 +895,7 @@ Digital Learning Platforms
             { type: "compute", value: 5 }
         ],
         category: "tool",
+        icon: "🎯",
         path: "dem",
     }
 
@@ -894,6 +916,7 @@ Digital Learning Platforms
             { type: "compute", value: 5 }
         ],
         category: "tool",
+        icon: "👁️",
         path: "dem",
     }
 
@@ -916,6 +939,7 @@ Digital Learning Platforms
             { type: "data", value: 220 }
         ],
         category: "tool",
+        icon: "📣",
         path: "dem",
     }
 
@@ -960,6 +984,7 @@ Digital Learning Platforms
             { type: "data", value: 180 }
         ],
         category: "tool",
+        icon: "⛓️",
         path: "dem",
     }
 
@@ -983,6 +1008,7 @@ Digital Learning Platforms
             { type: "data", value: 500 }
         ],
         category: "tool",
+        icon: "👥",
         path: "dem",
     }
 
@@ -1256,6 +1282,7 @@ Climate Data Interpreter
             { type: "compute", value: 2 }
         ],
         category: "tool",
+        icon: "🌡️",
 	path: "clim",
     }
 
@@ -1274,6 +1301,7 @@ Climate Data Interpreter
             { type: "compute", value: 3 }
         ],
         category: "tool",
+        icon: "🌤️",
         path: "clim",
     }
 
@@ -1344,6 +1372,7 @@ Climate Data Interpreter
         duration: { min: 10, max: 14 },
         cost: [ { type: "compute", value: 5 }  ],
         category: "tool",
+        icon: "🏭",
         path: "clim",
     }
 
@@ -1390,6 +1419,7 @@ Climate Data Interpreter
             { type: "compute", value: 5 }
         ],
         category: "tool",
+        icon: "⚡",
         path: "clim",
     }
 
@@ -1409,6 +1439,7 @@ Climate Data Interpreter
         duration: { min: 8, max: 11 },
         cost: [ { type: "compute", value: 5 } ],
         category: "tool",
+        icon: "🔌",
         path: "clim",
     }
 
@@ -1431,6 +1462,7 @@ Climate Data Interpreter
         duration: { min: 10, max: 14 },
         cost: [{ type: "compute", value: 6 }],
         category: "tool",
+        icon: "🌬️",
         path: "clim",
     }
 
@@ -1478,6 +1510,7 @@ Climate Data Interpreter
             { type: "compute", value: 4 }
         ],
         category: "tool",
+        icon: "⚕️",
 	path: "med",
     },
 
@@ -1496,6 +1529,7 @@ Climate Data Interpreter
             { type: "compute", value: 5 }
         ],
         category: "tool",
+        icon: "🔍",
         path: "med",
     },
 
@@ -1518,6 +1552,7 @@ Climate Data Interpreter
             { type: "data", value: 100 }
         ],
         category: "tool",
+        icon: "🧬",
         path: "med",
     },
 
@@ -1582,6 +1617,7 @@ Climate Data Interpreter
             { type: "data", value: 200 }
         ],
         category: "onetime",
+        icon: "🔗",
         path: "med",
     },
 
@@ -1606,6 +1642,7 @@ Climate Data Interpreter
             { type: "data", value: 300 }
         ],
         category: "tool",
+        icon: "💊",
         path: "med",
     },
 
@@ -1650,6 +1687,7 @@ Climate Data Interpreter
             { type: "compute", value: 5 }
         ],
         category: "tool",
+        icon: "🩸",
         path: "med",
     },
 
@@ -1667,6 +1705,7 @@ Climate Data Interpreter
             { type: "data", value: 100 }
         ],
         category: "tool",
+        icon: "🚨",
         path: "med",
     },
 
@@ -1689,6 +1728,7 @@ Climate Data Interpreter
             { type: "data", value: 150 }
         ],
         category: "tool",
+        icon: "🧫",
         path: "med",
     },
 
@@ -1742,6 +1782,7 @@ Climate Data Interpreter
             { type: "data", value: 200 }
         ],
         category: "tool",
+        icon: "🌱",
         path: "med",
     },
 

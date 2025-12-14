@@ -15,7 +15,7 @@ export const G_CONF = {
 
     // ===== STARTING RESOURCES =====
     STARTING_MONEY: 48,
-    STARTING_PIZZAS: ["imgclassifier"], // Lol pizza
+    STARTING_PIZZAS: ["imgclassifier", "game1"], // Lol pizza
     STARTING_GPUS: 1,
     STARTING_IQ: 1, // Intelligence stat, unlocked in Chapter 2
     STARTING_DATA: 0, // Data resource, unlocked in Chapter 2
@@ -253,5 +253,5 @@ export const STAT_ICONS = {
     autonomy: "🤖",
     generality: "💠",
     wonder: "⭐",  // "🏆" // "⭐" // 🌈 
-    defalut_job: "🌐"
+    default_job: "🔧"
 } as const;

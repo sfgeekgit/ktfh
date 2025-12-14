@@ -24,6 +24,18 @@ const sortBy = ['path', 'order', 'id'];
 // Whether to also print a tree view (grouped by path).
 const showTree = true;
 
+// Whether to show icons in tree view (if job has an icon set).
+const showIcons = true;
+
+// Path default icons (shown at root of each tree).
+// These should match the path-based defaults in src/data/layers/main.tsx getJobIcon()
+const pathIcons = {
+  sci: '🔬',
+  med: '⚕️',
+  dem: '🏛️',
+  clim: '🌍',
+};
+
 // Training run filter: "ignore" to drop them, "only" to keep only them, "all" for everything.
 //const trainingRuns = 'ignore'; // one of: 'ignore' | 'only' | 'all'
 const trainingRuns = 'all'; // one of: 'ignore' | 'only' | 'all'
@@ -214,7 +226,8 @@ if (showTree) {
   });
 
   byPath.forEach((jobsForPath, key) => {
-    console.log('\n' + key);
+    const pathIcon = showIcons && pathIcons[key] ? `${pathIcons[key]} ` : '';
+    console.log('\n' + pathIcon + key);
     printTree(jobsForPath);
   });
 }
@@ -295,6 +308,7 @@ function combinePrereqs(job) {
 
 function formatLabel(job) {
   const name = job.displayName || job.id;
+  const icon = showIcons && job.icon ? `${job.icon} ` : '';
   const chapter = formatChapter(job.chapter);
   const unlockMoney = getUnlockMoney(job);
   const prereqs = formatPrereqs(combinePrereqs(job), job);
@@ -302,7 +316,7 @@ function formatLabel(job) {
   const unlockPart = unlockMoney ? ` - unlock$: ${unlockMoney}` : '';
   const prereqPart = prereqs ? ` -        prereq: ${prereqs}` : '';
   const chapterPart = chapter ? ` (ch${chapter})` : '';
-  return `${name}${chapterPart}${unlockPart}${prereqPart}${wonder}`;
+  return `${icon}${name}${chapterPart}${unlockPart}${prereqPart}${wonder}`;
 }
 
 function formatChapter(chapter) {

@@ -19,8 +19,8 @@ import { NEWS_TEXT } from "../newsText";
 import { resetGame } from "util/reset";
 import storyContent from "@/data/story.md";
 
-//const IS_DEV = true;
-const IS_DEV = false;
+const IS_DEV = true;
+//const IS_DEV = false;
 
 /**
  * IMPORTANT: PERSISTENT STATE REGISTRATION
@@ -908,13 +908,23 @@ const layer = createLayer(id, function (this: any) {
         let jobType;
 
         if (unlockedJobTypes.value.length >= 3) {
+            const latestId = unlockedJobTypes.value[unlockedJobTypes.value.length - 1];
+            const latest = unlockedJobs.find(j => j.id === latestId && j.category !== "onetime");
+            if (!jobType && latest && Math.random() < 0.20) jobType = latest;
+
             const secondId = unlockedJobTypes.value[unlockedJobTypes.value.length - 2];
             const second = unlockedJobs.find(j => j.id === secondId && j.category !== "onetime");
             if (!jobType && second && Math.random() < 0.10) jobType = second;
 
-            const latestId = unlockedJobTypes.value[unlockedJobTypes.value.length - 1];
-            const latest = unlockedJobs.find(j => j.id === latestId && j.category !== "onetime");
-            if (!jobType && latest && Math.random() < 0.20) jobType = latest;
+            if (unlockedJobTypes.value.length >= 6) {
+                const thirdId = unlockedJobTypes.value[unlockedJobTypes.value.length - 3];
+                const third = unlockedJobs.find(j => j.id === thirdId && j.category !== "onetime");
+                if (!jobType && third && Math.random() < 0.07) jobType = third;
+
+                const fourthId = unlockedJobTypes.value[unlockedJobTypes.value.length - 4];
+                const fourth = unlockedJobs.find(j => j.id === fourthId && j.category !== "onetime");
+                if (!jobType && fourth && Math.random() < 0.07) jobType = fourth;
+            }
         }
 
         const preferWebScrape = currentChapter.value >= 3 && unlockedJobTypes.value.includes("webscrape");
@@ -969,6 +979,39 @@ const layer = createLayer(id, function (this: any) {
         };
     }
 
+    // Generate job with duplicate prevention
+    function generateJobWithDuplicateCheck(): DeliveryJob | null {
+        let newJob = generateJob();
+        if (newJob === null) return null;
+
+        let attempts = 0;
+        const maxAttempts = 10; // Safety limit to prevent infinite loops
+
+        while (attempts < maxAttempts) {
+            // Count how many times this job type already exists in queue
+            const existingCount = jobQueue.value.filter((j: DeliveryJob) => j.jobTypeId === newJob!.jobTypeId).length;
+
+            if (existingCount === 0) {
+                break; // Job not in queue, use it
+            }
+
+            // Determine re-roll chance based on existing count
+            const rerollChance = existingCount >= 2 ? 0.90 : 0.60;
+
+            if (Math.random() < rerollChance) {
+                // Re-roll for a different job
+                const rerolled = generateJob();
+                if (rerolled === null) break; // Can't generate another, use current
+                newJob = rerolled;
+                attempts++;
+            } else {
+                break; // Accept the duplicate this time
+            }
+        }
+
+        return newJob;
+    }
+
     // Buy GPU clickable
     const buyGPUClickable = createClickable(() => ({
         display: {
@@ -1015,6 +1058,39 @@ const layer = createLayer(id, function (this: any) {
             return `Requires Complete ${requiredJob?.displayName || prereq.value}`;
         }
         return "";
+    }
+
+    // Helper function to get the icon for a job type
+    function getJobIcon(jobType: any): string {
+        // If job has explicit icon, use it
+        if (jobType?.icon) return jobType.icon;
+
+        // If job is a wonder, use wonder icon
+        if (jobType?.is_wonder) return STAT_ICONS.wonder;
+
+        // For onetime jobs, check for stat payouts
+        if (jobType?.category === "onetime") {
+            // Check for exactly 1 IQ payout
+            const iqPayout = jobType.payout?.find((p: any) => p.type === "iq");
+            if (iqPayout && iqPayout.min === 1) return STAT_ICONS.iq;
+
+            // Check for exactly 1 autonomy payout
+            const autonomyPayout = jobType.payout?.find((p: any) => p.type === "autonomy");
+            if (autonomyPayout && autonomyPayout.min === 1) return STAT_ICONS.autonomy;
+
+            // Check for exactly 1 generality payout
+            const generalityPayout = jobType.payout?.find((p: any) => p.type === "generality");
+            if (generalityPayout && generalityPayout.min === 1) return STAT_ICONS.generality;
+        }
+
+        // Path-based default icons
+        if (jobType?.path === "sci") return "🔬";
+        if (jobType?.path === "med") return "⚕️";
+        if (jobType?.path === "dem") return "🏛️";
+        if (jobType?.path === "clim") return "🌍";
+
+        // Default icon
+        return STAT_ICONS.default_job;
     }
 
     // Job type unlock clickables
@@ -1292,7 +1368,7 @@ const layer = createLayer(id, function (this: any) {
 
                 // After the very first completion, spawn next job immediately if under limit
                 if (jobCompletions.value === 1 && jobQueue.value.length < autoJobLimit.value) {
-                    const newJob = generateJob();
+                    const newJob = generateJobWithDuplicateCheck();
                     if (newJob !== null) {
                         jobQueue.value.push(newJob);
                     }
@@ -1336,7 +1412,7 @@ const layer = createLayer(id, function (this: any) {
             if (timeSinceLastJob.value >= G_CONF.JOB_GENERATION_INTERVAL) {
                 timeSinceLastJob.value = 0;
                 if (jobQueue.value.length < autoJobLimit.value) {
-                    const newJob = generateJob();
+                    const newJob = generateJobWithDuplicateCheck();
                     if (newJob !== null) {
                         jobQueue.value.push(newJob);
                     }
@@ -1553,7 +1629,7 @@ const layer = createLayer(id, function (this: any) {
         const cardBorder = "#334155"; // neutral subtle border similar to 3.html
         const badgeBg = "linear-gradient(135deg, rgba(148, 163, 184, 0.2), rgba(148, 163, 184, 0.07))";
         const badgeBorder = "rgba(148, 163, 184, 0.35)";
-        const jobIcon = jobType?.icon || STAT_ICONS.defalut_job;
+        const jobIcon = getJobIcon(jobType);
         const rejectionState = jobRejectionState.value[job.id] || 0;
         const isInRejectionChain = rejectionState > 0;
         const buttonText = getAcceptButtonText(job, jobType);
@@ -1580,7 +1656,7 @@ const layer = createLayer(id, function (this: any) {
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                fontSize: "20px",
+                                fontSize: "26px",
                                 background: badgeBg,
                                 border: `1px solid ${badgeBorder}`
                             }}
@@ -2051,6 +2127,8 @@ const layer = createLayer(id, function (this: any) {
                                     </span>
                                 </span>
                             )}
+
+
                         </div>
                         <div style="font-size: 14px; margin-top: 4px; letter-spacing: 0.1em; color: #cbd5e1;">
                             {GPU_IC.free.repeat(Math.max(0, availableGPUs.value))}{GPU_IC.used.repeat(Math.max(0, gpusOwned.value - availableGPUs.value))}
@@ -2194,12 +2272,12 @@ const layer = createLayer(id, function (this: any) {
                                                 display: "flex",
                                                 alignItems: "center",
                                                 justifyContent: "center",
-                                                fontSize: "20px",
+                                                fontSize: "26px",
                                                 background: "linear-gradient(135deg, rgba(148, 163, 184, 0.2), rgba(148, 163, 184, 0.07))",
                                                 border: "1px solid rgba(148, 163, 184, 0.35)"
                                             }}
                                         >
-                                            {jobType?.icon || STAT_ICONS.defalut_job}
+                                            {getJobIcon(jobType)}
                                         </div>
                                         <div style="display: flex; flex-direction: column; gap: 6px; flex: 1 1 0; min-width: 0; align-items: flex-start; text-align: left;">
                                             <div style="font-size: 15px; font-weight: bold; color: #f8fafc;">{prefix} {jobType?.displayName}</div>
@@ -2343,6 +2421,9 @@ const layer = createLayer(id, function (this: any) {
                 )}
 
                     <div style="font-size: 14px; color: rgb(230, 218, 199);"><strong>Researched:</strong> {unlockedJobTypes.value.map(id => getJobType(id)?.displayName || id).join(", ")}</div>
+
+
+
 		    <div style="font-size: 20px; color: rgb(230, 218, 199); display: flex; gap: 10px; align-items: center;">
                         {/*
                         <button
@@ -2397,7 +2478,6 @@ const layer = createLayer(id, function (this: any) {
                             ⚙️
                         </button>
                     </div>
-
                 {IS_DEV && (
                     <div style="margin: 15px 0; padding: 12px; border: 2px solid #9C27B0; border-radius: 10px; background: #f3e5f5;">
                         <h4 style="margin: 0 0 10px 0; color: #9C27B0;">Dev Tools</h4>
