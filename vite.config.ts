@@ -3,14 +3,58 @@ import vueJsx from "@vitejs/plugin-vue-jsx";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import tsconfigPaths from "vite-tsconfig-paths";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 import projInfo from "./src/data/projInfo";
 import storyLoaderPlugin from "./vite-plugin-story-loader";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const allowedHostsEnv = process.env.VITE_ALLOWED_HOSTS || "";
 const allowedHosts = allowedHostsEnv
     .split(",")
     .map(h => h.trim())
     .filter(Boolean);
+
+function achievementImagesPlugin() {
+    const achDir = path.resolve(__dirname, "public/ach/240");
+    const imagesRoute = "/ach/240/images.json";
+
+    const readImages = () =>
+        fs
+            .readdirSync(achDir, { withFileTypes: true })
+            .filter(entry => entry.isFile() && entry.name.toLowerCase().endsWith(".png"))
+            .map(entry => entry.name)
+            .sort();
+
+    return {
+        name: "achievement-images-json",
+        configureServer(server) {
+            server.middlewares.use((req, res, next) => {
+                const url = req.url?.split("?")[0] ?? "";
+                if (url !== imagesRoute) return next();
+                try {
+                    const images = readImages();
+                    res.setHeader("Content-Type", "application/json");
+                    res.end(JSON.stringify(images));
+                } catch (err) {
+                    next(err as any);
+                }
+            });
+        },
+        generateBundle() {
+            if (!fs.existsSync(achDir)) return;
+            const images = readImages();
+            this.emitFile({
+                type: "asset",
+                fileName: "ach/240/images.json",
+                source: JSON.stringify(images)
+            });
+        }
+    };
+}
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -35,6 +79,7 @@ export default defineConfig({
         }
     },
     plugins: [
+        achievementImagesPlugin(),
         storyLoaderPlugin(),
         vue(),
         vueJsx({
