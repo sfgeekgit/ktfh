@@ -27,7 +27,7 @@ const layer = createLayer(id, function () {
     // requirementText is not used, I think
     // Reward is not used
     // Title is used for both the toast and the card
-    const defaultImage = "/ach/ach_gen.png";
+    const defaultImage = "/ach/240/ach_gen.png";
 
     const baseAchievementDefs = [
 
@@ -36,7 +36,7 @@ const layer = createLayer(id, function () {
         {
             id: "computeCluster4",
             title: "Quad Compute",
-	    image: "/ach/ach3.png",
+	    image: "/ach/240/ach3.png",
             description: "Own 4 GPUs",
             requirement: () => totalCompute.value >= 4,
             requirementText: "Own at least requirementText"
@@ -48,7 +48,7 @@ const layer = createLayer(id, function () {
             title: "Compute Cluster",
             description: "Reach 8 total compute units.",
             reward: "Permanent badge for future runs.",
-            image: "/ach/ach_sat_signal.png",
+            image: "/ach/240/ach_sat_signal.png",
             requirement: () => totalCompute.value >= 8,
             //requirementText: "Own at least 8 compute units"
         },
@@ -56,13 +56,13 @@ const layer = createLayer(id, function () {
             id: "compute16",
             title: "Sillicon",
             description: "Reach 16 total compute units.",	    
-            image: "/ach/ach_beehatt.png",
+            image: "/ach/240/ach_beehatt.png",
             requirement: () => totalCompute.value >= 16,
         },
         {
             id: "gateStayedClosed",
             title: "The Narrow Path",
-            image: "/ach/ach_good1.png",
+            image: "/ach/240/ach_good1.png",
             description: "YOU WON! AI is a boon to humanity",
             requirement: () =>
                 player.gameOver === true &&
@@ -78,14 +78,14 @@ const layer = createLayer(id, function () {
         {
             id: "wonderPerceptionManipulationApparatus",
             title: "Perception Manipulation Apparatus",
-	    image: "/ach/ach_badai2.png",
+	    image: "/ach/240/ach_badai2.png",
             requirement: () => completedOnetimeJobs.value.includes("dem15"),
             requirementText: "Complete Perception Manipulation Apparatus"
         },
         {
             id: "wonderAlgorithmicAuthoritarianism",
             title: "Algorithmic Authoritarianism",
-            image: "/ach/ach_badai1.png",	    
+            image: "/ach/240/ach_badai1.png",	    
             requirement: () => completedOnetimeJobs.value.includes("dem18"),
             requirementText: "Complete Algorithmic Authoritarianism"
         },
@@ -93,7 +93,7 @@ const layer = createLayer(id, function () {
         {
             id: "agiOverload",
             title: "AGI Overload",
-	    image: "/ach/ach_badai3.png",			
+	    image: "/ach/240/ach_badai3.png",			
             description: "Exceed A+G+I safety threshold.",
             requirement: () =>
                 player.gameOver === true &&
@@ -104,7 +104,7 @@ const layer = createLayer(id, function () {
         {
             id: "mcAgiRace",
             title: "Lose The Race",
-            image: "/ach/ach_bad1.png",
+            image: "/ach/240/ach_bad1.png",
             description: "Lose to MegaCorp AGI",
             requirement: () =>
                 player.gameOver === true &&
@@ -116,21 +116,21 @@ const layer = createLayer(id, function () {
         {
             id: "wonderFusionEnergy",
             title: "Fusion Energy",
-	    image: "/ach/ach_suneng.png",
+	    image: "/ach/240/ach_suneng.png",
             requirement: () => completedOnetimeJobs.value.includes("sci12"),
             requirementText: "Complete Fusion Energy"
         },
         {
             id: "wonderDemocraticConsensusSynthesizer",
             title: "Democratic Consensus Synthesizer",
-	    image: "/ach/ach_dem2.png",
+	    image: "/ach/240/ach_dem2.png",
             requirement: () => completedOnetimeJobs.value.includes("dem7"),
             requirementText: "Complete Democratic Consensus Synthesizer"
         },
         {
             id: "wonderCivicTrustInfrastructure",
             title: "Civic Trust Infrastructure",
-	    image: "/ach/ach_civ4.png",
+	    image: "/ach/240/ach_civ4.png",
             requirement: () => completedOnetimeJobs.value.includes("dem11"),
             requirementText: "Complete Civic Trust Infrastructure"
         },
@@ -138,14 +138,14 @@ const layer = createLayer(id, function () {
 	{
             id: "wonderMolecularManufacturing",
             title: "Molecular Manufacturing",
-	    image: "/ach/ach_molen2.png",
+	    image: "/ach/240/ach_molen2.png",
             requirement: () => completedOnetimeJobs.value.includes("sci7"),
             requirementText: "Complete Molecular Manufacturing"
         },
         {
             id: "wonderMaterialsDiscovery",
             title: "Materials Discovery",
-	    image: "/ach/ach_fiss.png",
+	    image: "/ach/240/ach_fiss.png",
             requirement: () => completedOnetimeJobs.value.includes("sci9"),
             requirementText: "Complete Materials Discovery"
         },
@@ -153,63 +153,63 @@ const layer = createLayer(id, function () {
 	{
             id: "wonderUniversalEducationTutor",
             title: "Universal Education Tutor",
-	    image: "/ach/ach_edu1.png",
+	    image: "/ach/240/ach_edu1.png",
             requirement: () => completedOnetimeJobs.value.includes("edu8"),
             requirementText: "Complete Universal Education Tutor"
         },
         {
             id: "wonderGlobalLearningNetwork",
             title: "Global Learning Network",
-	    image: "/ach/ach_edu4.png",
+	    image: "/ach/240/ach_edu4.png",
             requirement: () => completedOnetimeJobs.value.includes("edu11"),
             requirementText: "Complete Global Learning Network"
         },
         {
             id: "wonderHighlyLocalizedWeatherForecasting",
             title: "Highly Localized Weather Forecasting",
-	    image: "/ach/ach_cli2.png",
+	    image: "/ach/240/ach_cli2.png",
             requirement: () => completedOnetimeJobs.value.includes("clim4"),
             requirementText: "Complete Highly Localized Weather Forecasting"
         },
         {
             id: "wonderGlobalEmissionsTracking",
             title: "Global Emissions Tracking",
-	    image: "/ach/ach_glob_emis.png",
+	    image: "/ach/240/ach_glob_emis.png",
             requirement: () => completedOnetimeJobs.value.includes("clim7"),
             requirementText: "Complete Global Emissions Tracking"
         },
         {
             id: "wonderClimateAwareGridBalancing",
             title: "Climate-Aware Grid Balancing",
-	    image: "/ach/ach_climdata.png",
+	    image: "/ach/240/ach_climdata.png",
             requirement: () => completedOnetimeJobs.value.includes("clim11"),
             requirementText: "Complete Climate-Aware Grid Balancing"
         },
         {
             id: "wonderPrecisionOncology",
             title: "Precision Oncology",
-	    image: "/ach/ach_medtargt.png",	
+	    image: "/ach/240/ach_medtargt.png",	
             requirement: () => completedOnetimeJobs.value.includes("med4"),
             requirementText: "Complete Precision Oncology"
         },
         {
             id: "wonderAcceleratedDrugDiscovery",
             title: "Accelerated Drug Discovery",
-	    image: "/ach/ach_protien1.png",		    
+	    image: "/ach/240/ach_protien1.png",		    
             requirement: () => completedOnetimeJobs.value.includes("med8"),
             requirementText: "Complete Accelerated Drug Discovery"
         },
         {
             id: "wonderUniversalDiseaseTherapeutics",
             title: "Universal Disease Therapeutics",
-	    image: "/ach/ach_med.png",	
+	    image: "/ach/240/ach_med.png",	
             requirement: () => completedOnetimeJobs.value.includes("med12"),
             requirementText: "Complete Universal Disease Therapeutics"
         },
         {
             id: "wonderReversalOfAging",
             title: "Reversal of Aging",
-            image: "/ach/ach_age2.png",
+            image: "/ach/240/ach_age2.png",
             requirement: () => completedOnetimeJobs.value.includes("med14"),
             requirementText: "Complete Reversal of Aging"
         },
@@ -218,14 +218,14 @@ const layer = createLayer(id, function () {
         {
             id: "wonderDis",
             title: "Disability Support Systems",
-            image: "/ach/ach_disab.png",
+            image: "/ach/240/ach_disab.png",
             requirement: () => completedOnetimeJobs.value.includes("dissu"),
 
         },
         {
             id: "wonderscsc",
             title: "Room Temperature Superconductors",
-            image: "/ach/ach_nuc.png",
+            image: "/ach/240/ach_nuc.png",
             requirement: () => completedOnetimeJobs.value.includes("rtsusc"),
 
         },
@@ -235,7 +235,7 @@ const layer = createLayer(id, function () {
             id: "worker",
             title: "Worker",
             description: "Complete 1,000 jobs.",
-            image: "/ach/ach_tasks.png",
+            image: "/ach/240/ach_tasks.png",
             requirement: () => jobCompletions.value >= 1000,
             requirementText: "Complete 1,000 jobs"
         },
@@ -243,7 +243,7 @@ const layer = createLayer(id, function () {
             id: "money1",
             title: "Series A",
             description: "Reach $5000",
-            image: "/ach/ach_cash1.png",
+            image: "/ach/240/ach_cash1.png",
             requirement: () => Decimal.gte(money.value, 5000),
             requirementText: "Reach $5000"
         },
@@ -251,7 +251,7 @@ const layer = createLayer(id, function () {
             id: "money2",
             title: "Funded",
             description: "Reach $50,000",
-            image: "/ach/ach_cash2.png",
+            image: "/ach/240/ach_cash2.png",
             requirement: () => Decimal.gte(money.value, 50000),
             requirementText: "Reach $50000"
         },
@@ -265,10 +265,10 @@ const layer = createLayer(id, function () {
     // Track used images so auto-generated achievements do not reuse them
     const usedImages = new Set(baseAchievementDefs.map(def => def.image ?? defaultImage));
 
-    // Auto-generated achievements from /public/ach/ directory
+    // Auto-generated achievements from /public/ach/240/ directory
     // Run 'node scripts/ach_img_names.js' to regenerate the list
     const autoGeneratedAchievements = achievementImages.flatMap(img => {
-        const imagePath = `/ach/${img}.png`;
+        const imagePath = `/ach/240/${img}.png`;
         if (usedImages.has(imagePath)) return [];
         usedImages.add(imagePath);
         return [

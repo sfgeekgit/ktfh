@@ -2,7 +2,7 @@
 
 /**
  * Generates a TypeScript file listing all achievement image filenames
- * from the /public/ach/ directory.
+ * from the /public/ach/240/ directory.
  *
  * Usage: node scripts/ach_img_names.js
  */
@@ -14,11 +14,11 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PUBLIC_ACH_DIR = path.join(__dirname, '../../public/ach');
+const PUBLIC_ACH_DIR = path.join(__dirname, '../../public/ach/240');
 const OUTPUT_FILE = path.join(__dirname, '../data/generated/achievementImages.ts');
 
 function generateAchievementImages() {
-    // Ensure the public/ach directory exists
+    // Ensure the public/ach/240 directory exists
     if (!fs.existsSync(PUBLIC_ACH_DIR)) {
         console.error(`Error: Directory ${PUBLIC_ACH_DIR} does not exist`);
         process.exit(1);
