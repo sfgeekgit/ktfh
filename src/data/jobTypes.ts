@@ -192,7 +192,7 @@ export const JOB_TYPES: JobType[] = [
 
         unlockCost: [            { type: "money", value: 10 }],
         payout: [
-            { type: "data", min: 80}
+            { type: "data", min: 90}
         ],
         duration: { min: 9, max: 12 },
         cost: [
@@ -320,7 +320,7 @@ Scientific Data Processing
         unlockCost: [{ type: "money", value: 250 }],
         payout: [
             { type: "money", min: 144},
-	    { type: "data", min: 20}
+	    { type: "data", min: 40}
         ],
         duration: { min: 5, max: 8 },
         cost: [
@@ -341,7 +341,7 @@ Scientific Data Processing
         unlockCost: [{ type: "money", value: 500 }],
         payout: [
             { type: "money", min: 192},
-	    { type: "data", min: 20}
+	    { type: "data", min: 30}
 	    ],
         duration: { min: 3, max: 6 },
         cost: [
@@ -694,9 +694,9 @@ Digital Learning Platforms
             { type: "data", value: 30 }
         ],
         payout: [
-            { type: "money", min: 276}
+            { type: "money", min: 226}
         ],
-        duration: { min: 5, max: 7 },
+        duration: { min: 3, max: 4 },
         cost: [
             { type: "compute", value: 5 },
             { type: "data", value: 140 }
@@ -1294,7 +1294,7 @@ Climate Data Interpreter
 			, { type: "money", value: 800 , display_prereq: false}],
         unlockCost: [{ type: "money", value: 800 }],
         payout: [
-            { type: "money", min: 160}
+            { type: "money", min: 130}
         ],
         duration: { min: 8, max: 11 },
         cost: [
@@ -1318,7 +1318,7 @@ Climate Data Interpreter
             { type: "data", value: 100 }
         ],
         payout: [
-            { type: "money", min: 180},
+            { type: "money", min: 140},
             { type: "data", min: 10}
         ],
         duration: { min: 9, max: 13 },
@@ -1359,14 +1359,14 @@ Climate Data Interpreter
         displayName: "Emissions Source Detection",
         chapter: [4,5],
         prereq: [{ type: "job", value: "clim4" },
-		{type:"autonomy", value: 1}
+		{type:"iq", value: 6}
 		, { type: "money", value: 1500 , display_prereq: false}],
         unlockCost: [
             { type: "money", value: 2000 },
             { type: "data", value: 150 }
         ],
         payout: [
-            { type: "money", min: 252},
+            { type: "money", min: 202},
             { type: "data", min: 100}
         ],
         duration: { min: 10, max: 14 },
@@ -1390,7 +1390,7 @@ Climate Data Interpreter
         ],
         payout: [
             { type: "wonder", min: 1},
-	                { type: "iq", min:1},
+	            { type: "iq", min:1},
             { type: "generality", min:1}
 
         ],
@@ -1412,7 +1412,7 @@ Climate Data Interpreter
 		, { type: "money", value: 1400 , display_prereq: false}],
         unlockCost: [{ type: "money", value: 1200 }],
         payout: [
-            { type: "money", min: 132}
+            { type: "money", min: 182}
         ],
         duration: { min: 9, max: 13 },
         cost: [
@@ -1429,8 +1429,8 @@ Climate Data Interpreter
         chapter: [3,4,5],
 	displayTrigger: [ { type: "job", value: "clim8"} ],
         prereq: [{ type: "job", value: "clim8" },
-		{type: "autonomy", value: 2},
-		{type: "generality", value: 4}],
+		{type: "autonomy", value: 3}],
+
         unlockCost: [{ type: "money", value: 1800 }],
         payout: [
             { type: "money", min: 232},
@@ -1449,7 +1449,7 @@ Climate Data Interpreter
         chapter: [4,5],
 	displayTrigger: [ { type: "job", value: "clim9"} ],	
         prereq: [{ type: "job", value: "clim9" }
-		, {type:"iq", value: 7}
+		, {type:"iq", value: 8}
 		],
         unlockCost: [
             { type: "money", value: 2200 },
@@ -1472,7 +1472,7 @@ Climate Data Interpreter
         chapter: [4,5],
 	displayTrigger: [ { type: "job", value: "clim10"} ],
         prereq: [{ type: "job", value: "clim10", display_prereq: false },
-		 {type:"autonomy", value: 3}],
+		{type: "generality", value: 4}],
         unlockCost: [
             { type: "money", value: 4000 },
             { type: "data", value: 2000 }
@@ -1503,7 +1503,7 @@ Climate Data Interpreter
         prereq: [{ type: "choice", value: "med1" }],   /// Unlocked via choice only!
         unlockCost: [{ type: "money", value: 800 }],
         payout: [
-            { type: "money", min: 120}
+            { type: "money", min: 110}
         ],
         duration: { min: 8, max: 11 },
         cost: [
@@ -1522,7 +1522,7 @@ Climate Data Interpreter
 		, { type: "money", value: 800 }],
         unlockCost: [{ type: "money", value: 800 }],
         payout: [
-            { type: "money", min: 160}
+            { type: "money", min: 140}
         ],
         duration: { min: 7, max: 10 },
         cost: [
@@ -1544,7 +1544,7 @@ Climate Data Interpreter
         ],
         unlockCost: [{ type: "money", value: 2000 }],
         payout: [
-            { type: "money", min: 220}
+            { type: "money", min: 200}
         ],
         duration: { min: 10, max: 14 },
         cost: [
@@ -1604,8 +1604,10 @@ Climate Data Interpreter
         id: "med6",
         displayName: "Protein Interaction Modeling",
         chapter: [1,2,3,4,5],
+	displayTrigger: [ { type: "job", value: "med5"} ],	
         prereq: [{ type: "job", value: "med5" }
-		, { type: "money", value: 2000 , display_prereq: false}],
+                ,{ type: "generality", value:3}		
+		],
         unlockCost: [{ type: "money", value: 2000 }],
         payout: [
             { type: "iq", min:1},
@@ -1625,8 +1627,10 @@ Climate Data Interpreter
         id: "med7",
         displayName: "Drug Discovery",
         chapter: [1,2,3,4,5],
+	displayTrigger: [ { type: "job", value: "med6"} ],		
         prereq: [{ type: "job", value: "med6" }
-	        , { type: "money", value: 2000 , display_prereq: false}],
+                ,{ type: "autonomy", value:3}		
+		],
 
         unlockCost: [
             { type: "money", value: 1500 },
@@ -1636,7 +1640,7 @@ Climate Data Interpreter
             { type: "money", min: 280},
             { type: "data", min: 200}
         ],
-        duration: { min: 10, max: 14 },
+        duration: { min: 30, max: 40 },
         cost: [
             { type: "compute", value: 5 },
             { type: "data", value: 300 }
@@ -1650,7 +1654,10 @@ Climate Data Interpreter
         id: "med8",
         displayName: "Accelerated Drug Discovery",
         chapter: [1,2,3,4,5],
-        prereq: [{ type: "job", value: "med7", display_prereq: false }],
+	displayTrigger: [ { type: "job", value: "med7"} ],			
+        prereq: [{ type: "job", value: "med7", display_prereq: false }
+                ,{ type: "generality", value:5}	
+		],
         unlockCost: [
             { type: "money", value: 3500 },
             { type: "data", value: 1800 }
@@ -1679,7 +1686,7 @@ Climate Data Interpreter
 		, { type: "money", value: 1000, display_prereq: false }],
         unlockCost: [{ type: "money", value: 1000 }],
         payout: [
-            { type: "money", min: 132},
+            { type: "money", min: 112},
             { type: "data", min: 40}
         ],
         duration: { min: 9, max: 13 },
@@ -1698,7 +1705,7 @@ Climate Data Interpreter
         prereq: [{ type: "job", value: "med9" }
 		, { type: "money", value: 1500 , display_prereq: false}],		
         unlockCost: [{ type: "money", value: 1500 }],
-        payout: [{ type: "money", min: 260}],
+        payout: [{ type: "money", min: 230}],
         duration: { min: 8, max: 11 },
         cost: [
             { type: "compute", value: 5 },

@@ -159,14 +159,24 @@ Which path will you follow?
 **id:** interlude_public_sentiment
 
 ## Page 1
-The first large-scale Public Sentiment Analysis finishes crunching through millions of civic comments.
-Suddenly everyone wants it: protest organizers, city councils, policy shops, campaigns, all demanding access to the feed.
-You have to decide whether to turn this tool toward collaborative dialogue or targeted pressure.
 
-## Page 2 [CHOICE]
+Amid a flood of new capabilities, you approved the first run of Public Opinion Insight.
+That run has now completed.
+
+Millions of civic comments have been gathered into a clear picture of public sentiment, making common ground visible for the first time.
+
+
+## Page 2
+The result doesn’t stay private for long.
+Institutions and political actors alike begin requesting access.
+
+With direct insight into the public mood, this system can be used to support open dialogue, or to apply targeted pressure.
+
+
+## Page 3 [CHOICE]
 **title:** Aim the Feedback Loop
 
-Choose how to use your new visibility into the public mood.
+Choose how this insight is applied:
 
 [OPTION: dem4]
 **button:** Dialogue

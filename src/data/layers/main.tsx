@@ -19,8 +19,8 @@ import { NEWS_TEXT } from "../newsText";
 import { resetGame } from "util/reset";
 import storyContent from "@/data/story.md";
 
-const IS_DEV = true;
-//const IS_DEV = false;
+//const IS_DEV = true;
+const IS_DEV = false;
 
 /**
  * IMPORTANT: PERSISTENT STATE REGISTRATION
@@ -336,10 +336,10 @@ const layer = createLayer(id, function (this: any) {
         const max = getPayoutMaxFromMin(min);
         const range = Math.max(0, max - min);
         let amount = min + Math.floor(Math.random() * (range + 1));
-        if (min > 5 && amount >= 100 && Math.random() < 0.30) {
-            amount *= 2; // rare big-number bonus
-                if (min > 5 && amount >= 100 && Math.random() < 0.1) { // Might even happen again!
-                    amount *= 2; // rarer double big-number bonus
+        if (min > 5 && amount >= 100 && Math.random() < 0.25) {
+            amount = Math.floor(amount * 1.5); // rare big-number bonus
+                if (min > 5 && amount >= 100 && Math.random() < 0.25) { // Might even happen again!
+	            amount = Math.floor(amount * 1.5); // rare big-number bonus
 		 }
         }
         if (applyQualityBonus) {
