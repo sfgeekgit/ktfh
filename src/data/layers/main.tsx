@@ -10,6 +10,7 @@ import { globalBus } from "game/events";
 import { noPersist } from "game/persistence";
 import { persistent } from "game/persistence";
 import ResetModal from "components/modals/ResetModal.vue";
+import AboutModal from "components/modals/AboutModal.vue";
 import { G_CONF, CHAP_5_MC_AGI_LOSE_TIMELINE, CHAP_5_ACCEPT_TIMELINE, COMPUTE_NAMES, GPU_IC, STAT_ICONS } from "../gameConfig";
 import { JOB_TYPES } from "../jobTypes";
 import { save } from "util/save";
@@ -119,6 +120,8 @@ const layer = createLayer(id, function (this: any) {
 
     // Reset modal ref
     const resetModal = ref<InstanceType<typeof ResetModal> | null>(null);
+    // About modal ref
+    const aboutModal = ref<InstanceType<typeof AboutModal> | null>(null);
 
     // Resources
     const money = createResource<DecimalSource>(G_CONF.STARTING_MONEY, "dollars");
@@ -1733,7 +1736,7 @@ const layer = createLayer(id, function (this: any) {
                     <div style="display: inline-flex; align-items: center; gap: 12px;">
                         {isScooped ? (
                             <>
-                                <div style="font-size: 13px; color: #d32f2f; font-weight: bold; padding: 6px 12px;">
+                                <div style="font-size: 14px; color:#e06060; font-weight: bold; padding: 6px 12px;">
                                     Job Scooped by MegaCorp
                                 </div>
                                 <button
@@ -1968,6 +1971,7 @@ const layer = createLayer(id, function (this: any) {
                     </div>
 
                     <ResetModal ref={resetModal} is-dev={IS_DEV} />
+                    <AboutModal ref={aboutModal} />
                 </div>
             );
         }
@@ -2424,7 +2428,7 @@ const layer = createLayer(id, function (this: any) {
 
 
 
-		    <div style="font-size: 20px; color: rgb(230, 218, 199); display: flex; gap: 10px; align-items: center;">
+		    <div style="font-size: 20px; color: rgb(230, 218, 199); display: flex; justify-content: space-evenly; align-items: center; width: 100%;">
                         {/*
                         <button
                             onClick={() => window.open("https://forms.gle/vRxuZMLrkBwgkqY49", "_blank")}
@@ -2463,19 +2467,40 @@ const layer = createLayer(id, function (this: any) {
                             Achievements
                         </button>
                         <button
-                            onClick={() => resetModal.value?.open()}
+                            onClick={() => aboutModal.value?.open()}
                             style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "6px",
                                 background: "var(--raised-background)",
                                 border: "2px solid var(--outline)",
                                 borderRadius: "4px",
                                 cursor: "pointer",
-                                fontSize: "20px",
-                                color: "var(--foreground)",
-                                padding: "4px 8px"
+                                fontSize: "16px",
+                                color: "#ccc",
+                                padding: "4px 10px"
+                            }}
+                            title="About"
+                        >
+                            ℹ️ About
+                        </button>
+                        <button
+                            onClick={() => resetModal.value?.open()}
+                            style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "6px",
+                                background: "var(--raised-background)",
+                                border: "2px solid var(--outline)",
+                                borderRadius: "4px",
+                                cursor: "pointer",
+                                fontSize: "16px",
+                                color: "#ccc",
+                                padding: "4px 10px"
                             }}
                             title="Game Options"
                         >
-                            ⚙️
+                            ⚙️ Settings
                         </button>
                     </div>
                 {IS_DEV && (
@@ -2790,6 +2815,7 @@ const layer = createLayer(id, function (this: any) {
                 )}
 
                 <ResetModal ref={resetModal} is-dev={IS_DEV} />
+                <AboutModal ref={aboutModal} />
             </div>
         );
     };
