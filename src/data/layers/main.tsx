@@ -1349,6 +1349,14 @@ const layer = createLayer(id, function (this: any) {
 
                 jobCompletions.value += 1;
 
+                // Track milestone every 20 jobs
+                if (jobCompletions.value % 20 === 0 && jobCompletions.value > 0) {
+                    trackEvent("jobs_milestone", {
+                        jobs_completed: jobCompletions.value,
+                        chapter: currentChapter.value
+                    });
+                }
+
                 if (pendingInterludes.value.length) {
                     const first = pendingInterludes.value[0];
                     const updatedRemaining = first.jobsRemaining - 1;

@@ -86,4 +86,29 @@ requestAnimationFrame(async () => {
 
     startGameLoop();
     trackEvent("game_start");
+
+    // Track referrer and UTM parameters on game load
+    try {
+        const referrer = document.referrer || '(direct)';
+        const params = new URLSearchParams(window.location.search);
+        const trackingParams: Record<string, any> = {
+            referrer: referrer
+        };
+
+        // Capture UTM parameters if present
+        const utmParams = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+        utmParams.forEach(param => {
+            const value = params.get(param);
+            if (value) {
+                trackingParams[param] = value;
+            }
+        });
+
+        // Only fire if we have referrer or UTM params
+        if (referrer !== '(direct)' || Object.keys(trackingParams).length > 1) {
+            trackEvent('game_load', trackingParams);
+        }
+    } catch (e) {
+        // Silently fail - don't let tracking break the game
+    }
 });
