@@ -36,12 +36,20 @@ Most of the wonders and prewonders will happen during chapters 4 and 5 (mostly 5
 **id:** chapter1
 
 
+## Page Intro0
+**title:** The Choice Before Us
+**pageType:** intro
+**button_text:** CONTINUE
+
+A game by <a href="https://nickshapiro.com/" target="_blank" rel="noopener noreferrer">Nick Shapiro</a>
+
+Based on the essay <a href="https://keepthefuturehuman.ai/" target="_blank" rel="noopener noreferrer">Keep The Future Human</a> by Anthony Aguirre
+
+
 ## Page Intro1
 **title:**  The Choice Before Us
 **pageType:** intro
 **button_text:** LET'S GO
-
-This is a game based on the essay <a href="https://keepthefuturehuman.ai/" target="_new">Keep The Future Human</a>
 
 [left] Right now, AI labs are racing to build AGI without proven safety methods. The choices being made today will determine whether we control advanced AI or lose control of our future.
 [left]In this game, you run an AI startup and make choices that affect both your company's success and humanity's survival.
@@ -694,11 +702,11 @@ The future is still ours to choose, but only if we act. Real AI companies respon
 
 
 If this game moved you, please contact your lawmakers. You can do it in <b>just 2 minutes</b> with these links:
-<a target="_new" href="https://futureoflife.org/take-action/contact-your-legislator/">futureoflife.org</a>
-<a href="https://campaign.controlai.com/take-action?source=ktfhgame" target="_new">controlai.com</a>
+<a href="https://futureoflife.org/take-action/contact-your-legislator/" target="_blank" rel="noopener noreferrer">futureoflife.org</a>
+<a href="https://campaign.controlai.com/take-action?source=ktfhgame" target="_blank" rel="noopener noreferrer">controlai.com</a>
 
 
-<a href="https://superintelligence-statement.org" target="_new">Sign the Superintelligence Statement</a>
+<a href="https://superintelligence-statement.org" target="_blank" rel="noopener noreferrer">Sign the Superintelligence Statement</a>
 
 Stay in touch with The Future of Life Institute for future action at futureoflife.org
 

@@ -132,7 +132,7 @@ export function createChapterLayer(chapterId: string, chapterData: ChapterData) 
             // Handle choice pages differently
             if (page.isChoice) {
                 const titleText = page.title !== undefined ? page.title : chapterData.title;
-                const enableTyping = titleText === "The Choice Before Us";
+                const enableTyping = chapterId === 'chapter1' && currentPage.value === 1;
                 return (
                     <div class={page.pageType === 'intro' ? 'story-page-intro' : ''}>
                         <h2 style={`color: ${styles.headerColor}; font-size: ${styles.headerSize}; margin-bottom: 30px;`}>
@@ -210,7 +210,7 @@ export function createChapterLayer(chapterId: string, chapterData: ChapterData) 
             }
 
             const titleText = page.title !== undefined ? page.title : chapterData.title;
-            const enableTyping = titleText === "The Choice Before Us";
+            const enableTyping = chapterId === 'chapter1' && currentPage.value === 1;
             return (
                 <div class={page.pageType === 'intro' ? 'story-page-intro' : ''}>
                     <h2 style={`color: ${styles.headerColor}; font-size: ${styles.headerSize}; margin-bottom: 30px;`}>

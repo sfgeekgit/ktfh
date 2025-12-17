@@ -7,10 +7,9 @@
         </template>
         <template v-slot:body>
             <div>
-                <button class="reset-button" @click="confirmReset()">Reset Game</button>
-                <p style="font-size: 12px; color: #2196F3; opacity: 0.8; margin-top: 10px;">This will delete all progress and start over from the beginning.</p>
+                <button class="reset-button" @click="confirmReset()">RESET GAME</button>
+                <p style="font-size: 12px; color: #2196F3; opacity: 0.9; margin-top: 10px;">This will delete all progress and start over from the beginning.<br/><br/>You will keep your Achievements.</p>
 
-                <hr style="margin: 20px 0; border-color: #2196F3; opacity: 0.3;" />
 
                 <div v-if="props.isDev" style="margin-top: 15px;">
                     <h3 style="color: #2196F3; font-size: 14px; margin-bottom: 10px;">Dev Tools</h3>
@@ -24,7 +23,7 @@
             <div class="modal-default-footer">
                 <div class="modal-default-flex-grow"></div>
                 <button class="close-button" @click="closeModal">
-                    Close
+                    CLOSE
                 </button>
             </div>
         </template>
@@ -185,11 +184,14 @@ defineExpose({
 .reset-button {
     background: #f44336;
     color: white;
-    padding: 6px 12px;
+    padding: 8px 16px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 15px;
+    display: block;
+    width: 180px;
+    margin: 0 auto;
 }
 
 .reset-button:hover {

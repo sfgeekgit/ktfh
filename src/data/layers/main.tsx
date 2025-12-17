@@ -2508,7 +2508,7 @@ const layer = createLayer(id, function (this: any) {
                             }}
                             title="Game Options"
                         >
-                            ⚙️ Settings
+                            ⚙️ Reset
                         </button>
                     </div>
                 {IS_DEV && (
