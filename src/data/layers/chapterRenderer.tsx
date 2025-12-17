@@ -211,14 +211,21 @@ export function createChapterLayer(chapterId: string, chapterData: ChapterData) 
 
             const titleText = page.title !== undefined ? page.title : chapterData.title;
             const enableTyping = chapterId === 'chapter1' && currentPage.value === 1;
+
+            // Add background image for Page Intro0
+            const isIntroPage0 = chapterId === 'chapter1' && currentPage.value === 0;
+            const backgroundStyle = isIntroPage0
+                ? `margin: 20px 0; padding: 30px; border: 2px solid ${styles.borderColor}; border-radius: 10px; background-image: url('/ach/tcbu_crop.png'); background-size: cover; background-position: center; background-color: ${styles.background}; color: #222222;`
+                : `margin: 20px 0; padding: 30px; border: 2px solid ${styles.borderColor}; border-radius: 10px; background: ${styles.background}; color: ${styles.textColor};`;
+
             return (
                 <div class={page.pageType === 'intro' ? 'story-page-intro' : ''}>
                     <h2 style={`color: ${styles.headerColor}; font-size: ${styles.headerSize}; margin-bottom: 30px;`}>
                         {titleText}
                     </h2>
 
-                    <div style={`margin: 20px 0; padding: 30px; border: 2px solid ${styles.borderColor}; border-radius: 10px; background: ${styles.background}; color: ${styles.textColor};`}>
-                        {renderContent(page, styles.textAlign, styles.textColor, enableTyping)}
+                    <div style={backgroundStyle} class={isIntroPage0 ? 'intro-page-0-content' : ''}>
+                        {renderContent(page, styles.textAlign, styles.textColor, enableTyping, isIntroPage0)}
                     </div>
 
                     <div style="margin: 30px 0; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
@@ -253,7 +260,7 @@ export function createChapterLayer(chapterId: string, chapterData: ChapterData) 
     };
 }
 
-function renderContent(page: StoryPage, textAlign: string = "left", textColor: string = "#000000", enableTypingEffect: boolean = false) {
+function renderContent(page: StoryPage, textAlign: string = "left", textColor: string = "#000000", enableTypingEffect: boolean = false, needsSemiTransparentBg: boolean = false) {
     const lastWonderName = (player as any).lastWonderName ?? "";
 
     return (
@@ -300,16 +307,17 @@ function renderContent(page: StoryPage, textAlign: string = "left", textColor: s
 
                 // Regular paragraphs
                 const isCallToAction = normalizedContent.includes("Will you keep the future human");
-                const shouldAnimate = enableTypingEffect && index > 0 && !isCallToAction;
+                const shouldAnimate = enableTypingEffect && index < 2;
                 const shouldFadeIn = enableTypingEffect && isCallToAction;
                 const fontSize = isCallToAction ? "21.6px" : "18px"; // Slightly larger for the call-to-action
-                const fadeDelay = shouldFadeIn ? `${(page.paragraphs.length - 2) * 3 + 0.5}s` : "";
+                const fadeDelay = shouldFadeIn ? `${2 * 2.55 + 0.5}s` : "";
+                const semiTransparentBg = needsSemiTransparentBg ? 'background: rgba(255, 255, 255, 0.7); padding: 10px 15px; border-radius: 6px; width: fit-content;' : '';
 
                 return (
                     <p
                         key={index}
                         class={shouldAnimate ? "story-paragraph" : (shouldFadeIn ? "story-fade-in" : "")}
-                        style={`font-size: ${fontSize}; margin-bottom: 20px; text-align: ${forceLeft ? 'left' : textAlign}; ${shouldAnimate ? `animation-delay: ${(index - 1) * 3}s;` : ''} ${shouldFadeIn ? `animation-delay: ${fadeDelay}; font-weight: bold;` : ''} ${isCallToAction && !enableTypingEffect ? 'font-weight: bold;' : ''}`}
+                        style={`font-size: ${fontSize}; margin-bottom: 20px; text-align: ${forceLeft ? 'left' : textAlign}; ${shouldAnimate ? `animation-delay: ${index * 2.55}s;` : ''} ${shouldFadeIn ? `animation-delay: ${fadeDelay}; font-weight: bold;` : ''} ${isCallToAction && !enableTypingEffect ? 'font-weight: bold;' : ''} ${semiTransparentBg}`}
                         innerHTML={normalizedContent.replace(/<br\/>/g, '<br/>')}
                     />
                 );

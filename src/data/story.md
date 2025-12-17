@@ -39,7 +39,7 @@ Most of the wonders and prewonders will happen during chapters 4 and 5 (mostly 5
 ## Page Intro0
 **title:** The Choice Before Us
 **pageType:** intro
-**button_text:** CONTINUE
+**button_text:** BEGIN
 
 A game by <a href="https://nickshapiro.com/" target="_blank" rel="noopener noreferrer">Nick Shapiro</a>
 

@@ -72,7 +72,7 @@ ul {
 
 /* Typing animation for story paragraphs */
 .story-paragraph {
-	animation: typewriter 3s steps(150, end) forwards;
+	animation: typewriter 2.55s steps(150, end) both;
 	color: transparent !important;
 	background: linear-gradient(90deg, #E5E9F0 50%, transparent 50%);
 	background-size: 200% 100%;
@@ -83,6 +83,9 @@ ul {
 }
 
 @keyframes typewriter {
+	from {
+		background-position: 100% 0;
+	}
 	to {
 		background-position: 0 0;
 	}
@@ -98,6 +101,16 @@ ul {
 	to {
 		opacity: 1;
 	}
+}
+
+/* Intro Page 0 link styling */
+.intro-page-0-content a {
+	color: #1a5490;
+	font-weight: 600;
+}
+
+.intro-page-0-content a:hover {
+	color: #0d3a6b;
 }
 
 /* Story button hover fade */
