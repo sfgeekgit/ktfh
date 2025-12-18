@@ -262,9 +262,10 @@ export function createChapterLayer(chapterId: string, chapterData: ChapterData) 
 
 function renderContent(page: StoryPage, textAlign: string = "left", textColor: string = "#000000", enableTypingEffect: boolean = false, needsSemiTransparentBg: boolean = false) {
     const lastWonderName = (player as any).lastWonderName ?? "";
+    const containerMargin = needsSemiTransparentBg ? '20px auto 40px auto' : '40px auto';
 
     return (
-        <div style={`text-align: ${textAlign}; max-width: 600px; margin: 40px auto; line-height: 1.6;`}>
+        <div style={`text-align: ${textAlign}; max-width: 600px; margin: ${containerMargin}; line-height: 1.6;`}>
             {page.paragraphs.map((paragraph, index) => {
                 const contentWithVars = paragraph.replace(/{{lastWonderName}}/g, lastWonderName);
                 const forceLeft = contentWithVars.startsWith('[left]');
@@ -309,7 +310,8 @@ function renderContent(page: StoryPage, textAlign: string = "left", textColor: s
                 const isCallToAction = normalizedContent.includes("Will you keep the future human");
                 const shouldAnimate = enableTypingEffect && index < 2;
                 const shouldFadeIn = enableTypingEffect && isCallToAction;
-                const fontSize = isCallToAction ? "21.6px" : "18px"; // Slightly larger for the call-to-action
+                const isFirstParagraphIntro0 = needsSemiTransparentBg && index === 0;
+                const fontSize = isCallToAction ? "21.6px" : (isFirstParagraphIntro0 ? "15px" : "18px");
                 const fadeDelay = shouldFadeIn ? `${2 * 2.55 + 0.5}s` : "";
                 const semiTransparentBg = needsSemiTransparentBg ? 'background: rgba(255, 255, 255, 0.7); padding: 10px 15px; border-radius: 6px; width: fit-content;' : '';
 
