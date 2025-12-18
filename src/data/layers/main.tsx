@@ -1917,7 +1917,7 @@ const layer = createLayer(id, function (this: any) {
                                 }}
                             >
                                 <img
-                                    src="/ach/ach_gen.png"
+                                    src="./ach/240/ach_gen.png"
                                     alt="Achievements"
                                     style="width: 28px; height: 28px; opacity:1"
                                 />
@@ -2471,7 +2471,7 @@ const layer = createLayer(id, function (this: any) {
                                 padding: "4px 10px"
                             }}
                         >
-                            <img src="/ach/ach_gen.png" alt="Achievements" style="width: 35px; height: 35px; opacity:1" />
+                            <img src="./ach/240/ach_gen.png" alt="Achievements" style="width: 35px; height: 35px; opacity:1" />
                             Achievements
                         </button>
                         <button

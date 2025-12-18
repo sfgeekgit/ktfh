@@ -215,7 +215,7 @@ export function createChapterLayer(chapterId: string, chapterData: ChapterData) 
             // Add background image for Page Intro0
             const isIntroPage0 = chapterId === 'chapter1' && currentPage.value === 0;
             const backgroundStyle = isIntroPage0
-                ? `margin: 20px 0; padding: 30px; border: 2px solid ${styles.borderColor}; border-radius: 10px; background-image: url('/ach/tcbu_crop.png'); background-size: cover; background-position: center; background-color: ${styles.background}; color: #222222;`
+                ? `margin: 20px 0; padding: 30px; border: 2px solid ${styles.borderColor}; border-radius: 10px; background-image: url('./ach/tcbu_crop.png'); background-size: cover; background-position: center; background-color: ${styles.background}; color: #222222;`
                 : `margin: 20px 0; padding: 30px; border: 2px solid ${styles.borderColor}; border-radius: 10px; background: ${styles.background}; color: ${styles.textColor};`;
 
             return (
